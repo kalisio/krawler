@@ -67,6 +67,7 @@
     "fs-blob-store": "^5.2.1",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.5.3",
+    "moment": "^2.19.0",
     "semistandard": "^11.0.0",
     "shx": "^0.2.2"
   }

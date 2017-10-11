@@ -1,5 +1,6 @@
 // import errors from 'feathers-errors'
 import _ from 'lodash'
+import request from 'request'
 import makeDebug from 'debug'
 
 const debug = makeDebug('krawler:tasks')
@@ -41,6 +42,7 @@ class Service {
         break
     }
     // Setup request with URL & params
+    debug('Requesting ' + options.url + ' with following parameters', queryParameters)
     return {
       url: options.url,
       qs: queryParameters,
@@ -55,7 +57,7 @@ class Service {
       request.get(this.getRequest(type, options))
         .pipe(this.Model.createWriteStream({
           key: id,
-          params: params.storage
+          params: data.storage
         }, (error) =>
           error
             ? reject(error)
