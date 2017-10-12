@@ -4,20 +4,26 @@ import feathers from 'feathers'
 import path from 'path'
 import moment from 'moment'
 import store from 'fs-blob-store'
-import plugin from '../src'
+import plugin, { stores } from '../src'
 
 describe('krawler:tasks', () => {
-  let app, storage, tasksService
+  let app, server, storage, tasksService
 
   before(() => {
     chailint(chai, util)
     app = feathers()
     app.configure(plugin)
+    server = app.listen(3030)
+  })
+
+  it('registers the storage', () => {
     storage = store(path.join(__dirname, './data'))
+    stores.registerStore('fs', storage)
+    expect(stores.getStore('fs')).toExist()
   })
 
   it('creates the tasks service', () => {
-    app.use('tasks', plugin.tasks({ Model: storage }))
+    app.use('tasks', plugin.tasks())
     tasksService = app.service('tasks')
     expect(tasksService).toExist()
   })
@@ -27,6 +33,7 @@ describe('krawler:tasks', () => {
     datetime.startOf('day')
     tasksService.create({
       id: 'request.tif',
+      store: 'fs',
       type: 'wcs',
       options: {
         url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS?SERVICE=WCS&version=2.0.1',
@@ -45,4 +52,8 @@ describe('krawler:tasks', () => {
   // Let enough time to download
   .timeout(10000)
 
+  // Cleanup
+  after(() => {
+    if (server) server.close()
+  })
 })

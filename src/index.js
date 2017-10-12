@@ -2,14 +2,18 @@
 import program from 'commander'
 import makeDebug from 'debug'
 import tasks from './tasks'
+import jobs from './jobs'
+
+export * as stores from './stores'
 
 const debug = makeDebug('krawler')
 
 export default function init () {
-  
+
 }
 
 init.tasks = tasks
+init.jobs = jobs
 
 if (require.main === module) {
   program
@@ -18,7 +22,7 @@ if (require.main === module) {
     .parse(process.argv)
 
   debug('Initializing krawler command')
-  let jobfile = program.args[0]
+  // let jobfile = program.args[0]
 } else {
   debug('Initializing krawler plugin')
 }

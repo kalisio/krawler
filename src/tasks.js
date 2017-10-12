@@ -2,20 +2,12 @@
 import _ from 'lodash'
 import request from 'request'
 import makeDebug from 'debug'
+import * as stores from './stores'
 
 const debug = makeDebug('krawler:tasks')
 
 class Service {
-  constructor (options) {
-    if (!options) {
-      throw new Error('krawler tasks service: constructor `options` must be provided')
-    }
-
-    if (!options.Model) {
-      throw new Error('krawler tasks service: constructor `options.Model` must be provided')
-    }
-
-    this.Model = options.Model
+  constructor (options = {}) {
     this.id = options.id || 'id'
   }
 
@@ -51,13 +43,19 @@ class Service {
   }
 
   create (data, params = {}) {
-    let { id, type, options } = data
-    
+    let { id, type, options, store, storageOptions } = data
+
     return new Promise((resolve, reject) => {
+      const message = 'Can\'t find store ' + store
+      store = stores.getStore(store)
+      if (!store) {
+        reject(new Error(message))
+        return
+      }
       request.get(this.getRequest(type, options))
-        .pipe(this.Model.createWriteStream({
+        .pipe(store.createWriteStream({
           key: id,
-          params: data.storage
+          params: storageOptions
         }, (error) =>
           error
             ? reject(error)
@@ -69,9 +67,17 @@ class Service {
     })
   }
 
-  remove (id) {
+  remove (id, params) {
     return new Promise((resolve, reject) => {
-      this.Model.remove({
+      const query = params.query
+      let store = query.store || params.store
+      const message = 'Can\'t find store ' + store
+      if (typeof store === 'string') store = stores.getStore(store)
+      if (!store) {
+        reject(new Error(message))
+        return
+      }
+      store.remove({
         key: id
       }, error => error ? reject(error) : resolve())
     })
