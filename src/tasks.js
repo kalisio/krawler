@@ -20,8 +20,8 @@ class Service {
         // Convert from a json subset key/value to standard, eg height: 10 => height(10)
         if (options.subsets) {
           queryParameters.subset = []
-          Object.entries(options.subsets).forEach(subset => {
-            queryParameters.subset.push(subset[0] + '(' + subset[1] + ')')
+          _.forOwn(options.subsets, (value, key) => {
+            queryParameters.subset.push(key + '(' + value + ')')
           })
         }
         break
@@ -63,6 +63,7 @@ class Service {
               [this.id]: id
             })
         ))
+        .on('timeout', reject)
         .on('error', reject)
     })
   }
