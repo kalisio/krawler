@@ -53,6 +53,8 @@ class Service {
         return
       }
       request.get(this.getRequest(type, options))
+        .on('timeout', reject)
+        .on('error', reject)
         .pipe(store.createWriteStream({
           key: id,
           params: storageOptions
@@ -63,7 +65,6 @@ class Service {
               [this.id]: id
             })
         ))
-        .on('timeout', reject)
         .on('error', reject)
     })
   }
