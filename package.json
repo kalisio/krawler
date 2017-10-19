@@ -68,6 +68,7 @@
     "chai": "^3.5.0",
     "chai-lint": "^0.1.1",
     "feathers": "^2.2.2",
+    "feathers-hooks": "^2.1.0",
     "fs-blob-store": "^5.2.1",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.5.3",

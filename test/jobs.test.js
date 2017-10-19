@@ -36,6 +36,7 @@ describe('krawler:tasks', () => {
       id: 'requests',
       taskTemplate: {
         store: 'fs',
+        id: '<%= taskId %>.tif',
         type: 'wcs',
         options: {
           url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS?SERVICE=WCS&version=2.0.1',
@@ -47,9 +48,9 @@ describe('krawler:tasks', () => {
         }
       },
       tasks: [
-        { id: '2.tif', options: { subsets: { height: 2 } } },
-        { id: '20.tif', options: { subsets: { height: 20 } } },
-        { id: '3000.tif', options: { subsets: { height: 3000 } } }
+        { id: '2', options: { subsets: { height: 2 } } },
+        { id: '20', options: { subsets: { height: 20 } } },
+        { id: '3000', options: { subsets: { height: 3000 } } }
       ]
     })
     .then(tasks => {

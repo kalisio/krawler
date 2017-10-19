@@ -5,6 +5,7 @@ import tasks from './tasks'
 import jobs from './jobs'
 
 export * as stores from './stores'
+export * as hooks from './hooks'
 
 const debug = makeDebug('krawler')
 
