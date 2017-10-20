@@ -41,7 +41,36 @@ describe('krawler:grid', () => {
         create: [pluginHooks.generateGrid, pluginHooks.generateGridTasks]
       },
       after: {
-        create: [pluginHooks.generateGridCSV]
+        create: pluginHooks.generateCSV([
+          {
+            label: 'Latmin',
+            value: (task) => {
+              return task.bbox[1]
+            }
+          },
+          {
+            label: 'Lonmin',
+            value: (task) => {
+              return task.bbox[0]
+            }
+          },
+          {
+            label: 'Latmax',
+            value: (task) => {
+              return task.bbox[3]
+            }
+          },
+          {
+            label: 'Lonmax',
+            value: (task) => {
+              return task.bbox[2]
+            }
+          },
+          {
+            label: 'Elev',
+            value: 'max'
+          }
+        ])
       }
     })
   })
