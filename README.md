@@ -6,7 +6,7 @@
 [![Dependency Status](https://img.shields.io/david/kalisio/krawler.svg?style=flat-square)](https://david-dm.org/kalisio/krawler)
 [![Download Status](https://img.shields.io/npm/dm/krawler.svg?style=flat-square)](https://www.npmjs.com/package/krawler)
 
-> Make automated process of extracting data from web services easy
+> Make automated process of extracting data from (geographic) web services easy
 
 ## Installation
 
