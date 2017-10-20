@@ -16,7 +16,7 @@ npm install krawler --save
 
 ## Documentation
 
-Please refer to the [krawler documentation](http://docs.feathersjs.com/) for more details.
+**TODO**
 
 ## Complete Example
 
@@ -34,11 +34,9 @@ const plugin = require('krawler');
 const app = feathers()
   .configure(rest())
   .configure(hooks())
-  // Needed for parsing bodies (login)
-  .use(bodyParser.json())
-  .use(bodyParser.urlencoded({ extended: true }))
-  // Initialize your feathers plugin
-  .use('/plugin', plugin())
+  // Initialize your feathers plugin services
+  .use('/tasks', plugin.tasks());
+  .use('/jobs', plugin.jobs());
   .use(errorHandler());
 
 app.listen(3030);
