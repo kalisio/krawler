@@ -9,14 +9,14 @@ const debug = makeDebug('krawler:hooks:image')
 export function computeValues (options) {
   return function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'computeMaxValue' hook should only be used as a 'after' hook.`)
+      throw new Error(`The 'computeValues' hook should only be used as a 'after' hook.`)
     }
 
     return new Promise((resolve, reject) => {
       let store = stores.getStore(hook.data.store)
       let fileName = hook.result.id
       if (!store || !store.path || (path.extname(fileName) !== '.tif')) {
-        throw new Error(`The 'computeMaxValue' hook only work with GeoTiff files and the fs blob store.`)
+        throw new Error(`The 'computeValues' hook only work with GeoTiff files and the fs blob store.`)
       }
       const filePath = path.join(store.path, fileName)
       let readers = gtif.createReadStreams(filePath)
