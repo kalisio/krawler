@@ -1,4 +1,12 @@
 import _ from 'lodash'
+import makeDebug from 'debug'
+import SphericalMercator from '@mapbox/sphericalmercator'
+
+const debug = makeDebug('krawler:hooks:grid')
+
+const sphericalMercator = new SphericalMercator({
+  size: 256
+})
 
 // Generate grid spec from location/width/resolution spec
 export function generateGrid (hook) {
@@ -20,6 +28,7 @@ export function generateGrid (hook) {
     hook.data.resolution = [ dLongitude, dLatitude ]
     hook.data.origin = [ hook.data.longitude - halfWidthLongitude, hook.data.latitude - halfWidthLatitude ]
     hook.data.size = [ 2 * halfWidthLongitude / dLongitude, 2 * halfWidthLatitude / dLatitude ]
+    debug('Generated grid spec for data ', hook.data)
   }
 
   return hook
@@ -43,16 +52,40 @@ export function generateGridTasks (hook) {
       for (let j = 0; j < size[1]; j++) {
         let minLon = origin[0] + (i * resolution[0])
         let minLat = origin[1] + (j * resolution[1])
-        let maxLon = minLon + resolution[0]
-        let maxLat = minLat + resolution[1]
+        let bbox = [
+          minLon,
+          minLat,
+          minLon + resolution[0],
+          minLat + resolution[1]
+        ]
+        // Check if we need to convert to spherical mercator
+        // FIXME: manage more CRS
+        let crs = _.get(hook.data, 'taskTemplate.options.SRS')
+        if (!crs) crs = _.get(hook.data, 'taskTemplate.options.CRS')
+        if (crs === 'EPSG:900913' || crs === 'EPSG:3857') {
+          bbox = sphericalMercator.convert(bbox, '900913')
+        }
+        // Check if we need to invert XY
+        let version = _.get(hook.data, 'taskTemplate.options.VERSION')
+        if (version) {
+          version = _.toNumber(version.replace('.', ''))
+          // Before WMS v 1.1.3 order was always lon,lat
+          // With WMS v 1.1.3 order si the same than the SRS used so usually lat,lon
+          // FIXME: check with CRS
+          if (version >= 113) {
+            bbox = [ bbox[1], bbox[0], bbox[3], bbox[2] ]
+          }
+        }
         tasks.push({
           id: j.toFixed() + '-' + i.toFixed(),
+          bbox,
           options: {
-            BBOX: minLat + ',' + minLon + ',' + maxLat + ',' + maxLon
+            BBOX: bbox[0] + ',' + bbox[1] + ',' + bbox[2] + ',' + bbox[3]
           }
         })
       }
     }
+    debug('Generated grid tasks', tasks)
     hook.data.tasks = tasks
   }
 

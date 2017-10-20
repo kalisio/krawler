@@ -7,10 +7,6 @@ import * as stores from './stores'
 const debug = makeDebug('krawler:tasks')
 
 class Service {
-  constructor (options = {}) {
-    this.id = options.id || 'id'
-  }
-
   // Build the request options to download data from input data source
   getRequest (type, options) {
     let queryParameters = _.merge({}, _.omit(options, ['url', 'subsets']))
@@ -61,9 +57,7 @@ class Service {
         }, (error) =>
           error
             ? reject(error)
-            : resolve({
-              [this.id]: id
-            })
+            : resolve(data)
         ))
         .on('error', reject)
     })

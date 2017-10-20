@@ -8,7 +8,7 @@ import store from 'fs-blob-store'
 import plugin, { stores, hooks as pluginHooks } from '../src'
 
 describe('krawler:grid', () => {
-  let app, server, storage, jobsService
+  let app, server, storage, tasksService, jobsService
 
   before(() => {
     chailint(chai, util)
@@ -27,11 +27,21 @@ describe('krawler:grid', () => {
   it('adds hooks to the jobs service', () => {
     app.use('tasks', plugin.tasks())
     app.use('jobs', plugin.jobs())
+    tasksService = app.service('tasks')
+    expect(tasksService).toExist()
     jobsService = app.service('jobs')
     expect(jobsService).toExist()
+    tasksService.hooks({
+      after: {
+        create: [pluginHooks.computeValues({ max: true })]
+      }
+    })
     jobsService.hooks({
       before: {
         create: [pluginHooks.generateGrid, pluginHooks.generateGridTasks]
+      },
+      after: {
+        create: [pluginHooks.generateGridCSV]
       }
     })
   })
@@ -66,19 +76,36 @@ describe('krawler:grid', () => {
       id: 'requests',
       taskTemplate: {
         store: 'fs',
-        id: '<%= taskId %>.png',
-        type: 'wms',
+        // id: '<%= taskId %>.png',
+        id: '<%= taskId %>.tif',
+        // type: 'wms',
+        type: 'wcs',
         options: {
-          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?SERVICE=WMS&version=1.3.0',
+          // With png data
+          /*
+          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS',
+          VERSION: '1.3.0',
+          SERVICE: 'wms',
           token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
           LAYERS: 'TEMPERATURE__ISOBARIC_SURFACE',
           CRS: 'EPSG:4326',
-          styles: 'T__ISOBARIC__SHADING',
-          format: 'image/png',
-          width: 512,
-          height: 512,
+          STYLES: 'T__ISOBARIC__SHADING',
+          FORMAT: 'image/png',
+          WIDTH: 512,
+          HEIGHT: 512,
           dim_reference_time: datetime.format(),
           time: datetime.format()
+          */
+          // With geotif data
+          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
+          VERSION: '2.0.1',
+          SERVICE: 'wcs',
+          token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
+          coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
+          subsets: {
+            time: datetime.format(),
+            height: 2
+          }
         }
       },
       origin: [-10, 35],
