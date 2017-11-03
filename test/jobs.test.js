@@ -6,7 +6,7 @@ import moment from 'moment'
 import store from 'fs-blob-store'
 import plugin, { stores } from '../src'
 
-describe('krawler:tasks', () => {
+describe('krawler:jobs', () => {
   let app, server, storage, jobsService
 
   before(() => {
