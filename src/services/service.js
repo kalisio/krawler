@@ -1,6 +1,11 @@
+import _ from 'lodash'
+
 class Service {
-  constructor (options = {}) {
+  constructor (generators = {}) {
     this.generators = {}
+    _.forOwn(generators, (value, key) => {
+      this.registerGenerator(key, value)
+    })
   }
 
   registerGenerator (type, generator) {
@@ -11,10 +16,10 @@ class Service {
     delete this.generators[type]
   }
 
-  generate (type, options) {
+  generate (type, ...options) {
     let generator = this.generators[type]
     if (!generator) return null
-    else return generator(options)
+    else return generator.apply(this, options)
   }
 }
 

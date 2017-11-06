@@ -7,7 +7,7 @@ import moment from 'moment'
 import plugin, { hooks as pluginHooks } from '../src'
 
 describe('krawler:grid', () => {
-  let app, server, storage, storesService, tasksService, jobsService
+  let app, server, storesService, tasksService, jobsService
 
   before(() => {
     chailint(chai, util)
@@ -17,21 +17,13 @@ describe('krawler:grid', () => {
     server = app.listen(3030)
   })
 
-  it('registers the storage', () => {
+  it('adds hooks to the jobs service', () => {
     app.use('stores', plugin.stores())
     storesService = app.service('stores')
-    storesService.create({ id: 'fs', type: 'fs', options: { path: path.join(__dirname, './data') } })
-    .then(store => {
-      storage = store
-      expect(storesService.get('fs')).toExist()
-    })
-  })
-
-  it('adds hooks to the jobs service', () => {
     app.use('tasks', plugin.tasks())
-    app.use('jobs', plugin.jobs())
     tasksService = app.service('tasks')
     expect(tasksService).toExist()
+    app.use('jobs', plugin.jobs())
     jobsService = app.service('jobs')
     expect(jobsService).toExist()
     tasksService.hooks({
@@ -100,24 +92,56 @@ describe('krawler:grid', () => {
     expect(hook.data.origin).to.deep.equal([longitude - n * convergenceFactor, latitude - n])
     expect(hook.data.size).to.deep.equal([20, 20])
   })
-
+/*
+  it('creates a WCS gridded job', (done) => {
+    jobsService.create({
+      id: 'requests',
+      store: {
+        id: 'test-store',
+        type: 'fs',
+        options: { path: path.join(__dirname, './data') }
+      },
+      taskTemplate: {
+        store: 'test-store',
+        id: '<%= taskId %>.tif',
+        type: 'wcs',
+        options: {
+          url: 'http://geoserver.kalisio.xyz/geoserver/Kalisio/wcs',
+          VERSION: '2.0.1',
+          FORMAT: 'image/tiff',
+          coverageid: 'Kalisio:GMTED2010_15'
+        }
+      },
+      origin: [-10, 35],
+      resolution: [5, 5],
+      size: [2, 2]
+    })
+    .then(tasks => {
+      return storesService.get('test-store')
+    })
+    .then(store => {
+      store.exists('0-0.tif', error => done(error))
+    })
+  })
+  // Let enough time to download
+  .timeout(30000)
+*/
   it('creates a WMS gridded job', (done) => {
     let datetime = moment.utc()
     datetime.startOf('day')
     jobsService.create({
       id: 'requests',
+      store: {
+        id: 'test-store',
+        type: 'fs',
+        options: { path: path.join(__dirname, './data') }
+      },
       taskTemplate: {
-        store: 'fs',
-        // id: '<%= taskId %>.png',
-        id: '<%= taskId %>.tif',
-        // type: 'wms',
-        type: 'wcs',
+        id: '<%= taskId %>.png',
+        type: 'wms',
         options: {
-          // With png data
-          /*
           url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS',
           VERSION: '1.3.0',
-          SERVICE: 'wms',
           token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
           LAYERS: 'TEMPERATURE__ISOBARIC_SURFACE',
           CRS: 'EPSG:4326',
@@ -127,17 +151,6 @@ describe('krawler:grid', () => {
           HEIGHT: 512,
           dim_reference_time: datetime.format(),
           time: datetime.format()
-          */
-          // With geotif data
-          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
-          VERSION: '2.0.1',
-          SERVICE: 'wcs',
-          token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
-          coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
-          subsets: {
-            time: datetime.format(),
-            height: 2
-          }
         }
       },
       origin: [-10, 35],
@@ -145,7 +158,10 @@ describe('krawler:grid', () => {
       size: [2, 2]
     })
     .then(tasks => {
-      storage.exists('0-0.tif', error => done(error))
+      return storesService.get('test-store')
+    })
+    .then(store => {
+      store.exists('0-0.png', error => done(error))
     })
   })
   // Let enough time to download

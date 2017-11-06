@@ -17,7 +17,7 @@ init.jobs = jobs
 if (require.main === module) {
   program
     .version(require('../package.json').version)
-    .usage('<jobfile> [options]')
+    .usage('<jobfile>')
     .parse(process.argv)
 
   debug('Initializing krawler command')

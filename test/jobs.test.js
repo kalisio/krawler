@@ -6,7 +6,7 @@ import moment from 'moment'
 import plugin from '../src'
 
 describe('krawler:jobs', () => {
-  let app, server, storage, storesService, jobsService
+  let app, server, storesService, jobsService
 
   before(() => {
     chailint(chai, util)
@@ -15,17 +15,9 @@ describe('krawler:jobs', () => {
     server = app.listen(3030)
   })
 
-  it('registers the storage', () => {
+  it('creates the jobs service', () => {
     app.use('stores', plugin.stores())
     storesService = app.service('stores')
-    storesService.create({ id: 'fs', type: 'fs', options: { path: path.join(__dirname, './data') } })
-    .then(store => {
-      storage = store
-      expect(storesService.get('fs')).toExist()
-    })
-  })
-
-  it('creates the jobs service', () => {
     app.use('tasks', plugin.tasks())
     app.use('jobs', plugin.jobs())
     jobsService = app.service('jobs')
@@ -37,12 +29,20 @@ describe('krawler:jobs', () => {
     datetime.startOf('day')
     jobsService.create({
       id: 'requests',
+      options: {
+        workersLimit: 2
+      },
+      store: {
+        id: 'test-store',
+        type: 'fs',
+        options: { path: path.join(__dirname, './data') }
+      },
       taskTemplate: {
-        store: 'fs',
         id: '<%= taskId %>.tif',
         type: 'wcs',
         options: {
-          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS?SERVICE=WCS&version=2.0.1',
+          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
+          VERSION: '2.0.1',
           token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
           coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
           subsets: {
@@ -57,7 +57,10 @@ describe('krawler:jobs', () => {
       ]
     })
     .then(tasks => {
-      storage.exists('request.tif', error => done(error))
+      return storesService.get('test-store')
+    })
+    .then(store => {
+      store.exists('20.tif', error => done(error))
     })
   })
   // Let enough time to download

@@ -15,17 +15,12 @@ describe('krawler:tasks', () => {
     server = app.listen(3030)
   })
 
-  it('creates the stores service', () => {
+  it('creates the storage', () => {
     app.use('stores', plugin.stores())
     storesService = app.service('stores')
-    expect(storesService).toExist()
-  })
-
-  it('registers the storage', () => {
-    storesService.create({ id: 'fs', type: 'fs', options: { path: path.join(__dirname, './data') } })
+    return storesService.create({ id: 'test-store', type: 'fs', options: { path: path.join(__dirname, './data') } })
     .then(store => {
       storage = store
-      expect(storesService.get('fs')).toExist()
     })
   })
 
@@ -40,10 +35,11 @@ describe('krawler:tasks', () => {
     datetime.startOf('day')
     tasksService.create({
       id: 'request.tif',
-      store: 'fs',
+      store: 'test-store',
       type: 'wcs',
       options: {
-        url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS?SERVICE=WCS&version=2.0.1',
+        url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
+        version: '2.0.1',
         token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
         coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
         subsets: {

@@ -11,7 +11,10 @@ export function generateCSV (fields) {
     if (hook.type !== 'after') {
       throw new Error(`The 'generateCSV' hook should only be used as a 'after' hook.`)
     }
-    let store = await hook.app.service('stores').get(hook.data.taskTemplate.store)
+    // Check if store object already provided or has to be found
+    let store = (hook.params.store
+      ? hook.params.store
+      : await hook.app.service('stores').get(typeof hook.data.store === 'object' ? hook.data.store.id : hook.data.store))
     if (!store || !store.path) {
       throw new Error(`The 'generateCSV' hook only work with the fs blob store.`)
     }

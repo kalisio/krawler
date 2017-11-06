@@ -1,5 +1,4 @@
 import makeDebug from 'debug'
-import _ from 'lodash'
 import Service from './service'
 import defaultTaskGenerators from '../tasks'
 
@@ -7,22 +6,27 @@ const debug = makeDebug('krawler:tasks')
 
 class TasksService extends Service {
   constructor (options = {}) {
-    super(options)
-    _.forOwn(defaultTaskGenerators, (value, key) => {
-      this.registerGenerator(key, value)
-    })
+    super(defaultTaskGenerators)
+    this.storesService = options.storesService || 'stores'
   }
 
   setup (app, path) {
-    this.storesService = app.service('stores')
+    this.storesService = app.service(this.storesService)
   }
 
   create (data, params = {}) {
     let { id, type, options, store, storageOptions } = data
 
     return new Promise(async (resolve, reject) => {
-      let message = 'Can\'t find store ' + store
-      let storage = await this.storesService.get(store)
+      let message = 'Can\'t find or create store ' + store
+      let storage = params.store
+      // Store might be directly provided
+      if (!storage || (typeof storage !== 'object')) {
+        try {
+          storage = await this.storesService.get(store)
+        } catch (error) {
+        }
+      }
       if (!storage) {
         debug(message)
         reject(new Error(message))

@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import makeDebug from 'debug'
 import Service from './service'
 import defaultStoreGenerators from '../stores'
@@ -7,18 +6,22 @@ const debug = makeDebug('krawler:stores')
 
 class StoresService extends Service {
   constructor (options = {}) {
-    super(options)
+    super(defaultStoreGenerators)
     this.stores = {}
-    _.forOwn(defaultStoreGenerators, (value, key) => {
-      this.registerGenerator(key, value)
-    })
   }
 
   create (data, params = {}) {
     let { id, type, options } = data
 
     return new Promise((resolve, reject) => {
-      let store = this.generate(type, options)
+      let store = this.stores[id]
+      if (store) {
+        const message = 'Store with id ' + id + ' already exist'
+        debug(message)
+        reject(new Error(message))
+        return
+      }
+      store = this.generate(type, options)
       if (!store) {
         const message = 'Can\'t find store generator for store type ' + type
         debug(message)
@@ -37,9 +40,9 @@ class StoresService extends Service {
         const message = 'Can\'t find store with ID ' + id
         debug(message)
         reject(new Error(message))
-        return
+      } else {
+        resolve(store)
       }
-      resolve(store)
     })
   }
 
@@ -50,10 +53,10 @@ class StoresService extends Service {
         const message = 'Can\'t find store for removal with ID ' + id
         debug(message)
         reject(new Error(message))
-        return
+      } else {
+        delete this.stores[id]
+        resolve(store)
       }
-      delete this.stores[id]
-      resolve(store)
     })
   }
 }

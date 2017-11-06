@@ -12,10 +12,14 @@ export function computeValues (options) {
     }
 
     return new Promise(async (resolve, reject) => {
-      let store = await hook.app.service('stores').get(hook.data.store)
+      // Check if store object already provided or has to be found
+      let store = (hook.params.store ? hook.params.store : await hook.app.service('stores').get(hook.data.store))
       let fileName = hook.result.id
       if (!store || !store.path || (path.extname(fileName) !== '.tif')) {
-        throw new Error(`The 'computeValues' hook only work with GeoTiff files and the fs blob store.`)
+        // throw new Error(`The 'computeValues' hook only work with GeoTiff files and the fs blob store.`)
+        // Simply skip processing
+        resolve(hook)
+        return
       }
       const filePath = path.join(store.path, fileName)
       let readers = gtif.createReadStreams(filePath)
