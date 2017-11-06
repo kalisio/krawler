@@ -3,11 +3,10 @@ import chailint from 'chai-lint'
 import feathers from 'feathers'
 import path from 'path'
 import moment from 'moment'
-import store from 'fs-blob-store'
-import plugin, { stores } from '../src'
+import plugin from '../src'
 
 describe('krawler:tasks', () => {
-  let app, server, storage, tasksService
+  let app, server, storage, storesService, tasksService
 
   before(() => {
     chailint(chai, util)
@@ -16,10 +15,18 @@ describe('krawler:tasks', () => {
     server = app.listen(3030)
   })
 
+  it('creates the stores service', () => {
+    app.use('stores', plugin.stores())
+    storesService = app.service('stores')
+    expect(storesService).toExist()
+  })
+
   it('registers the storage', () => {
-    storage = store(path.join(__dirname, './data'))
-    stores.registerStore('fs', storage)
-    expect(stores.getStore('fs')).toExist()
+    storesService.create({ id: 'fs', type: 'fs', options: { path: path.join(__dirname, './data') } })
+    .then(store => {
+      storage = store
+      expect(storesService.get('fs')).toExist()
+    })
   })
 
   it('creates the tasks service', () => {

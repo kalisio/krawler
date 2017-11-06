@@ -1,10 +1,7 @@
-// import errors from 'feathers-errors'
 import program from 'commander'
 import makeDebug from 'debug'
-import tasks from './tasks'
-import jobs from './jobs'
+import { stores, tasks, jobs } from './services'
 
-export * as stores from './stores'
 export * as hooks from './hooks'
 
 const debug = makeDebug('krawler')
@@ -13,6 +10,7 @@ export default function init () {
 
 }
 
+init.stores = stores
 init.tasks = tasks
 init.jobs = jobs
 

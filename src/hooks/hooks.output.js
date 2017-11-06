@@ -2,17 +2,16 @@ import json2csv from 'json2csv'
 import fs from 'fs-extra'
 import path from 'path'
 import makeDebug from 'debug'
-import * as stores from '../stores'
 
 const debug = makeDebug('krawler:hooks:output')
 
 // Generate a CSV from tasks and specific task values
 export function generateCSV (fields) {
-  return function (hook) {
+  return async function (hook) {
     if (hook.type !== 'after') {
       throw new Error(`The 'generateCSV' hook should only be used as a 'after' hook.`)
     }
-    let store = stores.getStore(hook.data.taskTemplate.store)
+    let store = await hook.app.service('stores').get(hook.data.taskTemplate.store)
     if (!store || !store.path) {
       throw new Error(`The 'generateCSV' hook only work with the fs blob store.`)
     }

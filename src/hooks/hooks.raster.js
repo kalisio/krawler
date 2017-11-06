@@ -1,9 +1,8 @@
 import path from 'path'
 import makeDebug from 'debug'
 import gtif from 'geo-pixel-stream'
-import * as stores from '../stores'
 
-const debug = makeDebug('krawler:hooks:image')
+const debug = makeDebug('krawler:hooks:raster')
 
 // Compute min/max value/elevation on a zone
 export function computeValues (options) {
@@ -12,8 +11,8 @@ export function computeValues (options) {
       throw new Error(`The 'computeValues' hook should only be used as a 'after' hook.`)
     }
 
-    return new Promise((resolve, reject) => {
-      let store = stores.getStore(hook.data.store)
+    return new Promise(async (resolve, reject) => {
+      let store = await hook.app.service('stores').get(hook.data.store)
       let fileName = hook.result.id
       if (!store || !store.path || (path.extname(fileName) !== '.tif')) {
         throw new Error(`The 'computeValues' hook only work with GeoTiff files and the fs blob store.`)

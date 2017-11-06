@@ -1,51 +1,44 @@
 import makeDebug from 'debug'
 import _ from 'lodash'
-import * as stores from './stores'
-import defaultTaskGenerators from './tasks.default'
+import Service from './service'
+import defaultTaskGenerators from '../tasks'
 
 const debug = makeDebug('krawler:tasks')
 
-class Service {
+class TasksService extends Service {
   constructor (options = {}) {
-    this.taskGenerators = {}
+    super(options)
     _.forOwn(defaultTaskGenerators, (value, key) => {
-      this.registerTaskGenerator(key, value)
+      this.registerGenerator(key, value)
     })
   }
 
-  registerTaskGenerator (type, generator) {
-    this.taskGenerators[type] = generator
-  }
-
-  unregisterTaskGenerator (type) {
-    delete this.taskGenerators[type]
-  }
-
-  generateTask (type, options) {
-    let generator = this.taskGenerators[type]
-    if (!generator) return null
-    else return generator(type, options)
+  setup (app, path) {
+    this.storesService = app.service('stores')
   }
 
   create (data, params = {}) {
     let { id, type, options, store, storageOptions } = data
 
-    return new Promise((resolve, reject) => {
-      const message = 'Can\'t find store ' + store
-      store = stores.getStore(store)
-      if (!store) {
+    return new Promise(async (resolve, reject) => {
+      let message = 'Can\'t find store ' + store
+      let storage = await this.storesService.get(store)
+      if (!storage) {
+        debug(message)
         reject(new Error(message))
         return
       }
-      let taskStream = this.generateTask(type, options)
+      let taskStream = this.generate(type, options)
       if (!taskStream) {
-        reject(new Error('Can\'t find task generator for task type ' + type))
+        message = 'Can\'t find task generator for task type ' + type
+        debug(message)
+        reject(new Error(message))
         return
       }
       taskStream
         .on('timeout', reject)
         .on('error', reject)
-        .pipe(store.createWriteStream({
+        .pipe(storage.createWriteStream({
           key: id,
           params: storageOptions
         }, (error) =>
@@ -58,12 +51,13 @@ class Service {
   }
 
   remove (id, params) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const query = params.query
       let store = query.store || params.store
       const message = 'Can\'t find store ' + store
-      if (typeof store === 'string') store = stores.getStore(store)
+      if (typeof store === 'string') store = await this.storesService.get(store)
       if (!store) {
+        debug(message)
         reject(new Error(message))
         return
       }
@@ -75,7 +69,7 @@ class Service {
 }
 
 export default function init (options) {
-  return new Service(options)
+  return new TasksService(options)
 }
 
-init.Service = Service
+init.Service = TasksService

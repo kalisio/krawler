@@ -1,3 +1,3 @@
 export * from './hooks.grid'
-export * from './hooks.image'
+export * from './hooks.raster'
 export * from './hooks.output'

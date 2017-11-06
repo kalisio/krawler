@@ -4,11 +4,10 @@ import feathers from 'feathers'
 import hooks from 'feathers-hooks'
 import path from 'path'
 import moment from 'moment'
-import store from 'fs-blob-store'
-import plugin, { stores, hooks as pluginHooks } from '../src'
+import plugin, { hooks as pluginHooks } from '../src'
 
 describe('krawler:grid', () => {
-  let app, server, storage, tasksService, jobsService
+  let app, server, storage, storesService, tasksService, jobsService
 
   before(() => {
     chailint(chai, util)
@@ -19,9 +18,13 @@ describe('krawler:grid', () => {
   })
 
   it('registers the storage', () => {
-    storage = store(path.join(__dirname, './data'))
-    stores.registerStore('fs', storage)
-    expect(stores.getStore('fs')).toExist()
+    app.use('stores', plugin.stores())
+    storesService = app.service('stores')
+    storesService.create({ id: 'fs', type: 'fs', options: { path: path.join(__dirname, './data') } })
+    .then(store => {
+      storage = store
+      expect(storesService.get('fs')).toExist()
+    })
   })
 
   it('adds hooks to the jobs service', () => {
@@ -142,8 +145,7 @@ describe('krawler:grid', () => {
       size: [2, 2]
     })
     .then(tasks => {
-      done()
-      // storage.exists('request.tif', error => done(error))
+      storage.exists('0-0.tif', error => done(error))
     })
   })
   // Let enough time to download

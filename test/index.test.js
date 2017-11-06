@@ -13,6 +13,8 @@ describe('krawler', () => {
 
   it('is CommonJS compatible', () => {
     expect(typeof plugin).to.equal('function')
+    expect(typeof plugin.stores).to.equal('function')
+    expect(typeof plugin.stores.Service).to.equal('function')
     expect(typeof plugin.tasks).to.equal('function')
     expect(typeof plugin.tasks.Service).to.equal('function')
     expect(typeof plugin.jobs).to.equal('function')

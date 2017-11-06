@@ -1,11 +1,12 @@
-// import errors from 'feathers-errors'
 import _ from 'lodash'
 import makeDebug from 'debug'
+import Service from './service'
 
 const debug = makeDebug('krawler:jobs')
 
-class Service {
+class JobsService extends Service {
   constructor (options = {}) {
+    super(options)
     this.id = options.id || 'id'
   }
 
@@ -33,7 +34,7 @@ class Service {
 }
 
 export default function init (options) {
-  return new Service(options)
+  return new JobsService(options)
 }
 
-init.Service = Service
+init.Service = JobsService

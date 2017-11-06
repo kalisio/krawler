@@ -3,11 +3,10 @@ import chailint from 'chai-lint'
 import feathers from 'feathers'
 import path from 'path'
 import moment from 'moment'
-import store from 'fs-blob-store'
-import plugin, { stores } from '../src'
+import plugin from '../src'
 
 describe('krawler:jobs', () => {
-  let app, server, storage, jobsService
+  let app, server, storage, storesService, jobsService
 
   before(() => {
     chailint(chai, util)
@@ -17,9 +16,13 @@ describe('krawler:jobs', () => {
   })
 
   it('registers the storage', () => {
-    storage = store(path.join(__dirname, './data'))
-    stores.registerStore('fs', storage)
-    expect(stores.getStore('fs')).toExist()
+    app.use('stores', plugin.stores())
+    storesService = app.service('stores')
+    storesService.create({ id: 'fs', type: 'fs', options: { path: path.join(__dirname, './data') } })
+    .then(store => {
+      storage = store
+      expect(storesService.get('fs')).toExist()
+    })
   })
 
   it('creates the jobs service', () => {
@@ -54,8 +57,7 @@ describe('krawler:jobs', () => {
       ]
     })
     .then(tasks => {
-      done()
-      // storage.exists('request.tif', error => done(error))
+      storage.exists('request.tif', error => done(error))
     })
   })
   // Let enough time to download
