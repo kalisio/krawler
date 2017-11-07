@@ -13,7 +13,7 @@ describe('krawler:grid', () => {
     chailint(chai, util)
     app = feathers()
     app.configure(hooks())
-    app.configure(plugin)
+    app.configure(plugin())
     server = app.listen(3030)
   })
 
@@ -28,38 +28,30 @@ describe('krawler:grid', () => {
     expect(jobsService).toExist()
     tasksService.hooks({
       after: {
-        create: [pluginHooks.computeValues({ max: true })]
+        create: [pluginHooks.computeStatistics({ max: true })]
       }
     })
     jobsService.hooks({
       before: {
-        create: [pluginHooks.generateGrid, pluginHooks.generateGridTasks]
+        create: [pluginHooks.generateGrid(), pluginHooks.generateGridTasks()]
       },
       after: {
         create: pluginHooks.generateCSV([
           {
             label: 'Latmin',
-            value: (task) => {
-              return task.bbox[1]
-            }
+            value: 'bbox[1]'
           },
           {
             label: 'Lonmin',
-            value: (task) => {
-              return task.bbox[0]
-            }
+            value: 'bbox[0]'
           },
           {
             label: 'Latmax',
-            value: (task) => {
-              return task.bbox[3]
-            }
+            value: 'bbox[3]'
           },
           {
             label: 'Lonmax',
-            value: (task) => {
-              return task.bbox[2]
-            }
+            value: 'bbox[2]'
           },
           {
             label: 'Elev',
@@ -87,12 +79,12 @@ describe('krawler:grid', () => {
         halfWidth: n * resolution
       }
     }
-    pluginHooks.generateGrid(hook)
+    pluginHooks.generateGrid()(hook)
     expect(hook.data.resolution).to.deep.equal([convergenceFactor, 1])
     expect(hook.data.origin).to.deep.equal([longitude - n * convergenceFactor, latitude - n])
     expect(hook.data.size).to.deep.equal([20, 20])
   })
-/*
+
   it('creates a WCS gridded job', (done) => {
     jobsService.create({
       id: 'requests',
@@ -107,8 +99,8 @@ describe('krawler:grid', () => {
         type: 'wcs',
         options: {
           url: 'http://geoserver.kalisio.xyz/geoserver/Kalisio/wcs',
-          VERSION: '2.0.1',
-          FORMAT: 'image/tiff',
+          version: '2.0.1',
+          format: 'image/tiff',
           coverageid: 'Kalisio:GMTED2010_15'
         }
       },
@@ -125,7 +117,7 @@ describe('krawler:grid', () => {
   })
   // Let enough time to download
   .timeout(30000)
-*/
+
   it('creates a WMS gridded job', (done) => {
     let datetime = moment.utc()
     datetime.startOf('day')
@@ -141,14 +133,14 @@ describe('krawler:grid', () => {
         type: 'wms',
         options: {
           url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS',
-          VERSION: '1.3.0',
+          version: '1.3.0',
           token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
-          LAYERS: 'TEMPERATURE__ISOBARIC_SURFACE',
-          CRS: 'EPSG:4326',
-          STYLES: 'T__ISOBARIC__SHADING',
-          FORMAT: 'image/png',
-          WIDTH: 512,
-          HEIGHT: 512,
+          layers: 'TEMPERATURE__ISOBARIC_SURFACE',
+          crs: 'EPSG:4326',
+          styles: 'T__ISOBARIC__SHADING',
+          format: 'image/png',
+          width: 512,
+          height: 512,
           dim_reference_time: datetime.format(),
           time: datetime.format()
         }

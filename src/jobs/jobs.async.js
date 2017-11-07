@@ -20,6 +20,7 @@ function createJob (options = {}, store = null, tasks) {
           await Promise.all(workers)
         } catch (error) {
           reject(error)
+          return
         }
         workers = []
       }

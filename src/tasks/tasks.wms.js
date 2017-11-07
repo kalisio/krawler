@@ -7,8 +7,8 @@ const debug = makeDebug('krawler:tasks')
 // Build the request parameters to download data from input data source
 function getRequestParameters (options) {
   let queryParameters = _.merge({}, _.omit(options, ['url']))
-  queryParameters.SERVICE = 'WMS'
-  queryParameters.REQUEST = 'GetMap'
+  queryParameters.service = 'WMS'
+  queryParameters.request = 'GetMap'
   // Setup request with URL & params
   debug('Requesting ' + options.url + ' with following parameters', queryParameters)
   return {

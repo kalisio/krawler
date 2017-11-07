@@ -11,7 +11,7 @@ describe('krawler:tasks', () => {
   before(() => {
     chailint(chai, util)
     app = feathers()
-    app.configure(plugin)
+    app.configure(plugin())
     server = app.listen(3030)
   })
 

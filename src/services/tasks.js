@@ -45,11 +45,10 @@ class TasksService extends Service {
         .pipe(storage.createWriteStream({
           key: id,
           params: storageOptions
-        }, (error) =>
-          error
-            ? reject(error)
-            : resolve(data)
-        ))
+        }, error => {
+          if (error) reject(error)
+        }))
+        .on('finish', () => resolve(data))
         .on('error', reject)
     })
   }

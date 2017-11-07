@@ -10,7 +10,7 @@ describe('krawler:stores', () => {
   before(() => {
     chailint(chai, util)
     app = feathers()
-    app.configure(plugin)
+    app.configure(plugin())
   })
 
   it('creates the stores service', () => {

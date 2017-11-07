@@ -19,9 +19,9 @@ export function generateCSV (fields) {
       throw new Error(`The 'generateCSV' hook only work with the fs blob store.`)
     }
 
-    debug('Creating CSV for job')
+    debug('Creating CSV for ' + hook.data.id)
     let csv = json2csv({ data: hook.result, fields })
-    let filePath = path.join(store.path, 'output.csv')
+    let filePath = path.join(store.path, (hook.data.id || 'output') + '.csv')
     debug('Exporting CSV to ' + filePath)
     return fs.outputFile(filePath, csv)
     .then(() => hook)

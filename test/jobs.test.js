@@ -11,7 +11,7 @@ describe('krawler:jobs', () => {
   before(() => {
     chailint(chai, util)
     app = feathers()
-    app.configure(plugin)
+    app.configure(plugin())
     server = app.listen(3030)
   })
 
@@ -42,7 +42,7 @@ describe('krawler:jobs', () => {
         type: 'wcs',
         options: {
           url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
-          VERSION: '2.0.1',
+          version: '2.0.1',
           token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
           coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
           subsets: {
