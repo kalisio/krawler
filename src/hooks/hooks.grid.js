@@ -86,8 +86,8 @@ export function generateGridTasks (options) {
           } else if (type === 'wcs') {
             if (version >= 200) {
               if (!task.options.subsets) task.options.subsets = {}
-              task.options.subsets.Long = bbox[0] + ',' + bbox[2]
-              task.options.subsets.Lat = bbox[1] + ',' + bbox[3]
+              task.options.subsets[_.get(hook.data, 'taskTemplate.options.longitudeLabel', 'long')] = bbox[0] + ',' + bbox[2]
+              task.options.subsets[_.get(hook.data, 'taskTemplate.options.latitudeLabel', 'lat')] = bbox[1] + ',' + bbox[3]
             } else {
               // WCS 1.1 follows EPSG defined axis/tuple ordering for geographic coordinate systems.
               // This means that coordinates reported are actually handled as lat/long not long/lat.

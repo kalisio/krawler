@@ -26,38 +26,9 @@ describe('krawler:grid', () => {
     app.use('jobs', plugin.jobs())
     jobsService = app.service('jobs')
     expect(jobsService).toExist()
-    tasksService.hooks({
-      after: {
-        create: [pluginHooks.computeStatistics({ max: true })]
-      }
-    })
     jobsService.hooks({
       before: {
         create: [pluginHooks.generateGrid(), pluginHooks.generateGridTasks()]
-      },
-      after: {
-        create: pluginHooks.generateCSV([
-          {
-            label: 'Latmin',
-            value: 'bbox[1]'
-          },
-          {
-            label: 'Lonmin',
-            value: 'bbox[0]'
-          },
-          {
-            label: 'Latmax',
-            value: 'bbox[3]'
-          },
-          {
-            label: 'Lonmax',
-            value: 'bbox[2]'
-          },
-          {
-            label: 'Elev',
-            value: 'max'
-          }
-        ])
       }
     })
   })
@@ -85,51 +56,18 @@ describe('krawler:grid', () => {
     expect(hook.data.size).to.deep.equal([20, 20])
   })
 
-  it('creates a WCS gridded job', (done) => {
-    jobsService.create({
-      id: 'requests',
-      store: {
-        id: 'test-store',
-        type: 'fs',
-        options: { path: path.join(__dirname, './data') }
-      },
-      taskTemplate: {
-        store: 'test-store',
-        id: '<%= taskId %>.tif',
-        type: 'wcs',
-        options: {
-          url: 'http://geoserver.kalisio.xyz/geoserver/Kalisio/wcs',
-          version: '2.0.1',
-          format: 'image/tiff',
-          coverageid: 'Kalisio:GMTED2010_15'
-        }
-      },
-      origin: [-10, 35],
-      resolution: [5, 5],
-      size: [2, 2]
-    })
-    .then(tasks => {
-      return storesService.get('test-store')
-    })
-    .then(store => {
-      store.exists('0-0.tif', error => done(error))
-    })
-  })
-  // Let enough time to download
-  .timeout(30000)
-
   it('creates a WMS gridded job', (done) => {
     let datetime = moment.utc()
     datetime.startOf('day')
     jobsService.create({
-      id: 'requests',
+      id: 'wms-grid',
       store: {
         id: 'test-store',
         type: 'fs',
         options: { path: path.join(__dirname, './data') }
       },
       taskTemplate: {
-        id: '<%= taskId %>.png',
+        id: 'wms-<%= taskId %>.png',
         type: 'wms',
         options: {
           url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS',
@@ -146,14 +84,96 @@ describe('krawler:grid', () => {
         }
       },
       origin: [-10, 35],
-      resolution: [5, 5],
+      resolution: [0.5, 0.5],
       size: [2, 2]
     })
     .then(tasks => {
       return storesService.get('test-store')
     })
     .then(store => {
-      store.exists('0-0.png', error => done(error))
+      store.exists('wms-0-0.png', error => done(error))
+    })
+  })
+  // Let enough time to download
+  .timeout(30000)
+
+  it('creates a WCS gridded job', (done) => {
+    // These hooke only work with Geotiff
+    tasksService.hooks({
+      after: {
+        create: [pluginHooks.computeStatistics({ max: true })]
+      }
+    })
+    jobsService.hooks({
+      after: {
+        create: pluginHooks.generateCSV({
+          fields: [
+            {
+              label: 'Latmin',
+              value: 'bbox[1]'
+            },
+            {
+              label: 'Lonmin',
+              value: 'bbox[0]'
+            },
+            {
+              label: 'Latmax',
+              value: 'bbox[3]'
+            },
+            {
+              label: 'Lonmax',
+              value: 'bbox[2]'
+            },
+            {
+              label: 'Elev',
+              value: 'max'
+            }
+          ]
+        })
+      }
+    })
+
+    let datetime = moment.utc()
+    datetime.startOf('day')
+    jobsService.create({
+      id: 'wcs-grid',
+      store: {
+        id: 'test-store',
+        type: 'fs',
+        options: { path: path.join(__dirname, './data') }
+      },
+      taskTemplate: {
+        store: 'test-store',
+        id: 'wcs-<%= taskId %>.tif',
+        type: 'wcs',
+        options: {
+          /*
+          url: 'http://geoserver.kalisio.xyz/geoserver/Kalisio/wcs',
+          version: '2.0.1',
+          format: 'image/tiff',
+          coverageid: 'Kalisio:GMTED2010_15',
+          longitudeLabel: 'Long',
+          latitudeLabel: 'Lat'
+          */
+          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
+          version: '2.0.1',
+          token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
+          coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
+          subsets: {
+            time: datetime.format(),
+            height: 3000
+          }
+        }
+      },
+      origin: [-10, 35],
+      resolution: [0.5, 0.5],
+      size: [2, 2]
+    })
+    .then(tasks => {
+      return storesService.get('test-store')
+    })
+    .then(store => {
+      store.exists('wcs-0-0.tif', error => done(error))
     })
   })
   // Let enough time to download

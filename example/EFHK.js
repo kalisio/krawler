@@ -1,16 +1,15 @@
 const _ = require('lodash')
 const template = require('./jobfile')
 
-module.exports = _.merge({
-  id: 'EFHK-6000-20000',
-  longitude: 24.96333333,
-  latitude: 60.31722222,
-  resolution: 6000,
-  halfWidth: 20000,
-  /*
-  origin: [24.96333333 - 0.1, 60.31722222 - 0.1],
-  resolution: [0.1, 0.1],
-  size: [2, 2],
-  */
+const longitude = 24.96333333
+const latitude = 60.31722222
+const resolution = 1000
+const halfWidth = 20000
+
+const job = _.merge({
+  id: 'EFHK-' + resolution + '-' + halfWidth,
+  longitude, latitude, resolution, halfWidth
 }, template)
+
+module.exports = job
 

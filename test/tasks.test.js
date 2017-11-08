@@ -34,7 +34,7 @@ describe('krawler:tasks', () => {
     let datetime = moment.utc()
     datetime.startOf('day')
     tasksService.create({
-      id: 'request.tif',
+      id: 'task.tif',
       store: 'test-store',
       type: 'wcs',
       options: {
@@ -49,7 +49,7 @@ describe('krawler:tasks', () => {
       }
     })
     .then(task => {
-      storage.exists('request.tif', error => done(error))
+      storage.exists('task.tif', error => done(error))
     })
   })
   // Let enough time to download

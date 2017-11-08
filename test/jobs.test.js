@@ -28,7 +28,7 @@ describe('krawler:jobs', () => {
     let datetime = moment.utc()
     datetime.startOf('day')
     jobsService.create({
-      id: 'requests',
+      id: 'job',
       options: {
         workersLimit: 2
       },
@@ -38,7 +38,7 @@ describe('krawler:jobs', () => {
         options: { path: path.join(__dirname, './data') }
       },
       taskTemplate: {
-        id: '<%= taskId %>.tif',
+        id: 'job-<%= taskId %>.tif',
         type: 'wcs',
         options: {
           url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
@@ -60,7 +60,7 @@ describe('krawler:jobs', () => {
       return storesService.get('test-store')
     })
     .then(store => {
-      store.exists('20.tif', error => done(error))
+      store.exists('job-20.tif', error => done(error))
     })
   })
   // Let enough time to download

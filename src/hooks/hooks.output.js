@@ -1,4 +1,5 @@
 import json2csv from 'json2csv'
+import _ from 'lodash'
 import fs from 'fs-extra'
 import path from 'path'
 import makeDebug from 'debug'
@@ -6,7 +7,7 @@ import makeDebug from 'debug'
 const debug = makeDebug('krawler:hooks:output')
 
 // Generate a CSV from tasks and specific task values
-export function generateCSV (fields) {
+export function generateCSV (options) {
   return async function (hook) {
     if (hook.type !== 'after') {
       throw new Error(`The 'generateCSV' hook should only be used as a 'after' hook.`)
@@ -20,7 +21,7 @@ export function generateCSV (fields) {
     }
 
     debug('Creating CSV for ' + hook.data.id)
-    let csv = json2csv({ data: hook.result, fields })
+    let csv = json2csv({ data: _.get(hook, options.data || 'result'), fields: options.fields })
     let filePath = path.join(store.path, (hook.data.id || 'output') + '.csv')
     debug('Exporting CSV to ' + filePath)
     return fs.outputFile(filePath, csv)
