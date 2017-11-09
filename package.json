@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "homepage": "https://github.com/kalisio/krawler",
   "main": "lib/",
+  "bin": "lib/index.js",
   "keywords": [
     "feathers",
     "feathers-plugin"
