@@ -6,7 +6,7 @@ const debug = makeDebug('krawler:tasks')
 
 // Build the request parameters to download data from input data source
 function getRequestParameters (options) {
-  let queryParameters = _.merge({}, _.omit(options, ['url', 'subsets']))
+  let queryParameters = _.merge({}, _.omit(options, ['url', 'headers', 'subsets']))
   queryParameters.service = 'WCS'
   queryParameters.request = 'GetCoverage'
   // Convert from a json subset key/value to standard, eg height: 10 => height(10)
@@ -20,6 +20,7 @@ function getRequestParameters (options) {
   debug('Requesting ' + options.url + ' with following parameters', queryParameters)
   return {
     url: options.url,
+    headers: options.headers,
     qs: queryParameters,
     qsStringifyOptions: { arrayFormat: 'repeat' }
   }

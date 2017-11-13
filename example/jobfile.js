@@ -17,11 +17,20 @@ module.exports = {
       format: 'image/tiff',
       coverageid: 'Kalisio:GMTED2010_15',
       longitudeLabel: 'Long',
-      latitudeLabel: 'Lat'
+      latitudeLabel: 'Lat',
+      auth: {
+        user: 'username',
+        password: 'password'
+      }
     }
   }, 
   hooks: {
     tasks: {
+      /*
+      before: {
+        basicAuth: { type: 'Proxy-Authorization' }
+      },
+      */
       after: {
         //geotiff2json: {},
         computeStatistics: { max: true }
@@ -29,6 +38,7 @@ module.exports = {
     },
     jobs: {
       before: {
+        basicAuth: { type: 'Proxy-Authorization', path: 'taskTemplate.options' },
         generateGrid: {},
         generateGridTasks: {}
       },

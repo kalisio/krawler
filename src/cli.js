@@ -25,7 +25,7 @@ function activateHooks (service, serviceHooks) {
   service.hooks(serviceHooks)
 }
 
-export default function cli() {
+export default function cli () {
   program
     .version(require('../package.json').version)
     .usage('<jobfile>')
