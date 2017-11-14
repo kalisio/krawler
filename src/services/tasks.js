@@ -55,16 +55,26 @@ class TasksService extends Service {
 
   remove (id, params) {
     return new Promise(async (resolve, reject) => {
-      const query = params.query
-      let store = query.store || params.store
-      const message = 'Can\'t find store ' + store
-      if (typeof store === 'string') store = await this.storesService.get(store)
-      if (!store) {
+      let message = 'Can\'t find or create store'
+      let storage = params.store
+      if (!storage && params.query) {
+        storage = params.query
+        message += storage
+      }
+      // Store might be directly provided
+      if (!storage || (typeof storage !== 'object')) {
+        try {
+          storage = await this.storesService.get(storage)
+        } catch (error) {
+        }
+      }
+      if (!storage) {
         debug(message)
         reject(new Error(message))
         return
       }
-      store.remove({
+
+      storage.remove({
         key: id
       }, error => error ? reject(error) : resolve())
     })

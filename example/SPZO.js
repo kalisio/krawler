@@ -3,7 +3,7 @@ const template = require('./jobfile')
 
 const longitude = -71.93878056
 const latitude = -13.53572222
-const resolution = 1000
+const resolution = 500
 const halfWidth = 20000
 
 const job = _.merge({

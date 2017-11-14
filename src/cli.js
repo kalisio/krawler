@@ -28,8 +28,13 @@ function activateHooks (service, serviceHooks) {
 export default function cli () {
   program
     .version(require('../package.json').version)
-    .usage('<jobfile>')
+    .usage('<jobfile> [options]')
+    .option('-u, --user', 'User name to be used for authentication')
+    .option('-p, --password', 'User password to be used for authentication')
     .parse(process.argv)
+
+  process.env.USER_NAME = program.user
+  process.env.USER_PASSWORD = program.password
 
   debug('Initializing krawler application')
   let app = feathers()
@@ -50,6 +55,7 @@ export default function cli () {
   // Run the app, this is required to correctly setup Feathers
   let server = app.listen(3030)
   // Run the job
+  console.log('Launching job ' + job.id + ', please wait...')
   console.time('Running time')
   app.service('jobs').create(job)
   .then(tasks => {

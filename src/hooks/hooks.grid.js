@@ -9,7 +9,7 @@ const sphericalMercator = new SphericalMercator({
 })
 
 // Generate grid spec from location/width/resolution spec
-export function generateGrid (options) {
+export function generateGrid (options = {}) {
   return function (hook) {
     if (hook.type !== 'before') {
       throw new Error(`The 'generateGrid' hook should only be used as a 'before' hook.`)
@@ -28,8 +28,17 @@ export function generateGrid (options) {
       // Then setup grid spec
       hook.data.resolution = [ dLongitude, dLatitude ]
       hook.data.origin = [ hook.data.longitude - halfWidthLongitude, hook.data.latitude - halfWidthLatitude ]
-      hook.data.size = [ 2 * halfWidthLongitude / dLongitude, 2 * halfWidthLatitude / dLatitude ]
-      debug('Generated grid spec for data ', hook.data)
+      hook.data.size = [ Math.floor(2 * halfWidthLongitude / dLongitude), Math.floor(2 * halfWidthLatitude / dLatitude) ]
+      // Take into account a block resolution
+      const blockResolution = hook.data.blockResolution
+      if (blockResolution) {
+        const dBlockLatitude = 360 * blockResolution / (2 * Math.PI * earthRadius)
+        const dBlockLongitude = dBlockLatitude * convergenceFactor
+        hook.data.blockResolution = [ dBlockLongitude, dBlockLatitude ]
+        hook.data.nbBlocks = [ Math.floor(2 * halfWidthLongitude / dBlockLongitude), Math.floor(2 * halfWidthLatitude / dBlockLatitude) ]
+        hook.data.blockSize = [ hook.data.size[0] / hook.data.nbBlocks[0], hook.data.size[1] / hook.data.nbBlocks[1] ]
+      }
+      debug('Generated grid specification for ', hook.data)
     }
 
     return hook
@@ -37,7 +46,7 @@ export function generateGrid (options) {
 }
 
 // Generate the task to download gridded data from grid spec
-export function generateGridTasks (options) {
+export function generateGridTasks (options = {}) {
   return function (hook) {
     if (hook.type !== 'before') {
       throw new Error(`The 'generateGridTasks' hook should only be used as a 'before' hook.`)
@@ -46,16 +55,23 @@ export function generateGridTasks (options) {
     if (hook.data.origin && hook.data.origin.length > 1 &&
         hook.data.size && hook.data.size.length > 1 &&
         hook.data.resolution && hook.data.resolution.length > 1) {
-      const origin = hook.data.origin
-      const size = hook.data.size
-      const resolution = hook.data.resolution
+      let origin = hook.data.origin
+      // One task can target a block of the grid or the final grid resolution
+      const blockSize = hook.data.blockSize
+      const size = hook.data.nbBlocks || hook.data.size
+      const resolution = hook.data.blockResolution || hook.data.resolution
 
-      let type = _.get(hook.data, 'taskTemplate.type')
+      const type = _.get(hook.data, 'taskTemplate.type')
       // Depending on the version number we have different options
       let version = _.get(hook.data, 'taskTemplate.options.version')
       if (version) {
         version = _.toNumber(version.split('.').join(''))
       }
+      const longitudeLabel = _.get(hook.data, 'taskTemplate.options.longitudeLabel', 'long')
+      const latitudeLabel = _.get(hook.data, 'taskTemplate.options.latitudeLabel', 'lat')
+      // Once consumed not required anymore and will avoid polluting request parameters
+      _.unset(hook.data, 'taskTemplate.options.longitudeLabel')
+      _.unset(hook.data, 'taskTemplate.options.latitudeLabel')
 
       let tasks = []
       for (let i = 0; i < size[0]; i++) {
@@ -82,17 +98,35 @@ export function generateGridTasks (options) {
               // FIXME: check with CRS
               bbox = [ bbox[1], bbox[0], bbox[3], bbox[2] ]
             }
+            // Resample to target grid resolution ?
+            if (options.resample) {
+              if (blockSize) {
+                task.options.width = blockSize[0]
+                task.options.height = blockSize[1]
+              } else {
+                task.options.width = 1
+                task.options.height = 1
+              }
+            }
             task.options.BBOX = bbox[0] + ',' + bbox[1] + ',' + bbox[2] + ',' + bbox[3]
           } else if (type === 'wcs') {
             if (version >= 200) {
               if (!task.options.subsets) task.options.subsets = {}
-              task.options.subsets[_.get(hook.data, 'taskTemplate.options.longitudeLabel', 'long')] = bbox[0] + ',' + bbox[2]
-              task.options.subsets[_.get(hook.data, 'taskTemplate.options.latitudeLabel', 'lat')] = bbox[1] + ',' + bbox[3]
+              task.options.subsets[longitudeLabel] = bbox[0] + ',' + bbox[2]
+              task.options.subsets[latitudeLabel] = bbox[1] + ',' + bbox[3]
+              // Resample to target grid resolution ?
+              if (options.resample) {
+                if (blockSize) {
+                  task.options.scalesize = 'i(' + blockSize[0] + ')' + ',' + 'j(' + blockSize[1] + ')'
+                } else {
+                  task.options.scalesize = 'i(' + 1 + ')' + ',' + 'j(' + 1 + ')'
+                }
+              }
             } else {
               // WCS 1.1 follows EPSG defined axis/tuple ordering for geographic coordinate systems.
               // This means that coordinates reported are actually handled as lat/long not long/lat.
               bbox = [ bbox[1], bbox[0], bbox[3], bbox[2] ]
-              task.options.BOUNDINGBOX = bbox[0] + ',' + bbox[1] + ',' + bbox[2] + ',' + bbox[3] + ',' + 'urn:ogc:def:crs:EPSG::4326'
+              task.options.boundingbox = bbox[0] + ',' + bbox[1] + ',' + bbox[2] + ',' + bbox[3] + ',' + 'urn:ogc:def:crs:EPSG::4326'
             }
           }
           tasks.push(task)

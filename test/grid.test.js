@@ -67,7 +67,7 @@ describe('krawler:grid', () => {
         options: { path: path.join(__dirname, './data') }
       },
       taskTemplate: {
-        id: 'wms-<%= taskId %>.png',
+        id: '<%= jobId %>-<%= taskId %>.png',
         type: 'wms',
         options: {
           url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS',
@@ -101,7 +101,7 @@ describe('krawler:grid', () => {
     // These hooke only work with Geotiff
     tasksService.hooks({
       after: {
-        create: [pluginHooks.computeStatistics({ max: true })]
+        create: [ pluginHooks.computeStatistics({ max: true }), pluginHooks.geotiff2json({ writeToFile: true }) ]
       }
     })
     jobsService.hooks({
@@ -144,7 +144,7 @@ describe('krawler:grid', () => {
       },
       taskTemplate: {
         store: 'test-store',
-        id: 'wcs-<%= taskId %>.tif',
+        id: '<%= jobId %>-<%= taskId %>.tif',
         type: 'wcs',
         options: {
           /*
@@ -173,7 +173,10 @@ describe('krawler:grid', () => {
       return storesService.get('test-store')
     })
     .then(store => {
-      store.exists('wcs-0-0.tif', error => done(error))
+      store.exists('wcs-0-0.tif', error => {
+        if (error) done(error)
+        else store.exists('wcs-0-0.json', error => done(error))
+      })
     })
   })
   // Let enough time to download

@@ -36,13 +36,16 @@ class JobsService extends Service {
     debug('Launching job with following template', taskTemplate)
     tasks = tasks.map(task => {
       // Create a new task with compiled ID
-      let newTask = Object.assign({ id: compiler({ taskId: task.id }) }, _.omit(task, ['id']))
+      let newTask = Object.assign({ id: compiler({ jobId: data.id, taskId: task.id }) }, _.omit(task, ['id']))
       // Then affect template
       _.merge(newTask, _.omit(taskTemplate, ['id']))
       return newTask
     })
     // Always default to async if no type given
     return this.generate(type || 'async', options, store, tasks)
+    // FIXME: clear tasks temporary files, for now generate this bug
+    // EBUSY: resource busy or locked
+    // .then(tasks => Promise.all(tasks.map(task => this.tasksService.remove(task.id, { store }))))
   }
 }
 

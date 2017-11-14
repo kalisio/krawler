@@ -38,7 +38,7 @@ describe('krawler:jobs', () => {
         options: { path: path.join(__dirname, './data') }
       },
       taskTemplate: {
-        id: 'job-<%= taskId %>.tif',
+        id: '<%= jobId %>-<%= taskId %>.tif',
         type: 'wcs',
         options: {
           url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
