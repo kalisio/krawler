@@ -14,6 +14,13 @@
 npm install krawler --save
 ```
 
+Add `-g` option if you'd like to globally install the command-line version.  
+
+A native command-line executable can also be generated using [pkg](https://github.com/zeit/pkg) eg for windows:
+```
+pkg . --target node8-win-x86
+```
+
 ## Documentation
 
 **TODO**
@@ -34,7 +41,9 @@ const plugin = require('krawler');
 const app = feathers()
   .configure(rest())
   .configure(hooks())
+  .configure(plugins())
   // Initialize your feathers plugin services
+  .use('/stores', plugin.stores());
   .use('/tasks', plugin.tasks());
   .use('/jobs', plugin.jobs());
   .use(errorHandler());
