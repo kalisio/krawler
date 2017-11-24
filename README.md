@@ -16,14 +16,28 @@ npm install krawler --save
 
 Add `-g` option if you'd like to globally install the command-line version.  
 
-A native command-line executable can also be generated using [pkg](https://github.com/zeit/pkg) eg for windows:
+You can run a sample from the example directory like this
+```
+// If local installation
+node . ./example/RJTT.js
+// If global/executable installation
+krawler ./example/RJTT.js
+```
+
+A native command-line executable can be generated using [pkg](https://github.com/zeit/pkg) eg for windows:
 ```
 pkg . --target node8-win-x86
 ```
 
+> Because it relies on the GDAL native bindings you will need to deploy the *gdal.node* file (usually found in *node_modules\gdal\lib\binding*) to the same directory as the executable. Take care to generate the executable with the same architecture than your Node.js version. 
+
 ## Documentation
 
 **TODO**
+
+A set of introduction articles is currently written to detail:
+* [the underlying concepts](https://medium.com/@luc.claustres/a-minimalist-etl-using-feathersjs-part-1-1d56972d6500)
+* the practical use case of geographical data processing
 
 ## Complete Example
 
