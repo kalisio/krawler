@@ -4,7 +4,7 @@ import makeDebug from 'debug'
 const debug = makeDebug('krawler:hooks:auth')
 
 // Add headers for basic/proxy auth
-export function basicAuth (options) {
+export function basicAuth (options = {}) {
   return function (hook) {
     if (hook.type !== 'before') {
       throw new Error(`The 'basicAuth' hook should only be used as a 'before' hook.`)

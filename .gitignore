@@ -34,4 +34,4 @@ lib/
 
 # The test data
 data
-test/data
+test/data/output

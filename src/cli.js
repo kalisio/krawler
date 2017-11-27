@@ -12,14 +12,14 @@ const debug = makeDebug('krawler')
 function activateHooks (service, serviceHooks) {
   // Iterate over hook types (before, after)
   _.forOwn(serviceHooks, (hooksDefinition, stage) => {
-    // Iterate over hooks to create the hook chain
-    let chain = []
+    // Iterate over hooks to create the hook pipeline
+    let pipeline = []
     _.forOwn(hooksDefinition, (hookOptions, hookName) => {
       // Jump from name/options to the real hook function
-      chain.push(hooks[hookName](hookOptions))
+      pipeline.push(hooks[hookName](hookOptions))
     })
     // Replace hooks in place so that we can use it directly with Feathers after
-    serviceHooks[stage] = { create: chain } // We only have create operation to manage
+    serviceHooks[stage] = { create: pipeline } // We only have create operation to manage
   })
   // Setup hooks on service
   service.hooks(serviceHooks)

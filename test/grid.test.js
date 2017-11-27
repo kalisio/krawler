@@ -64,7 +64,7 @@ describe('krawler:grid', () => {
       store: {
         id: 'test-store',
         type: 'fs',
-        options: { path: path.join(__dirname, './data') }
+        options: { path: path.join(__dirname, 'data', 'output') }
       },
       taskTemplate: {
         id: '<%= jobId %>-<%= taskId %>.png',
@@ -140,7 +140,7 @@ describe('krawler:grid', () => {
       store: {
         id: 'test-store',
         type: 'fs',
-        options: { path: path.join(__dirname, './data') }
+        options: { path: path.join(__dirname, 'data', 'output') }
       },
       taskTemplate: {
         store: 'test-store',

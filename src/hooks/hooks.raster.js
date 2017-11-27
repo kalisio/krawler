@@ -108,10 +108,10 @@ export function geotiff2json (options = {}) {
             const y = yOffset + j
             // Take care that blocks do not exactly fit image size
             if ((x < stream.metadata.width) && (y < stream.metadata.height)) {
-              let value = data.buffer[i + j * data.blockSize.y]
+              let value = data.buffer[i + j * data.blockSize.x]
               // If no fields given simply export the value matrix
               if (!options.fields) {
-                json[x * stream.metadata.width + y] = value
+                json[x + y * stream.metadata.width] = value
               } else {
                 // Compute pixel bbox, take care that when x increases longitude increases
                 // but when y increases latitude decreases
@@ -128,7 +128,7 @@ export function geotiff2json (options = {}) {
                 bottomRight = coordinateTransform.transformPoint(bottomRight)
                 const bbox = [topLeft.x, topLeft.y, bottomRight.x, bottomRight.y]
                 // Otherwise pick which field shoul be exported
-                json[x * stream.metadata.width + y] = _.pick({ x, y, bbox, value }, options.fields)
+                json[x + y * stream.metadata.width] = _.pick({ x, y, bbox, value }, options.fields)
               }
             }
           }

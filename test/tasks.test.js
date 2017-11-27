@@ -18,7 +18,7 @@ describe('krawler:tasks', () => {
   it('creates the storage', () => {
     app.use('stores', plugin.stores())
     storesService = app.service('stores')
-    return storesService.create({ id: 'test-store', type: 'fs', options: { path: path.join(__dirname, './data') } })
+    return storesService.create({ id: 'test-store', type: 'fs', options: { path: path.join(__dirname, 'data', 'output') } })
     .then(store => {
       storage = store
     })

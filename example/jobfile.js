@@ -14,10 +14,10 @@ module.exports = {
     id: '<%= jobId %>-<%= taskId %>.tif',
     type: 'wcs',
     options: {
-      url: 'http://geoserver.kalisio.xyz/geoserver/Kalisio/wcs',
+      url: 'http://gs.kalisio.xyz/geoserver/Kalisio/wcs',
       version: '2.0.1',
       format: 'image/tiff',
-      coverageid: 'Kalisio:GMTED2010_15',
+      coverageid: 'Kalisio:SRTM',
       longitudeLabel: 'Long',
       latitudeLabel: 'Lat',
       auth: {

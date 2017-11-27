@@ -48,6 +48,11 @@
       "mocha"
     ]
   },
+  "pkg": {
+    "scripts": [
+      "lib/**/*.js"
+    ]
+  },
   "directories": {
     "lib": "lib"
   },
