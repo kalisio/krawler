@@ -25,16 +25,12 @@ function activateHooks (service, serviceHooks) {
   service.hooks(serviceHooks)
 }
 
-export default function cli () {
-  program
-    .version(require('../package.json').version)
-    .usage('<jobfile> [options]')
-    .option('-u, --user', 'User name to be used for authentication')
-    .option('-p, --password', 'User password to be used for authentication')
-    .parse(process.argv)
-
-  process.env.USER_NAME = program.user
-  process.env.USER_PASSWORD = program.password
+export function run (jobfile, options = {}) {
+  if (options.proxy) process.env.HTTP_PROXY = options.proxy
+  if (options['proxy-https']) process.env.HTTPS_PROXY = ['proxy-https']
+  if (options.debug) process.env.DEBUG = 'krawler*'
+  if (options.user) process.env.USER_NAME = options.user
+  if (options.password) process.env.USER_PASSWORD = options.password
 
   debug('Initializing krawler application')
   let app = feathers()
@@ -44,7 +40,6 @@ export default function cli () {
   app.use('tasks', plugin.tasks())
   app.use('jobs', plugin.jobs())
   // Read job file
-  let jobfile = path.join(process.cwd(), program.args[0])
   let job = require(jobfile)
   // Process hooks
   _.forOwn(job.hooks, (value, key) => {
@@ -57,16 +52,31 @@ export default function cli () {
   // Run the job
   console.log('Launching job ' + job.id + ', please wait...')
   console.time('Running time')
-  app.service('jobs').create(job)
+  return app.service('jobs').create(job)
   .then(tasks => {
     console.log('Job terminated, ' + tasks.length + ' tasks ran')
     console.timeEnd('Running time')
     server.close()
+    return tasks
   })
   .catch(error => {
     console.log(error.message)
     server.close()
   })
+}
+
+export default function cli () {
+  program
+    .version(require('../package.json').version)
+    .usage('<jobfile> [options]')
+    .option('-d, --debug', 'Verbose output for debugging')
+    .option('-P, --proxy', 'Proxy to be used for HTTP (and HTTPS)')
+    .option('-PS, --proxy-https', 'Proxy to be used for HTTPS')
+    .option('-u, --user', 'User name to be used for authentication')
+    .option('-p, --password', 'User password to be used for authentication')
+    .parse(process.argv)
+
+  run(path.join(process.cwd(), program.args[0]), program)
 }
 
 if (require.main === module) {

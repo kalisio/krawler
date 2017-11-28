@@ -35,7 +35,7 @@ describe('krawler:jobs', () => {
       store: {
         id: 'test-store',
         type: 'fs',
-        options: { path: path.join(__dirname, 'data', 'output') }
+        options: { path: path.join(__dirname, 'output') }
       },
       taskTemplate: {
         id: '<%= jobId %>-<%= taskId %>.tif',
@@ -60,7 +60,10 @@ describe('krawler:jobs', () => {
       return storesService.get('test-store')
     })
     .then(store => {
-      store.exists('job-20.tif', error => done(error))
+      store.exists('job-20.tif', (error, exist) => {
+        if (error) done(error)
+        done(exist ? null : new Error('File not found in store'))
+      })
     })
   })
   // Let enough time to download

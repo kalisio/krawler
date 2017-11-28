@@ -8,7 +8,8 @@ const debug = makeDebug('krawler:tasks')
 function getRequestParameters (options) {
   let queryParameters = _.merge({}, _.omit(options, ['url', 'headers', 'subsets']))
   queryParameters.service = 'WCS'
-  queryParameters.request = 'GetCoverage'
+  // If request type if not provided set default value
+  if (!queryParameters.request) queryParameters.request = 'GetCoverage'
   // Convert from a json subset key/value to standard, eg height: 10 => height(10)
   if (options.subsets) {
     queryParameters.subset = []

@@ -16,7 +16,7 @@ class JobsService extends Service {
   }
 
   async create (data, params = {}) {
-    let { type, options, store, taskTemplate, tasks } = data
+    let { type, id, options, store, taskTemplate, tasks } = data
     // Store config given for all tasks of the job
     if (typeof store === 'object') {
       try {
@@ -32,17 +32,27 @@ class JobsService extends Service {
       }
     }
     // The task template ID is used as a template string for the task ID
-    let compiler = _.template(taskTemplate.id)
-    debug('Launching job with following template', taskTemplate)
+    let compiler
+    if (taskTemplate) {
+      compiler = _.template(taskTemplate.id)
+      debug('Launching job with following template', taskTemplate)
+    }
     tasks = tasks.map(task => {
-      // Create a new task with compiled ID
-      let newTask = Object.assign({ id: compiler({ jobId: data.id, taskId: task.id }) }, _.omit(task, ['id']))
-      // Then affect template
-      _.merge(newTask, _.omit(taskTemplate, ['id']))
+      let newTask = {}
+      if (taskTemplate) {
+        // Create a new task with compiled ID
+        newTask.id = compiler({ jobId: data.id, taskId: task.id })
+        // Then affect template and object
+        _.merge(newTask, _.omit(taskTemplate, ['id']))
+        _.merge(newTask, _.omit(task, ['id']))
+      } else {
+        // Simply copy input object when no template is given
+        Object.assign(newTask, task)
+      }
       return newTask
     })
     // Always default to async if no type given
-    return this.generate(type || 'async', options, store, tasks)
+    return this.generate(type || 'async', options, store, tasks, id)
     // FIXME: clear tasks temporary files, for now generate this bug
     // EBUSY: resource busy or locked
     // .then(tasks => Promise.all(tasks.map(task => this.tasksService.remove(task.id, { store }))))

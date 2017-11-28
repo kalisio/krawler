@@ -1,18 +1,17 @@
 import path from 'path'
 import _ from 'lodash'
-import fs from 'fs-extra'
 import makeDebug from 'debug'
 import gtif from 'geo-pixel-stream'
 import gdal from 'gdal'
+import { getStoreFromHook } from '../stores'
 
 const debug = makeDebug('krawler:hooks:raster')
 
-async function getStream (hook, hookName) {
-  // Check if store object already provided or has to be found
-  let store = (hook.params.store ? hook.params.store : await hook.app.service('stores').get(typeof hook.data.store === 'object' ? hook.data.store.id : hook.data.store))
+async function getStream (hook, hookName, storePath) {
+  let store = await getStoreFromHook(hook, hookName, storePath)
   let fileName = hook.result.id
-  if (!store || !store.path || (path.extname(fileName) !== '.tif')) {
-    throw new Error(`The ${hookName} hook only work with GeoTiff files and the fs blob store.`)
+  if (path.extname(fileName) !== '.tif') {
+    throw new Error(`The ${hookName} hook only work with GeoTiff files.`)
   }
   const filePath = path.join(store.path, fileName)
   let readers = []
@@ -76,17 +75,17 @@ export function computeStatistics (options = {}) {
   }
 }
 
-// Convert GeoTiff to JSON
-export function geotiff2json (options = {}) {
+// Read a GeoTiff from an input stream/store and convert to JSON values
+export function readGeoTiff (options = {}) {
   return function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'geotiff2json' hook should only be used as a 'after' hook.`)
+      throw new Error(`The 'readGeotiff' hook should only be used as a 'after' hook.`)
     }
 
     return new Promise(async (resolve, reject) => {
       let geotiff
       try {
-        geotiff = await getStream(hook, 'geotiff2json')
+        geotiff = await getStream(hook, 'readGeotiff')
       } catch (error) {
         reject(error)
         return
@@ -136,16 +135,9 @@ export function geotiff2json (options = {}) {
       })
 
       stream.on('end', () => {
-        // Store in memory attached to result object ?
-        if (!options.writeToFile) {
-          _.set(hook, options.dataPath || 'result.data', json)
-          resolve(hook)
-        } else {
-          // Otherwise store to file
-          fs.outputJson(path.join(path.dirname(geotiff.filePath), path.basename(geotiff.filePath, '.tif') + '.json'), json)
-          .then(_ => resolve(hook))
-          .catch(error => reject(error))
-        }
+        // Store in memory attached to result object
+        _.set(hook, options.dataPath || 'result.data', json)
+        resolve(hook)
       })
     })
   }

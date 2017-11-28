@@ -64,7 +64,7 @@ describe('krawler:grid', () => {
       store: {
         id: 'test-store',
         type: 'fs',
-        options: { path: path.join(__dirname, 'data', 'output') }
+        options: { path: path.join(__dirname, 'output') }
       },
       taskTemplate: {
         id: '<%= jobId %>-<%= taskId %>.png',
@@ -91,7 +91,10 @@ describe('krawler:grid', () => {
       return storesService.get('test-store')
     })
     .then(store => {
-      store.exists('wms-0-0.png', error => done(error))
+      store.exists('wms-grid-0-0.png', (error, exist) => {
+        if (error) done(error)
+        done(exist ? null : new Error('File not found in store'))
+      })
     })
   })
   // Let enough time to download
@@ -101,12 +104,12 @@ describe('krawler:grid', () => {
     // These hooke only work with Geotiff
     tasksService.hooks({
       after: {
-        create: [ pluginHooks.computeStatistics({ max: true }), pluginHooks.geotiff2json({ writeToFile: true }) ]
+        create: [ pluginHooks.computeStatistics({ max: true }), pluginHooks.readGeoTiff(), pluginHooks.writeJson() ]
       }
     })
     jobsService.hooks({
       after: {
-        create: pluginHooks.generateCSV({
+        create: pluginHooks.writeCSV({
           fields: [
             {
               label: 'Latmin',
@@ -140,7 +143,7 @@ describe('krawler:grid', () => {
       store: {
         id: 'test-store',
         type: 'fs',
-        options: { path: path.join(__dirname, 'data', 'output') }
+        options: { path: path.join(__dirname, 'output') }
       },
       taskTemplate: {
         store: 'test-store',
@@ -173,9 +176,14 @@ describe('krawler:grid', () => {
       return storesService.get('test-store')
     })
     .then(store => {
-      store.exists('wcs-0-0.tif', error => {
+      store.exists('wcs-grid-0-0.tif', (error, exist) => {
         if (error) done(error)
-        else store.exists('wcs-0-0.json', error => done(error))
+        if (!exist) done(new Error('File not found in store'))
+
+        store.exists('wcs-grid-0-0.tif.json', (error, exist) => {
+          if (error) done(error)
+          done(exist ? null : new Error('File not found in store'))
+        })
       })
     })
   })

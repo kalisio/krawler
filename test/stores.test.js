@@ -20,7 +20,7 @@ describe('krawler:stores', () => {
   })
 
   it('creates the storage', () => {
-    return storesService.create({ id: 'fs', type: 'fs', options: { path: path.join(__dirname, 'data', 'output') } })
+    return storesService.create({ id: 'fs', type: 'fs', options: { path: path.join(__dirname, 'output') } })
     .then(_ => {
       return storesService.get('fs')
     })

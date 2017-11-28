@@ -8,7 +8,8 @@ const debug = makeDebug('krawler:tasks')
 function getRequestParameters (options) {
   let queryParameters = _.merge({}, _.omit(options, ['url', 'headers']))
   queryParameters.service = 'WMS'
-  queryParameters.request = 'GetMap'
+  // If request type if not provided set default value
+  if (!queryParameters.request) queryParameters.request = 'GetMap'
   // Setup request with URL & params
   debug('Requesting ' + options.url + ' with following parameters', queryParameters)
   return {

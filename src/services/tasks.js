@@ -32,14 +32,20 @@ class TasksService extends Service {
         reject(new Error(message))
         return
       }
-      let taskStream = this.generate(type, options)
+      // Providing 'type-stream' as input type means we don't want to directly write the read stream
+      // to the store but simply open it and return it for hooks to process
+      const streamed = type.endsWith('-stream')
+      let taskStream = await this.generate(streamed ? type.replace('-stream', '') : type, options, id)
       if (!taskStream) {
         message = 'Can\'t find task generator for task type ' + type
         debug(message)
         reject(new Error(message))
         return
       }
-      taskStream
+      if (streamed) {
+        resolve(Object.assign({ stream: taskStream }, data))
+      } else {
+        taskStream
         .on('timeout', reject)
         .on('error', reject)
         .pipe(storage.createWriteStream({
@@ -50,6 +56,7 @@ class TasksService extends Service {
         }))
         .on('finish', () => resolve(data))
         .on('error', reject)
+      }
     })
   }
 

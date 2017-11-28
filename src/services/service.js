@@ -16,7 +16,7 @@ class Service {
     delete this.generators[type]
   }
 
-  generate (type, ...options) {
+  async generate (type, ...options) {
     let generator = this.generators[type]
     if (!generator) return null
     else return generator.apply(this, options)

@@ -18,7 +18,7 @@ describe('krawler:tasks', () => {
   it('creates the storage', () => {
     app.use('stores', plugin.stores())
     storesService = app.service('stores')
-    return storesService.create({ id: 'test-store', type: 'fs', options: { path: path.join(__dirname, 'data', 'output') } })
+    return storesService.create({ id: 'test-store', type: 'fs', options: { path: path.join(__dirname, 'output') } })
     .then(store => {
       storage = store
     })
@@ -49,7 +49,10 @@ describe('krawler:tasks', () => {
       }
     })
     .then(task => {
-      storage.exists('task.tif', error => done(error))
+      storage.exists('task.tif', (error, exist) => {
+        if (error) done(error)
+        done(exist ? null : new Error('File not found in store'))
+      })
     })
   })
   // Let enough time to download

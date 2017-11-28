@@ -13,7 +13,7 @@ class StoresService extends Service {
   create (data, params = {}) {
     let { id, type, options } = data
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       let store = this.stores[id]
       if (store) {
         const message = 'Store with id ' + id + ' already exist'
@@ -21,7 +21,7 @@ class StoresService extends Service {
         reject(new Error(message))
         return
       }
-      store = this.generate(type, options)
+      store = await this.generate(type, options, id)
       if (!store) {
         const message = 'Can\'t find store generator for store type ' + type
         debug(message)

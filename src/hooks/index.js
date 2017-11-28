@@ -1,4 +1,5 @@
 export * from './hooks.grid'
 export * from './hooks.raster'
-export * from './hooks.output'
+export * from './hooks.csv'
+export * from './hooks.json'
 export * from './hooks.auth'
