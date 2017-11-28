@@ -22,11 +22,13 @@ module.exports = {
     tasks: {
       after: {
         readGeoTiff: {
-          // For debug purpose
-          //writeToFile: true,
           dataPath: 'result.data',
           fields: ['bbox', 'value']
         },
+        // For debug purpose
+        /*
+        writeJson: {}
+        */
         writeCSV: {
           dataPath: 'result.data',
           fields: [
