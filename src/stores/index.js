@@ -20,6 +20,26 @@ export async function getStoreFromHook (hook, hookName, storePath) {
   return store
 }
 
+export async function getStoreFromService (storesService, params, data) {
+  // First try specific service data
+  let { store } = data
+  // Store config given
+  if (store) {
+    try {
+      // Check if store does not already exist
+      store = await storesService.get(typeof store === 'object' ? store.id : store)
+    } catch (error) {
+      // If not create it the first time
+      store = await storesService.create(store)
+    }
+  } else {
+    // Check if store object already provided as global parameter
+    store = params.store
+  }
+
+  return store
+}
+
 export default {
   fs
 }

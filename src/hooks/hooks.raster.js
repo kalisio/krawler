@@ -38,19 +38,14 @@ async function getStream (hook, hookName, storePath) {
 
 // Compute min/max value/elevation on a zone
 export function computeStatistics (options = {}) {
-  return function (hook) {
+  return async function (hook) {
     if (hook.type !== 'after') {
       throw new Error(`The 'computeStatistics' hook should only be used as a 'after' hook.`)
     }
 
+    let geotiff = await getStream(hook, 'computeStatistics')
+
     return new Promise(async (resolve, reject) => {
-      let geotiff
-      try {
-        geotiff = await getStream(hook, 'computeStatistics')
-      } catch (error) {
-        reject(error)
-        return
-      }
       let { filePath, stream, band } = geotiff
       debug('Computing statistics for ' + filePath)
       let maxValue = Number.NEGATIVE_INFINITY
@@ -77,19 +72,14 @@ export function computeStatistics (options = {}) {
 
 // Read a GeoTiff from an input stream/store and convert to JSON values
 export function readGeoTiff (options = {}) {
-  return function (hook) {
+  return async function (hook) {
     if (hook.type !== 'after') {
       throw new Error(`The 'readGeotiff' hook should only be used as a 'after' hook.`)
     }
 
+    let geotiff = await getStream(hook, 'readGeotiff')
+
     return new Promise(async (resolve, reject) => {
-      let geotiff
-      try {
-        geotiff = await getStream(hook, 'readGeotiff')
-      } catch (error) {
-        reject(error)
-        return
-      }
       let { filePath, stream, dataset, band } = geotiff
       const wgs84 = gdal.SpatialReference.fromEPSG(4326)
       const geotransform = dataset.geoTransform
