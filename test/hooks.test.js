@@ -76,6 +76,8 @@ describe('krawler:hooks', () => {
       checkJson(hook)
     })
   })
+  // Let enough time to proceed
+  .timeout(5000)
 
   it('computes statistics on GeoTiff', () => {
     return pluginHooks.computeStatistics({
@@ -89,6 +91,8 @@ describe('krawler:hooks', () => {
       expect(hook.result.max.toFixed(2)).to.equal('73.44')
     })
   })
+  // Let enough time to proceed
+  .timeout(5000)
 
   it('converts CSV to JSON', () => {
     return pluginHooks.readCSV({ headers: true })(csvHook)
@@ -105,4 +109,6 @@ describe('krawler:hooks', () => {
       checkJson(hook)
     })
   })
+  // Let enough time to proceed
+  .timeout(5000)
 })
