@@ -5,7 +5,7 @@ const debug = makeDebug('krawler:stores')
 
 // Create the fs store
 function createStore (options, id) {
-  debug('Creating FS store ' + id + ' with following parameters', options)
+  debug('Creating S3 store ' + id + ' with following parameters', options)
   return store(options)
 }
 

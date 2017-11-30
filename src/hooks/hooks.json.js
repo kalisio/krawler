@@ -70,13 +70,13 @@ export function convertToGeoJson (options = {}) {
     let json = _.get(hook, options.dataPath || 'result.data', {})
 
     // Declare the output GeoJson collection
-    let collection = { 
-      type: 'FeatureCollection', 
-      features: [] 
+    let collection = {
+      type: 'FeatureCollection',
+      features: []
     }
-        
+
     // Then iterate over JSON objects
-     _.forEach(json, object => {
+    _.forEach(json, object => {
       let lon = Number(_.get(object, options.longitude || 'longitude', 0))
       let lat = Number(_.get(object, options.latitude || 'latitude', 0))
       let alt = Number(_.get(object, options.altitude || 'altitude', 0))
@@ -93,7 +93,7 @@ export function convertToGeoJson (options = {}) {
         collection.features.push(feature)
       }
     })
-    
+
     // Then update JSON in place in memory
     _.set(hook, options.dataPath || 'result.data', collection)
   }
