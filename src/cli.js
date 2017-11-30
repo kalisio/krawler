@@ -7,7 +7,7 @@ import makeDebug from 'debug'
 import * as hooks from './hooks'
 import plugin from '.'
 
-const debug = makeDebug('krawler')
+const debug = makeDebug('krawler:cli')
 
 function activateHooks (service, serviceHooks) {
   // Iterate over hook types (before, after)
@@ -27,12 +27,12 @@ function activateHooks (service, serviceHooks) {
 
 export function run (jobfile, options = {}) {
   if (options.proxy) process.env.HTTP_PROXY = options.proxy
-  if (options['proxy-https']) process.env.HTTPS_PROXY = ['proxy-https']
+  if (options['proxy-https']) process.env.HTTPS_PROXY = options['proxy-https']
   if (options.debug) process.env.DEBUG = 'krawler*'
   if (options.user) process.env.USER_NAME = options.user
   if (options.password) process.env.USER_PASSWORD = options.password
 
-  debug('Initializing krawler application')
+  debug('Initializing krawler application with env ', process.env)
   let app = feathers()
   app.configure(feathersHooks())
   app.configure(plugin())
