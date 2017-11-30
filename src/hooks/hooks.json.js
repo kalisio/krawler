@@ -8,20 +8,14 @@ const debug = makeDebug('krawler:hooks:json')
 
 // Generate a JSON from specific hook result values
 export function writeJson (options = {}) {
-  return function (hook) {
+  return async function (hook) {
     if (hook.type !== 'after') {
       throw new Error(`The 'writeJson' hook should only be used as a 'after' hook.`)
     }
 
-    return new Promise(async (resolve, reject) => {
-      let store
-      try {
-        store = await getStoreFromHook(hook, 'writeJson', options.storePath)
-      } catch (error) {
-        reject(error)
-        return
-      }
+    let store = await getStoreFromHook(hook, 'writeJson', options.storePath)
 
+    return new Promise(async (resolve, reject) => {
       debug('Creating JSON for ' + hook.data.id)
       const filePath = path.join(store.path, hook.data.id + '.json')
       fs.outputJson(filePath, _.get(hook, options.dataPath || 'result.data', {}))

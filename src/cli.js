@@ -7,7 +7,7 @@ import makeDebug from 'debug'
 import * as hooks from './hooks'
 import plugin from '.'
 
-const debug = makeDebug('krawler')
+const debug = makeDebug('krawler:cli')
 
 function activateHooks (service, serviceHooks) {
   // Iterate over hook types (before, after)
@@ -27,7 +27,7 @@ function activateHooks (service, serviceHooks) {
 
 export function run (jobfile, options = {}) {
   if (options.proxy) process.env.HTTP_PROXY = options.proxy
-  if (options['proxy-https']) process.env.HTTPS_PROXY = ['proxy-https']
+  if (options['proxy-https']) process.env.HTTPS_PROXY = options['proxy-https']
   if (options.debug) process.env.DEBUG = 'krawler*'
   if (options.user) process.env.USER_NAME = options.user
   if (options.password) process.env.USER_PASSWORD = options.password
@@ -56,8 +56,9 @@ export function run (jobfile, options = {}) {
   .then(tasks => {
     console.log('Job terminated, ' + tasks.length + ' tasks ran')
     console.timeEnd('Running time')
-    server.close()
-    return tasks
+    return new Promise((resolve, reject) => {
+      server.close(_ => resolve(tasks))
+    })
   })
   .catch(error => {
     console.log(error.message)
@@ -70,10 +71,10 @@ export default function cli () {
     .version(require('../package.json').version)
     .usage('<jobfile> [options]')
     .option('-d, --debug', 'Verbose output for debugging')
-    .option('-P, --proxy', 'Proxy to be used for HTTP (and HTTPS)')
-    .option('-PS, --proxy-https', 'Proxy to be used for HTTPS')
-    .option('-u, --user', 'User name to be used for authentication')
-    .option('-p, --password', 'User password to be used for authentication')
+    .option('-P, --proxy [proxy]', 'Proxy to be used for HTTP (and HTTPS)')
+    .option('-PS, --proxy-https [proxy-https]', 'Proxy to be used for HTTPS')
+    .option('-u, --user [user]', 'User name to be used for authentication')
+    .option('-p, --password [password]', 'User password to be used for authentication')
     .parse(process.argv)
 
   run(path.join(process.cwd(), program.args[0]), program)

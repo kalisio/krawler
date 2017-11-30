@@ -17,4 +17,6 @@ describe('krawler:cli', () => {
       expect(tasks.length > 0).beTrue()
     })
   })
+  // Let enough time to process
+  .timeout(10000)
 })
