@@ -32,7 +32,7 @@ export function run (jobfile, options = {}) {
   if (options.user) process.env.USER_NAME = options.user
   if (options.password) process.env.USER_PASSWORD = options.password
 
-  debug('Initializing krawler application with env ', process.env)
+  debug('Initializing krawler application')
   let app = feathers()
   app.configure(feathersHooks())
   app.configure(plugin())
@@ -56,8 +56,9 @@ export function run (jobfile, options = {}) {
   .then(tasks => {
     console.log('Job terminated, ' + tasks.length + ' tasks ran')
     console.timeEnd('Running time')
-    server.close()
-    return tasks
+    return new Promise((resolve, reject) => {
+      server.close(_ => resolve(tasks))
+    })
   })
   .catch(error => {
     console.log(error.message)
