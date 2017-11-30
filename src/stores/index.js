@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import fs from './stores.fs'
+import s3 from './stores.s3'
 
 export async function getStoreFromHook (hook, hookName, storePath) {
   // First try specific hook data
@@ -21,5 +22,6 @@ export async function getStoreFromHook (hook, hookName, storePath) {
 }
 
 export default {
-  fs
+  fs,
+  s3
 }

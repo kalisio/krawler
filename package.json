@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "@mapbox/sphericalmercator": "^1.0.5",
+    "aws-sdk": "^2.158.0",
     "commander": "^2.11.0",
     "debug": "^3.1.0",
     "fast-csv": "^2.4.1",
@@ -71,7 +72,8 @@
     "json2csv": "^3.11.4",
     "lodash": "^4.17.4",
     "merge-stream": "^1.0.1",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "s3-blob-store": "^2.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -57,3 +57,44 @@ export function transformJson (options = {}) {
     _.set(hook, options.dataPath || 'result.data', json)
   }
 }
+
+// Convert a Json to a GeoJSON point collection
+export function convertToGeoJson (options = {}) {
+  return function (hook) {
+    if (hook.type !== 'after') {
+      throw new Error(`The 'convertToGeoJson' hook should only be used as a 'after' hook.`)
+    }
+
+    debug('Converting to GeoJSON for ' + hook.result.id)
+
+    let json = _.get(hook, options.dataPath || 'result.data', {})
+
+    // Declare the output GeoJson collection
+    let collection = { 
+      type: 'FeatureCollection', 
+      features: [] 
+    }
+        
+    // Then iterate over JSON objects
+     _.forEach(json, object => {
+      let lon = Number(_.get(object, options.longitude || 'longitude', 0))
+      let lat = Number(_.get(object, options.latitude || 'latitude', 0))
+      let alt = Number(_.get(object, options.altitude || 'altitude', 0))
+      if (lat && lon) {
+        // Define the GeoJson feature corresponding to the object
+        let feature = {
+          type: 'Feature',
+          properties: object,
+          geometry: {
+            type: 'Point',
+            coordinates: [lon, lat, alt]
+          }
+        }
+        collection.features.push(feature)
+      }
+    })
+    
+    // Then update JSON in place in memory
+    _.set(hook, options.dataPath || 'result.data', collection)
+  }
+}
