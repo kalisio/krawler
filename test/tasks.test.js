@@ -51,12 +51,22 @@ describe('krawler:tasks', () => {
     .then(task => {
       storage.exists('task.tif', (error, exist) => {
         if (error) done(error)
-        done(exist ? null : new Error('File not found in store'))
+        else done(exist ? null : new Error('File not found in store'))
       })
     })
   })
   // Let enough time to download
   .timeout(10000)
+
+  it('removes a task', (done) => {
+    tasksService.remove('task.tif', { store: storage })
+    .then(_ => {
+      storage.exists('task.tif', (error, exist) => {
+        if (error) done(error)
+        else done(!exist ? null : new Error('File found in store'))
+      })
+    })
+  })
 
   // Cleanup
   after(() => {

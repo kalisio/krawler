@@ -31,7 +31,7 @@ class TasksService extends Service {
     if (streamed) {
       return Object.assign({ stream: taskStream }, data)
     }
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       taskStream
       .on('timeout', reject)
       .on('error', reject)
@@ -49,13 +49,22 @@ class TasksService extends Service {
     })
   }
 
-  async remove (id, params) {
-    let store = await getStoreFromService(this.storesService, params, params.query)
+  async remove (id, params = {}) {
+    let store = await getStoreFromService(this.storesService, params, params.query || {})
 
-    return new Promise(async (resolve, reject) => {
-      store.remove({
-        key: id
-      }, error => error ? reject(error) : resolve())
+    return new Promise((resolve, reject) => {
+      // Remove output data
+      debug('Removing data for task ' + id + ' from store')
+      store.remove(id, error => {
+        // Continue cleanup on error
+        if (error) {
+          console.log(error)
+          // reject(error)
+          // return
+        }
+
+        resolve()
+      })
     })
   }
 }

@@ -62,7 +62,7 @@ describe('krawler:jobs', () => {
     .then(store => {
       store.exists('job-20.tif', (error, exist) => {
         if (error) done(error)
-        done(exist ? null : new Error('File not found in store'))
+        else done(exist ? null : new Error('File not found in store'))
       })
     })
   })

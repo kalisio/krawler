@@ -10,6 +10,9 @@ const debug = makeDebug('krawler:hooks:raster')
 async function getStream (hook, hookName, storePath) {
   let store = await getStoreFromHook(hook, hookName, storePath)
   let fileName = hook.result.id
+  if (!store.path) {
+    throw new Error(`The ${hookName} hook only work with the fs blob store.`)
+  }
   if (path.extname(fileName) !== '.tif') {
     throw new Error(`The ${hookName} hook only work with GeoTiff files.`)
   }
@@ -45,7 +48,7 @@ export function computeStatistics (options = {}) {
 
     let geotiff = await getStream(hook, 'computeStatistics')
 
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let { filePath, stream, band } = geotiff
       debug('Computing statistics for ' + filePath)
       let maxValue = Number.NEGATIVE_INFINITY
@@ -79,7 +82,7 @@ export function readGeoTiff (options = {}) {
 
     let geotiff = await getStream(hook, 'readGeotiff')
 
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let { filePath, stream, dataset, band } = geotiff
       const wgs84 = gdal.SpatialReference.fromEPSG(4326)
       const geotransform = dataset.geoTransform

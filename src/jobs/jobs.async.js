@@ -6,6 +6,7 @@ function createJob (options = {}, store = null, tasks) {
     // The set of workers/tasks for current step
     // We launch the workers in sequence, one step of the sequence contains a maximum number of workersLimit workers
     let workers = []
+    let taskResults = []
     while (i < tasks.length) {
       // Add a worker to current step of the sequence
       if (store) {
@@ -17,7 +18,8 @@ function createJob (options = {}, store = null, tasks) {
       if ((workers.length >= workersLimit) ||
            (i === tasks.length - 1)) {
         try {
-          await Promise.all(workers)
+          let results = await Promise.all(workers)
+          taskResults = taskResults.concat(results)
         } catch (error) {
           reject(error)
           return
@@ -26,7 +28,7 @@ function createJob (options = {}, store = null, tasks) {
       }
       i++
     }
-    resolve(tasks)
+    resolve(taskResults)
   })
 }
 

@@ -93,7 +93,7 @@ describe('krawler:grid', () => {
     .then(store => {
       store.exists('wms-grid-0-0.png', (error, exist) => {
         if (error) done(error)
-        done(exist ? null : new Error('File not found in store'))
+        else done(exist ? null : new Error('File not found in store'))
       })
     })
   })
@@ -177,12 +177,18 @@ describe('krawler:grid', () => {
     })
     .then(store => {
       store.exists('wcs-grid-0-0.tif', (error, exist) => {
-        if (error) done(error)
-        if (!exist) done(new Error('File not found in store'))
+        if (error) {
+          done(error)
+          return
+        }
+        if (!exist) {
+          done(new Error('File not found in store'))
+          return
+        }
 
         store.exists('wcs-grid-0-0.tif.json', (error, exist) => {
           if (error) done(error)
-          done(exist ? null : new Error('File not found in store'))
+          else done(exist ? null : new Error('File not found in store'))
         })
       })
     })

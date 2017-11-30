@@ -14,12 +14,18 @@ export function writeJson (options = {}) {
     }
 
     let store = await getStoreFromHook(hook, 'writeJson', options.storePath)
+    if (!store.path) {
+      throw new Error(`The 'writeJson' hook only work with the fs blob store.`)
+    }
 
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       debug('Creating JSON for ' + hook.data.id)
       const filePath = path.join(store.path, hook.data.id + '.json')
       fs.outputJson(filePath, _.get(hook, options.dataPath || 'result.data', {}))
-      .then(_ => resolve(hook))
+      .then(() => {
+        _.get(hook.result, 'outputs', []).push(hook.data.id + '.json')
+        resolve(hook)
+      })
       .catch(reject)
     })
   }

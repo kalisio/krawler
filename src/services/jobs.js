@@ -10,15 +10,17 @@ class JobsService extends Service {
   constructor (options = {}) {
     super(defaultJobGenerators)
     this.tasksService = options.tasksService || 'tasks'
+    this.storesService = options.storesService || 'stores'
   }
 
   setup (app, path) {
     this.tasksService = app.service(this.tasksService)
+    this.storesService = app.service(this.storesService)
   }
 
   async create (data, params = {}) {
     let { type, id, options, taskTemplate, tasks } = data
-    let store = await getStoreFromService(this.tasksService.storesService, params, data)
+    let store = await getStoreFromService(this.storesService, params, data)
 
     // The task template ID is used as a template string for the task ID
     let compiler
@@ -42,9 +44,6 @@ class JobsService extends Service {
     })
     // Always default to async if no type given
     return this.generate(type || 'async', options, store, tasks, id)
-    // FIXME: clear tasks temporary files, for now generate this bug
-    // EBUSY: resource busy or locked
-    // .then(tasks => Promise.all(tasks.map(task => this.tasksService.remove(task.id, { store }))))
   }
 }
 

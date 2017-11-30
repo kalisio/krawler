@@ -17,6 +17,9 @@ export function writeCSV (options = {}) {
     }
 
     let store = await getStoreFromHook(hook, 'writeCSV', options.storePath)
+    if (!store.path) {
+      throw new Error(`The 'writeCSV' hook only work with the fs blob store.`)
+    }
 
     return new Promise((resolve, reject) => {
       debug('Creating CSV for ' + hook.data.id)
@@ -24,7 +27,10 @@ export function writeCSV (options = {}) {
       let filePath = path.join(store.path, hook.data.id + '.csv')
       debug('Exporting CSV to ' + filePath)
       fs.outputFile(filePath, csv)
-      .then(() => resolve(hook))
+      .then(() => {
+        _.get(hook.result, 'outputs', []).push(hook.data.id + '.csv')
+        resolve(hook)
+      })
       .catch(reject)
     })
   }
@@ -39,18 +45,20 @@ export function mergeCSV (options = {}) {
 
     let store = await getStoreFromHook(hook, 'mergeCSV', options.storePath)
 
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       debug('Merging CSV for ' + hook.data.id)
       let inputStreams = hook.result.map(result => {
-        let stream = fs.createReadStream(path.join(store.path, result.id + '.csv'))
+        let stream = store.createReadStream(result.id + '.csv')
         return fastcsv.fromStream(stream, options)
       })
 
-      let filePath = path.join(store.path, hook.data.id + '.csv')
       merge.apply(null, inputStreams)
       .pipe(fastcsv.createWriteStream(options))
-      .pipe(fs.createWriteStream(filePath))
-      .on('finish', () => resolve(hook))
+      .pipe(store.createWriteStream(hook.data.id + '.csv'))
+      .on('finish', () => {
+        _.get(hook.result, 'outputs', []).push(hook.data.id + '.csv')
+        resolve(hook)
+      })
       .on('error', reject)
     })
   }
@@ -65,10 +73,10 @@ export function readCSV (options = {}) {
 
     let store = await getStoreFromHook(hook, 'readCSV', options.storePath)
 
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       debug('Reading CSV for ' + hook.result.id)
       let stream = hook.result.stream
-        ? hook.result.stream : fs.createReadStream(path.join(store.path, hook.result.id))
+        ? hook.result.stream : store.createReadStream(hook.result.id)
 
       fastcsv.fromStream(stream, options)
       .on('data', data => {
