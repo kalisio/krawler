@@ -1,3 +1,8 @@
+The krawler can be viewed as a minimalist **Extract, Transform, Load (ETL)** system. It allows to:
+* extract data from heterogeneous data sources (e.g. storages or web services);
+* transform data in a target format or structure (e.g. JSON or CSV);
+* load data into a target store (e.g. a file system or a database).
+
 # Installation
 
 ```
