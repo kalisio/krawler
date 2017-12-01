@@ -2,6 +2,10 @@
 
 These sections detail the external (i.e. REST/Websocket) as well as the internal (ie Classes/Functions) [API](https://en.wikipedia.org/wiki/Application_programming_interface) of krawler.
 
+A set of introduction articles have been written to detail:
+* [the underlying concepts](https://medium.com/@luc.claustres/a-minimalist-etl-using-feathersjs-part-1-1d56972d6500)
+* the practical use case of geographical data processing
+
 ## Services
 
 ### Complete Example
