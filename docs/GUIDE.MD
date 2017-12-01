@@ -55,7 +55,7 @@ Extract Digital Elevation Model [DEM](https://en.wikipedia.org/wiki/Digital_elev
 
 The sample folder contains different job file entry points named according to ICAO airport codes like [`RJTT.js`](https://github.com/kalisio/krawler/blob/master/examples/dem2csv/RJTT.js) to perform the process around some airports. The common job configuration is stored in the [`jobfile.js`](https://github.com/kalisio/krawler/blob/master/examples/dem2csv/jobfile.js) and the hooks configuration in [`hooks-blocks.js`](https://github.com/kalisio/krawler/blob/master/examples/dem2csv/hooks-blocks.js).
 
-The process can handle large datasets because the grid is split in a matrix of NxN blocks of *blockResolution* (in meter) to perform the data download and the merging of all block data rely on streams. The [hooks](./API.MD#hooks) used are the following:
+The process can handle large datasets because the grid is split in a matrix of NxN blocks of *blockResolution* (in meter) to perform the data download and the merging of all block data relies on streams. The [hooks](./API.MD#hooks) used are the following:
 
 ![Hooks Blocks](https://cdn.rawgit.com/kalisio/krawler/b46277bd9ef6b866e1a4d634766882345b9fd198/examples/dem2csv/Hooks%20Diagram%20Blocks.svg)
 
