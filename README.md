@@ -13,6 +13,9 @@
 [**Guide**](./docs/GUIDE.MD)<br/>
 Get familiar with krawler by running your first job.
 
+[**Architecture**](./docs/ARCHITECTURE.MD)<br/>
+Learn more about krawler concepts, architecture and components.
+
 [**API**](./docs/API.MD)<br/>
 Learn more about krawler architecture, API and hooks.
 
