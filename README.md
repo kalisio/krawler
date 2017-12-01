@@ -14,6 +14,8 @@ A set of introduction articles to krawler have been written to detail:
 * [the underlying concepts](https://medium.com/@luc.claustres/a-minimalist-etl-using-feathersjs-part-1-1d56972d6500)
 * the practical use case of geographical data processing (to appear)
 
+## Documentation
+
 [**Guide**](./docs/GUIDE.MD)<br/>
 Get familiar with krawler by running your first job.
 
