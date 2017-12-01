@@ -16,4 +16,4 @@ Get familiar with krawler by running your first job.
 [**API**](./docs/API.MD)<br/>
 Learn more about krawler architecture, API and hooks.
 
-[**License**](./LICENSE.MD)
+[**License**](./LICENSE)
