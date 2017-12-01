@@ -2,7 +2,7 @@ import path from 'path'
 import _ from 'lodash'
 import fs from 'fs-extra'
 import makeDebug from 'debug'
-import { getStoreFromHook } from '../stores'
+import { getStoreFromHook, addOutput } from '../utils'
 
 const debug = makeDebug('krawler:hooks:json')
 
@@ -23,7 +23,7 @@ export function writeJson (options = {}) {
       const filePath = path.join(store.path, hook.data.id + '.json')
       fs.outputJson(filePath, _.get(hook, options.dataPath || 'result.data', {}))
       .then(() => {
-        _.get(hook.result, 'outputs', []).push(hook.data.id + '.json')
+        addOutput(hook.result, hook.data.id + '.json', options.outputType)
         resolve(hook)
       })
       .catch(reject)

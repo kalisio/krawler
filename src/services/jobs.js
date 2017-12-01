@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
 import Service from './service'
-import { getStoreFromService } from '../stores'
+import { getStoreFromService } from '../utils'
 import defaultJobGenerators from '../jobs'
 
 const debug = makeDebug('krawler:jobs')
@@ -44,6 +44,25 @@ class JobsService extends Service {
     })
     // Always default to async if no type given
     return this.generate(type || 'async', options, store, tasks, id)
+  }
+
+  async remove (id, params = {}) {
+    let store = await getStoreFromService(this.storesService, params, params.query || {})
+
+    return new Promise((resolve, reject) => {
+      // Remove output data
+      debug('Removing data for job ' + id + ' from store')
+      store.remove(id, error => {
+        // Continue cleanup on error
+        if (error) {
+          console.log(error)
+          // reject(error)
+          // return
+        }
+
+        resolve()
+      })
+    })
   }
 }
 

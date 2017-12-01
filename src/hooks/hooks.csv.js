@@ -5,7 +5,7 @@ import _ from 'lodash'
 import fs from 'fs-extra'
 import path from 'path'
 import makeDebug from 'debug'
-import { getStoreFromHook } from '../stores'
+import { getStoreFromHook, addOutput } from '../utils'
 
 const debug = makeDebug('krawler:hooks:csv')
 
@@ -28,7 +28,7 @@ export function writeCSV (options = {}) {
       debug('Exporting CSV to ' + filePath)
       fs.outputFile(filePath, csv)
       .then(() => {
-        _.get(hook.result, 'outputs', []).push(hook.data.id + '.csv')
+        addOutput(hook.result, hook.data.id + '.csv', options.outputType)
         resolve(hook)
       })
       .catch(reject)
@@ -56,7 +56,7 @@ export function mergeCSV (options = {}) {
       .pipe(fastcsv.createWriteStream(options))
       .pipe(store.createWriteStream(hook.data.id + '.csv'))
       .on('finish', () => {
-        _.get(hook.result, 'outputs', []).push(hook.data.id + '.csv')
+        addOutput(hook.result, hook.data.id + '.csv', options.outputType)
         resolve(hook)
       })
       .on('error', reject)

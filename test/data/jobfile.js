@@ -23,7 +23,8 @@ module.exports = {
       after: {
         readGeoTiff: {
           dataPath: 'result.data',
-          fields: ['bbox', 'value']
+          fields: ['bbox', 'value'],
+          outputType: 'intermediate'
         },
         // For debug purpose
         /*
@@ -52,7 +53,15 @@ module.exports = {
               label: 'Elev',
               value: 'value'
             }
-          ]
+          ],
+          outputType: 'product'
+        }
+      }
+    },
+    jobs: {
+      after: {
+        clearOutputs: {
+          type: 'intermediate'
         }
       }
     }

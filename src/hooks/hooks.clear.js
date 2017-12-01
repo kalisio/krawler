@@ -1,48 +1,47 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
-import { getStoreFromHook } from '../stores'
+import { getStoreFromHook } from '../utils'
 
 const debug = makeDebug('krawler:hooks:clear')
 
-// Clear intermediate outputs
-export function clearHooksOutputs (options = {}) {
-  return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'clearHooksOutputs' hook should only be used as a 'after' hook.`)
-    }
+function clearObjectOutputs (object, store, type) {
+  // Default value
+  let outputType = (type || 'intermediate')
 
-    let store = await getStoreFromHook(hook, 'clearHooksOutputs', options.storePath)
-
-    return new Promise((resolve, reject) => {
-      let outputs = _.get(hook.result, 'outputs', [])
-      if (outputs.length > 0) {
-        debug('Removing output data for ' + hook.result.id + ' from store')
-        outputs.forEach(output => {
-          store.remove(output, error => {
-            // Continue cleanup on error
-            if (error) {
-              console.log(error)
-              // reject(error)
-              // return
-            }
-          })
+  return new Promise((resolve, reject) => {
+    let outputs = _.get(object, outputType, [])
+    if (outputs.length > 0) {
+      outputs.forEach(output => {
+        store.remove(output, error => {
+          // Continue cleanup on error
+          if (error) {
+            console.log(error)
+            // reject(error)
+            // return
+          } else {
+            debug('Removing output data ' + output + ' for ' + object.id + ' from store')
+          }
         })
-      }
-      resolve(hook)
-    })
-  }
+      })
+    }
+    resolve(object)
+  })
 }
 
-// Clear output for object
-export function clearOutput (options = {}) {
+// Clear outputs
+export function clearOutputs (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'clearOutput' hook should only be used as a 'after' hook.`)
+      throw new Error(`The 'clearOutputs' hook should only be used as a 'after' hook.`)
     }
 
-    let store = await getStoreFromHook(hook, 'clearOutput', options.storePath)
+    let store = await getStoreFromHook(hook, 'clearOutputs', options.storePath)
+    if (Array.isArray(hook.result)) {
+      await Promise.all(hook.result.map(result => clearObjectOutputs(result, store, options.type)))
+    } else {
+      await clearObjectOutputs(hook.result, store, options.type)
+    }
 
-    if (hook.service.remove) return hook.service.remove(hook.result.id, { store })
-    else return Promise.resolve(hook)
+    return hook
   }
 }
