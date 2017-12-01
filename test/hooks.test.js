@@ -5,41 +5,23 @@ import fsStore from 'fs-blob-store'
 import { hooks as pluginHooks } from '../src'
 
 describe('krawler:hooks', () => {
-  let authHook = {
-    type: 'before',
-    data: {
-      options: {
-        auth: {
-          user: 'toto',
-          password: 'titi'
-        }
-      }
-    }
-  }
-  let geotiffHook = {
-    type: 'after',
-    result: {
-      id: 'RJTT-30-18000-2-1.tif'
-    },
-    params: {
-      store: fsStore({ path: path.join(__dirname, 'data') })
-    }
-  }
-  let csvHook = {
-    type: 'after',
-    result: {
-      id: 'RJTT-30-18000-2-1.csv'
-    },
-    params: {
-      store: fsStore({ path: path.join(__dirname, 'data') })
-    }
-  }
-
   before(() => {
     chailint(chai, util)
   })
 
   it('manages auth on requests', () => {
+    let authHook = {
+      type: 'before',
+      data: {
+        options: {
+          auth: {
+            user: 'toto',
+            password: 'titi'
+          }
+        }
+      }
+    }
+
     pluginHooks.basicAuth({ type: 'Proxy-Authorization' })(authHook)
     expect(authHook.data.options.headers['Proxy-Authorization']).toExist()
     expect(authHook.data.options.headers['Proxy-Authorization'].startsWith('Basic ')).beTrue()
@@ -68,6 +50,16 @@ describe('krawler:hooks', () => {
     expect(maxIndex % 300).to.equal(96)
   }
 
+  let geotiffHook = {
+    type: 'after',
+    result: {
+      id: 'RJTT-30-18000-2-1.tif'
+    },
+    params: {
+      store: fsStore({ path: path.join(__dirname, 'data') })
+    }
+  }
+
   it('converts GeoTiff to JSON', () => {
     return pluginHooks.readGeoTiff({
       fields: ['bbox', 'value']
@@ -93,6 +85,16 @@ describe('krawler:hooks', () => {
   })
   // Let enough time to proceed
   .timeout(5000)
+
+  let csvHook = {
+    type: 'after',
+    result: {
+      id: 'RJTT-30-18000-2-1.csv'
+    },
+    params: {
+      store: fsStore({ path: path.join(__dirname, 'data') })
+    }
+  }
 
   it('converts CSV to JSON', () => {
     return pluginHooks.readCSV({ headers: true })(csvHook)

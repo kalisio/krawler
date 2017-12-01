@@ -2,7 +2,6 @@ const path = require('path')
 const aws = require('aws-sdk')
 const pg = require('pg')
 
-
 let s3Client = new aws.S3({
   accessKeyId: process.env.S3_ACCESS_KEY,
   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY

@@ -3,6 +3,7 @@ import cli from './cli'
 import { stores, tasks, jobs } from './services'
 
 export * as hooks from './hooks'
+export * as utils from './utils'
 export { run } from './cli'
 
 const debug = makeDebug('krawler')

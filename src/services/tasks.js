@@ -1,6 +1,6 @@
 import makeDebug from 'debug'
 import Service from './service'
-import { getStoreFromService } from '../stores'
+import { getStoreFromService, addOutput } from '../utils'
 import defaultTaskGenerators from '../tasks'
 
 const debug = makeDebug('krawler:tasks')
@@ -44,7 +44,10 @@ class TasksService extends Service {
       }, error => {
         if (error) reject(error)
       }))
-      .on('finish', () => resolve(data))
+      .on('finish', () => {
+        addOutput(data, id, options.outputType)
+        resolve(data)
+      })
       .on('error', reject)
     })
   }
