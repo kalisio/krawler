@@ -28,7 +28,7 @@ The `tasks` [service](https://docs.feathersjs.com/api/services.html) allow to ma
     * **outputType**: the type of output produced by this task, defaults to `intermediate`
 * **remove(id)**: remove the task with given ID, this will actually remove the produced output from the store given as a (query) parameters
 
-The returned task objects will contain an additional property for each output types holding an array of produced output files. This is used by the [clearOutputs](./API.MD#) hook to perform cleanup.
+The returned task objects will contain an additional property for each output types holding an array of produced output files. This is used by the [clearOutputs](./API.MD##clearoutputsoptions) hook to perform cleanup.
 
 By default a task implementation return a [stream](https://nodejs.org/api/stream.html) to extract data from that is piped to the target store. Available task types are the following:
 * [`http`](https://github.com/request/request) for HTTP requests, available options
@@ -165,6 +165,6 @@ Generate a JSON file from in-memory JSON values, hook options are the following:
 
 ### Clearing
 
-#### clearObjectOutputs(options)
+#### clearOutputs(options)
 
 
