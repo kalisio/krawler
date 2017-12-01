@@ -7,7 +7,7 @@ module.exports = {
   store: {
     id: 'job-store',
     type: 'fs',
-    options: { path: './../data' }
+    options: { path: './data' }
   },
   taskTemplate: {
     store: 'job-store',
@@ -75,7 +75,8 @@ module.exports = {
         generateGridTasks: { resample: true }
       },
       after: {
-        mergeCSV: { headers: true }
+        mergeCSV: { headers: true },
+        clearOutputs: {}
       }
     }
   }
@@ -126,7 +127,8 @@ module.exports = {
               value: 'max'
             }
           ]
-        }
+        },
+        clearOutputs: {}
       }
     }
   }
