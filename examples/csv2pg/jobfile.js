@@ -1,5 +1,6 @@
 const path = require('path')
 const aws = require('aws-sdk')
+const pg = require('pg')
 
 
 let s3Client = new aws.S3({
@@ -7,6 +8,8 @@ let s3Client = new aws.S3({
   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
 })
 let s3Bucket = process.env.S3_BUCKET
+
+let pool = new pg.Pool()
 
 module.exports = {
   id: 'job',
@@ -37,7 +40,15 @@ module.exports = {
           latitude: 'lat',
           longitude: 'lng'
         },
-        writeJson: {
+        dropTable: {
+          pool: pool
+        },
+        createTable: {
+          pool: pool
+        },
+        writeTable: {
+          pool: pool,
+          chunkSize: 100
         }
       }
     }
