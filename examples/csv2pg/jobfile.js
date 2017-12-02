@@ -8,8 +8,6 @@ let s3Client = new aws.S3({
 })
 let s3Bucket = process.env.S3_BUCKET
 
-let pool = new pg.Pool()
-
 module.exports = {
   id: 'job',
   store: {
@@ -39,16 +37,13 @@ module.exports = {
           latitude: 'lat',
           longitude: 'lng'
         },
-        dropTable: {
-          pool: pool
+        connectPG: {},
+        dropPGTable: {},
+        createPGTable: {},
+        writePGTable: {
+          chunkSize: 50
         },
-        createTable: {
-          pool: pool
-        },
-        writeTable: {
-          pool: pool,
-          chunkSize: 100
-        }
+        disconnectPG: {}
       }
     }
   }

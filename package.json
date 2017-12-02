@@ -69,6 +69,7 @@
     "fs-extra": "^4.0.2",
     "gdal": "^0.9.6",
     "geo-pixel-stream": "^0.4.0",
+    "js-yaml": "^3.10.0",
     "json2csv": "^3.11.4",
     "lodash": "^4.17.4",
     "merge-stream": "^1.0.1",
