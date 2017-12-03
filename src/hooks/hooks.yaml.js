@@ -3,6 +3,7 @@ import _ from 'lodash'
 import fs from 'fs-extra'
 import yaml from 'js-yaml'
 import makeDebug from 'debug'
+import { getStoreFromHook, addOutput } from '../utils'
 
 const debug = makeDebug('krawler:hooks:yaml')
 
@@ -19,7 +20,7 @@ export function writeYAML (options = {}) {
     }
 
     return new Promise((resolve, reject) => {
-      debug('Creating YAML for ' + hook.data.id)
+      debug('Writing YAML for ' + hook.data.id)
 
       const fileName = hook.data.id + '.yaml'
       const filePath = path.join(store.path, fileName)
@@ -46,13 +47,18 @@ export function readYAML (options = {}) {
       throw new Error(`The 'readYAML' hook only work with the fs blob store.`)
     }
 
-    debug('Creating YAML for ' + hook.data.id)
-    const fileName = hook.data.id + '.yaml'
-    const filePath = path.join(store.path, fileName)
-
-    const yamlObject = await fs.readFile(filePath)
-    _.set(hook, options.dataPath || 'result.data', yaml.safeLoad(yamlObject))
-    return hook
+    return new Promise((resolve, reject) => {
+      debug('Reading YAML for ' + hook.result.id)
+      const fileName = hook.result.id + '.yaml'
+      const filePath = path.join(store.path, fileName)
+      fs.readFile(filePath, (err, data) => {
+        if (err) {
+          reject(err)
+        }
+        _.set(hook, options.dataPath || 'result.data', yaml.safeLoad(data))
+        resolve(hook)
+      })
+    })
   }
 }
 

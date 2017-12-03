@@ -113,4 +113,24 @@ describe('krawler:hooks', () => {
   })
   // Let enough time to proceed
   .timeout(5000)
+
+  let yamlHook = {
+    type: 'after',
+    result: {
+      id: 'mapproxy'
+    },
+    params: {
+      store: fsStore({ path: path.join(__dirname, 'data') })
+    }
+  }
+
+  it('converts YAML to JSON', () => {
+    return pluginHooks.readYAML()(yamlHook)
+    .then(hook => {
+      expect(hook.result.data).toExist()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
 })
