@@ -1,6 +1,5 @@
 # Summary
 
-* [Introduction](README.MD)
 * [Guide](docs/GUIDE.MD)
   * [Installation](docs/GUIDE.MD#installation)
   * [Samples](docs/GUIDE.MD#samples)
