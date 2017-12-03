@@ -12,7 +12,7 @@
     * [Stores](docs/SERVICES.MD#stores)
     * [Tasks](docs/SERVICES.MD#tasks)
     * [Jobs](docs/SERVICES.MD#jobs)
-    * [Example](docs/SERVICES.MD#example)
+    * [Example](docs/SERVICES.MD#complete-example)
   * [Hooks](docs/HOOKS.MD)
     * [Authentication](docs/HOOKS.MD#authentication)
     * [CSV](docs/HOOKS.MD#csv)
