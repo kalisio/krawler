@@ -132,5 +132,4 @@ describe('krawler:hooks', () => {
   })
   // Let enough time to proceed
   .timeout(5000)
-
 })

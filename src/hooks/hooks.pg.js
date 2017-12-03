@@ -1,4 +1,3 @@
-import path from 'path'
 import util from 'util'
 import _ from 'lodash'
 import pg from 'pg'
@@ -6,9 +5,9 @@ import makeDebug from 'debug'
 
 const debug = makeDebug('krawler:hooks:pg')
 
-var client = undefined
+var client
 
-// Connect to the postgres database 
+// Connect to the postgres database
 export function connectPG (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
@@ -36,7 +35,7 @@ export function disconnectPG (options = {}) {
   }
 }
 
-// Drop a table from the specific hook 
+// Drop a table from the specific hook
 export function dropPGTable (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
@@ -48,12 +47,13 @@ export function dropPGTable (options = {}) {
 
     // Drop the table
     let table = _.get(options, 'table', _.snakeCase(hook.result.id))
+    debug(`Droping the table ` + table + `'`)
     await client.query('DROP TABLE IF EXISTS ' + table)
     return hook
   }
 }
 
-// Create a table from the specific hook 
+// Create a table from the specific hook
 export function createPGTable (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
@@ -65,6 +65,7 @@ export function createPGTable (options = {}) {
 
     // Create the table
     let table = _.get(options, 'table', _.snakeCase(hook.result.id))
+    debug(`Creating the table ` + table + `'`)
     await client.query('CREATE TABLE ' + table + ' (id SERIAL PRIMARY KEY, geom GEOMETRY(POINTZ, 4326), properties JSON)')
     return hook
   }
@@ -79,7 +80,7 @@ export function writePGTable (options = {}) {
     if (_.isNil(client)) {
       throw new Error(`You must be connected to PostgresSQL before using the 'writePGTable' hook`)
     }
-    
+
     // Defines the chunks
     let geojson = _.get(hook, options.dataPath || 'result.data', {})
     let chunks = []
@@ -92,11 +93,12 @@ export function writePGTable (options = {}) {
     // Write the chunks
     // The insert query must have the following form ($1, $2), ($3, $4) .... ($i, $i+1) [param1, param2 ....... parami, param i+1]
     let table = _.get(options, 'table', _.snakeCase(hook.result.id))
-    for(let i = 0; i < chunks.length; ++i) {
+    debug(`Inserting GeoJSON in the table ` + table + `'`)
+    for (let i = 0; i < chunks.length; ++i) {
       let values = ''
       let params = []
       let counter = 1
-      for(let j = 0; j < chunks[i].length; ++j) {
+      for (let j = 0; j < chunks[i].length; ++j) {
         values += util.format(' (ST_SetSRID(ST_GeomFromGeoJSON($%d), 4326), $%d)', counter++, counter++)
         if (j < (chunks[i].length - 1)) {
           values += ','
