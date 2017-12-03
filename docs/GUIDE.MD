@@ -32,7 +32,7 @@ pkg . --target node8-win-x86
 
 > Because it relies on the GDAL native bindings you will need to deploy the *gdal.node* file (usually found in *node_modules\gdal\lib\binding*) to the same directory as the executable. Take care to generate the executable with the same architecture than your Node.js version. 
 
-# Run samples
+# Samples
 
 Samples are not intended to work out-of-the-box because they rely on data sources that might not be available or relevant for you. However they can be easily adapted to a working use case.
 
