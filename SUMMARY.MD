@@ -20,4 +20,4 @@
     * [Raster](docs/HOOKS.MD#raster)
     * [Clearing](docs/HOOKS.MD#clearing)
 * [Contributing](docs/CONTRIBUTING.MD)
-* [License](LICENSE)
+* [License](LICENSE.MD)

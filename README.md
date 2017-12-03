@@ -23,7 +23,7 @@ Learn more about krawler concepts, architecture and components.
 [**API**](./docs/API.MD)<br/>
 Learn more about krawler architecture, API and hooks.
 
-[**License**](./LICENSE)
+[**License**](./LICENSE.MD)
 
 **Trusted by**
 
@@ -36,3 +36,9 @@ Learn more about krawler architecture, API and hooks.
 <p align="center">
   <a href="http://www.kalisio.xyz"><img src="https://cdn.rawgit.com/kalisio/kDocs/5cea886176539f288e26599c9b4a951c08658caa/images/kalisio-banner-250x96.png" width="256"/></a>
 </p>
+
+If you are looking for different formats we have the latest version of this doc available in:
+
+* [PDF](https://www.gitbook.com/download/pdf/book/kalisio/krawler)
+* [ePub](https://www.gitbook.com/download/epub/book/kalisio/krawler)
+* [Mobi](https://www.gitbook.com/download/mobi/book/kalisio/krawler)
