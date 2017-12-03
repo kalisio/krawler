@@ -1,7 +1,5 @@
 # krawler
 
-![Kalisio logo](https://github.com/kalisio/kDocs/raw/master/images/kalisio-banner-250x96.png)
-
 [![Build Status](https://travis-ci.org/kalisio/krawler.png?branch=master)](https://travis-ci.org/kalisio/krawler)
 [![Code Climate](https://codeclimate.com/github/kalisio/krawler/badges/gpa.svg)](https://codeclimate.com/github/kalisio/krawler)
 [![Test Coverage](https://codeclimate.com/github/kalisio/krawler/badges/coverage.svg)](https://codeclimate.com/github/kalisio/krawler/coverage)
@@ -26,3 +24,15 @@ Learn more about krawler concepts, architecture and components.
 Learn more about krawler architecture, API and hooks.
 
 [**License**](./LICENSE)
+
+**Trusted by**
+
+<p align="center">
+  <a href="http://www.airbus.com/"><img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Airbus_logo_2017.png" width="256"/></a>
+</p>
+
+**Sponsored by**
+
+<p align="center">
+  <a href="http://www.kalisio.xyz"><img src="https://cdn.rawgit.com/kalisio/kDocs/5cea886176539f288e26599c9b4a951c08658caa/images/kalisio-banner-250x96.png" width="256"/></a>
+</p>
