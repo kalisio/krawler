@@ -14,6 +14,8 @@ export function writeYAML (options = {}) {
       throw new Error(`The 'writeYAML' hook should only be used as a 'after' hook.`)
     }
 
+    console.log(_.get(hook, options.dataPath || 'result.data'))
+
     let store = await getStoreFromHook(hook, 'writeYAML', options.storePath)
     if (!store.path) {
       throw new Error(`The 'writeYAML' hook only work with the fs blob store.`)
@@ -25,12 +27,13 @@ export function writeYAML (options = {}) {
       const fileName = hook.data.id + '.yaml'
       const filePath = path.join(store.path, fileName)
       let yamlObject = yaml.safeDump(_.get(hook, options.dataPath || 'result.data'))
-      fs.outputJson(filePath, yamlObject, {})
-      .then(() => {
+      fs.writeFile(filePath, yamlObject, (err) => {
+        if (err) {
+          reject(err)
+        }
         addOutput(hook.result, fileName, options.outputType)
         resolve(hook)
       })
-      .catch(reject)
     })
   }
 }
