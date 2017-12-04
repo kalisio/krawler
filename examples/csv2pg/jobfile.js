@@ -1,19 +1,11 @@
 const path = require('path')
-const aws = require('aws-sdk')
-const pg = require('pg')
-
-let s3Client = new aws.S3({
-  accessKeyId: process.env.S3_ACCESS_KEY,
-  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
-})
-let s3Bucket = process.env.S3_BUCKET
 
 module.exports = {
   id: 'job',
   store: {
     id: 'job-store',
     type: 'fs',
-    options: { path: path.join(__dirname, 'output') }
+    options: { path: path.join(__dirname, '..', 'output') }
   },
   tasks: [{
     id: 'world_cities.csv',
@@ -22,7 +14,13 @@ module.exports = {
       store: {
         id: 'task-store',
         type: 's3',
-        options: { client: s3Client, bucket: s3Bucket }
+        options: {
+          client: {
+            accessKeyId: process.env.S3_ACCESS_KEY,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+          },
+          bucket: process.env.S3_BUCKET
+        }
       }
     }
   }],
@@ -37,13 +35,29 @@ module.exports = {
           latitude: 'lat',
           longitude: 'lng'
         },
-        connectPG: {},
         dropPGTable: {},
         createPGTable: {},
         writePGTable: {
           chunkSize: 50
+        }
+      }
+    },
+    jobs: {
+      before: {
+        connectPG: {
+          user: process.env.PG_USER,
+          password: process.env.PG_PASSWORD,
+          host: 'localhost',
+          database: 'test',
+          port: 5432,
+          clientPath: 'taskTemplate.client'
+        }
+      },
+      after: {
+        disconnectPG: {
+          clientPath: 'taskTemplate.client'
         },
-        disconnectPG: {}
+        clearOutputs: {}
       }
     }
   }

@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   options: {
     // If we use a download task per grid cell this should be high like 50,
@@ -7,7 +9,7 @@ module.exports = {
   store: {
     id: 'job-store',
     type: 'fs',
-    options: { path: './data' }
+    options: { path: path.join(__dirname, '..', 'output') }
   },
   taskTemplate: {
     store: 'job-store',

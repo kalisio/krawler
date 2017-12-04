@@ -33,5 +33,5 @@ node_modules
 lib/
 
 # The test data
-data
 test/output
+examples/output

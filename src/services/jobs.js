@@ -33,6 +33,8 @@ class JobsService extends Service {
       if (taskTemplate) {
         // Create a new task with compiled ID
         newTask.id = compiler({ jobId: data.id, taskId: task.id })
+        // When there is nothing to interpolate the returned ID is empty
+        if (!newTask.id) newTask.id = task.id
         // Then affect template and object
         _.merge(newTask, _.omit(taskTemplate, ['id']))
         _.merge(newTask, _.omit(task, ['id']))

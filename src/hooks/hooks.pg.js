@@ -5,17 +5,16 @@ import makeDebug from 'debug'
 
 const debug = makeDebug('krawler:hooks:pg')
 
-var client
-
 // Connect to the postgres database
 export function connectPG (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'connectPG' hook should only be used as a 'after' hook.`)
+    if (hook.type !== 'before') {
+      throw new Error(`The 'connectPG' hook should only be used as a 'before' hook.`)
     }
 
-    client = new pg.Client()
+    let client = new pg.Client(options)
     await client.connect()
+    _.set(hook.data, options.clientPath || 'client', client)
     return hook
   }
 }
@@ -26,11 +25,13 @@ export function disconnectPG (options = {}) {
     if (hook.type !== 'after') {
       throw new Error(`The 'disconnectPG' hook should only be used as a 'after' hook.`)
     }
+    let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to PostgresSQL before using the 'disconnectPG' hook`)
     }
 
     await client.end()
+    _.unset(hook, options.clientPath || 'client')
     return hook
   }
 }
@@ -41,13 +42,14 @@ export function dropPGTable (options = {}) {
     if (hook.type !== 'after') {
       throw new Error(`The 'dropTable' hook should only be used as a 'after' hook.`)
     }
+    let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to PostgresSQL before using the 'dropPGTable' hook`)
     }
 
     // Drop the table
     let table = _.get(options, 'table', _.snakeCase(hook.result.id))
-    debug(`Droping the table ` + table + `'`)
+    debug('Droping the ' + table + ' table')
     await client.query('DROP TABLE IF EXISTS ' + table)
     return hook
   }
@@ -59,13 +61,14 @@ export function createPGTable (options = {}) {
     if (hook.type !== 'after') {
       throw new Error(`The 'createTable' hook should only be used as a 'after' hook.`)
     }
+    let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to PostgresSQL before using the 'createPGTable' hook`)
     }
 
     // Create the table
     let table = _.get(options, 'table', _.snakeCase(hook.result.id))
-    debug(`Creating the table ` + table + `'`)
+    debug('Creating the ' + table + ' table')
     await client.query('CREATE TABLE ' + table + ' (id SERIAL PRIMARY KEY, geom GEOMETRY(POINTZ, 4326), properties JSON)')
     return hook
   }
@@ -77,6 +80,7 @@ export function writePGTable (options = {}) {
     if (hook.type !== 'after') {
       throw new Error(`The 'writeTable' hook should only be used as a 'after' hook.`)
     }
+    let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to PostgresSQL before using the 'writePGTable' hook`)
     }
@@ -93,7 +97,7 @@ export function writePGTable (options = {}) {
     // Write the chunks
     // The insert query must have the following form ($1, $2), ($3, $4) .... ($i, $i+1) [param1, param2 ....... parami, param i+1]
     let table = _.get(options, 'table', _.snakeCase(hook.result.id))
-    debug(`Inserting GeoJSON in the table ` + table + `'`)
+    debug('Inserting GeoJSON in the ' + table + ' table')
     for (let i = 0; i < chunks.length; ++i) {
       let values = ''
       let params = []
