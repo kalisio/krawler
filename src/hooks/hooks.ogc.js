@@ -13,8 +13,6 @@ export function readOGCSchema (options = {}) {
       throw new Error(`The 'readOGCSchema' hook should only be used as a 'after' hook.`)
     }
 
-    debug('Reading OGC schema from' + hook.data.id)
-
     let store = await getStoreFromHook(hook, 'readOGCSchema', options.storePath)
     if (!store.path) {
       throw new Error(`The 'readOGCSchema' hook only work with the fs blob store.`)
