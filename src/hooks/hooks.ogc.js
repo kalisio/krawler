@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import path from 'path'
-import jsonix from 'Jsonix'
+import jsonix from 'jsonix'
 import makeDebug from 'debug'
 import { getStoreFromHook } from '../utils'
 
