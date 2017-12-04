@@ -74,6 +74,22 @@ mapping: {
 
 **TODO**
 
+### YAML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.yaml.js)
+
+#### readYAML(options)
+
+Read a YAML file from a store and convert it to in-memory JSON values, hook options are the following:
+* **dataPath**: property path where to store the resulting JSON object on the hook object, defaults to `result.data`
+* **storePath**: property path where to read the store to be used on the hook object, defaults to `data.store`
+
+#### writeYAML(options)
+
+Generate a YAML file from in-memory JSON values, hook options are the following:
+* **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result`
+* **storePath**: property path where to read the store to be used on the hook object, defaults to `data.store`
+* **outputType**: the type of output produced by this hook, defaults to `intermediate`
+* any option supported by [js-yaml](https://github.com/nodeca/js-yaml#safedump-object---options-)
+
 ### Raster [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.raster.js)
 
 #### readGeoTiff(options)
