@@ -1,6 +1,14 @@
 const path = require('path')
 
+const longitude = 139.7811111
+const latitude = 35.55333333
+const resolution = 30
+const halfWidth = 18000
+const blockResolution = 9000
+
 module.exports = {
+  id: 'dem-' + resolution + '-' + halfWidth,
+  longitude, latitude, resolution, halfWidth, blockResolution,
   options: {
     // If we use a download task per grid cell this should be high like 50,
     // much lower if we use a download task per grid block
