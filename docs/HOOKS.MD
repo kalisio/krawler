@@ -74,6 +74,15 @@ mapping: {
 
 **TODO**
 
+### XML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.xml.js)
+
+#### readXML(options)
+
+Read an XML file from a store and convert it to in-memory JSON values, hook options are the following:
+* **dataPath**: property path where to store the resulting JSON object on the hook object, defaults to `result.data`
+* **storePath**: property path where to read the store to be used on the hook object, defaults to `data.store`
+* **schemas**: array of schemas to be used for defining XML/JSON mappings (please refer to the [Jsonix documentation](https://github.com/highsource/jsonix/wiki/Introduction) for a more detailed explanation). Any of the OGC schemas defined in the library [ogc-schema] are supported. 
+
 ### YAML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.yaml.js)
 
 #### readYAML(options)
