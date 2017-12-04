@@ -65,8 +65,8 @@ export function computeStatistics (options = {}) {
       })
 
       stream.on('end', () => {
-        if (options.max) hook.result.max = maxValue
-        if (options.min) hook.result.min = minValue
+        if (options.max) _.set(hook, (options.statisticsPath || 'result') + '.max', maxValue)
+        if (options.min) _.set(hook, (options.statisticsPath || 'result') + '.min', minValue)
         resolve(hook)
       })
     })
