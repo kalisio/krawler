@@ -19,7 +19,7 @@ module.exports = {
   hooks: {
     tasks: {
       after: {
-        readOGCSchema: {
+        readXML: {
           schemas: [
             {organisation: 'w3c', name: 'XLink_1_0'}, 
             {organisation: 'ogc', name: 'WMS_1_3_0'}

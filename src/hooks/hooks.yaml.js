@@ -24,7 +24,7 @@ export function writeYAML (options = {}) {
 
       const fileName = hook.data.id + '.yaml'
       const filePath = path.join(store.path, fileName)
-      let yamlObject = yaml.safeDump(_.get(hook, options.dataPath || 'result.data'))
+      let yamlObject = yaml.safeDump(_.get(hook, options.dataPath || 'result.data'), options)
       fs.writeFile(filePath, yamlObject, (err) => {
         if (err) {
           reject(err)
@@ -50,7 +50,7 @@ export function readYAML (options = {}) {
 
     return new Promise((resolve, reject) => {
       debug('Reading YAML for ' + hook.result.id)
-      const fileName = hook.result.id + '.yaml'
+      const fileName = hook.result.id
       const filePath = path.join(store.path, fileName)
       fs.readFile(filePath, (err, data) => {
         if (err) {

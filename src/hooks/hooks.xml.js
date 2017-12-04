@@ -7,7 +7,7 @@ import { getStoreFromHook } from '../utils'
 const debug = makeDebug('krawler:hooks:ogc')
 
 // Generate a YAML from specific hook result values
-export function readOGCSchema (options = {}) {
+export function readXML (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
       throw new Error(`The 'readOGCSchema' hook should only be used as a 'after' hook.`)
@@ -17,11 +17,11 @@ export function readOGCSchema (options = {}) {
     if (!store.path) {
       throw new Error(`The 'readOGCSchema' hook only work with the fs blob store.`)
     }
-    const fileName = hook.data.id
+    const fileName = hook.result.id
     const filePath = path.join(store.path, fileName)
 
     return new Promise((resolve, reject) => {
-      debug('Reading XML file ' + hook.data.id)
+      debug('Reading XML file ' + filePath)
 
       let contextSchemas = []
       if (options.schemas) {
@@ -29,6 +29,7 @@ export function readOGCSchema (options = {}) {
           contextSchemas.push(require(schema.organisation + '-schemas')[schema.name])
         })
       }
+
       let jsonixContext = new jsonix.Jsonix.Context(contextSchemas)
       let unmarshaller = jsonixContext.createUnmarshaller()
 
@@ -37,7 +38,7 @@ export function readOGCSchema (options = {}) {
           _.set(hook, options.dataPath || 'result.data', result.value)
           resolve(hook)
         }
-        reject(new Error('readOGCSchema: Could not parse the file: ' + filePath))
+        reject(new Error('readOGCSchema: could not parse the file ' + filePath))
       })
     })
   }

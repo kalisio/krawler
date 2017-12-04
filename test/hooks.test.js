@@ -114,10 +114,34 @@ describe('krawler:hooks', () => {
   // Let enough time to proceed
   .timeout(5000)
 
+  let xmlHook = {
+    type: 'after',
+    result: {
+      id: 'wms.xml'
+    },
+    params: {
+      store: fsStore({ path: path.join(__dirname, 'data') })
+    }
+  }
+
+  let schemas = [
+    {organisation: 'w3c', name: 'XLink_1_0'},
+    {organisation: 'ogc', name: 'WMS_1_3_0'}
+  ]
+
+  it('converts XML to JSON', () => {
+    return pluginHooks.readXML({ schemas: schemas })(xmlHook)
+    .then(hook => {
+      expect(hook.result.data).toExist()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
   let yamlHook = {
     type: 'after',
     result: {
-      id: 'mapproxy'
+      id: 'mapproxy.yaml'
     },
     params: {
       store: fsStore({ path: path.join(__dirname, 'data') })
