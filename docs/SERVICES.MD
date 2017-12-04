@@ -24,7 +24,7 @@ The `tasks` [service](https://docs.feathersjs.com/api/services.html) allow to ma
     * **outputType**: the type of output produced by this task, defaults to `intermediate`
 * **remove(id)**: remove the task with given ID, this will actually remove the produced output from the store given as a (query) parameters
 
-The returned task objects will contain an additional property for each output types holding an array of produced output files. This is used by the [clearOutputs](./API.MD##clearoutputsoptions) hook to perform cleanup.
+The returned task objects will contain an additional property for each output types holding an array of produced output files. This is used by the [clearOutputs](./HOOKS.MD#clearoutputsoptions) hook to perform cleanup.
 
 By default a task implementation return a [stream](https://nodejs.org/api/stream.html) to extract data from that is piped to the target store. Available task types are the following:
 * [`http`](https://github.com/request/request) for HTTP requests, available options
@@ -48,6 +48,44 @@ The returned job object is a [promise](https://developer.mozilla.org/en-US/docs/
 Available job types are the following:
 * `asyn` to run tasks in parallel by batch, available options are
   * **workersLimit**: the maximum number of tasks to be run in parallel by the job
+  
+#### Task templates
+
+When creating a job if a `taskTemplate` object is provided it will be automatically merged in all job tasks so that you can use it to store options common to all your tasks. It also provide tasj ID [templating](https://lodash.com/docs/4.17.4#template) based on `jobId` and `taskId` injected variables. So if you provide the following task template:
+```
+id: 'job',
+taskTemplate: {
+  store: 'job-store',
+  id: '<%= jobId %>-<%= taskId %>',
+  type: 'http',
+  options: {
+    url: 'xxx',
+    parameter1: xxx
+  }
+}
+```
+And submit the following task to your job:
+```
+{
+  id: 'task',
+  options: {
+    parameter2: xxx
+  }
+}
+```
+The final task to be executed will be:
+```
+{
+  store: 'job-store',
+  id: 'job-task',
+  type: 'http',
+  options: {
+    url: 'xxx',
+    parameter1: xxx,
+    parameter2: xxx
+  }
+}
+```
 
 ### Complete Example
 
