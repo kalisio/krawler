@@ -2,6 +2,19 @@
 
 These sections detail the external (i.e. REST/Websocket) as well as the internal (ie Classes/Functions) [API](https://en.wikipedia.org/wiki/Application_programming_interface) of krawler.
 
+## Command-Line Interface
+
+The problem with hooks is that they are configured at application setup time and usually fixed during the whole application lifecycle. It means you would have a to create an application instance for each pipeline you’d like to have, not so simple. This is the reason why krawler can also be used as a command-line utility, where each execution setup the hooks pipeline according to the job to be done. The underlying implementation is managed by the global **run(jobfile, options)** function:
+* **jobfile**: a path to a local job file or a jobfile JSON object
+* **options**:
+  * **proxy**: proxy URL to be used for HTTP requests
+  * **proxy-https**: proxy URL to be used for HTTPS requests
+  * **user**: user name to be used for proxy
+  * **password**: user password to be used for proxy
+  * **debug**: debug namespace to output like `krawler*` for all messages or `krawler:hooks*` to only trace hooks messages
+  
+The options are read from the CLI arguments with the same names.
+
 ## Services
 
 [Stores](./SERVICES.MD#stores) to manage storage backends
