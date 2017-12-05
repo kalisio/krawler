@@ -51,7 +51,7 @@ Available job types are the following:
   
 #### Task templates
 
-When creating a job if a `taskTemplate` object is provided it will be automatically merged in all job tasks so that you can use it to store options common to all your tasks. It also provide tasj ID [templating](https://lodash.com/docs/4.17.4#template) based on `jobId` and `taskId` injected variables. So if you provide the following task template:
+When creating a job if a `taskTemplate` object is provided it will be automatically merged in all job tasks so that you can use it to store options common to all your tasks. It also provides task ID [templating](https://lodash.com/docs/4.17.4#template) based on `jobId` and `taskId` injected variables. So if you provide the following task template:
 ```
 id: 'job',
 taskTemplate: {
