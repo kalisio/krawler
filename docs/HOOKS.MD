@@ -70,6 +70,17 @@ mapping: {
 }
 ```
 
+#### writeTemplate(options)
+
+Generate a file from an input template and injected in-memory JSON values, hook options are the following:
+* **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result.data`
+* **storePath**: property path where to read the store to be used for writing templated file on the hook object, defaults to `data.store`
+* **templateStorePath**: property path where to read the store to be used for reading template on the hook object, defaults to `data.templateStore`
+* **templateFile**: file name of the template file to be used
+* **outputType**: the type of output produced by this hook, defaults to `intermediate`
+
+> Learn more about [templating](https://lodash.com/docs/4.17.4#template)
+
 #### convertToGeoJson(options)
 
 **TODO**
