@@ -133,7 +133,7 @@ Generate geographic grid parameters from an input location (grid center), area w
 * **longitude**: grid center longitude (in degrees)
 * **latitude**: grid center latitude (in degrees)
 * **resolution**: grid cell resolution (in meters)
-* **halfWidth**: grid half-width (in meter)
+* **halfWidth**: grid half-width (in meters)
 * **blockResolution**: grid block resolution (in meters)
 
 Output hook data are the following:
