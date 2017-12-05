@@ -35,3 +35,7 @@ hooks.registerHook('custom', hook)
 ```
 
 After that you can use your custom hook like the built-in ones with the [CLI](./API.MD#command-line-interface).
+
+## Complete example
+
+A complete example of extension is available in the [samples](https://github.com/kalisio/krawler/blob/master/examples/extend/index.js).
