@@ -83,7 +83,11 @@ Generate a file from an input template and injected in-memory JSON values, hook 
 
 #### convertToGeoJson(options)
 
-**TODO**
+Convert in-memory JSON values to a [GeoJSON](http://geojson.org/) collection. For each in-memory object, the hook generates a corresponding GeoJSON feature using specific properties to build the `geometry` property. For now, it only allows to generate features of type of `Point`. Moreover, the coordinate reference system is a geographic coordinate reference system, using the World Geodetic System 1984 (WGS 84), with longitude and latitude defined in decimal degrees. The entire object is stored under the `properties` property of the feature.
+Hook options are the following:
+* **longitude**: property path where to read the longitude value defaults to `longitude`
+* **latitude**: property path where to read the latitude value defaults to `latitude`
+* **altitude**: property path where to read the altitude value defaults to `altitude`
 
 ### PostgreSQL [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.pg.js)
 
