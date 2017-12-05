@@ -23,6 +23,9 @@ Learn more about krawler concepts, architecture and components.
 [**API**](./docs/API.MD)<br/>
 Learn more about krawler architecture, API and hooks.
 
+[**Extending**](./docs/EXTENDING.MD)<br/>
+Learn more about how to extend krawler to fit your needs.
+
 [**License**](./LICENSE.MD)
 
 **Trusted by**
