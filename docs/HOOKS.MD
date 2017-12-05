@@ -85,6 +85,28 @@ Generate a file from an input template and injected in-memory JSON values, hook 
 
 **TODO**
 
+### PostgreSQL [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.pg.js)
+
+#### connectPG(options)
+
+**TODO**
+
+#### disconnectPG(options)
+
+**TODO**
+
+#### dropPGTable(options)
+
+**TODO**
+
+#### createPGTable(options)
+
+**TODO**
+
+#### writePGTable(options)
+
+**TODO**
+
 ### XML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.xml.js)
 
 #### readXML(options)
@@ -135,6 +157,22 @@ Computes minimum and maximum values on a GeoTiff file, hook options are the foll
 * **min**: boolean indicating if minimum value should be computed
 * **max**: boolean indicating if maximum value should be computed
 * **statisticsPath**: property path where to write the output statistics on the hook object, defaults to `result`
+
+### Store [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.store.js)
+
+#### createStores(options)
+
+Create (a set of) store(s), hook options are the (array of) following the following:
+* any option supported by the [stores service](./SERVICES#stores)
+* **storePath**: property path where to set the created store on the hook object, if not given the store will be created through the service but not stored on the hook
+
+#### removeStores(options)
+
+Remove (a set of) store(s), hook options are (array of) the following:
+* **id**: the store ID
+* **storePath**: property path where to unset the removed store on the hook object, if not given the store will be removed through service but not on the hook
+
+> As a shortcut the options provided can only be store IDs when **storePath** is not used
 
 ### Geographic grid [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.grid.js)
 
