@@ -16,18 +16,18 @@ These sections detail the external (i.e. REST/Websocket) as well as the internal
 
 [Authentication](./HOOKS.MD#authentication) management
 
-[CSV](./HOOKS.MD#csv) file management
+[CSV](./HOOKS.MD#csv-source) file management
 
-[JSON](./HOOKS.MD#json) file and structures management
+[JSON](./HOOKS.MD#json-source) file and structures management
 
-[XML](./HOOKS.MD#xml) file management
+[XML](./HOOKS.MD#xml-source) file management
 
-[YAML](./HOOKS.MD#yaml) file management
+[YAML](./HOOKS.MD#yaml-source) file management
 
-[Raster](./HOOKS.MD#raster) file management
+[Raster](./HOOKS.MD#raster-source) file management
 
-[PostgreSQL](./HOOKS.MD#postgresql) database management
+[PostgreSQL](./HOOKS.MD#postgresql-source) database management
 
-[Store](./HOOKS.MD#store) management
+[Store](./HOOKS.MD#store-source) management
 
-[Clearing](./HOOKS.MD#clearing) of output files management
+[Clearing](./HOOKS.MD#clearing-source) of output files management
