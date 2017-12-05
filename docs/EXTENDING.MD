@@ -20,4 +20,18 @@ The type of the created entity depends on the service being extended:
 
 ## Extend hooks
 
-**TODO**
+It is possible to add user-registered hook constructor functions like this:
+```js
+import { hooks } from 'krawler'
+// A krawler hook constructor function
+let hook = (options = {}) => {
+  // Standard FeathersJS hook function
+  return (hook) => {
+    ...do something that depends on options
+    return hook
+  }
+}
+hooks.registerHook('custom', hook)
+```
+
+After that you can use your custom hook like the built-in ones with the [CLI](./API.MD#command-line-interface).
