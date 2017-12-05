@@ -13,7 +13,49 @@ The problem with hooks is that they are configured at application setup time and
   * **password**: user password to be used for proxy
   * **debug**: debug namespace to output like `krawler*` for all messages or `krawler:hooks*` to only trace hooks messages
   
-The options are read from the CLI arguments with the same names.
+The options are read from the CLI arguments with the same names. This function is responsible of parsing the job definition including all the required parameters to call the underlying services with the relevant hooks configured (see below). A typical job definition is:
+```js
+let job = {
+  // Options for job executor
+  options: {
+    workersLimit: 4
+  },
+  // Store to be used for job output
+  store: 'job-store',
+  // Common options for all generated tasks
+  taskTemplate: {
+    // Store to be used for task output
+    store: 'job-store',
+    id: '<%= jobId %>-<%= taskId %>',
+    type: 'xxx',
+    options: {
+      ...
+    }
+  },
+  // Hooks setup
+  hooks: {
+    tasks: {
+      after: {
+        computeSomething: {
+          hookOption: ...
+        }
+      }
+    },
+    jobs: {
+      before: {
+        generateTasks: {
+          hookOption: ...
+        }
+      },
+      after: {
+        generateOutput: {
+          hookOption: ...
+        }
+      }
+    }
+  }
+}
+```
 
 ## Services
 
