@@ -5,7 +5,7 @@ import fsStore from 'fs-blob-store'
 import yaml from 'js-yaml'
 import fs from 'fs'
 import _ from 'lodash'
-import { hooks as pluginHooks } from '../src'
+import { hooks as pluginHooks, activateHooks } from '../src'
 
 describe('krawler:hooks', () => {
   let inputStore = fsStore({ path: path.join(__dirname, 'data') })
@@ -13,6 +13,22 @@ describe('krawler:hooks', () => {
 
   before(() => {
     chailint(chai, util)
+  })
+
+  it('registers custom hook', () => {
+    let hookFunction = (hook) => hook
+    pluginHooks.registerHook('custom', (options) => hookFunction)
+    let hooks = {
+      before: {
+        custom: { parameter: 1 }
+      },
+      after: {
+        custom: { parameter: 2 }
+      }
+    }
+    activateHooks(hooks)
+    expect(hooks.before.create.includes(hookFunction)).beTrue()
+    expect(hooks.after.create.includes(hookFunction)).beTrue()
   })
 
   it('manages auth on requests', () => {

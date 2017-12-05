@@ -9,20 +9,30 @@ import plugin from '.'
 
 const debug = makeDebug('krawler:cli')
 
-function activateHooks (service, serviceHooks) {
+export function activateHooks (serviceHooks, service) {
   // Iterate over hook types (before, after)
   _.forOwn(serviceHooks, (hooksDefinition, stage) => {
     // Iterate over hooks to create the hook pipeline
     let pipeline = []
     _.forOwn(hooksDefinition, (hookOptions, hookName) => {
       // Jump from name/options to the real hook function
-      pipeline.push(hooks[hookName](hookOptions))
+      // First built-in hooks
+      let hook = hooks[hookName]
+      // Then custom ones
+      if (!hook) hook = hooks.getHook(hookName)
+      if (typeof hook === 'function') {
+        pipeline.push(hook(hookOptions))
+      } else {
+        let message = 'Unknown hook ' + hookName
+        debug(message)
+        console.error(message)
+      }
     })
     // Replace hooks in place so that we can use it directly with Feathers after
     serviceHooks[stage] = { create: pipeline } // We only have create operation to manage
   })
   // Setup hooks on service
-  service.hooks(serviceHooks)
+  if (service) service.hooks(serviceHooks)
 }
 
 export function run (jobfile, options = {}) {
@@ -40,11 +50,11 @@ export function run (jobfile, options = {}) {
   app.use('tasks', plugin.tasks())
   app.use('jobs', plugin.jobs())
   // Read job file
-  let job = require(jobfile)
+  let job = (typeof jobfile === 'object' ? jobfile : require(jobfile))
   // Process hooks
   _.forOwn(job.hooks, (value, key) => {
     let service = app.service(key)
-    activateHooks(service, value)
+    activateHooks(value, service)
   })
   delete job.hooks
   // Run the app, this is required to correctly setup Feathers
@@ -61,7 +71,7 @@ export function run (jobfile, options = {}) {
     })
   })
   .catch(error => {
-    console.log(error.message)
+    console.error(error.message)
     server.close()
   })
 }

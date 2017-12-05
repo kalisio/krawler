@@ -4,7 +4,7 @@ import { stores, tasks, jobs } from './services'
 
 export * as hooks from './hooks'
 export * as utils from './utils'
-export { run } from './cli'
+export { activateHooks, run } from './cli'
 
 const debug = makeDebug('krawler')
 
