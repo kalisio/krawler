@@ -53,7 +53,7 @@ Grab a CSV file from AWS S3, convert it to GeoJson and push it into a PostGIS da
 
 ![Hooks Blocks](https://cdn.rawgit.com/kalisio/krawler/c85a9a96f08e090ff8b60b9df4adfa108f70bd7a/examples/csv2pg/Hooks%20Diagram.svg)
 
-For security reasons some secrets are not hard-written in the jobfile, as a consequence you must define the following environment variables to make this sample work:
+Some parameters like the input file name of the PostGIS host can be directly edited in the jobfile. However, for security concerns, some secrets are not hard-written in the jobfile, as a consequence you must define the following environment variables to make this sample work:
 * **S3_ACCESS_KEY** : AWS S3 Access Key ID
 * **S3_SECRET_ACCESS_KEY** : AWS S3 Secret Access Key
 * **S3_BUCKET** : the name of the S3 bucket to read the CSV file from
