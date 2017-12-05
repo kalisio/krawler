@@ -1,13 +1,17 @@
-import program from 'commander'
 import _ from 'lodash'
-import path from 'path'
 import feathers from 'feathers'
 import feathersHooks from 'feathers-hooks'
 import makeDebug from 'debug'
 import * as hooks from './hooks'
-import plugin from '.'
+import { stores, tasks, jobs } from './services'
+import plugin from './plugin'
 
 const debug = makeDebug('krawler:cli')
+
+// Create default services used by CLI
+export let StoresService = stores()
+export let TasksService = tasks()
+export let JobsService = jobs()
 
 export function activateHooks (serviceHooks, service) {
   // Iterate over hook types (before, after)
@@ -46,9 +50,9 @@ export function run (jobfile, options = {}) {
   let app = feathers()
   app.configure(feathersHooks())
   app.configure(plugin())
-  app.use('stores', plugin.stores())
-  app.use('tasks', plugin.tasks())
-  app.use('jobs', plugin.jobs())
+  app.use('stores', StoresService)
+  app.use('tasks', TasksService)
+  app.use('jobs', JobsService)
   // Read job file
   let job = (typeof jobfile === 'object' ? jobfile : require(jobfile))
   // Process hooks
@@ -74,22 +78,4 @@ export function run (jobfile, options = {}) {
     console.error(error.message)
     server.close()
   })
-}
-
-export default function cli () {
-  program
-    .version(require('../package.json').version)
-    .usage('<jobfile> [options]')
-    .option('-d, --debug', 'Verbose output for debugging')
-    .option('-P, --proxy [proxy]', 'Proxy to be used for HTTP (and HTTPS)')
-    .option('-PS, --proxy-https [proxy-https]', 'Proxy to be used for HTTPS')
-    .option('-u, --user [user]', 'User name to be used for authentication')
-    .option('-p, --password [password]', 'User password to be used for authentication')
-    .parse(process.argv)
-
-  run(path.join(process.cwd(), program.args[0]), program)
-}
-
-if (require.main === module) {
-  cli()
 }
