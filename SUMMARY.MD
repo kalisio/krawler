@@ -7,6 +7,7 @@
   * [Main concepts](docs/ARCHITECTURE.MD#main-concepts)
   * [Global architecture](docs/ARCHITECTURE.MD#global-architecture)
 * [API](docs/API.MD)
+  * [CLI](docs/API.MD#command-line-interface)
   * [Services](docs/SERVICES.MD)
     * [Stores](docs/SERVICES.MD#stores)
     * [Tasks](docs/SERVICES.MD#tasks)
