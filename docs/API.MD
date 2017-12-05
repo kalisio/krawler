@@ -1,6 +1,6 @@
 # API
 
-These sections detail the external (i.e. REST/Websocket) as well as the internal (ie Classes/Functions) [API](https://en.wikipedia.org/wiki/Application_programming_interface) of krawler.
+These sections detail the external (i.e. CLI, REST or Websocket) as well as the internal (ie Classes/Functions) [API](https://en.wikipedia.org/wiki/Application_programming_interface) of krawler.
 
 ## Command-Line Interface
 
