@@ -26,6 +26,8 @@ These sections detail the external (i.e. REST/Websocket) as well as the internal
 
 [Raster](./HOOKS.MD#raster) file management
 
+[PostgreSQL](./HOOKS.MD#postgresql) database management
+
 [Store](./HOOKS.MD#store) management
 
 [Clearing](./HOOKS.MD#clearing) of output files management
