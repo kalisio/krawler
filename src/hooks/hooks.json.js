@@ -98,3 +98,42 @@ export function convertToGeoJson (options = {}) {
     _.set(hook, options.dataPath || 'result.data', collection)
   }
 }
+
+// Generate a file based on a template and injected JSON from specific hook result values
+export function writeTemplate (options = {}) {
+  return async function (hook) {
+    if (hook.type !== 'after') {
+      throw new Error(`The 'writeTemplate' hook should only be used as a 'after' hook.`)
+    }
+
+    let store = await getStoreFromHook(hook, 'writeTemplate', options.storePath)
+    if (!store.path) {
+      throw new Error(`The 'writeTemplate' hook only work with the fs blob store.`)
+    }
+
+    let templateStore = await getStoreFromHook(hook, 'writeTemplate', options.templateStorePath || 'templateStore')
+    if (!templateStore.path) {
+      throw new Error(`The 'writeTemplate' hook only work with the fs blob store.`)
+    }
+
+    const ext = path.extname(options.templateFile)
+    return new Promise((resolve, reject) => {
+      debug('Creating file from template ' + options.templateFile + ' for ' + hook.data.id)
+      const templateFilePath = path.join(templateStore.path, options.templateFile)
+      fs.readFile(templateFilePath, (error, template) => {
+        if (error) {
+          reject(error)
+          return
+        }
+        let compiler = _.template(template)
+        const filePath = path.join(store.path, hook.data.id + ext)
+        fs.outputFile(filePath, compiler(_.get(hook, options.dataPath || 'result.data', {})))
+        .then(() => {
+          addOutput(hook.result, hook.data.id + ext, options.outputType)
+          resolve(hook)
+        })
+        .catch(reject)
+      })
+    })
+  }
+}

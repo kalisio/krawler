@@ -1,5 +1,3 @@
-const path = require('path')
-
 const longitude = 139.7811111
 const latitude = 35.55333333
 const resolution = 30
@@ -14,11 +12,7 @@ module.exports = {
     // much lower if we use a download task per grid block
     workersLimit: 4
   },
-  store: {
-    id: 'job-store',
-    type: 'fs',
-    options: { path: path.join(__dirname, '..', 'output') }
-  },
+  store: 'job-store',
   taskTemplate: {
     store: 'job-store',
     id: '<%= jobId %>-<%= taskId %>.tif',

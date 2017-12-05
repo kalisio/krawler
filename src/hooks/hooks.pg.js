@@ -12,6 +12,7 @@ export function connectPG (options = {}) {
       throw new Error(`The 'connectPG' hook should only be used as a 'before' hook.`)
     }
 
+    debug('Connecting to PG for ' + hook.data.id)
     let client = new pg.Client(options)
     await client.connect()
     _.set(hook.data, options.clientPath || 'client', client)
@@ -30,6 +31,7 @@ export function disconnectPG (options = {}) {
       throw new Error(`You must be connected to PostgresSQL before using the 'disconnectPG' hook`)
     }
 
+    debug('Disconnecting from PG for ' + hook.data.id)
     await client.end()
     _.unset(hook, options.clientPath || 'client')
     return hook

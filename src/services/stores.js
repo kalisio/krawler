@@ -10,54 +10,46 @@ class StoresService extends Service {
     this.stores = {}
   }
 
-  create (data, params = {}) {
+  async create (data, params = {}) {
     let { id, type, options } = data
 
-    return new Promise(async (resolve, reject) => {
-      let store = this.stores[id]
-      if (store) {
-        const message = 'Store with id ' + id + ' already exist'
-        debug(message)
-        reject(new Error(message))
-        return
-      }
-      store = await this.generate(type, options, id)
-      if (!store) {
-        const message = 'Can\'t find store generator for store type ' + type
-        debug(message)
-        reject(new Error(message))
-        return
-      }
-      this.stores[id] = store
-      resolve(store)
-    })
+    let store = this.stores[id]
+    if (store) {
+      const message = 'Store with id ' + id + ' already exist'
+      debug(message)
+      throw new Error(message)
+    }
+    store = await this.generate(type, options, id)
+    if (!store) {
+      const message = 'Can\'t find store generator for store type ' + type
+      debug(message)
+      throw new Error(message)
+    }
+    this.stores[id] = store
+    return store
   }
 
-  get (id, params) {
-    return new Promise((resolve, reject) => {
-      let store = this.stores[id]
-      if (!store) {
-        const message = 'Can\'t find store with ID ' + id
-        debug(message)
-        reject(new Error(message))
-      } else {
-        resolve(store)
-      }
-    })
+  async get (id, params) {
+    let store = this.stores[id]
+    if (!store) {
+      const message = 'Can\'t find store with ID ' + id
+      debug(message)
+      throw new Error(message)
+    } else {
+      return store
+    }
   }
 
-  remove (id, params) {
-    return new Promise((resolve, reject) => {
-      let store = this.stores[id]
-      if (!store) {
-        const message = 'Can\'t find store for removal with ID ' + id
-        debug(message)
-        reject(new Error(message))
-      } else {
-        delete this.stores[id]
-        resolve(store)
-      }
-    })
+  async remove (id, params) {
+    let store = this.stores[id]
+    if (!store) {
+      const message = 'Can\'t find store for removal with ID ' + id
+      debug(message)
+      throw new Error(message)
+    } else {
+      delete this.stores[id]
+      return store
+    }
   }
 }
 

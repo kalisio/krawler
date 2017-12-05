@@ -2,26 +2,12 @@ const path = require('path')
 
 module.exports = {
   id: 'job',
-  store: {
-    id: 'job-store',
-    type: 'fs',
-    options: { path: path.join(__dirname, '..', 'output') }
-  },
+  store: 'job-store',
   tasks: [{
     id: 'world_cities.csv',
     type: 'store',
     options: {
-      store: {
-        id: 'task-store',
-        type: 's3',
-        options: {
-          client: {
-            accessKeyId: process.env.S3_ACCESS_KEY,
-            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
-          },
-          bucket: process.env.S3_BUCKET
-        }
-      }
+      store: 'task-store'
     }
   }],
   hooks: {
@@ -44,6 +30,23 @@ module.exports = {
     },
     jobs: {
       before: {
+        createStores: [{
+          id: 'job-store',
+          type: 'fs',
+          storePath: 'taskTemplate.store',
+          options: { path: path.join(__dirname, '..', 'output') }
+        },
+        {
+          id: 'task-store',
+          type: 's3',
+          options: {
+            client: {
+              accessKeyId: process.env.S3_ACCESS_KEY,
+              secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+            },
+            bucket: process.env.S3_BUCKET
+          }
+        }],
         connectPG: {
           user: process.env.PG_USER,
           password: process.env.PG_PASSWORD,
@@ -57,7 +60,8 @@ module.exports = {
         disconnectPG: {
           clientPath: 'taskTemplate.client'
         },
-        clearOutputs: {}
+        clearOutputs: {},
+        removeStores: ['job-store', 'task-store']
       }
     }
   }

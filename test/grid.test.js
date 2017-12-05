@@ -28,7 +28,15 @@ describe('krawler:grid', () => {
     expect(jobsService).toExist()
     jobsService.hooks({
       before: {
-        create: [pluginHooks.generateGrid(), pluginHooks.generateGridTasks()]
+        create: [
+          pluginHooks.createStores([{
+            id: 'test-store',
+            type: 'fs',
+            options: { path: path.join(__dirname, 'output') }
+          }]),
+          pluginHooks.generateGrid(),
+          pluginHooks.generateGridTasks()
+        ]
       }
     })
   })
@@ -61,13 +69,9 @@ describe('krawler:grid', () => {
     datetime.startOf('day')
     jobsService.create({
       id: 'wms-grid',
-      store: {
-        id: 'test-store',
-        type: 'fs',
-        options: { path: path.join(__dirname, 'output') }
-      },
       taskTemplate: {
         id: '<%= jobId %>-<%= taskId %>.png',
+        store: 'test-store',
         type: 'wms',
         options: {
           url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS',
@@ -140,14 +144,10 @@ describe('krawler:grid', () => {
     datetime.startOf('day')
     jobsService.create({
       id: 'wcs-grid',
-      store: {
-        id: 'test-store',
-        type: 'fs',
-        options: { path: path.join(__dirname, 'output') }
-      },
+      store: 'test-store',
       taskTemplate: {
-        store: 'test-store',
         id: '<%= jobId %>-<%= taskId %>.tif',
+        store: 'test-store',
         type: 'wcs',
         options: {
           /*

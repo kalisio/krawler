@@ -1,4 +1,7 @@
 import _ from 'lodash'
+import makeDebug from 'debug'
+
+const debug = makeDebug('krawler:utils')
 
 // Add to the 'outputs' property of the given abject a new entry
 export function addOutput (object, output, type) {
@@ -9,43 +12,36 @@ export function addOutput (object, output, type) {
   _.set(object, outputType, outputs)
 }
 
-// Get the actual store object from its definition in input data based on the given property path
-// or if definition not found retrieve directly from params
-export async function getStoreFromHook (hook, hookName, storePath) {
-  // First try specific hook data
-  let store = _.get(hook, storePath || 'data.store')
+// Get the actual store object from its definition in input data based on the given property path,
+// or if definition not found retrieve it directly from params
+export async function getStore (storesService, params, data, storePath) {
+  debug('Seeking for store with data or params', data, params)
+  // First try specific service data
+  let store = _.get(data, storePath || 'store')
+  // Store config/object given ?
   if (store) {
-    store = await hook.service.storesService.get(typeof store === 'object' ? store.id : store)
+    if (typeof store === 'string' && storesService) {
+      store = await storesService.get(store)
+    }
   } else {
     // Check if store object already provided as global parameter
-    store = hook.params.store
+    store = _.get(params, storePath || 'store')
   }
+
   if (!store) {
-    throw new Error(`Cannot find store for hook ${hookName}.`)
+    throw new Error('Cannot find store on data or params ', data, params)
   }
 
   return store
 }
 
-// Get the actual store object from its definition in input data based on the given property path,
-// will create it if it does not yet exist
+// Get the actual store object from its definition in input data based on the given property path
 // or if definition not found retrieve directly from params
-export async function getStoreFromService (storesService, params, data, storePath) {
-  // First try specific service data
-  let store = _.get(data, storePath || 'store')
-  // Store config given
-  if (store) {
-    try {
-      // Check if store does not already exist
-      store = await storesService.get(typeof store === 'object' ? store.id : store)
-    } catch (error) {
-      // If not create it the first time
-      store = await storesService.create(store)
-    }
-  } else {
-    // Check if store object already provided as global parameter
-    store = params.store
+export async function getStoreFromHook (hook, hookName, storePath) {
+  debug('Seeking for store in hook ' + hookName)
+  try {
+    return await getStore(_.get(hook, 'service.storesService'), hook.params, hook.data, storePath)
+  } catch (error) {
+    throw new Error(`Cannot find store for hook ${hookName}.`)
   }
-
-  return store
 }

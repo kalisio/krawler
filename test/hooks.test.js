@@ -2,9 +2,15 @@ import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
 import path from 'path'
 import fsStore from 'fs-blob-store'
+import yaml from 'js-yaml'
+import fs from 'fs'
+import _ from 'lodash'
 import { hooks as pluginHooks } from '../src'
 
 describe('krawler:hooks', () => {
+  let inputStore = fsStore({ path: path.join(__dirname, 'data') })
+  let outputStore = fsStore({ path: path.join(__dirname, 'output') })
+
   before(() => {
     chailint(chai, util)
   })
@@ -55,9 +61,7 @@ describe('krawler:hooks', () => {
     result: {
       id: 'RJTT-30-18000-2-1.tif'
     },
-    params: {
-      store: fsStore({ path: path.join(__dirname, 'data') })
-    }
+    params: { store: inputStore }
   }
 
   it('converts GeoTiff to JSON', () => {
@@ -91,9 +95,7 @@ describe('krawler:hooks', () => {
     result: {
       id: 'RJTT-30-18000-2-1.csv'
     },
-    params: {
-      store: fsStore({ path: path.join(__dirname, 'data') })
-    }
+    params: { store: inputStore }
   }
 
   it('converts CSV to JSON', () => {
@@ -119,9 +121,7 @@ describe('krawler:hooks', () => {
     result: {
       id: 'wms.xml'
     },
-    params: {
-      store: fsStore({ path: path.join(__dirname, 'data') })
-    }
+    params: { store: inputStore }
   }
 
   let schemas = [
@@ -143,15 +143,44 @@ describe('krawler:hooks', () => {
     result: {
       id: 'mapproxy.yaml'
     },
-    params: {
-      store: fsStore({ path: path.join(__dirname, 'data') })
-    }
+    params: { store: inputStore }
   }
 
   it('converts YAML to JSON', () => {
     return pluginHooks.readYAML()(yamlHook)
     .then(hook => {
       expect(hook.result.data).toExist()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  let templateHook = {
+    type: 'after',
+    data: {
+      id: 'mapproxy-templated'
+    },
+    result: {
+      id: 'mapproxy-templated',
+      data: {
+        times: [new Date(Date.UTC(2017, 11, 5, 0, 0, 0)), new Date(Date.UTC(2017, 11, 5, 6, 0, 0)), new Date(Date.UTC(2017, 11, 5, 12, 0, 0))],
+        elevations: [0, 10, 100]
+      }
+    },
+    params: { store: outputStore, templateStore: inputStore }
+  }
+
+  it('write template from JSON', () => {
+    return pluginHooks.writeTemplate({ templateFile: 'mapproxy-template.yaml' })(templateHook)
+    .then(hook => {
+      let templated = fs.readFileSync(path.join(outputStore.path, 'mapproxy-templated.yaml'), 'utf8')
+      templated = yaml.safeLoad(templated)
+      let times = _.get(templated, 'layers[0].dimensions.time.values')
+      expect(times).toExist()
+      expect(times.map(time => new Date(time))).to.deep.equal(hook.result.data.times)
+      let elevations = _.get(templated, 'layers[0].dimensions.elevation.values')
+      expect(elevations).toExist()
+      expect(elevations).to.deep.equal(hook.result.data.elevations)
     })
   })
   // Let enough time to proceed

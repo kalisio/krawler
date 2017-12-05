@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   tasks: {
     after: {
@@ -39,13 +41,20 @@ module.exports = {
   },
   jobs: {
     before: {
+      createStores: [{
+        id: 'job-store',
+        type: 'fs',
+        storePath: 'taskTemplate.store',
+        options: { path: path.join(__dirname, '..', 'output') }
+      }],
       basicAuth: { type: 'Proxy-Authorization', optionsPath: 'taskTemplate.options' },
       generateGrid: {},
       generateGridTasks: { resample: true }
     },
     after: {
       mergeCSV: { headers: true },
-      clearOutputs: {}
+      clearOutputs: {},
+      removeStores: ['job-store']
     }
   }
 }

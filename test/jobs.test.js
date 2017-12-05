@@ -24,6 +24,19 @@ describe('krawler:jobs', () => {
     expect(jobsService).toExist()
   })
 
+  it('creates the job store', () => {
+    const outputPath = path.join(__dirname, 'output')
+    return storesService.create({
+      id: 'test-store',
+      type: 'fs',
+      options: { path: outputPath }
+    })
+    .then(store => {
+      expect(store).toExist()
+      expect(store.path).to.equal(outputPath)
+    })
+  })
+
   it('creates a WCS job', (done) => {
     let datetime = moment.utc()
     datetime.startOf('day')
@@ -32,12 +45,8 @@ describe('krawler:jobs', () => {
       options: {
         workersLimit: 2
       },
-      store: {
-        id: 'test-store',
-        type: 'fs',
-        options: { path: path.join(__dirname, 'output') }
-      },
       taskTemplate: {
+        store: 'test-store',
         id: '<%= jobId %>-<%= taskId %>.tif',
         type: 'wcs',
         options: {

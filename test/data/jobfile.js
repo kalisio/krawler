@@ -2,20 +2,12 @@ import path from 'path'
 
 module.exports = {
   id: 'job',
-  store: {
-    id: 'job-store',
-    type: 'fs',
-    options: { path: path.join(__dirname, '..', 'output') }
-  },
+  store: 'job-store',
   tasks: [{
     id: 'RJTT-30-18000-2-1.tif',
     type: 'store',
     options: {
-      store: {
-        id: 'task-store',
-        type: 'fs',
-        options: { path: __dirname }
-      }
+      store: 'task-store'
     }
   }],
   hooks: {
@@ -59,10 +51,24 @@ module.exports = {
       }
     },
     jobs: {
+      before: {
+        createStores: [{
+          id: 'job-store',
+          type: 'fs',
+          storePath: 'taskTemplate.store',
+          options: { path: path.join(__dirname, '..', 'output') }
+        },
+        {
+          id: 'task-store',
+          type: 'fs',
+          options: { path: __dirname }
+        }]
+      },
       after: {
         clearOutputs: {
           type: 'intermediate'
-        }
+        },
+        removeStores: ['job-store', 'task-store']
       }
     }
   }

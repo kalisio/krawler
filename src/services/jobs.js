@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
 import Service from './service'
-import { getStoreFromService } from '../utils'
+import { getStore } from '../utils'
 import defaultJobGenerators from '../jobs'
 
 const debug = makeDebug('krawler:jobs')
@@ -20,7 +20,14 @@ class JobsService extends Service {
 
   async create (data, params = {}) {
     let { type, id, options, taskTemplate, tasks } = data
-    let store = await getStoreFromService(this.storesService, params, data)
+    let store
+    // If a store is found at job level it will be forwarded to all tasks
+    // as params so that they don't have to seek for output store
+    try {
+      await getStore(this.storesService, params, data)
+    } catch (error) {
+      // Otherwise each task should specify its output store
+    }
 
     // The task template ID is used as a template string for the task ID
     let compiler
@@ -49,7 +56,7 @@ class JobsService extends Service {
   }
 
   async remove (id, params = {}) {
-    let store = await getStoreFromService(this.storesService, params, params.query || {})
+    let store = await getStore(this.storesService, params, params.query || {})
 
     return new Promise((resolve, reject) => {
       // Remove output data

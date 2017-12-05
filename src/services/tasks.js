@@ -1,6 +1,6 @@
 import makeDebug from 'debug'
 import Service from './service'
-import { getStoreFromService, addOutput } from '../utils'
+import { getStore, addOutput } from '../utils'
 import defaultTaskGenerators from '../tasks'
 
 const debug = makeDebug('krawler:tasks')
@@ -18,7 +18,7 @@ class TasksService extends Service {
   async create (data, params = {}) {
     let { id, type, options, storageOptions } = data
 
-    let store = await getStoreFromService(this.storesService, params, data)
+    let store = await getStore(this.storesService, params, data)
     // Providing 'type-stream' as input type means we don't want to directly write the read stream
     // to the store but simply open it and return it for hooks to process
     const streamed = type.endsWith('-stream')
@@ -53,7 +53,7 @@ class TasksService extends Service {
   }
 
   async remove (id, params = {}) {
-    let store = await getStoreFromService(this.storesService, params, params.query || {})
+    let store = await getStore(this.storesService, params, params.query || {})
 
     return new Promise((resolve, reject) => {
       // Remove output data

@@ -1,13 +1,15 @@
 import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
 import path from 'path'
+import _ from 'lodash'
 import fsStore from 'fs-blob-store'
 import { run } from '../src'
 
 describe('krawler:cli', () => {
   const jobfilePath = path.join(__dirname, 'data', 'jobfile.js')
   const jobfile = require(jobfilePath)
-  let store = fsStore({ path: jobfile.store.options.path })
+  const outputPath = _.get(jobfile, 'hooks.jobs.before.createStores[0].options.path')
+  let store = fsStore({ path: outputPath })
 
   before(() => {
     chailint(chai, util)
