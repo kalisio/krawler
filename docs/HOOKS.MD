@@ -128,15 +128,25 @@ Disconnect from a PostgresSQL database. Hook options are the following:
 
 #### dropPGTable(options)
 
-**TODO**
+Drop if exists a table in a PostgreSQL database. Hook options are the following:
+* **clientPath**: property path where to retrieve the connection object, defaults to `taskTemplate.client`
+
 
 #### createPGTable(options)
 
-**TODO**
+Create a table in a PostgreSQL database with the following structure:
+* `id`: a SERIAL (primary key)
+* `geom`: a PostGIS geometry of type of `POINTZ` expressed in Geodetic reference system.
+* `properties`: an object of type of JSON.
+> For now the structure has been defined to store GeoJSON collection.
+Hook options are the following:
+* **clientPath**: property path where to retrieve the connection object, defaults to `taskTemplate.client`
 
 #### writePGTable(options)
 
-**TODO**
+Inserts a GeoJSON collection or an array of features into an existing table. THe table must have the same structured as a table created using the **createPGTable** hook.
+Hook options are the following:
+* **clientPath**: property path where to retrieve the connection object, defaults to `taskTemplate.client`
 
 ### XML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.xml.js)
 
