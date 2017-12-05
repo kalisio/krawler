@@ -32,7 +32,7 @@ By default a task implementation return a [stream](https://nodejs.org/api/stream
 * [`wcs`](https://en.wikipedia.org/wiki/Web_Coverage_Service) for HTTP requests targeting WCS services
 * [`store`](https://github.com/maxogden/abstract-blob-store) to read input data from a store
 
-If the task type is writtent `type-stream` then the stream is not piped directly to the store but returned in a `stream` property for further usage by hooks.
+If the task type is written `type-stream` then the stream is not piped directly to the store but returned in a `stream` property for further usage by hooks.
 
 ### Jobs
 
