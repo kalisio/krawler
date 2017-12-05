@@ -110,6 +110,10 @@ const app = feathers()
   .use('/jobs', plugin.jobs());
   .use(errorHandler());
 
+// Define the required hooks for your app
+app.service('jobs').hooks({ ... });
+app.service('tasks').hooks({ ... });
+
 app.listen(3030);
 
 console.log('Feathers app started on 127.0.0.1:3030');
