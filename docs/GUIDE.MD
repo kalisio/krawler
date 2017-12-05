@@ -40,12 +40,25 @@ You can run a sample from the *examples* directory of the module like this:
 ```
 cd examples
 // If local installation
-node .. ./dem2csv/RJTT.js
+node .. ./dem2csv/jobfile.js
 // If global/executable installation
-krawler ./dem2csv/RJTT.js
+krawler ./dem2csv/jobfile.js
 ```
 
-Intermediate and product outputs will be generated in the *data* folder. The available samples are detailed below.
+Intermediate and product outputs will be generated in the *ouput* folder. The available samples are detailed below.
+
+## csv2pg
+
+Grab a CSV file from AWS S3, convert it to GeoJson and push it into a PostGIS database table (it will be dropped if it already exists). The [hooks](./API.MD#hooks) used are the following:
+
+![Hooks Blocks](https://cdn.rawgit.com/kalisio/krawler/c85a9a96f08e090ff8b60b9df4adfa108f70bd7a/examples/csv2pg/Hooks%20Diagram.svg)
+
+For security reasons some secrets are not hard-written in the jobfile, as a consequence you must define the following environment variables to make this sample work:
+* **S3_ACCESS_KEY** : AWS S3 Access Key ID
+* **S3_SECRET_ACCESS_KEY** : AWS S3 Secret Access Key
+* **S3_BUCKET** : the name of the S3 bucket to read the CSV file from
+* **PG_USER** : the name of the PostgreSQL user to be used to connect
+* **PG_PASSWORD** : the password of the PostgreSQL user to be used to connect
 
 ## dem2csv
 
@@ -67,8 +80,4 @@ For illustration purpose we kept the original ["naïve" implementation](https://
 However, processing time was too long on high resolution grids, the [hooks](./API.MD#hooks) used were the following:
 
 ![Hooks](https://cdn.rawgit.com/kalisio/krawler/b46277bd9ef6b866e1a4d634766882345b9fd198/examples/dem2csv/Hooks%20Diagram.svg)
-
-## csv2pg
-
-**TODO**
 
