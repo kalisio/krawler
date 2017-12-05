@@ -9,7 +9,7 @@ Add headers to HTTP requests for basic authorization, hook options are the follo
 * **optionsPath**: the property path to the request options that contains the authorization options, defaults to `options`
 
 The authorization options have to be structured like this, e.g. on a task (or similarly on a task template in a job):
-```
+```js
 httpTask: {
   type: 'http',
   options: {
@@ -62,7 +62,7 @@ Generate a JSON file from in-memory JSON values, hook options are the following:
 Restructure in-memory JSON values, hook options are the following:
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result.data`
 * **mapping**: a map between input key path and output key path using dot notation like this
-```
+```js
 mapping: {
   sourceProperty: 'targetProperty',
   'source.property': 'target.property',
@@ -116,7 +116,7 @@ Read an XML file from a store and convert it to in-memory JSON values, hook opti
 * **storePath**: property path where to read the store to be used on the hook object, defaults to `data.store`
 * **schemas**: array of schemas to be used for defining XML/JSON mappings (please refer to the [Jsonix documentation](https://github.com/highsource/jsonix/wiki/Introduction) for a more detailed explanation). Any of the OGC schemas defined in the library [ogc-schema](https://github.com/highsource/ogc-schemas#ogc-schemas-1) are supported. A schema is defined by a pair specifying the organisation and its name such as in the following example:
 
-```
+```js
 schemas: [
   {organisation: 'w3c', name: 'XLink_1_0'}, 
   {organisation: 'ogc', name: 'WMS_1_3_0'}
