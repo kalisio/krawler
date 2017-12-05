@@ -20,6 +20,10 @@ These sections detail the external (i.e. REST/Websocket) as well as the internal
 
 [JSON](./HOOKS.MD#json) file and structures management
 
+[XML](./HOOKS.MD#xml) file management
+
+[YAML](./HOOKS.MD#yaml) file management
+
 [Raster](./HOOKS.MD#raster) file management
 
 [Clearing](./HOOKS.MD#clearing) of output files management
