@@ -5,7 +5,7 @@ In the future we might consider others options to extend krawler like a plugin a
 ## Extend services
 
 In order to keep krawler generic [all services](./SERVICES.MD) are not tied to specific implementations. As a consequence, each time a create operation is run on a service it expects as input a `type` and `options` parameters used to delegate the actual instanciation to a user-registered construction function. The [base service](https://github.com/kalisio/krawler/blob/master/src/services/service.js) class is used to implement this behaviour on all our services, to register a new constructor:
-```
+```js
 app.service(serviceName)
 .registerGenerator(typeName, (options) => {
   ...
