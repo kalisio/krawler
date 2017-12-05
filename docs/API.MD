@@ -14,7 +14,7 @@ These sections detail the external (i.e. REST/Websocket) as well as the internal
 
 ## Hooks
 
-[Authentication](./HOOKS.MD#authentication) management
+[Authentication](./HOOKS.MD#authentication-source) management
 
 [CSV](./HOOKS.MD#csv-source) file management
 
