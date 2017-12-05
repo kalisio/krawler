@@ -22,5 +22,6 @@
     * [PostgreSQL](docs/HOOKS.MD#postgresql-source)
     * [Store](docs/HOOKS.MD#store-source)
     * [Clearing](docs/HOOKS.MD#clearing-source)
+* [Extending](docs/EXTENDING.MD)
 * [Contributing](docs/CONTRIBUTING.MD)
 * [License](LICENSE.MD)
