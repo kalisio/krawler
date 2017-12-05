@@ -205,7 +205,7 @@ Generate WMS/WCS request tasks to download data for each cell of a geographic gr
 
 > This hook works only for EPSG 4326
 
-### Clearing
+### Clearing [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.clear.js)
 
 #### clearOutputs(options)
 
