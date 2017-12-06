@@ -18,3 +18,11 @@ Regarding the store management we rely on [abstract-blob-store](https://github.c
 The following figure depicts the global architecture and all concepts at play:
 
 ![Architecture](https://github.com/kalisio/krawler/blob/master/images/global-architecture.png)
+
+## What is inside ?
+
+krawler is possible and mainly powered by the following stack:
+* [Feathers](https://feathersjs.com/)
+* [node-gdal](https://github.com/naturalatlas/node-gdal) the Node.js binding of [GDAL / OGR](http://www.gdal.org/) used to process rasters and vectors
+
+
