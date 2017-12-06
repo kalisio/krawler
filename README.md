@@ -1,6 +1,6 @@
 # krawler
 
-[![Kalisio logo](https://github.com/kalisio/kDocs/blob/master/images/kalisio-logo-256.png)](https://github.com/kalisio/krawler)
+[![Kalisio logo](https://cdn.rawgit.com/kalisio/kDocs/9dbd0471dda9200453d62cd2882554a0b4330bf4/images/kalisio-logo-256.png)](https://github.com/kalisio/krawler)
 
 [![Build Status](https://travis-ci.org/kalisio/krawler.png?branch=master)](https://travis-ci.org/kalisio/krawler)
 [![Code Climate](https://codeclimate.com/github/kalisio/krawler/badges/gpa.svg)](https://codeclimate.com/github/kalisio/krawler)
