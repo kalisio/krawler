@@ -140,13 +140,8 @@ describe('krawler:hooks', () => {
     params: { store: inputStore }
   }
 
-  let schemas = [
-    {organisation: 'w3c', name: 'XLink_1_0'},
-    {organisation: 'ogc', name: 'WMS_1_3_0'}
-  ]
-
   it('converts XML to JSON', () => {
-    return pluginHooks.readXML({ schemas: schemas })(xmlHook)
+    return pluginHooks.readXML()(xmlHook)
     .then(hook => {
       expect(hook.result.data).toExist()
     })
@@ -164,6 +159,22 @@ describe('krawler:hooks', () => {
 
   it('converts YAML to JSON', () => {
     return pluginHooks.readYAML()(yamlHook)
+    .then(hook => {
+      expect(hook.result.data).toExist()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  let capabilitiesHook = {
+    type: 'after'
+  }
+
+  it('get WMS capabilities', () => {
+    return pluginHooks.getCapabilities({
+      url: 'http://geoserver.kalisio.xyz/geoserver/Kalisio/wms',
+      service: 'WMS'
+    })(capabilitiesHook)
     .then(hook => {
       expect(hook.result.data).toExist()
     })
