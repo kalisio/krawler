@@ -27,7 +27,7 @@ export function getCapabilities (options = {}) {
         // trivial check
         if (error) reject(error)
         if (response.statusCode !== 200) reject(new Error('Request rejected with HTTP code ' + response.statusCode))
-        // parse the body 
+        // parse the body
         let parser = new xml2js.Parser()
         parser.parseString(body, (err, result) => {
           if (err) {
