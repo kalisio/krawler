@@ -17,7 +17,7 @@ Regarding the store management we rely on [abstract-blob-store](https://github.c
 
 The following figure depicts the global architecture and all concepts at play:
 
-![Architecture](https://github.com/kalisio/krawler/blob/master/images/global-architecture.png)
+![Architecture](https://cdn.rawgit.com/kalisio/krawler/95bb7b3b11bc37add6c9e022d88efdd931767256/images/global-architecture.png)
 
 ## What is inside ?
 
