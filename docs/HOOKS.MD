@@ -83,29 +83,70 @@ Generate a file from an input template and injected in-memory JSON values, hook 
 
 #### convertToGeoJson(options)
 
-**TODO**
+Convert in-memory JSON values to a [GeoJSON](https://fr.wikipedia.org/wiki/GeoJSON) collection. For each in-memory object, the hook generates a corresponding GeoJSON feature using specific properties to build the `geometry` property. For now, it only allows to generate features of type of `Point`. Moreover, the coordinate reference system is a geographic coordinate reference system, using the World Geodetic System 1984 (WGS 84), with longitude and latitude expressed in decimal degrees. The entire object is stored under the `properties` property of the feature.
+Hook options are the following:
+* **longitude**: property path where to read the longitude value defaults to `longitude`
+* **latitude**: property path where to read the latitude value defaults to `latitude`
+* **altitude**: property path where to read the altitude value defaults to `altitude`
 
 ### PostgreSQL [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.pg.js)
 
 #### connectPG(options)
 
-**TODO**
+Connect to a PostgreSQL database. The connection information are defined through the hook options:  
+* **user**: the database user
+* **paswword**: the user's password
+* **host**: the database server
+* **port**: the post to establish the connection
+* **database**: the database name
+* **clientPath**: property path where to stote the connection object to be used by the PostgreSQL hooks, defaults to `taskTemplate.client`
+
+Also, this hook allows you to use the same environment variables as [node-postgres](https://node-postgres.com/features/connecting) to store the connection information:
+* `PGUSER=dbuser`
+* `PGPASSWORD=secretpassword`
+* `PGHOST=database.server.com `
+* `PGPORT=5432`
+* `PGDATABASE=database`
+
+Finnaly and for some security reason, it is highly recommended to combine both wways such as in the following example: 
+
+```
+connectPG: {
+  user: process.env.PG_USER,
+  password: process.env.PG_PASSWORD,
+  host: 'localhost',
+  database: 'test',
+  port: 5432,
+  clientPath: 'taskTemplate.client'
+}
+```
 
 #### disconnectPG(options)
 
-**TODO**
+Disconnect from a PostgresSQL database. Hook options are the following:
+* **clientPath**: property path where to retrieve the connection object, defaults to `taskTemplate.client`
 
 #### dropPGTable(options)
 
-**TODO**
+Drop if exists a table in a PostgreSQL database. Hook options are the following:
+* **clientPath**: property path where to retrieve the connection object, defaults to `taskTemplate.client`
+
 
 #### createPGTable(options)
 
-**TODO**
+Create a table in a PostgreSQL database with the following structure:
+* `id`: a SERIAL (primary key)
+* `geom`: a PostGIS geometry of type of `POINTZ` expressed in Geodetic reference system.
+* `properties`: an object of type of JSON.
+> For now the structure has been defined to store GeoJSON collection.
+Hook options are the following:
+* **clientPath**: property path where to retrieve the connection object, defaults to `taskTemplate.client`
 
 #### writePGTable(options)
 
-**TODO**
+Inserts a GeoJSON collection or an array of features into an existing table. THe table must have the same structured as a table created using the **createPGTable** hook.
+Hook options are the following:
+* **clientPath**: property path where to retrieve the connection object, defaults to `taskTemplate.client`
 
 ### XML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.xml.js)
 

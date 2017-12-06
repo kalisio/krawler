@@ -1,0 +1,21 @@
+{
+  "styles": {
+    "website": "docs/styles/website.css"
+  },
+  "plugins": [
+    "feathers-collapsible-menu",
+    "heading-anchors",
+    "include-codeblock",
+    "edit-link"
+  ],
+  "pluginsConfig": {
+    "edit-link": {
+      "placement": "left",
+      "base": "https://github.com/kalisio/krawler/edit/master",
+      "label": "Edit This Page"
+    },
+    "lunr": {
+      "maxIndexSize": 1000000000
+    }
+  }
+}

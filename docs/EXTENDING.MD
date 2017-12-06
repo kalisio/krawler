@@ -18,6 +18,17 @@ The type of the created entity depends on the service being extended:
 * a task constructor should return a [stream](https://nodejs.org/api/stream.html) to extract data from that is piped to the target store,
 * a job constructor should return a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) resolved or rejected when the job is finished or has failed.
 
+If you do not use the services in your app but the CLI mode, you should extend the default services used by the CLI like this:
+```js
+import { StoresService, TasksService, JobsService } from 'krawler'
+
+StoresService
+.registerGenerator('custom-store', (options) => {
+  ...
+  return a store entity based on provided options
+})
+```
+
 ## Extend hooks
 
 It is possible to add user-registered hook constructor functions like this:
