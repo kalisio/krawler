@@ -6,6 +6,7 @@
 * [Architecture](docs/ARCHITECTURE.MD)
   * [Main concepts](docs/ARCHITECTURE.MD#main-concepts)
   * [Global architecture](docs/ARCHITECTURE.MD#global-architecture)
+  * [What is inside ?](docs/ARCHITECTURE.MD#what-is-inside-)
 * [API](docs/API.MD)
   * [CLI](docs/API.MD#command-line-interface)
   * [Services](docs/SERVICES.MD)
