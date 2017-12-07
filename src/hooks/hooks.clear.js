@@ -45,3 +45,19 @@ export function clearOutputs (options = {}) {
     return hook
   }
 }
+
+// Clear in-memory data
+export function clearData (options = {}) {
+  return function (hook) {
+    if (hook.type !== 'after') {
+      throw new Error(`The 'clearData' hook should only be used as a 'after' hook.`)
+    }
+
+    let dataPath = options.dataPath || 'result.data'
+    if (_.get(hook, dataPath)) {
+      debug('Clearing data for ' + hook.data.id + ' on path ' + dataPath)
+      _.unset(hook, dataPath)
+    }
+    return hook
+  }
+}
