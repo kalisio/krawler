@@ -7,7 +7,9 @@
   "bin": "lib/index.js",
   "keywords": [
     "feathers",
-    "feathers-plugin"
+    "feathers-plugin",
+    "etl",
+    "gis"
   ],
   "license": "MIT",
   "repository": {
@@ -15,16 +17,15 @@
     "url": "git://github.com/kalisio/krawler.git"
   },
   "author": {
-    "name": "Feathers contributors",
-    "email": "hello@feathersjs.com",
-    "url": "https://feathersjs.com"
+    "name": "Kalisio contributors",
+    "url": "https://github.com/kalisio"
   },
   "contributors": [],
   "bugs": {
     "url": "https://github.com/kalisio/krawler/issues"
   },
   "engines": {
-    "node": ">= 4.6.0"
+    "node": ">= 8.0.0"
   },
   "scripts": {
     "prepublish": "npm run compile",
