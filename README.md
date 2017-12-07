@@ -8,4 +8,8 @@
 
 > Make automated process of extracting and processing (geographic) data from heterogeneous sources easy
 
-Please read the [documentation](https://kalisio.gitbooks.io/krawler/).
+**This tool is under heavy development, breaking changes could be pushed unexpectedly. As a consequence it should be considered unstable, not yet ready for production use.**
+
+## Documentation
+
+Please read the [documentation web site](https://kalisio.gitbooks.io/krawler/).
