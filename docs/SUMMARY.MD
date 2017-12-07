@@ -26,4 +26,4 @@
     * [Clearing](./HOOKS.MD#clearing-source)
 * [Extending](./EXTENDING.MD)
 * [Contributing](./CONTRIBUTING.MD)
-* [License](../LICENSE.MD)
+* [License](./LICENSE.MD)
