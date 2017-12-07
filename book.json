@@ -1,5 +1,8 @@
 {
   "root": "docs",
+  "structure": {
+    "readme": "INDEX.MD"
+  },
   "styles": {
     "website": "docs/styles/website.css"
   },
