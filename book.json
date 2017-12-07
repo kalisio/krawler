@@ -1,4 +1,5 @@
 {
+  "root": "docs",
   "styles": {
     "website": "docs/styles/website.css"
   },
