@@ -36,7 +36,8 @@ module.exports = {
             value: 'value'
           }
         ]
-      }
+      },
+      clearData: { dataPath: 'result.data' }
     }
   },
   jobs: {

@@ -1,4 +1,8 @@
 {
+  "root": "./docs",
+  "structure": {
+    "readme": "INDEX.MD"
+  },
   "styles": {
     "website": "docs/styles/website.css"
   },
@@ -11,7 +15,7 @@
   "pluginsConfig": {
     "edit-link": {
       "placement": "left",
-      "base": "https://github.com/kalisio/krawler/edit/master",
+      "base": "https://github.com/kalisio/krawler/docs/edit/master",
       "label": "Edit This Page"
     },
     "lunr": {
