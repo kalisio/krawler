@@ -1,5 +1,5 @@
 {
-  "root": "docs",
+  "root": "./docs",
   "structure": {
     "readme": "INDEX.MD"
   },
