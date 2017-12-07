@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import makeDebug from 'debug'
 import Service from './service'
 import { getStore, addOutput } from '../utils'
@@ -24,6 +25,10 @@ class TasksService extends Service {
     // to the store but simply open it and return it for hooks to process
     const streamed = type.endsWith('-stream')
     let taskStream = await this.generate(streamed ? type.replace('-stream', '') : type, options, id)
+    // TO BE FIXED: just a trivial test for handling noop tasks
+    if (_.isUndefined(taskStream)) {
+      return data
+    }
     if (!taskStream) {
       let message = 'Can\'t find task generator for task type ' + type
       debug(message)

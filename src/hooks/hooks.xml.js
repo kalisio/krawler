@@ -27,7 +27,7 @@ export function readXML (options = {}) {
         if (err) {
           reject(err)
         }
-        let parser = new xml2js.Parser()
+        let parser = new xml2js.Parser({explicitArray: false})
         parser.parseString(data, (err, result) => {
           if (err) {
             reject(err)
