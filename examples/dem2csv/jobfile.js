@@ -1,7 +1,7 @@
 const longitude = 139.7811111
 const latitude = 35.55333333
 const resolution = 30
-const halfWidth = 180000
+const halfWidth = 18000
 const blockResolution = 9000
 
 module.exports = {
