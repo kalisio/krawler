@@ -23,9 +23,10 @@ The following figure depicts the global architecture and all concepts at play:
 
 krawler is possible and mainly powered by the following stack:
 * [Feathers](https://feathersjs.com/)
+* [Lodash](https://lodash.com/) A Javascript utility library
 * [node-gdal](https://github.com/naturalatlas/node-gdal) the Node.js binding of [GDAL / OGR](http://www.gdal.org/) used to process rasters and vectors
 * [js-yaml](https://github.com/nodeca/js-yaml) used to process YAML files
-* [jsonix](https://github.com/highsource/jsonix) used to process XML files
+* [xml2js](https://github.com/Leonidas-from-XIV/node-xml2js) used to process XML files
 * [json2csv](https://github.com/zemirco/json2csv) used to process CSV files
 * [fast-csv](https://github.com/C2FO/fast-csv) used to stream CSV files
 * [abstract-blob-store](https://github.com/maxogden/abstract-blob-store) used to abstract storage
