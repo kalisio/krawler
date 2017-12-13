@@ -74,7 +74,7 @@ let job = {
 }
 ```
 
-By default hook names are used as JSON object keys so you could not have the same hook appearing twice in your pipeline using this notation. However, you can also use the *named hook syntax* if you want to use the same hook multiple time in your pipeline. In this case the key used in the configuration file can be whatever you want but the associated object value must have a `hook`property containing the name of the hook to be run like this:
+By default hook names are used as JSON object keys so you cannot have the same hook appearing twice in your pipeline using this notation. However, you can also use the *named hook syntax* if you want to use the same hook multiple times in your pipeline. In this case the key used in the configuration file can be whatever you want but the associated object value must have a `hook` property containing the name of the hook to be run like this:
 ```js
 tasks: {
   after: {
