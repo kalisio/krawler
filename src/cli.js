@@ -57,7 +57,9 @@ export function activateHooks (serviceHooks, service) {
         // Jump from name/options to the real hook function
         let hook
         try {
-          hook = getHookFunction(hookName)
+          // If hook name is given as 'hook' option property use it
+          // otherwise us key as hook name
+          hook = getHookFunction(_.get(hookOptions, 'hook', hookName))
           pipeline.push(hook(hookOptions))
         } catch (error) {
           console.error(error.message)
