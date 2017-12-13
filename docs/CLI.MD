@@ -82,12 +82,10 @@ tasks: {
     },
     writeTemplateYaml: {
       hook: 'writeTemplate',
-      dataPath: 'result.data.WMS_Capabilities.Capability.Layer',
       templateFile: 'mapproxy-template.yaml'
     },
     writeTemplateHtml: {
       hook: 'writeTemplate',
-      dataPath: 'result.data.WMS_Capabilities.Capability.Layer',
       templateFile: 'leaflet-template.html'
     }
   }
