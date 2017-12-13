@@ -67,9 +67,9 @@ let job = {
 }
 ```
 
-> Because hook names are managed as a JSON object keys you cannot have the same hook appearing twice in your pipeline, you can do that using the parallel syntax (see below)
+> Because hook names are managed as a JSON object keys you cannot have the same hook appearing twice in your pipeline, however you can do that using the parallel syntax (see below)
 
-By default all hooks are run in sequence, if at given step of your pipeline you want a parallel execution of some you can use the reserved hook name `parallel` and give the hooks to be run in parallel as an array of items each containing the hook name as a `hook`property and its options as other properties:
+By default all hooks are run in sequence, if at given step of your pipeline you want a parallel execution of some you can use the reserved hook name `parallel` and give the hooks to be run in parallel as an array of items each containing the hook name as a `hook` property and its options as other properties:
 ```js
 tasks: {
   after: {
