@@ -8,7 +8,7 @@
   * [Global architecture](./ARCHITECTURE.MD#global-architecture)
   * [What is inside ?](./ARCHITECTURE.MD#what-is-inside-)
 * [API](./API.MD)
-  * [CLI](./API.MD#command-line-interface)
+  * [CLI](./CLI.MD)
   * [Services](./SERVICES.MD)
     * [Stores](./SERVICES.MD#stores)
     * [Tasks](./SERVICES.MD#tasks)
