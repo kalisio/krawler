@@ -13,13 +13,13 @@ export let StoresService = stores()
 export let TasksService = tasks()
 export let JobsService = jobs()
 
-function parallel(hooks) {
+function parallel (hooks) {
   return async function (hookObject) {
     return Promise.all(hooks.map(hook => hook(hookObject))).then(_ => hookObject)
   }
 }
 
-function getHookFunction(hookName) {
+function getHookFunction (hookName) {
   // Jump from name to the real hook function
   // First built-in hooks
   let hook = hooks[hookName]
@@ -40,7 +40,7 @@ export function activateHooks (serviceHooks, service) {
     let pipeline = []
     _.forOwn(hooksDefinition, (hookOptions, hookName) => {
       // Check for parallel execution hook
-      if (hookName == 'parallel') {
+      if (hookName === 'parallel') {
         try {
           // In this case we have an array of hooks to be run in parallel
           // Each item contains the hook name as a 'hook' property and hook options
