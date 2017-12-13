@@ -9,7 +9,7 @@ The problem with hooks is that they are configured at application setup time and
   * **proxy-https**: proxy URL to be used for HTTPS requests
   * **user**: user name to be used for proxy
   * **password**: user password to be used for proxy
-  * **debug**: debug namespace to output like `krawler*` for all messages or `krawler:hooks*` to only trace hooks messages
+  * **debug**: output debug messages
 
 This function is responsible of parsing the job definition including all the required parameters to call the underlying services with the relevant hooks configured (see below).
 
