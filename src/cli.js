@@ -13,23 +13,55 @@ export let StoresService = stores()
 export let TasksService = tasks()
 export let JobsService = jobs()
 
+function parallel(hooks) {
+  return async function (hookObject) {
+    return Promise.all(hooks.map(hook => hook(hookObject))).then(_ => hookObject)
+  }
+}
+
+function getHookFunction(hookName) {
+  // Jump from name to the real hook function
+  // First built-in hooks
+  let hook = hooks[hookName]
+  // Then custom ones
+  if (!hook) hook = hooks.getHook(hookName)
+  if (typeof hook !== 'function') {
+    let message = 'Unknown hook ' + hookName
+    debug(message)
+    throw new Error(message)
+  }
+  return hook
+}
+
 export function activateHooks (serviceHooks, service) {
   // Iterate over hook types (before, after)
   _.forOwn(serviceHooks, (hooksDefinition, stage) => {
     // Iterate over hooks to create the hook pipeline
     let pipeline = []
     _.forOwn(hooksDefinition, (hookOptions, hookName) => {
-      // Jump from name/options to the real hook function
-      // First built-in hooks
-      let hook = hooks[hookName]
-      // Then custom ones
-      if (!hook) hook = hooks.getHook(hookName)
-      if (typeof hook === 'function') {
-        pipeline.push(hook(hookOptions))
+      // Check for parallel execution hook
+      if (hookName == 'parallel') {
+        try {
+          // In this case we have an array of hooks to be run in parallel
+          // Each item contains the hook name as a 'hook' property and hook options
+          let hooks = hookOptions.map(item => {
+            // Jump from name/options to the real hook function
+            let hook = getHookFunction(item.hook)
+            return hook(item)
+          })
+          pipeline.push(parallel(hooks))
+        } catch (error) {
+          console.error(error.message)
+        }
       } else {
-        let message = 'Unknown hook ' + hookName
-        debug(message)
-        console.error(message)
+        // Jump from name/options to the real hook function
+        let hook
+        try {
+          hook = getHookFunction(hookName)
+          pipeline.push(hook(hookOptions))
+        } catch (error) {
+          console.error(error.message)
+        }
       }
     })
     // Replace hooks in place so that we can use it directly with Feathers after

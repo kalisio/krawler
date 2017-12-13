@@ -38,14 +38,18 @@ module.exports = {
           ],
           dataPath: 'result.data.WMS_Capabilities.Capability.Layer.Layer'
         },
-        writeTemplate: {
-          dataPath: 'result.data.WMS_Capabilities.Capability.Layer',
-          templateFile: 'mapproxy-template.yaml'
-        }/*,
-        writeTemplate: {
-          dataPath: 'result.data.WMS_Capabilities.Capability.Layer',
-          templateFile: 'leaflet-template.html'
-        }*/
+        parallel: [
+          {
+            hook: 'writeTemplate',
+            dataPath: 'result.data.WMS_Capabilities.Capability.Layer',
+            templateFile: 'mapproxy-template.yaml'
+          },
+          {
+            hook: 'writeTemplate',
+            dataPath: 'result.data.WMS_Capabilities.Capability.Layer',
+            templateFile: 'leaflet-template.html'
+          }
+        ]
       }
     },
     jobs: {
