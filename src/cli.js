@@ -98,18 +98,27 @@ export function run (jobfile, options = {}) {
   // Run the app, this is required to correctly setup Feathers
   let server = app.listen(3030)
   // Run the job
-  console.log('Launching job ' + job.id + ', please wait...')
-  console.time('Running time')
-  return app.service('jobs').create(job)
-  .then(tasks => {
-    console.log('Job terminated, ' + tasks.length + ' tasks ran')
-    console.timeEnd('Running time')
-    return new Promise((resolve, reject) => {
-      server.close(_ => resolve(tasks))
+  function runJob () {
+    console.log('Launching job ' + job.id + ', please wait...')
+    console.time('Running time')
+    return app.service('jobs').create(job)
+    .then(tasks => {
+      console.log('Job terminated, ' + tasks.length + ' tasks ran')
+      console.timeEnd('Running time')
+      if (options.interval) {
+        setTimeout(runJob, options.interval)
+        return Promise.resolve(tasks)
+      } else {
+        return new Promise((resolve, reject) => {
+          server.close(_ => resolve(tasks))
+        })
+      }
     })
-  })
-  .catch(error => {
-    console.error(error.message)
-    server.close()
-  })
+    .catch(error => {
+      console.error(error.message)
+      server.close()
+    })
+  }
+
+  return runJob()
 }
