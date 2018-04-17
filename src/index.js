@@ -5,6 +5,10 @@ import plugin from './plugin'
 
 export * as hooks from './hooks'
 export * as utils from './utils'
+export * as services from './services'
+export * as stores from './stores'
+export * as jobs from './jobs'
+export * as tasks from './tasks'
 export * from './cli'
 
 export default plugin

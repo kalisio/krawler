@@ -39,7 +39,7 @@ export function readYAML (options = {}) {
     }
 
     let store = await getStoreFromHook(hook, 'readYAML', options.storePath)
-    if (!store.path && !store.store) {
+    if (!store.path && !store.buffers) {
       throw new Error(`The 'readYAML' hook only work with the fs or memory blob store.`)
     }
 
@@ -51,7 +51,7 @@ export function readYAML (options = {}) {
       yaml = await fs.readFile(filePath)
     } else {
       debug('Parsing YAML for ' + yamlName)
-      yaml = store.store[yamlName]
+      yaml = store.buffers[yamlName]
     }
     _.set(hook, options.dataPath || 'result.data', yamljs.safeLoad(yaml.toString()))
     return hook

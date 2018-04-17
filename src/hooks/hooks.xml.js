@@ -15,7 +15,7 @@ export function readXML (options = {}) {
     }
 
     let store = await getStoreFromHook(hook, 'readXML', options.storePath)
-    if (!store.path && !store.store) {
+    if (!store.path && !store.buffers) {
       throw new Error(`The 'readXML' hook only work with the fs or memory blob store.`)
     }
 
@@ -27,7 +27,7 @@ export function readXML (options = {}) {
       xml = await fs.readFile(filePath)
     } else {
       debug('Parsing XML for ' + xmlName)
-      xml = store.store[xmlName]
+      xml = store.buffers[xmlName]
     }
     let parser = new xml2js.Parser({explicitArray: false})
     return new Promise((resolve, reject) => {

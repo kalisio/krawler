@@ -20,7 +20,6 @@ class TasksService extends Service {
     let { id, type, options, storageOptions } = data
     if (!options) options = {}
 
-    let store = await getStore(this.storesService, params, data)
     // Providing 'type-stream' as input type means we don't want to directly write the read stream
     // to the store but simply open it and return it for hooks to process
     const streamed = type.endsWith('-stream')
@@ -37,6 +36,8 @@ class TasksService extends Service {
     if (streamed) {
       return Object.assign({ stream: taskStream }, data)
     }
+    // Otherwise we target a store
+    let store = await getStore(this.storesService, params, data)
     return new Promise((resolve, reject) => {
       taskStream
       .on('timeout', reject)

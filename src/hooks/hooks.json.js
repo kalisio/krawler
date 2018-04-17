@@ -1,6 +1,7 @@
 import path from 'path'
 import _ from 'lodash'
 import fs from 'fs-extra'
+import sift from 'sift'
 import makeDebug from 'debug'
 import { getStoreFromHook, addOutput, writeBufferToStore } from '../utils'
 
@@ -40,6 +41,12 @@ export function transformJson (options = {}) {
     debug('Transforming JSON for ' + hook.result.id)
 
     let json = _.get(hook, options.dataPath || 'result.data', {})
+    if (options.toArray) {
+      json = _.toArray(json)
+    }
+    if (options.filter) {
+      json = sift(options.filter, json)
+    }
     // Iterate over path mapping
     _.forOwn(options.mapping, (outputPath, inputPath) => {
       // Then iterate over JSON objects
@@ -161,7 +168,7 @@ export function readJson (options = {}) {
     }
 
     let store = await getStoreFromHook(hook, 'readJson', options.storePath)
-    if (!store.path && !store.store) {
+    if (!store.path && !store.buffers) {
       throw new Error(`The 'readJson' hook only work with the fs or memory blob store.`)
     }
 
@@ -173,7 +180,7 @@ export function readJson (options = {}) {
       json = await fs.readJson(filePath)
     } else {
       debug('Parsing JSON for ' + jsonName)
-      json = JSON.parse(store.store[jsonName].toString())
+      json = JSON.parse(store.buffers[jsonName].toString())
     }
     _.set(hook, options.dataPath || 'result.data', json)
     return hook
