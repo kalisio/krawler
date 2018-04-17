@@ -45,6 +45,32 @@ describe('krawler:stores', () => {
     })
   })
 
+  it('creates the memory storage', () => {
+    return storesService.create({
+      id: 'memory',
+      type: 'memory',
+      options: {
+        path: path.join(__dirname, 'output')
+      }
+    })
+    .then(_ => {
+      return storesService.get('memory')
+    })
+    .then(store => {
+      expect(store).toExist()
+    })
+  })
+
+  it('removes the memory storage', (done) => {
+    storesService.remove('memory')
+    .then(store => {
+      storesService.get('memory').catch(error => {
+        expect(error).toExist()
+        done()
+      })
+    })
+  })
+
   it('creates the s3 storage', () => {
     return storesService.create({
       id: 's3',

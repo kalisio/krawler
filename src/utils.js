@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
+import { Duplex } from 'stream'
 
 const debug = makeDebug('krawler:utils')
 
@@ -44,4 +45,25 @@ export async function getStoreFromHook (hook, hookName, storePath) {
   } catch (error) {
     throw new Error(`Cannot find store for hook ${hookName}.`)
   }
+}
+
+export function bufferToStream (buffer) {
+  let stream = new Duplex()
+  stream.push(buffer)
+  stream.push(null)
+  return stream
+}
+
+export function writeBufferToStore (buffer, store, options) {
+  return new Promise((resolve, reject) => {
+    bufferToStream(buffer)
+    .on('error', reject)
+    .pipe(store.createWriteStream(options, error => {
+      if (error) reject(error)
+    }))
+    .on('finish', () => {
+      resolve()
+    })
+    .on('error', reject)
+  })
 }

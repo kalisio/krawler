@@ -74,6 +74,9 @@ describe('krawler:hooks', () => {
 
   let geotiffHook = {
     type: 'after',
+    data: {
+      id: 'RJTT-30-18000-2-1.tif'
+    },
     result: {
       id: 'RJTT-30-18000-2-1.tif'
     },
@@ -106,8 +109,43 @@ describe('krawler:hooks', () => {
   // Let enough time to proceed
   .timeout(5000)
 
+  it('write JSON', () => {
+    // Switch to output store
+    geotiffHook.params.store = outputStore
+    return pluginHooks.writeJson()(geotiffHook)
+    .then(hook => {
+      expect(fs.existsSync(path.join(outputStore.path, geotiffHook.result.id + '.json'))).beTrue()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('clear JSON data', () => {
+    pluginHooks.clearData()(geotiffHook)
+    expect(geotiffHook.result.data).beUndefined()
+  })
+
+  it('read JSON', () => {
+    // Update input file name to converted json
+    geotiffHook.result.id += '.json'
+    return pluginHooks.readJson()(geotiffHook)
+    .then(hook => {
+      checkJson(hook)
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('clear JSON output', () => {
+    pluginHooks.clearOutputs()(geotiffHook)
+    expect(fs.existsSync(path.join(outputStore.path, geotiffHook.result.id + '.json'))).beFalse()
+  })
+
   let csvHook = {
     type: 'after',
+    data: {
+      id: 'RJTT-30-18000-2-1.csv'
+    },
     result: {
       id: 'RJTT-30-18000-2-1.csv'
     },
@@ -134,6 +172,9 @@ describe('krawler:hooks', () => {
 
   let xmlHook = {
     type: 'after',
+    data: {
+      id: 'wms.xml'
+    },
     result: {
       id: 'wms.xml'
     },
@@ -151,6 +192,9 @@ describe('krawler:hooks', () => {
 
   let yamlHook = {
     type: 'after',
+    data: {
+      id: 'mapproxy.yaml'
+    },
     result: {
       id: 'mapproxy.yaml'
     },

@@ -13,6 +13,7 @@ The `stores` [service](https://docs.feathersjs.com/api/services.html) allow to m
 The returned store objects comply the [abstract-blob-store](https://github.com/maxogden/abstract-blob-store) interface. Available store types are the following:
 * [`fs`](https://github.com/mafintosh/fs-blob-store) for local file system
 * [`s3`](https://github.com/jb55/s3-blob-store) for AWS S3
+* [`memory`](https://github.com/retrohacker/memory-blob-store) for in-memory data buffers
 
 ### Tasks
 

@@ -15,26 +15,29 @@ export function readXML (options = {}) {
     }
 
     let store = await getStoreFromHook(hook, 'readXML', options.storePath)
-    if (!store.path) {
-      throw new Error(`The 'readXML' hook only work with the fs blob store.`)
+    if (!store.path && !store.store) {
+      throw new Error(`The 'readXML' hook only work with the fs or memory blob store.`)
     }
-    const fileName = hook.result.id
-    const filePath = path.join(store.path, fileName)
 
-    debug('Reading XML file ' + filePath)
+    let xml
+    const xmlName = hook.result.id
+    if (store.path) {
+      const filePath = path.join(store.path, xmlName)
+      debug('Reading XML file ' + filePath)
+      xml = await fs.readFile(filePath)
+    } else {
+      debug('Parsing XML for ' + xmlName)
+      xml = store.store[xmlName]
+    }
+    let parser = new xml2js.Parser({explicitArray: false})
     return new Promise((resolve, reject) => {
-      fs.readFile(filePath, (err, data) => {
+      parser.parseString(xml.toString(), (err, result) => {
         if (err) {
           reject(err)
+          return
         }
-        let parser = new xml2js.Parser({explicitArray: false})
-        parser.parseString(data, (err, result) => {
-          if (err) {
-            reject(err)
-          }
-          _.set(hook, options.dataPath || 'result.data', result)
-          resolve(hook)
-        })
+        _.set(hook, options.dataPath || 'result.data', result)
+        resolve(hook)
       })
     })
   }

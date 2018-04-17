@@ -24,7 +24,7 @@ class JobsService extends Service {
     // If a store is found at job level it will be forwarded to all tasks
     // as params so that they don't have to seek for output store
     try {
-      await getStore(this.storesService, params, data)
+      store = await getStore(this.storesService, params, data)
     } catch (error) {
       // Otherwise each task should specify its output store
     }

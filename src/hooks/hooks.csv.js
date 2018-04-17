@@ -2,10 +2,8 @@ import json2csv from 'json2csv'
 import fastcsv from 'fast-csv'
 import merge from 'merge-stream'
 import _ from 'lodash'
-import fs from 'fs-extra'
-import path from 'path'
 import makeDebug from 'debug'
-import { getStoreFromHook, addOutput } from '../utils'
+import { getStoreFromHook, addOutput, writeBufferToStore } from '../utils'
 
 const debug = makeDebug('krawler:hooks:csv')
 
@@ -17,22 +15,19 @@ export function writeCSV (options = {}) {
     }
 
     let store = await getStoreFromHook(hook, 'writeCSV', options.storePath)
-    if (!store.path) {
-      throw new Error(`The 'writeCSV' hook only work with the fs blob store.`)
-    }
 
-    return new Promise((resolve, reject) => {
-      debug('Creating CSV for ' + hook.data.id)
-      let csv = json2csv({ data: _.get(hook, options.dataPath || 'result'), fields: options.fields })
-      let filePath = path.join(store.path, hook.data.id + '.csv')
-      debug('Exporting CSV to ' + filePath)
-      fs.outputFile(filePath, csv)
-      .then(() => {
-        addOutput(hook.result, hook.data.id + '.csv', options.outputType)
-        resolve(hook)
-      })
-      .catch(reject)
-    })
+    debug('Creating CSV for ' + hook.data.id)
+    let csv = json2csv({ data: _.get(hook, options.dataPath || 'result'), fields: options.fields })
+    let csvName = hook.data.id + '.csv'
+    await writeBufferToStore(
+      Buffer.from(csv, 'utf8'),
+      store, {
+        key: csvName,
+        params: options.storageOptions
+      }
+    )
+    addOutput(hook.result, csvName, options.outputType)
+    return hook
   }
 }
 

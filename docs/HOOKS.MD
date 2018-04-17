@@ -96,6 +96,12 @@ Generate WMS/WCS request tasks to download data for each cell of a geographic gr
 
 ### JSON [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.json.js)
 
+#### readJson(options)
+
+Read a JSON from an input stream/store and convert it to in-memory JSON values, hook options are the following:
+* **dataPath**: property path where to store the resulting JSON object on the hook object, defaults to `result.data`
+* **storePath**: property path where to read the store to be used on the hook object, defaults to `data.store`
+
 #### writeJson(options)
 
 Generate a JSON file from in-memory JSON values, hook options are the following:
@@ -108,13 +114,24 @@ Generate a JSON file from in-memory JSON values, hook options are the following:
 Restructure in-memory JSON values, hook options are the following:
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result.data`
 * **mapping**: a map between input key path and output key path using dot notation like this
+* **pick**: an array of properties to be picked using [Lodash](https://lodash.com/docs#pick)
+* **omit**: an array of properties to be omitted using [Lodash](https://lodash.com/docs#omit)
 ```js
 mapping: {
   sourceProperty: 'targetProperty',
   'source.property': 'target.property',
-  sourceProperty: 'targetArrayProperty[0]'
+  sourceProperty: 'targetArrayProperty[0]',
+  pick: ['onlyThisPropertyWillBeKept'],
+  omit: ['onlyThisPropertyWillBeRemoved']
 }
 ```
+
+#### mergeJson(options)
+
+Generate a in-memory JSON object from a set of input in-memory JSON objects, hook options are the following:
+* **dataPath**: property path where to read the input JSON object on the result hook objects, defaults to `data`
+
+The input hook result is expected to be an array of tasks which output will be read in-memory.
 
 #### writeTemplate(options)
 
