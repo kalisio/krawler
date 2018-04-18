@@ -167,8 +167,8 @@ export function mergeJson (options = {}) {
 
     debug('Merging JSON for ' + hook.data.id)
     // Only in-memory for now
-    let jsons = hook.result.map(result => _.get(result, options.dataPath || 'data', {}))
-    let json = _.merge({}, ...jsons)
+    let objects = hook.result.map(result => _.get(result, options.dataPath || 'data', {}))
+    let json = _.unionBy(objects, options.by)
     _.set(hook, options.dataPath || 'result.data', json)
     return hook
   }

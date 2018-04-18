@@ -132,18 +132,20 @@ Generate a JSON file from in-memory JSON values, hook options are the following:
 Restructure in-memory JSON values, hook options are the following:
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result.data`
 * **toArray**: boolean indicating if the JSON object will be transformed into an array using [Lodash](https://lodash.com/docs#toArray), defaults to `false`
+* **toObjects**: if your input JSON objects are flat arrays it will be transformed into objects according to the given indexed list of property names to be used as keys, not defined by default
 * **filter**: a filter to be applied on the JSON object using any option supported by [sift](https://github.com/crcn/sift.js)
 * **mapping**: a map between input key path and output key path using dot notation like this
 * **pick**: an array of properties to be picked using [Lodash](https://lodash.com/docs#pick)
 * **omit**: an array of properties to be omitted using [Lodash](https://lodash.com/docs#omit)
 ```js
+toObjects: ['1', '2'], // The following input object ['a', 'b'] will be transformed into { 1: 'a', 2: 'b' }
 mapping: {
   sourceProperty: 'targetProperty',
   'source.property': 'target.property',
-  sourceProperty: 'targetArrayProperty[0]',
-  pick: ['onlyThisPropertyWillBeKept'],
-  omit: ['onlyThisPropertyWillBeRemoved']
+  sourceProperty: 'targetArrayProperty[0]'
 }
+pick: ['onlyThisPropertyWillBeKept'],
+omit: ['onlyThisPropertyWillBeRemoved']
 ```
 
 > The transformations are applied in the order of the documentation, e.g. filtering occurs before mapping.
@@ -151,6 +153,7 @@ mapping: {
 #### mergeJson(options)
 
 Generate a in-memory JSON object from a set of input in-memory JSON objects, hook options are the following:
+* **by**: property name to be used as a unique identifier to perform merging using [Lodash](https://lodash.com/docs#unionBy)
 * **dataPath**: property path where to read the input JSON object on the result hook objects, defaults to `data`
 
 The input hook result is expected to be an array of tasks which output will be read in-memory.

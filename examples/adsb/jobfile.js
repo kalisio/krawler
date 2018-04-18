@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 
 module.exports = {
-  id: 'adsb-job',
+  id: 'adsb',
   store: 'memory',
   //workersLimit: 1,
   tasks: [{
@@ -83,8 +83,18 @@ module.exports = {
         }]
       },
       after: {
-        //mergeJson: {},
-        //writeJson: {},
+        mergeJson: { by: 'icao' },
+        writeJsonFS: {
+          hook: 'writeJson',
+          store: 'fs'
+        },
+        writeJsonS3: {
+          hook: 'writeJson',
+          store: 's3',
+          storageOptions: {
+            ACL: 'public-read'
+          }
+        },
         removeStores: ['memory', 'fs', 's3']
       }
     }

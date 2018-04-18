@@ -49,7 +49,7 @@ Intermediate and product outputs will be generated in the *ouput* folder. The av
 
 ## ADS-B
 
-Grab [ADS-B](https://en.wikipedia.org/wiki/Automatic_dependent_surveillance_%E2%80%93_broadcast) data from two different providers using REST Web Services, convert it to a standardised JSON format, transform it to GeoJson and push it into AWS S3 and the local file system. Once the files have been produced simply drag'n'drop them at [geojson.io](http://geojson.io) to see the live position of the Air Maroc fleet !
+Grab [ADS-B](https://en.wikipedia.org/wiki/Automatic_dependent_surveillance_%E2%80%93_broadcast) data from two different providers using REST Web Services, convert it to a standardised JSON format, transform it to GeoJson and push it into AWS S3 and the local file system. To avoid "holes" the data from both providers are then merged into a single file based on their unique identifier (a.k.a. [ICAO](https://en.wikipedia.org/wiki/Aviation_transponder_interrogation_modes#ICAO_24-bit_address)). Once the files have been produced simply drag'n'drop them at [geojson.io](http://geojson.io) to see the live position of the Air Maroc fleet !
 
 ![ADS-B](https://cdn.rawgit.com/kalisio/krawler/c4c7c00e3bd97390d6a9dd91c063d526f9c262e3/images/ADS-B.png)
 
@@ -71,6 +71,7 @@ This sample demonstrates the flexibility of the krawler by using:
 * a [match filter](./HOOKS.html#common-options) to apply a given hook to a subset of the tasks (e.g. perform a JSON transformation adapted to the output of each provider)
 * a [JSON transformation](./HOOKS.html#transformjsonoptions) to generate an unified format and filter data
 * the [same hook multiple times](CLI.html#external-api) (e.g. `writeJson`) with different options (e.g. to write to different output stores)
+* the same hook at the task or job level to manage unitary as well as merged data
 
 ## csv2pg
 
