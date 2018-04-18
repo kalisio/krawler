@@ -1,5 +1,12 @@
 ## Hooks
 
+### Common options
+
+All hooks can have the following options:
+* **match**: a match filter to be applied on the input hook data using any option supported by [sift](https://github.com/crcn/sift.js), if the data is filtered the hook will not be applied
+
+> Matching is for instance useful when you'd like to apply a hook to only a subset of your tasks; e.g. all the CSV files
+
 ### Authentication [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.auth.js)
 
 #### basicAuth(options)
@@ -113,6 +120,8 @@ Generate a JSON file from in-memory JSON values, hook options are the following:
 
 Restructure in-memory JSON values, hook options are the following:
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result.data`
+* **toArray**: boolean indicating if the JSON object will be transformed into an array using [Lodash](https://lodash.com/docs#toArray), defaults to `false`
+* **filter**: a filter to be applied on the JSON object using any option supported by [sift](https://github.com/crcn/sift.js)
 * **mapping**: a map between input key path and output key path using dot notation like this
 * **pick**: an array of properties to be picked using [Lodash](https://lodash.com/docs#pick)
 * **omit**: an array of properties to be omitted using [Lodash](https://lodash.com/docs#omit)
@@ -125,6 +134,8 @@ mapping: {
   omit: ['onlyThisPropertyWillBeRemoved']
 }
 ```
+
+> The transformations are applied in the order of the documentation, e.g. filtering occurs before mapping.
 
 #### mergeJson(options)
 
@@ -151,6 +162,7 @@ Hook options are the following:
 * **longitude**: property path where to read the longitude value defaults to `longitude`
 * **latitude**: property path where to read the latitude value defaults to `latitude`
 * **altitude**: property path where to read the altitude value defaults to `altitude`
+* **keepGeometryProperties**: boolean indicating if longitude, latitude and altitude values are also kept as properties, defaults to `true`
 
 ### OGC [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.ogc.js)
 

@@ -16,7 +16,7 @@ function createJob (options = {}, store = null, tasks) {
       }
       // When we reach the worker limit wait until the step finishes and jump to next one
       if ((workers.length >= workersLimit) ||
-           (i === tasks.length - 1)) {
+          (i === tasks.length - 1)) {
         try {
           let results = await Promise.all(workers)
           taskResults = taskResults.concat(results)

@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import sift from 'sift'
 import makeDebug from 'debug'
 import { Duplex } from 'stream'
 
@@ -16,9 +17,10 @@ export function addOutput (object, output, type) {
 // Get the actual store object from its definition in input data based on the given property path,
 // or if definition not found retrieve it directly from params
 export async function getStore (storesService, params, data, storePath) {
-  debug('Seeking for store with data or params', data, params)
+  let path = storePath || 'store'
+  debug('Seeking for store with data or params on path', path)
   // First try specific service data
-  let store = _.get(data, storePath || 'store')
+  let store = _.get(data, path)
   // Store config/object given ?
   if (store) {
     if (typeof store === 'string' && storesService) {
@@ -26,7 +28,7 @@ export async function getStore (storesService, params, data, storePath) {
     }
   } else {
     // Check if store object already provided as global parameter
-    store = _.get(params, storePath || 'store')
+    store = _.get(params, path)
   }
 
   if (!store) {
@@ -47,6 +49,7 @@ export async function getStoreFromHook (hook, hookName, storePath) {
   }
 }
 
+// Convert a data buffer to a stream
 export function bufferToStream (buffer) {
   let stream = new Duplex()
   stream.push(buffer)
@@ -54,6 +57,7 @@ export function bufferToStream (buffer) {
   return stream
 }
 
+// Convert a data buffer to a stream piped to a target store
 export function writeBufferToStore (buffer, store, options) {
   return new Promise((resolve, reject) => {
     bufferToStream(buffer)
@@ -67,3 +71,4 @@ export function writeBufferToStore (buffer, store, options) {
     .on('error', reject)
   })
 }
+
