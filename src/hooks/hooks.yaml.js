@@ -23,7 +23,7 @@ export function writeYAML (options = {}) {
       Buffer.from(yaml, 'utf8'),
       store, {
         key: ymlName,
-        params: options.storageOptions
+        params: Object.assign({}, options.storageOptions) // See https://github.com/kalisio/krawler/issues/7
       }
     )
     addOutput(hook.result, ymlName, options.outputType)

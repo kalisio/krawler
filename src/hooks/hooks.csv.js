@@ -23,7 +23,7 @@ export function writeCSV (options = {}) {
       Buffer.from(csv, 'utf8'),
       store, {
         key: csvName,
-        params: options.storageOptions
+        params: Object.assign({}, options.storageOptions) // See https://github.com/kalisio/krawler/issues/7
       }
     )
     addOutput(hook.result, csvName, options.outputType)

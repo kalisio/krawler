@@ -23,7 +23,7 @@ export function writeJson (options = {}) {
       Buffer.from(JSON.stringify(json), 'utf8'),
       store, {
         key: jsonName,
-        params: options.storageOptions
+        params: Object.assign({}, options.storageOptions) // See https://github.com/kalisio/krawler/issues/7
       }
     )
     addOutput(hook.result, jsonName, options.outputType)
@@ -90,17 +90,20 @@ export function convertToGeoJson (options = {}) {
       type: 'FeatureCollection',
       features: []
     }
-
+    const longitude = options.longitude || 'longitude'
+    const latitude = options.latitude || 'latitude'
+    const altitude = options.altitude || 'altitude'
     // Then iterate over JSON objects
     _.forEach(json, object => {
-      let lon = Number(_.get(object, options.longitude || 'longitude', 0))
-      let lat = Number(_.get(object, options.latitude || 'latitude', 0))
-      let alt = Number(_.get(object, options.altitude || 'altitude', 0))
+      let lon = Number(_.get(object, longitude, 0))
+      let lat = Number(_.get(object, latitude, 0))
+      let alt = Number(_.get(object, altitude, 0))
       if (lat && lon) {
         // Define the GeoJson feature corresponding to the object
         let feature = {
           type: 'Feature',
-          properties: object,
+          // Lat, long, alt not required anymore
+          properties: _.omit(object, [longitude, latitude, altitude]),
           geometry: {
             type: 'Point',
             coordinates: [lon, lat, alt]

@@ -47,7 +47,7 @@ class TasksService extends Service {
       })
       .pipe(store.createWriteStream({
         key: id,
-        params: storageOptions
+        params: Object.assign({}, storageOptions) // See https://github.com/kalisio/krawler/issues/7
       }, error => {
         if (error) reject(error)
       }))
