@@ -55,7 +55,7 @@ Grab [ADS-B](https://en.wikipedia.org/wiki/Automatic_dependent_surveillance_%E2%
 
 The [hooks](./HOOKS.MD) used are the following:
 
-![Hooks ADS-B](https://cdn.rawgit.com/kalisio/krawler/c85a9a96f08e090ff8b60b9df4adfa108f70bd7a/examples/adsb/Hooks%20Diagram.svg)
+![Hooks ADS-B](https://cdn.rawgit.com/kalisio/krawler/d63995305e03c3775f4c3e71ad02f076efd7aca9/examples/adsb/Hooks%20Diagram.svg)
 
 Most parameters can be directly edited in the jobfile. However, for security concerns, some secrets are not hard-written in the jobfile, as a consequence you must define the following environment variables to make this sample work:
 * **S3_ACCESS_KEY** : AWS S3 Access Key ID
