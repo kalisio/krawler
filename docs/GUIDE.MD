@@ -51,7 +51,7 @@ Intermediate and product outputs will be generated in the *ouput* folder. The av
 
 Grab [ADS-B](https://en.wikipedia.org/wiki/Automatic_dependent_surveillance_%E2%80%93_broadcast) data from two different providers using REST Web Services, convert it to a standardised JSON format, transform it to GeoJson and push it into AWS S3 and the local file system. Once the files have been produced simply drag'n'drop them at [geojson.io](http://geojson.io) to see the live position of the Air Maroc fleet !
 
-![ADS-B](https://cdn.rawgit.com/kalisio/krawler/c85a9a96f08e090ff8b60b9df4adfa108f70bd7a/images/ADS-B.png)
+![ADS-B](https://cdn.rawgit.com/kalisio/krawler/c4c7c00e3bd97390d6a9dd91c063d526f9c262e3/images/ADS-B.png)
 
 The [hooks](./HOOKS.MD) used are the following:
 
