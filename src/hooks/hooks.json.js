@@ -14,7 +14,7 @@ export function writeJson (options = {}) {
       throw new Error(`The 'writeJson' hook should only be used as a 'after' hook.`)
     }
 
-    let store = await getStoreFromHook(hook, 'writeJson', options.storePath)
+    let store = await getStoreFromHook(hook, 'writeJson', options)
 
     debug('Creating JSON for ' + hook.data.id)
     let json = _.get(hook, options.dataPath || 'result.data', {})
@@ -43,6 +43,14 @@ export function transformJson (options = {}) {
     let json = _.get(hook, options.dataPath || 'result.data', {})
     if (options.toArray) {
       json = _.toArray(json)
+    }
+    if (options.toObjects) {
+      json = json.map(array => array.reduce((object, value, index) => {
+        // Set the value at index on object using key provided in input list
+        const propertyName = options.toObjects[index]
+        object[propertyName] = value
+        return object
+      }, {}))
     }
     if (options.filter) {
       json = sift(options.filter, json)
@@ -103,7 +111,7 @@ export function convertToGeoJson (options = {}) {
         let feature = {
           type: 'Feature',
           // Lat, long, alt not required anymore
-          properties: _.omit(object, [longitude, latitude, altitude]),
+          properties: (options.keepGeometryProperties ? object : _.omit(object, [longitude, latitude, altitude])),
           geometry: {
             type: 'Point',
             coordinates: [lon, lat, alt]
@@ -125,12 +133,15 @@ export function writeTemplate (options = {}) {
       throw new Error(`The 'writeTemplate' hook should only be used as a 'after' hook.`)
     }
 
-    let store = await getStoreFromHook(hook, 'writeTemplate', options.storePath)
+    let store = await getStoreFromHook(hook, 'writeTemplate', options)
     if (!store.path) {
       throw new Error(`The 'writeTemplate' hook only work with the fs blob store.`)
     }
 
-    let templateStore = await getStoreFromHook(hook, 'writeTemplate', options.templateStorePath || 'templateStore')
+    let templateStore = await getStoreFromHook(hook, 'writeTemplate', {
+      store: options.templateStore,
+      storePath: options.templateStorePath || 'templateStore'
+    })
     if (!templateStore.path) {
       throw new Error(`The 'writeTemplate' hook only work with the fs blob store.`)
     }
@@ -170,7 +181,7 @@ export function readJson (options = {}) {
       throw new Error(`The 'readJson' hook should only be used as a 'after' hook.`)
     }
 
-    let store = await getStoreFromHook(hook, 'readJson', options.storePath)
+    let store = await getStoreFromHook(hook, 'readJson', options)
     if (!store.path && !store.buffers) {
       throw new Error(`The 'readJson' hook only work with the fs or memory blob store.`)
     }
@@ -184,6 +195,9 @@ export function readJson (options = {}) {
     } else {
       debug('Parsing JSON for ' + jsonName)
       json = JSON.parse(store.buffers[jsonName].toString())
+    }
+    if (options.objectPath) {
+      json = _.get(json, options.objectPath)
     }
     _.set(hook, options.dataPath || 'result.data', json)
     return hook

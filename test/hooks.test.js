@@ -5,7 +5,7 @@ import fsStore from 'fs-blob-store'
 import yaml from 'js-yaml'
 import fs from 'fs'
 import _ from 'lodash'
-import { hooks as pluginHooks, activateHooks } from '../src'
+import { hooks as pluginHooks } from '../src'
 
 describe('krawler:hooks', () => {
   let inputStore = fsStore({ path: path.join(__dirname, 'data') })
@@ -26,7 +26,7 @@ describe('krawler:hooks', () => {
         custom: { parameter: 2 }
       }
     }
-    activateHooks(hooks)
+    pluginHooks.activateHooks(hooks)
     expect(hooks.before.create.includes(hookFunction)).beTrue()
     expect(hooks.after.create.includes(hookFunction)).beTrue()
   })

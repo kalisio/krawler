@@ -47,6 +47,31 @@ krawler ./dem2csv/jobfile.js
 
 Intermediate and product outputs will be generated in the *ouput* folder. The available samples are detailed below.
 
+## ADS-B
+
+Grab [ADS-B](https://en.wikipedia.org/wiki/Automatic_dependent_surveillance_%E2%80%93_broadcast) data from two different providers using REST Web Services, convert it to a standardised JSON format, transform it to GeoJson and push it into AWS S3 and the local file system. Once the files have been produced simply drag'n'drop them at [geojson.io](http://geojson.io) to see the live position of the Air Maroc fleet !
+
+![ADS-B](https://cdn.rawgit.com/kalisio/krawler/c85a9a96f08e090ff8b60b9df4adfa108f70bd7a/images/ADS-B.png)
+
+The [hooks](./HOOKS.MD) used are the following:
+
+![Hooks ADS-B](https://cdn.rawgit.com/kalisio/krawler/c85a9a96f08e090ff8b60b9df4adfa108f70bd7a/examples/adsb/Hooks%20Diagram.svg)
+
+Most parameters can be directly edited in the jobfile. However, for security concerns, some secrets are not hard-written in the jobfile, as a consequence you must define the following environment variables to make this sample work:
+* **S3_ACCESS_KEY** : AWS S3 Access Key ID
+* **S3_SECRET_ACCESS_KEY** : AWS S3 Secret Access Key
+* **S3_BUCKET** : the name of the S3 bucket to write the GeoJson file to
+
+The web services used according to the providers are the following:
+* [ADS-B Exchange](https://www.adsbexchange.com/data/)
+* [OpenSky Network](https://opensky-network.org/apidoc/rest.html)
+
+This sample demonstrates the flexibility of the krawler by using:
+* different output [stores](./SERVICES.html#stores) and an intermediate [in-memory store](./SERVICES.html#stores) to avoid writing temporary files,
+* a [match filter](./HOOKS.html#common-options) to apply a given hook to a subset of the tasks (e.g. perform a JSON transformation adapted to the output of each provider)
+* a [JSON transformation](./HOOKS.html#transformjsonoptions) to generate an unified format and filter data
+* the [same hook multiple times](CLI.html#external-api) (e.g. `writeJson`) with different options (e.g. to write to different output stores)
+
 ## csv2pg
 
 Grab a CSV file from AWS S3, convert it to GeoJson and push it into a PostGIS database table (it will be dropped if it already exists). The [hooks](./HOOKS.MD) used are the following:

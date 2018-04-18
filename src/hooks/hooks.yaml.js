@@ -14,7 +14,7 @@ export function writeYAML (options = {}) {
       throw new Error(`The 'writeYAML' hook should only be used as a 'after' hook.`)
     }
 
-    let store = await getStoreFromHook(hook, 'writeYAML', options.storePath)
+    let store = await getStoreFromHook(hook, 'writeYAML', options)
 
     debug('Creating YAML for ' + hook.data.id)
     let yaml = yamljs.safeDump(_.get(hook, options.dataPath || 'result.data'), options)
@@ -38,7 +38,7 @@ export function readYAML (options = {}) {
       throw new Error(`The 'readYAML' hook should only be used as a 'after' hook.`)
     }
 
-    let store = await getStoreFromHook(hook, 'readYAML', options.storePath)
+    let store = await getStoreFromHook(hook, 'readYAML', options)
     if (!store.path && !store.buffers) {
       throw new Error(`The 'readYAML' hook only work with the fs or memory blob store.`)
     }

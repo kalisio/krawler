@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import sift from 'sift'
 import makeDebug from 'debug'
 import { Duplex } from 'stream'
 
@@ -14,36 +13,41 @@ export function addOutput (object, output, type) {
   _.set(object, outputType, outputs)
 }
 
-// Get the actual store object from its definition in input data based on the given property path,
+// Get the actual store object from its definition in input data based on the given name or property path,
 // or if definition not found retrieve it directly from params
-export async function getStore (storesService, params, data, storePath) {
-  let path = storePath || 'store'
-  debug('Seeking for store with data or params on path', path)
-  // First try specific service data
+export async function getStore (storesService, params, data, storePathOrName) {
+  let path = storePathOrName || 'store'
+  debug('Seeking for store in service, data or params with path/name ' + path)
+  // First try store as specified in input data
   let store = _.get(data, path)
-  // Store config/object given ?
   if (store) {
+    // Store object or only ID given ?
     if (typeof store === 'string' && storesService) {
       store = await storesService.get(store)
     }
   } else {
-    // Check if store object already provided as global parameter
+    // Check if store object already provided as global parameter on params
     store = _.get(params, path)
   }
 
+  // Try to directly access it by name from service
   if (!store) {
-    throw new Error('Cannot find store on data or params ', data, params)
+    if (storesService) {
+      store = await storesService.get(path)
+    } else {
+      throw new Error('Cannot find store on data or params ', data, params)
+    }
   }
 
   return store
 }
 
-// Get the actual store object from its definition in input data based on the given property path
+// Get the actual store object from its definition in input data based on the given name or property path
 // or if definition not found retrieve directly from params
-export async function getStoreFromHook (hook, hookName, storePath) {
+export async function getStoreFromHook (hook, hookName, options = {}) {
   debug('Seeking for store in hook ' + hookName)
   try {
-    return await getStore(_.get(hook, 'service.storesService'), hook.params, hook.data, storePath)
+    return await getStore(_.get(hook, 'service.storesService'), hook.params, hook.data, options.store || options.storePath)
   } catch (error) {
     throw new Error(`Cannot find store for hook ${hookName}.`)
   }
@@ -71,4 +75,3 @@ export function writeBufferToStore (buffer, store, options) {
     .on('error', reject)
   })
 }
-

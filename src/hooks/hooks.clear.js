@@ -35,7 +35,7 @@ export function clearOutputs (options = {}) {
       throw new Error(`The 'clearOutputs' hook should only be used as a 'after' hook.`)
     }
 
-    let store = await getStoreFromHook(hook, 'clearOutputs', options.storePath)
+    let store = await getStoreFromHook(hook, 'clearOutputs', options)
     if (Array.isArray(hook.result)) {
       await Promise.all(hook.result.map(result => clearObjectOutputs(result, store, options.type)))
     } else {

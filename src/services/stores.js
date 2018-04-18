@@ -19,7 +19,8 @@ class StoresService extends Service {
       debug(message)
       throw new Error(message)
     }
-    store = await this.generate(type, options, id)
+    // Often the store has the same name as its type, in that case it can be omitted
+    store = await this.generate(type || id, options, id)
     if (!store) {
       const message = 'Can\'t find store generator for store type ' + type
       debug(message)

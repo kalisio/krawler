@@ -7,8 +7,8 @@ import { getStoreFromHook } from '../utils'
 
 const debug = makeDebug('krawler:hooks:raster')
 
-async function getStream (hook, hookName, storePath) {
-  let store = await getStoreFromHook(hook, hookName, storePath)
+async function getStream (hook, hookName) {
+  let store = await getStoreFromHook(hook, hookName)
   let fileName = hook.result.id
   if (!store.path) {
     throw new Error(`The ${hookName} hook only work with the fs blob store.`)

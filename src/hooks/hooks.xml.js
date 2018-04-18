@@ -14,7 +14,7 @@ export function readXML (options = {}) {
       throw new Error(`The 'readXML' hook should only be used as a 'after' hook.`)
     }
 
-    let store = await getStoreFromHook(hook, 'readXML', options.storePath)
+    let store = await getStoreFromHook(hook, 'readXML', options)
     if (!store.path && !store.buffers) {
       throw new Error(`The 'readXML' hook only work with the fs or memory blob store.`)
     }

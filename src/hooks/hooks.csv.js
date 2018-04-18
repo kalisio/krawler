@@ -14,7 +14,7 @@ export function writeCSV (options = {}) {
       throw new Error(`The 'writeCSV' hook should only be used as a 'after' hook.`)
     }
 
-    let store = await getStoreFromHook(hook, 'writeCSV', options.storePath)
+    let store = await getStoreFromHook(hook, 'writeCSV', options)
 
     debug('Creating CSV for ' + hook.data.id)
     let csv = json2csv({ data: _.get(hook, options.dataPath || 'result'), fields: options.fields })
@@ -38,7 +38,7 @@ export function mergeCSV (options = {}) {
       throw new Error(`The 'mergeCSV' hook should only be used as a 'after' hook.`)
     }
 
-    let store = await getStoreFromHook(hook, 'mergeCSV', options.storePath)
+    let store = await getStoreFromHook(hook, 'mergeCSV', options)
 
     return new Promise((resolve, reject) => {
       debug('Merging CSV for ' + hook.data.id)
@@ -66,7 +66,7 @@ export function readCSV (options = {}) {
       throw new Error(`The 'readCSV' hook should only be used as a 'after' hook.`)
     }
 
-    let store = await getStoreFromHook(hook, 'readCSV', options.storePath)
+    let store = await getStoreFromHook(hook, 'readCSV', options)
 
     return new Promise((resolve, reject) => {
       debug('Reading CSV for ' + hook.result.id)
