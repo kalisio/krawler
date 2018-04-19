@@ -37,6 +37,9 @@ module.exports = {
           match: { id: 'adsb-exchange' },
           filter: { Spd: { $gt: 400 } }, // Keep speed above 400 knots
           mapping: { Spd: 'speed', Call: 'callsign', Lat: 'latitude', Long: 'longitude', Alt: 'altitude', Icao: 'icao' },
+          unitMapping: {
+            altitude: { from: 'feet', to: 'm' }
+          },
           pick: ['latitude', 'longitude', 'altitude', 'callsign', 'icao', 'speed']
         },
         transformJsonOpenSkyNetwork: {
@@ -45,7 +48,10 @@ module.exports = {
           // State vectors are given as arrays, see https://opensky-network.org/apidoc/rest.html#response
           toObjects: ['icao', 'callsign', 'origin_country', 'time_position', 'last_contact', 'longitude', 'latitude', 'geo_altitude', 'on_ground', 'velocity', 'heading', 'vertical_rate', 'sensors', 'baro_altitude', 'squawk', 'spi', 'position_source'],
         	filter: { velocity: { $gt: 200 }, callsign: { $regex: '^RAM' } }, // Keep speed above 200 m/s and callsign of Air Maroc
-          mapping: { velocity: 'speed' },
+          mapping: { velocity: 'speed', geo_altitude: 'altitude' },
+          unitMapping: {
+            speed: { from: 'm/s', to: 'kts' }
+          },
           pick: ['latitude', 'longitude', 'altitude', 'callsign', 'icao', 'speed']
         }
         /* To debug individual files

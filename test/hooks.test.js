@@ -141,6 +141,56 @@ describe('krawler:hooks', () => {
     expect(fs.existsSync(path.join(outputStore.path, geotiffHook.result.id + '.json'))).beFalse()
   })
 
+  let jsonHook = {
+    type: 'after',
+    result: {
+      id: 'json',
+      data: {
+        first: {
+          speed: 10,
+          nested: {
+            value: 20
+          },
+          notPicked: 'first',
+          omitted: 'first'
+        },
+        second: {
+          speed: 30,
+          nested: {
+            value: 40
+          },
+          notPicked: 'second',
+          omitted: 'second'
+        }
+      }
+    }
+  }
+
+  it('transform JSON', () => {
+    pluginHooks.transformJson({
+      toArray: true,
+      mapping: {
+        'nested.value': 'value'
+      },
+      unitMapping: {
+        speed: { from: 'kts', to: 'm/s' }
+      },
+      pick: ['speed', 'value', 'omit'],
+      omit: ['omit'],
+      merge: { new: 'new' }
+    })(jsonHook)
+    expect(Array.isArray(jsonHook.result.data)).beTrue()
+    expect(jsonHook.result.data.length === 2).beTrue()
+    const data = jsonHook.result.data[0]
+    expect(data.notPicked).beUndefined()
+    expect(data.omitted).beUndefined()
+    expect(data.new).toExist()
+    expect(data.new).to.equal('new')
+    expect(data.value).toExist()
+    expect(data.value).to.equal(20)
+    expect(data.speed).to.equal(10 * 0.514444)
+  })
+
   let csvHook = {
     type: 'after',
     data: {
@@ -165,6 +215,20 @@ describe('krawler:hooks', () => {
         }
       })(hook)
       checkJson(hook)
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('converts JSON to CSV', () => {
+    return pluginHooks.readCSV({ headers: true })(csvHook)
+    .then(hook => {
+      // Switch to output store
+      csvHook.params.store = outputStore
+      return pluginHooks.writeCSV({ fields: ['Latmin', 'Lonmin', 'Latmax', 'Lonmax', 'Elev'] })(csvHook)
+    })
+    .then(hook => {
+      expect(fs.existsSync(path.join(outputStore.path, csvHook.result.id + '.csv'))).beTrue()
     })
   })
   // Let enough time to proceed
@@ -205,6 +269,17 @@ describe('krawler:hooks', () => {
     return pluginHooks.readYAML()(yamlHook)
     .then(hook => {
       expect(hook.result.data).toExist()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('converts JSON to YAML', () => {
+    // Switch to output store
+    yamlHook.params.store = outputStore
+    return pluginHooks.writeYAML()(yamlHook)
+    .then(hook => {
+      expect(fs.existsSync(path.join(outputStore.path, yamlHook.result.id + '.yaml'))).beTrue()
     })
   })
   // Let enough time to proceed

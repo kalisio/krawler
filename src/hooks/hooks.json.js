@@ -2,10 +2,13 @@ import path from 'path'
 import _ from 'lodash'
 import fs from 'fs-extra'
 import sift from 'sift'
+import math from 'mathjs'
 import makeDebug from 'debug'
 import { getStoreFromHook, addOutput, writeBufferToStore } from '../utils'
 
 const debug = makeDebug('krawler:hooks:json')
+// Add knot unit not defined by default
+math.createUnit('knot', { definition: '0.514444 m/s', aliases: ['knots', 'kt', 'kts'] })
 
 // Generate a JSON from specific hook result values
 export function writeJson (options = {}) {
@@ -65,6 +68,14 @@ export function transformJson (options = {}) {
       // Now we can erase old data
       _.forEach(json, object => {
         _.unset(object, inputPath)
+      })
+    })
+    // Iterate over unit mapping
+    _.forOwn(options.unitMapping, (units, path) => {
+      // Then iterate over JSON objects
+      _.forEach(json, object => {
+        // Perform conversion
+        _.set(object, path, math.unit(_.get(object, path), units.from).toNumber(units.to))
       })
     })
     // Then iterate over JSON objects to pick/omit properties in place

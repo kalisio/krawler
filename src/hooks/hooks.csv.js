@@ -17,7 +17,8 @@ export function writeCSV (options = {}) {
     let store = await getStoreFromHook(hook, 'writeCSV', options)
 
     debug('Creating CSV for ' + hook.data.id)
-    let csv = json2csv({ data: _.get(hook, options.dataPath || 'result'), fields: options.fields })
+    const data = _.get(hook, options.dataPath || 'result')
+    let csv = json2csv({ data, fields: options.fields })
     let csvName = hook.data.id + '.csv'
     await writeBufferToStore(
       Buffer.from(csv, 'utf8'),
@@ -72,7 +73,8 @@ export function readCSV (options = {}) {
       debug('Reading CSV for ' + hook.result.id)
       let stream = hook.result.stream
         ? hook.result.stream : store.createReadStream(hook.result.id)
-
+      // Clear previous data if any as we append
+      _.unset(hook, options.dataPath || 'result.data')
       fastcsv.fromStream(stream, options)
       .on('data', data => {
         let json = _.get(hook, options.dataPath || 'result.data', [])
