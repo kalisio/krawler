@@ -134,19 +134,27 @@ Restructure in-memory JSON values, hook options are the following:
 * **toArray**: boolean indicating if the JSON object will be transformed into an array using [Lodash](https://lodash.com/docs#toArray), defaults to `false`
 * **toObjects**: if your input JSON objects are flat arrays it will be transformed into objects according to the given indexed list of property names to be used as keys, not defined by default
 * **filter**: a filter to be applied on the JSON object using any option supported by [sift](https://github.com/crcn/sift.js)
-* **mapping**: a map between input key path and output key path using dot notation like this
+* **mapping**: a map between input key path and output key path supporting dot notation
+* **unitMapping**: a map between input key path supporting notation and from/to units for conversion using [math.js](http://mathjs.org/docs/datatypes/units.html)
 * **pick**: an array of properties to be picked using [Lodash](https://lodash.com/docs#pick)
 * **omit**: an array of properties to be omitted using [Lodash](https://lodash.com/docs#omit)
 * **merge**: an object to be merged with each JSON objects using [Lodash](https://lodash.com/docs#merge)
+
+Example:
 ```js
+toArray: true, // The following input object { 1: { property: 'a' }, 2: { property: 'b' } } will be transformed into [{ property: 'a' }, { property: 'b' }]
 toObjects: ['1', '2'], // The following input object ['a', 'b'] will be transformed into { 1: 'a', 2: 'b' }
 mapping: {
   sourceProperty: 'targetProperty',
   'source.property': 'target.property',
   sourceProperty: 'targetArrayProperty[0]'
-}
+},
+unitMapping: {
+  property: { from: 'feet', to: 'm' } // This one will be converted from feet to meters
+},
 pick: ['onlyThisPropertyWillBeKept'],
-omit: ['onlyThisPropertyWillBeRemoved']
+omit: ['onlyThisPropertyWillBeRemoved'],
+merge: { newProperty: 'will be added to the final objects' }
 ```
 
 > The transformations are applied in the order of the documentation, e.g. filtering occurs before mapping.
