@@ -137,6 +137,7 @@ Restructure in-memory JSON values, hook options are the following:
 * **mapping**: a map between input key path and output key path using dot notation like this
 * **pick**: an array of properties to be picked using [Lodash](https://lodash.com/docs#pick)
 * **omit**: an array of properties to be omitted using [Lodash](https://lodash.com/docs#omit)
+* **merge**: an object to be merged with each JSON objects using [Lodash](https://lodash.com/docs#merge)
 ```js
 toObjects: ['1', '2'], // The following input object ['a', 'b'] will be transformed into { 1: 'a', 2: 'b' }
 mapping: {

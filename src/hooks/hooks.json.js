@@ -71,11 +71,15 @@ export function transformJson (options = {}) {
     for (let i = 0; i < json.length; i++) {
       let object = json[i]
       if (options.pick) {
-        json[i] = _.pick(object, options.pick)
+        object = _.pick(object, options.pick)
       }
       if (options.omit) {
-        json[i] = _.omit(object, options.omit)
+        object = _.omit(object, options.omit)
       }
+      if (options.merge) {
+        object = _.merge(object, options.merge)
+      }
+      json[i] = object
     }
     // Then update JSON in place in memory
     _.set(hook, options.dataPath || 'result.data', json)
@@ -168,7 +172,7 @@ export function mergeJson (options = {}) {
     debug('Merging JSON for ' + hook.data.id)
     // Only in-memory for now
     let objects = hook.result.map(result => _.get(result, options.dataPath || 'data', {}))
-    let json = _.unionBy(objects, options.by)
+    let json = _.unionBy(...objects, options.by)
     _.set(hook, options.dataPath || 'result.data', json)
     return hook
   }

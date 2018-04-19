@@ -47,8 +47,8 @@ module.exports = {
         	filter: { velocity: { $gt: 200 }, callsign: { $regex: '^RAM' } }, // Keep speed above 200 m/s and callsign of Air Maroc
           mapping: { velocity: 'speed' },
           pick: ['latitude', 'longitude', 'altitude', 'callsign', 'icao', 'speed']
-        },
-        convertToGeoJson: {},
+        }
+        /* To debug individual files
         writeJsonFS: {
           hook: 'writeJson',
           store: 'fs'
@@ -60,6 +60,7 @@ module.exports = {
             ACL: 'public-read'
           }
         }
+        */
       }
     },
     jobs: {
@@ -84,6 +85,7 @@ module.exports = {
       },
       after: {
         mergeJson: { by: 'icao' },
+        convertToGeoJson: {},
         writeJsonFS: {
           hook: 'writeJson',
           store: 'fs'
