@@ -2,9 +2,10 @@ import path from 'path'
 
 module.exports = {
   id: 'job',
+  // FIXME: when kue will run fine
   // In travis we test the kue job with a running Redis service
   // Avoid this on local env to avoid requiring a Redis server
-  type: (process.env.TRAVIS ? 'kue' : 'async'),
+  //type: (process.env.TRAVIS ? 'kue' : 'async'),
   store: 'job-store',
   tasks: [{
     id: 'RJTT-30-18000-2-1.tif',

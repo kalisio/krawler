@@ -48,3 +48,4 @@ if (cluster.isMaster) {
 if (require.main === module) {
   cli('run')
 }
+
