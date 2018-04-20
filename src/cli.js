@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import feathers from 'feathers'
 import feathersHooks from 'feathers-hooks'
+import socketio from 'feathers-socketio'
 import makeDebug from 'debug'
 import * as hooks from './hooks'
 import { stores, tasks, jobs } from './services'
@@ -12,11 +13,13 @@ const debug = makeDebug('krawler:cli')
 export let StoresService = stores()
 export let TasksService = tasks()
 export let JobsService = jobs()
+export let app
+let server
 
 // Register all default hooks
 _.forOwn(hooks, (hook, name) => hooks.registerHook(name, hook))
 
-export function run (jobfile, options = {}) {
+export function krawler (jobfile, options = {}) {
   if (options.proxy) process.env.HTTP_PROXY = options.proxy
   if (options['proxy-https']) process.env.HTTPS_PROXY = options['proxy-https']
   if (options.debug) process.env.DEBUG = 'krawler*'
@@ -24,8 +27,11 @@ export function run (jobfile, options = {}) {
   if (options.password) process.env.USER_PASSWORD = options.password
 
   debug('Initializing krawler application')
-  let app = feathers()
+  app = feathers()
   app.configure(feathersHooks())
+  app.configure(socketio({
+    transports: ['websocket']
+  }))
   app.configure(plugin())
   app.use('stores', StoresService)
   app.use('tasks', TasksService)
@@ -39,7 +45,11 @@ export function run (jobfile, options = {}) {
   })
   delete job.hooks
   // Run the app, this is required to correctly setup Feathers
-  let server = app.listen(3030)
+  server = app.listen(3030)
+  return job
+}
+
+export function run (job, options = {}) {
   // Run the job
   function runJob () {
     console.log('Launching job ' + job.id + ', please wait...')

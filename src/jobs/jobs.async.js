@@ -1,5 +1,10 @@
+import makeDebug from 'debug'
+
+const debug = makeDebug('krawler:jobs')
+
 // Create the async job
-function createJob (options = {}, store = null, tasks) {
+function createJob (options = {}, store = null, tasks, id) {
+  debug(`Creating async job ${id} with following options`, options)
   return new Promise(async (resolve, reject) => {
     const workersLimit = options.workersLimit || 4
     let i = 0

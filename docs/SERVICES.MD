@@ -48,9 +48,12 @@ The `jobs` [service](https://docs.feathersjs.com/api/services.html) allow to man
 The returned job object is a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) resolved or rejected when the job is finished or has failed.
 
 Available job types are the following:
-* `asyn` to run tasks in parallel by batch, available options are
+* `async` to run tasks in parallel by batch, available options are
   * **workersLimit**: the maximum number of tasks to be run in parallel by the job
-  
+* `kue` to run tasks by the [Kue job sequencer](https://github.com/Automattic/kue), available options are
+  * **workersLimit**: the maximum number of tasks to be processed in parallel by Kue
+  * **attemptsLimit**: the maximum number of attempts for a task before being declared as failed by Kue
+
 #### Task templates
 
 When creating a job if a `taskTemplate` object is provided it will be automatically merged in all job tasks so that you can use it to store options common to all your tasks. It also provides task ID [templating](https://lodash.com/docs/4.17.4#template) based on `jobId` and `taskId` injected variables. So if you provide the following task template:

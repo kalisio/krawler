@@ -3,8 +3,11 @@ const fs = require('fs')
 
 module.exports = {
   id: 'adsb',
+  //type: 'kue',
   store: 'memory',
-  //workersLimit: 1,
+  options: {
+    //workersLimit: 1
+  },
   tasks: [{
     id: 'adsb-exchange',
     type: 'http',
