@@ -51,7 +51,7 @@ export function createApp (jobfile, options = {}) {
 
 export function runJob (job, options = {}) {
   // Run the job
-  function runJob () {
+  function runJobWithOptions () {
     console.log('Launching job ' + job.id + ', please wait...')
     console.time('Running time')
     return app.service('jobs').create(job)
@@ -59,7 +59,7 @@ export function runJob (job, options = {}) {
       console.log('Job terminated, ' + tasks.length + ' tasks ran')
       console.timeEnd('Running time')
       if (options.interval) {
-        setTimeout(runJob, options.interval)
+        setTimeout(runJobWithOptions, options.interval)
         return Promise.resolve(tasks)
       } else {
         return new Promise((resolve, reject) => {
@@ -73,7 +73,7 @@ export function runJob (job, options = {}) {
     })
   }
 
-  return runJob()
+  return runJobWithOptions()
 }
 
 export function run (jobfile, options = {}) {

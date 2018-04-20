@@ -55,6 +55,10 @@ export function transformJson (options = {}) {
         return object
       }, {}))
     }
+    // Safety check
+    if (!Array.isArray(json)) {
+      json = [json]
+    }
     if (options.filter) {
       json = sift(options.filter, json)
     }
