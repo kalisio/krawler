@@ -3,7 +3,7 @@ import chailint from 'chai-lint'
 import path from 'path'
 import _ from 'lodash'
 import fsStore from 'fs-blob-store'
-import { krawler, run } from '../src'
+import { run } from '../src'
 
 describe('krawler:cli', () => {
   const jobfilePath = path.join(__dirname, 'data', 'jobfile.js')
@@ -16,8 +16,7 @@ describe('krawler:cli', () => {
   })
 
   it('runs as CLI', (done) => {
-    let job = krawler(jobfilePath)
-    run(job)
+    run(jobfilePath)
     .then(tasks => {
       // All other features should have been tested independently
       // so we just test here the CLI run correctly

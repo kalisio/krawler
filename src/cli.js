@@ -19,7 +19,7 @@ let server
 // Register all default hooks
 _.forOwn(hooks, (hook, name) => hooks.registerHook(name, hook))
 
-export function krawler (jobfile, options = {}) {
+export function createApp (jobfile, options = {}) {
   if (options.proxy) process.env.HTTP_PROXY = options.proxy
   if (options['proxy-https']) process.env.HTTPS_PROXY = options['proxy-https']
   if (options.debug) process.env.DEBUG = 'krawler*'
@@ -49,7 +49,7 @@ export function krawler (jobfile, options = {}) {
   return job
 }
 
-export function run (job, options = {}) {
+export function runJob (job, options = {}) {
   // Run the job
   function runJob () {
     console.log('Launching job ' + job.id + ', please wait...')
@@ -74,4 +74,9 @@ export function run (job, options = {}) {
   }
 
   return runJob()
+}
+
+export function run (jobfile, options = {}) {
+  let job = createApp(jobfile, options)
+  return runJob(job, options)
 }

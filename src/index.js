@@ -1,7 +1,7 @@
 import program from 'commander'
 import path from 'path'
 // import cluster from 'cluster'
-import { krawler, run } from './cli'
+import { createApp, runJob } from './cli'
 import plugin from './plugin'
 
 export * as hooks from './hooks'
@@ -25,8 +25,8 @@ function cli (mode) {
     .option('-p, --password [password]', 'User password to be used for authentication')
     .parse(process.argv)
 
-  let job = krawler(path.join(process.cwd(), program.args[0]), program)
-  if (mode === 'run') run(job)
+  let job = createApp(path.join(process.cwd(), program.args[0]), program)
+  if (mode === 'run') runJob(job)
   return job
 }
 
@@ -41,7 +41,7 @@ if (cluster.isMaster) {
   if (require.main === module) {
     let job = cli('setup')
     // Launch job on first available worker
-    process.on('message', message => { if (message === 'runJob') run(job) })
+    process.on('message', message => { if (message === 'runJob') runJob(job) })
   }
 }
 */
