@@ -79,7 +79,8 @@ export function transformJson (options = {}) {
       // Then iterate over JSON objects
       _.forEach(json, object => {
         // Perform conversion
-        _.set(object, path, math.unit(_.get(object, path), units.from).toNumber(units.to))
+        const value = _.get(object, path)
+        if (value) _.set(object, path, math.unit(value, units.from).toNumber(units.to))
       })
     })
     // Then iterate over JSON objects to pick/omit properties in place
@@ -214,6 +215,8 @@ export function readJson (options = {}) {
     } else {
       debug('Parsing JSON for ' + jsonName)
       json = JSON.parse(store.buffers[jsonName].toString())
+      // Sometimes we get a response string containing a JSON as a string
+      if (typeof json === 'string') json = JSON.parse(json)
     }
     if (options.objectPath) {
       json = _.get(json, options.objectPath)
