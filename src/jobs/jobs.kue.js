@@ -3,22 +3,27 @@ import kue from 'kue'
 import makeDebug from 'debug'
 
 const debug = makeDebug('krawler:jobs')
-let queue = kue.createQueue()
-
-/* WIP: cluster mode, any worker can pick any tasks, the main issue is how to share stores between workers ?
-queue.process('task', async (task, done) => {
-  try {
-    let result = await this.tasksService.create(task.data)
-    done()
-  } catch (error) {
-    done(error)
-    return
-  }
-})
-*/
+let queue
+function initialize () {
+  if (queue) return
+  queue = kue.createQueue()
+  /* WIP: cluster mode, any worker can pick any tasks, the main issue is how to share stores between workers ?
+  queue.process('task', async (task, done) => {
+    try {
+      let result = await this.tasksService.create(task.data)
+      done()
+    } catch (error) {
+      done(error)
+      return
+    }
+  })
+  */
+}
 
 // Create the kue job
 function createJob (options = {}, store = null, tasks, id) {
+  // Initialize queue on first job
+  initialize()
   debug(`Creating kue job ${id} with following options`, options)
   return new Promise((resolve, reject) => {
     const workersLimit = options.workersLimit || 4

@@ -1,7 +1,9 @@
 import _ from 'lodash'
+import path from 'path'
 import feathers from 'feathers'
 import feathersHooks from 'feathers-hooks'
 import socketio from 'feathers-socketio'
+import program from 'commander'
 import makeDebug from 'debug'
 import * as hooks from './hooks'
 import { stores, tasks, jobs } from './services'
@@ -19,7 +21,7 @@ let server
 // Register all default hooks
 _.forOwn(hooks, (hook, name) => hooks.registerHook(name, hook))
 
-export function createApp (jobfile, options = {}) {
+export async function createApp (job, options = {}) {
   if (options.proxy) process.env.HTTP_PROXY = options.proxy
   if (options['proxy-https']) process.env.HTTPS_PROXY = options['proxy-https']
   if (options.debug) process.env.DEBUG = 'krawler*'
@@ -36,8 +38,6 @@ export function createApp (jobfile, options = {}) {
   app.use('stores', StoresService)
   app.use('tasks', TasksService)
   app.use('jobs', JobsService)
-  // Read job file
-  let job = (typeof jobfile === 'object' ? jobfile : require(jobfile))
   // Process hooks
   _.forOwn(job.hooks, (value, key) => {
     let service = app.service(key)
@@ -45,8 +45,7 @@ export function createApp (jobfile, options = {}) {
   })
   delete job.hooks
   // Run the app, this is required to correctly setup Feathers
-  server = app.listen(3030)
-  return job
+  server = await app.listen(3030)
 }
 
 export function runJob (job, options = {}) {
@@ -76,7 +75,34 @@ export function runJob (job, options = {}) {
   return runJobWithOptions()
 }
 
-export function run (jobfile, options = {}) {
-  let job = createApp(jobfile, options)
+export async function run (job, options = {}) {
+  await createApp(job, options)
   return runJob(job, options)
+}
+
+export function processOptions () {
+  program
+    .version(require('../package.json').version)
+    .usage('<jobfile> [options]')
+    .option('-d, --debug', 'Verbose output for debugging')
+    .option('-P, --proxy [proxy]', 'Proxy to be used for HTTP (and HTTPS)')
+    .option('-PS, --proxy-https [proxy-https]', 'Proxy to be used for HTTPS')
+    .option('-u, --user [user]', 'User name to be used for authentication')
+    .option('-p, --password [password]', 'User password to be used for authentication')
+    .parse(process.argv)
+
+  let jobfile = program.args[0]
+  // When relative path is given assume it relative to working dir
+  if (!path.isAbsolute(jobfile)) jobfile = path.join(process.cwd(), jobfile)
+  // Read job file
+  let job = require(jobfile)
+  program.jobfile = jobfile
+  program.job = job
+  return program
+}
+
+export function cli (job, options = {}) {
+  if (options.mode === 'setup') return createApp(job, options)
+  else if (options.mode === 'runJob') return runJob(job)
+  else return run(job)
 }

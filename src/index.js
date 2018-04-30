@@ -1,7 +1,5 @@
-import program from 'commander'
-import path from 'path'
 // import cluster from 'cluster'
-import { createApp, runJob } from './cli'
+import { processOptions, cli } from './cli'
 import plugin from './plugin'
 
 export * as hooks from './hooks'
@@ -14,22 +12,6 @@ export * from './cli'
 
 export default plugin
 
-function cli (mode) {
-  program
-    .version(require('../package.json').version)
-    .usage('<jobfile> [options]')
-    .option('-d, --debug', 'Verbose output for debugging')
-    .option('-P, --proxy [proxy]', 'Proxy to be used for HTTP (and HTTPS)')
-    .option('-PS, --proxy-https [proxy-https]', 'Proxy to be used for HTTPS')
-    .option('-u, --user [user]', 'User name to be used for authentication')
-    .option('-p, --password [password]', 'User password to be used for authentication')
-    .parse(process.argv)
-
-  let job = createApp(path.join(process.cwd(), program.args[0]), program)
-  if (mode === 'run') runJob(job)
-  return job
-}
-
 /* WIP: cluster mode, the main issue is that stores are created by a job before hook
    thus are not availalbe on workers not running the job but running only tasks
 if (cluster.isMaster) {
@@ -39,13 +21,20 @@ if (cluster.isMaster) {
   cluster.once('listening', (worker, address) => worker.send('runJob'))
 } else {
   if (require.main === module) {
-    let job = cli('setup')
+    let options = processOptions()
+    options.mode = 'setup'
+    cli(options.job, options)
     // Launch job on first available worker
-    process.on('message', message => { if (message === 'runJob') runJob(job) })
+    process.on('message', message => {
+      if (message === 'runJob') {
+        options.mode = 'runJob'
+        cli(options.job, options)
+      }
+    })
   }
 }
 */
 if (require.main === module) {
-  cli('run')
+  const options = processOptions()
+  cli(options.job, options)
 }
-
