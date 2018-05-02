@@ -1,7 +1,7 @@
 {
   "name": "@kalisio/krawler",
   "description": "Make automated process of extracting data from web services easy",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/kalisio/krawler",
   "main": "lib/",
   "bin": "lib/index.js",
