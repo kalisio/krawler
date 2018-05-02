@@ -49,20 +49,23 @@ export async function createApp (job, options = {}) {
 }
 
 export function runJob (job, options = {}) {
-  // Run the job
+  let isRunning // Flag indicating if job is currently running
+  // Function to effectively run the job
   function runJobWithOptions () {
     console.log('Launching job ' + job.id + ', please wait...')
     console.time('Running time')
+    isRunning = true
     return app.service('jobs').create(job)
     .then(tasks => {
       console.log('Job terminated, ' + tasks.length + ' tasks ran')
       console.timeEnd('Running time')
+      isRunning = false
+      // When not running job continuously stop the server
       if (options.interval) {
-        setTimeout(runJobWithOptions, options.interval)
         return Promise.resolve(tasks)
       } else {
         return new Promise((resolve, reject) => {
-          server.close(_ => resolve(tasks))
+          server.close(() => resolve(tasks))
         })
       }
     })
@@ -72,6 +75,14 @@ export function runJob (job, options = {}) {
     })
   }
 
+  // Setup interval callback if required
+  if (options.interval) {
+    setInterval(() => {
+      // If last job has not yet finished skip this call as we are late
+      if (!isRunning) runJobWithOptions()
+    }, options.interval)
+  }
+  // Run job
   return runJobWithOptions()
 }
 

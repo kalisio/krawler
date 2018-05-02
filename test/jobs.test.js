@@ -76,7 +76,7 @@ describe('krawler:jobs', () => {
     })
   })
   // Let enough time to download
-  .timeout(30000)
+  .timeout(15000)
 
   // Cleanup
   after(() => {
