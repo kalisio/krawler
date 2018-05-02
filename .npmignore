@@ -4,6 +4,8 @@
 .istanbul.yml
 .babelrc
 .idea/
+coverage/
+examples/output/
 src/
 test/
 !lib/
