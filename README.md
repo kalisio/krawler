@@ -7,6 +7,7 @@
 [![Documentation](https://img.shields.io/badge/documentation-available-brightgreen.svg)](https://kalisio.gitbooks.io/krawler/)
 [![Known Vulnerabilities](https://snyk.io/test/github/kalisio/krawler/badge.svg)](https://snyk.io/test/github/kalisio/krawler)
 [![Download Status](https://img.shields.io/npm/dm/@kalisio/krawler.svg?style=flat-square)](https://www.npmjs.com/package/@kalisio/krawler)
+[![Docker Pulls](https://img.shields.io/docker/pulls/kalisio/krawler.svg?style=plastic)](https://hub.docker.com/r/kalisio/krawler/)
 
 > Make automated process of extracting and processing (geographic) data from heterogeneous sources easy
 
