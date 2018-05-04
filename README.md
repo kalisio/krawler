@@ -8,9 +8,14 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/kalisio/krawler/badge.svg)](https://snyk.io/test/github/kalisio/krawler)
 [![Download Status](https://img.shields.io/npm/dm/@kalisio/krawler.svg?style=flat-square)](https://www.npmjs.com/package/@kalisio/krawler)
 [![Docker Pulls](https://img.shields.io/docker/pulls/kalisio/krawler.svg?style=plastic)](https://hub.docker.com/r/kalisio/krawler/)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkalisio%2Fkrawler.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkalisio%2Fkrawler?ref=badge_shield)
 
 > Make automated process of extracting and processing (geographic) data from heterogeneous sources easy
 
 ## Documentation
 
 Please read the [documentation web site](https://kalisio.gitbooks.io/krawler/).
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkalisio%2Fkrawler.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkalisio%2Fkrawler?ref=badge_large)
