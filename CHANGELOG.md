@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.2.3](https://github.com/kalisio/krawler/tree/v0.2.3) (2018-05-07)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.2.2...v0.2.3)
+
+**Fixed bugs:**
+
+- Recurring jobs stop on error [\#11](https://github.com/kalisio/krawler/issues/11)
+
+**Merged pull requests:**
+
+- Add license scan report and status [\#10](https://github.com/kalisio/krawler/pull/10) ([fossabot](https://github.com/fossabot))
+
 ## [v0.2.2](https://github.com/kalisio/krawler/tree/v0.2.2) (2018-05-02)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.2.1...v0.2.2)
