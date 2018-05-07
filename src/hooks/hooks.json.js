@@ -206,17 +206,26 @@ export function readJson (options = {}) {
       throw new Error(`The 'readJson' hook only work with the fs or memory blob store.`)
     }
 
-    let json
+    let json = {}
     const jsonName = hook.result.id
     if (store.path) {
       const filePath = path.join(store.path, jsonName)
       debug('Reading JSON file ' + filePath)
-      json = await fs.readJson(filePath)
+      try {
+        json = await fs.readJson(filePath)
+      } catch (error) {
+        debug('Impossible to read json', error)
+      }
     } else {
       debug('Parsing JSON for ' + jsonName)
-      json = JSON.parse(store.buffers[jsonName].toString())
-      // Sometimes we get a response string containing a JSON as a string
-      if (typeof json === 'string') json = JSON.parse(json)
+      try {
+        const data = store.buffers[jsonName].toString()
+        json = JSON.parse(data)
+        // Sometimes we get a response string containing a JSON as a string
+        if (typeof json === 'string') json = JSON.parse(json)
+      } catch (error) {
+        debug('Impossible to parse json', data, error)
+      }
     }
     if (options.objectPath) {
       json = _.get(json, options.objectPath)
