@@ -218,8 +218,8 @@ export function readJson (options = {}) {
       }
     } else {
       debug('Parsing JSON for ' + jsonName)
+      const data = store.buffers[jsonName].toString()
       try {
-        const data = store.buffers[jsonName].toString()
         json = JSON.parse(data)
         // Sometimes we get a response string containing a JSON as a string
         if (typeof json === 'string') json = JSON.parse(json)
