@@ -71,7 +71,10 @@ export function runJob (job, options = {}) {
     })
     .catch(error => {
       console.error(error.message)
-      server.close()
+      // When not running job continuously stop the server
+      if (!options.interval) {
+        server.close()
+      }
     })
   }
 
