@@ -2,6 +2,7 @@ import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
 import feathers from 'feathers'
 import path from 'path'
+import nock from 'nock'
 import moment from 'moment'
 import plugin from '../src'
 
@@ -29,6 +30,67 @@ describe('krawler:tasks', () => {
     tasksService = app.service('tasks')
     expect(tasksService).toExist()
   })
+
+  it('creates a HTTP task', (done) => {
+    tasksService.create({
+      id: 'task.html',
+      store: 'test-store',
+      type: 'http',
+      options: {
+        url: 'https://www.google.com'
+      }
+    })
+    .then(task => {
+      storage.exists('task.html', (error, exist) => {
+        if (error) done(error)
+        else done(exist ? null : new Error('File not found in store'))
+      })
+    })
+  })
+  // Let enough time to download
+  .timeout(5000)
+
+  it('creates a failed HTTP task (403)', (done) => {
+    nock('https://www.google.com')
+    .get('/')
+    .reply(403)
+    tasksService.create({
+      id: 'task-403.html',
+      store: 'test-store',
+      type: 'http',
+      options: {
+        url: 'https://www.google.com'
+      }
+    })
+    .catch(error => {
+      expect(error).toExist()
+      done()
+    })
+  })
+  // Let enough time to download
+  .timeout(5000)
+
+  it('creates a failed HTTP task (timeout)', (done) => {
+    nock('https://www.google.com')
+    .get('/')
+    .delay(10000)
+    .reply(200, '<html></html>')
+    tasksService.create({
+      id: 'task-timeout.html',
+      store: 'test-store',
+      type: 'http',
+      options: {
+        url: 'https://www.google.com',
+        timeout: 5000
+      }
+    })
+    .catch(error => {
+      expect(error).toExist()
+      done()
+    })
+  })
+  // Let enough time to download
+  .timeout(10000)
 
   it('creates a WCS task', (done) => {
     let datetime = moment.utc()

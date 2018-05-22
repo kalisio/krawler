@@ -15,12 +15,14 @@ export function createStores (options = {}) {
 
     for (let i = 0; i < options.length; i++) {
       const storeOptions = options[i]
-      debug('Creating store for ' + hook.data.id + ' with options ', storeOptions)
+      debug('Looking for store ' + storeOptions.id)
       let store
       try {
         // Check if store does not already exist
         store = await hook.service.storesService.get(storeOptions.id)
+        debug('Found existing store ' + storeOptions.id)
       } catch (error) {
+        debug('Creating store for ' + hook.data.id + ' with options ', storeOptions)
         store = await hook.service.storesService.create(storeOptions)
       }
       if (storeOptions.storePath) _.set(hook.data, storeOptions.storePath, store)

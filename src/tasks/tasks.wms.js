@@ -15,6 +15,7 @@ function getRequestParameters (options) {
   return {
     url: options.url,
     headers: options.headers,
+    timeout: options.timeout,
     qs: queryParameters,
     qsStringifyOptions: { arrayFormat: 'repeat' }
   }
