@@ -96,6 +96,11 @@ export function runJob (job, options = {}) {
       if (!isRunning) runJobWithOptions()
       else console.log('Skipping scheduled job as previous one is not yet finished')
     })
+    // In case the server is forced to exit stop the job as well
+    server.on('close', () => {
+      cronJob.stop()
+      console.log('Stopped scheduled job with cron pattern')
+    })
   }
   // Run job
   if (cronJob) {
