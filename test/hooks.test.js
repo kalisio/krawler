@@ -26,7 +26,7 @@ describe('krawler:hooks', () => {
         custom: { parameter: 2 }
       }
     }
-    pluginHooks.activateHooks(hooks)
+    hooks = pluginHooks.activateHooks(hooks)
     expect(hooks.before.create.includes(hookFunction)).beTrue()
     expect(hooks.after.create.includes(hookFunction)).beTrue()
   })

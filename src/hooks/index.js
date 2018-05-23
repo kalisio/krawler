@@ -64,6 +64,7 @@ export function match (hookName, filter) {
 }
 
 export function activateHooks (serviceHooks, service) {
+  let feathersHooks = {}
   // Iterate over hook types (before, after)
   _.forOwn(serviceHooks, (hooksDefinition, stage) => {
     // Iterate over hooks to create the hook pipeline
@@ -106,9 +107,9 @@ export function activateHooks (serviceHooks, service) {
         }
       }
     })
-    // Replace hooks in place so that we can use it directly with Feathers after
-    serviceHooks[stage] = { create: pipeline } // We only have create operation to manage
+    feathersHooks[stage] = { create: pipeline } // We only have create operation to manage
   })
   // Setup hooks on service
-  if (service) service.hooks(serviceHooks)
+  if (service) service.hooks(feathersHooks)
+  return feathersHooks
 }

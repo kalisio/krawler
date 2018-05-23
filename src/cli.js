@@ -4,6 +4,7 @@ import feathers from 'feathers'
 import feathersHooks from 'feathers-hooks'
 import socketio from 'feathers-socketio'
 import program from 'commander'
+import { CronJob } from 'cron'
 import makeDebug from 'debug'
 import * as hooks from './hooks'
 import { stores, tasks, jobs } from './services'
@@ -43,9 +44,17 @@ export async function createApp (job, options = {}) {
     let service = app.service(key)
     hooks.activateHooks(value, service)
   })
-  delete job.hooks
   // Run the app, this is required to correctly setup Feathers
   server = await app.listen(3030)
+  return server
+}
+
+export function getApp () {
+  return app
+}
+
+export function getServer () {
+  return server
 }
 
 export function runJob (job, options = {}) {
@@ -61,7 +70,7 @@ export function runJob (job, options = {}) {
       console.timeEnd('Running time')
       isRunning = false
       // When not running job continuously stop the server
-      if (options.interval) {
+      if (options.cron) {
         return Promise.resolve(tasks)
       } else {
         return new Promise((resolve, reject) => {
@@ -72,21 +81,26 @@ export function runJob (job, options = {}) {
     .catch(error => {
       console.error(error.message)
       // When not running job continuously stop the server
-      if (!options.interval) {
+      if (!options.cron) {
         server.close()
       }
     })
   }
 
-  // Setup interval callback if required
-  if (options.interval) {
-    setInterval(() => {
+  // Setup CRON job if required
+  let cronJob
+  if (options.cron) {
+    console.log('Scheduling job with cron pattern ' + options.cron)
+    cronJob = new CronJob(options.cron, () => {
       // If last job has not yet finished skip this call as we are late
       if (!isRunning) runJobWithOptions()
       else console.log('Skipping scheduled job as previous one is not yet finished')
-    }, options.interval)
+    })
   }
   // Run job
+  if (cronJob) {
+    cronJob.start()
+  }
   return runJobWithOptions()
 }
 
@@ -100,6 +114,7 @@ export function processOptions () {
     .version(require('../package.json').version)
     .usage('<jobfile> [options]')
     .option('-d, --debug', 'Verbose output for debugging')
+    .option('-c, --cron [pattern]', 'Schedule job using a cron pattern')
     .option('-P, --proxy [proxy]', 'Proxy to be used for HTTP (and HTTPS)')
     .option('-PS, --proxy-https [proxy-https]', 'Proxy to be used for HTTPS')
     .option('-u, --user [user]', 'User name to be used for authentication')
@@ -118,6 +133,6 @@ export function processOptions () {
 
 export function cli (job, options = {}) {
   if (options.mode === 'setup') return createApp(job, options)
-  else if (options.mode === 'runJob') return runJob(job)
-  else return run(job)
+  else if (options.mode === 'runJob') return runJob(job, options)
+  else return run(job, options)
 }
