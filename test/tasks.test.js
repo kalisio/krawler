@@ -48,7 +48,7 @@ describe('krawler:tasks', () => {
     })
   })
   // Let enough time to download
-  .timeout(5000)
+  .timeout(10000)
 
   it('creates a failed HTTP task (403)', (done) => {
     nock('https://www.google.com')
