@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.3.0](https://github.com/kalisio/krawler/tree/v0.3.0) (2018-05-23)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.2.3...v0.3.0)
+
+**Implemented enhancements:**
+
+- Support CRON jobs [\#12](https://github.com/kalisio/krawler/issues/12)
+
 ## [v0.2.3](https://github.com/kalisio/krawler/tree/v0.2.3) (2018-05-07)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.2.2...v0.2.3)
