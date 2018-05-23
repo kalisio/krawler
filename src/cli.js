@@ -83,6 +83,7 @@ export function runJob (job, options = {}) {
     setInterval(() => {
       // If last job has not yet finished skip this call as we are late
       if (!isRunning) runJobWithOptions()
+      else console.log('Skipping scheduled job as previous one is not yet finished')
     }, options.interval)
   }
   // Run job
