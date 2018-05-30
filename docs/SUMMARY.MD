@@ -20,6 +20,7 @@
     * [CSV](./HOOKS.MD#csv-source)
     * [Geographic Grid](./HOOKS.MD#geographic-grid-source)
     * [JSON](./HOOKS.MD#json-source)
+    * [GeoJSON](./HOOKS.MD#geojson-source)
     * [OGC](./HOOKS.MD#ogc-source)
     * [PostgreSQL](./HOOKS.MD#postgresql-source)
     * [Raster](./HOOKS.MD#raster-source)
