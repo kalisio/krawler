@@ -191,6 +191,26 @@ describe('krawler:hooks', () => {
     expect(data.speed).to.equal(10 * 0.514444)
   })
 
+  let geoJsonHook = {
+    type: 'after',
+    result: {
+      id: 'gejson',
+      data: {
+        type: 'Point',
+        coordinates: [319180, 6399862]
+      }
+    }
+  }
+
+  it('reproject GeoJSON', () => {
+    pluginHooks.reprojectGeoJson({
+      from: 'EPSG:3006', to: 'EPSG:2400'
+    })(geoJsonHook)
+    const data = geoJsonHook.result.data
+    expect(Math.abs(data.coordinates[0] - 1271138)).to.be.below(1)
+    expect(Math.abs(data.coordinates[1] - 6404230)).to.be.below(1)
+  })
+
   let csvHook = {
     type: 'after',
     data: {

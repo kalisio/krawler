@@ -131,10 +131,13 @@ Generate a JSON file from in-memory JSON values, hook options are the following:
 
 Restructure in-memory JSON values, hook options are the following:
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result.data`
+* **transformPath**: property path where to read/write the JSON part to be transformed in the input JSON object, if not given use the input JSON
 * **toArray**: boolean indicating if the JSON object will be transformed into an array using [Lodash](https://lodash.com/docs#toArray), defaults to `false`
 * **toObjects**: if your input JSON objects are flat arrays it will be transformed into objects according to the given indexed list of property names to be used as keys, not defined by default
 * **filter**: a filter to be applied on the JSON object using any option supported by [sift](https://github.com/crcn/sift.js)
-* **mapping**: a map between input key path and output key path supporting dot notation
+* **mapping**: a map between input key path and output key path supporting dot notation, the values of the map can also be a structure like this:
+  * **path**: output key path
+  * **value**: a map between input values and output values
 * **unitMapping**: a map between input key path supporting notation and from/to units for conversion using [math.js](http://mathjs.org/docs/datatypes/units.html)
 * **pick**: an array of properties to be picked using [Lodash](https://lodash.com/docs#pick)
 * **omit**: an array of properties to be omitted using [Lodash](https://lodash.com/docs#omit)
@@ -146,6 +149,12 @@ toArray: true, // The following input object { 1: { property: 'a' }, 2: { proper
 toObjects: ['1', '2'], // The following input object ['a', 'b'] will be transformed into { 1: 'a', 2: 'b' }
 mapping: {
   sourceProperty: 'targetProperty',
+  sourceProperty: {
+    path: 'targetProperty',
+    values: {
+      'a': 'c' // Will map { xxx: 'a' } to { yyy: 'c' }
+    }
+  },
   'source.property': 'target.property',
   sourceProperty: 'targetArrayProperty[0]'
 },
@@ -188,6 +197,15 @@ Hook options are the following:
 * **latitude**: property path where to read the latitude value defaults to `latitude`
 * **altitude**: property path where to read the altitude value defaults to `altitude`
 * **keepGeometryProperties**: boolean indicating if longitude, latitude and altitude values are also kept as properties, defaults to `true`
+
+### GeoJSON [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.geojson.js)
+
+#### reprojectGeoJson(options)
+
+Reproject a GeoJSON from a given projection system to another one, hook options are the following:
+* **from**: EPSG code of the input projection, defaults to `EPSG:4326`
+* **to**: EPSG code of the output projection, defaults to `EPSG:4326`
+* **dataPath**: property path where to store the resulting GeoJSON object on the hook object, defaults to `result.data`
 
 ### OGC [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.ogc.js)
 

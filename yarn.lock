@@ -26,6 +26,13 @@
   dependencies:
     "@types/node" "*"
 
+JSONStream@^1.0.0:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/JSONStream/-/JSONStream-1.3.3.tgz#27b4b8fbbfeab4e71bcf551e7f27be8d952239bf"
+  dependencies:
+    jsonparse "^1.2.0"
+    through ">=2.2.7 <3"
+
 SimpleQueue@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/SimpleQueue/-/SimpleQueue-0.0.1.tgz#74466490afa37c1878653767f23c59067a8e7d70"
@@ -923,6 +930,10 @@ browser-stdout@1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/browser-stdout/-/browser-stdout-1.3.0.tgz#f351d32969d32fa5d7a5567154263d928ae3bd1f"
 
+buffer-from@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.0.tgz#87fcaa3a298358e0ade6e442cfce840740d1ad04"
+
 buffer-queue@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/buffer-queue/-/buffer-queue-1.0.0.tgz#3d253fe2f0ab70e851d728712e8cd6f914a8c002"
@@ -1149,6 +1160,15 @@ component-inherit@0.0.3:
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
+
+concat-stream@^1.5.1:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.6.2.tgz#904bdf194cd3122fc675c77fc4ac3d4ff0fd1a34"
+  dependencies:
+    buffer-from "^1.0.0"
+    inherits "^2.0.3"
+    readable-stream "^2.2.2"
+    typedarray "^0.0.6"
 
 concat-stream@^1.5.2:
   version "1.6.0"
@@ -2139,6 +2159,13 @@ geo-pixel-stream@^0.4.0:
   dependencies:
     gdal "~0.9.3"
 
+geojson-stream@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/geojson-stream/-/geojson-stream-0.0.1.tgz#1a1d617167041c7302a45470318164699761502f"
+  dependencies:
+    JSONStream "^1.0.0"
+    through "^2.3.4"
+
 get-caller-file@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-1.0.2.tgz#f702e63127e7e231c160a80c1554acb70d5047e5"
@@ -2787,6 +2814,10 @@ jsonify@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
 
+jsonparse@^1.2.0:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/jsonparse/-/jsonparse-1.3.1.tgz#3f4dae4a91fac315f71062f8521cc239f1366280"
+
 jsonpointer@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/jsonpointer/-/jsonpointer-4.0.1.tgz#4fd92cb34e0e9db3c89c8622ecf51f9b978c6cb9"
@@ -2961,7 +2992,7 @@ lodash@^4.0.0, lodash@^4.14.0, lodash@^4.2.0, lodash@^4.3.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
-lodash@^4.17.4, lodash@^4.17.5:
+lodash@^4.17.10, lodash@^4.17.4, lodash@^4.17.5:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
@@ -3013,6 +3044,10 @@ merge-stream@^1.0.1:
 methods@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
+
+mgrs@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/mgrs/-/mgrs-1.0.0.tgz#fb91588e78c90025672395cb40b25f7cd6ad1829"
 
 micromatch@^2.1.5:
   version "2.3.11"
@@ -3545,6 +3580,13 @@ progress@^1.1.8:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/progress/-/progress-1.1.8.tgz#e260c78f6161cdd9b0e56cc3e0a85de17c7a57be"
 
+proj4@^2.4.4:
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/proj4/-/proj4-2.4.4.tgz#c03d825e380f6850a4a7af5d20d365f6b72c4042"
+  dependencies:
+    mgrs "1.0.0"
+    wkt-parser "^1.2.0"
+
 promise@^7.0.1:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/promise/-/promise-7.3.1.tgz#064b72602b18f90f29192b8b1bc418ffd1ebd3bf"
@@ -3853,6 +3895,15 @@ repeating@^2.0.0:
   resolved "https://registry.yarnpkg.com/repeating/-/repeating-2.0.1.tgz#5214c53a926d3552707527fbab415dbc08d06dda"
   dependencies:
     is-finite "^1.0.0"
+
+reproject@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/reproject/-/reproject-1.2.1.tgz#1ee9150de8b364627199d3415d59214b7ef77cb8"
+  dependencies:
+    concat-stream "^1.5.1"
+    geojson-stream "0.0.1"
+    minimist "^1.2.0"
+    proj4 "^2.4.4"
 
 request@2.81.0:
   version "2.81.0"
@@ -4422,7 +4473,7 @@ text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
-through@2, through@^2.3.6:
+through@2, "through@>=2.2.7 <3", through@^2.3.4, through@^2.3.6:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
 
@@ -4647,6 +4698,10 @@ with@^5.0.0:
   dependencies:
     acorn "^3.1.0"
     acorn-globals "^3.0.0"
+
+wkt-parser@^1.2.0:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/wkt-parser/-/wkt-parser-1.2.1.tgz#3339689dbc549c103fc5c7447543534785ff8d4d"
 
 wordwrap@0.0.2:
   version "0.0.2"

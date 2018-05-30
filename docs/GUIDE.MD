@@ -53,7 +53,7 @@ node .. ./dem2csv/jobfile.js
 krawler ./dem2csv/jobfile.js
 ```
 
-Intermediate and product outputs will be generated in the *ouput* folder. The available samples are detailed below.
+Intermediate and product outputs will be generated in the *ouput* folder. The main available samples are detailed below.
 
 ## ADS-B
 
@@ -80,6 +80,16 @@ This sample demonstrates the flexibility of the krawler by using:
 * a [JSON transformation](./HOOKS.html#transformjsonoptions) to generate an unified format and filter data
 * the [same hook multiple times](CLI.html#external-api) (e.g. `writeJson`) with different options (e.g. to write to different output stores)
 * the same hook at the task or job level to manage unitary as well as merged data
+
+## Vigicrue
+
+Grab [Vigicrue](https://www.vigicrues.gouv.fr/) data as GeoJson sing REST Web Services, reproject it, style it according to alert level and push it into AWS S3 and the local file system. Once the file has been produced simply drag'n'drop it at [geojson.io](http://geojson.io) to see the live flood warnings !
+
+![Vigicrue](https://cdn.rawgit.com/kalisio/krawler/c4c7c00e3bd97390d6a9dd91c063d526f9c262e3/images/Vigicrue.png)
+
+This sample is pretty similar to the ADS-B one plus:
+* a [reprojection](./HOOKS.html#reprojectgeojson-options) to transform data from the Lambert 93 projection system to the WGS 84 projection system
+* a [JSON transformation](./HOOKS.html#transformjsonoptions) with value mapping to generate styling information
 
 ## csv2pg
 

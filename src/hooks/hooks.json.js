@@ -44,6 +44,10 @@ export function transformJson (options = {}) {
     debug('Transforming JSON for ' + hook.result.id)
 
     let json = _.get(hook, options.dataPath || 'result.data', {})
+    let rootJson = json
+    if (options.transformPath) {
+      json = _.get(json, options.transformPath)
+    }
     if (options.toArray) {
       json = _.toArray(json)
     }
@@ -56,20 +60,29 @@ export function transformJson (options = {}) {
       }, {}))
     }
     // Safety check
-    if (!Array.isArray(json)) {
+    let isArray = Array.isArray(json)
+    if (!isArray) {
       json = [json]
     }
     if (options.filter) {
       json = sift(options.filter, json)
     }
     // Iterate over path mapping
-    _.forOwn(options.mapping, (outputPath, inputPath) => {
+    _.forOwn(options.mapping, (output, inputPath) => {
+      let outputPath = output
+      if (typeof output === 'object') {
+        outputPath = outputPath.path
+      }
       // Then iterate over JSON objects
       _.forEach(json, object => {
-        // Perform mapping
-        _.set(object, outputPath, _.get(object, inputPath))
+        let value = _.get(object, inputPath)
+        // Perform value mapping (if any)
+        if (typeof output === 'object' && output.values) {
+          value = output.values[value]
+        }
+        // Perform key mapping
+        _.set(object, outputPath, value)
       })
-      // Now we can erase old data
       _.forEach(json, object => {
         _.unset(object, inputPath)
       })
@@ -98,6 +111,10 @@ export function transformJson (options = {}) {
       json[i] = object
     }
     // Then update JSON in place in memory
+    if (options.transformPath) {
+      _.set(rootJson, options.transformPath, json)
+      json = rootJson
+    }
     _.set(hook, options.dataPath || 'result.data', json)
   }
 }
