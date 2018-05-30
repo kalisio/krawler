@@ -85,7 +85,7 @@ This sample demonstrates the flexibility of the krawler by using:
 
 Grab [Vigicrue](https://www.vigicrues.gouv.fr/) data as GeoJson sing REST Web Services, reproject it, style it according to alert level and push it into AWS S3 and the local file system. Once the file has been produced simply drag'n'drop it at [geojson.io](http://geojson.io) to see the live flood warnings !
 
-![Vigicrue](https://cdn.rawgit.com/kalisio/krawler/c4c7c00e3bd97390d6a9dd91c063d526f9c262e3/images/Vigicrue.png)
+![Vigicrue](https://cdn.rawgit.com/kalisio/krawler/3632a68a7daa1bfd7df04bccc2a3c7817542e1f5/images/Vigicrue.png)
 
 This sample is pretty similar to the ADS-B one plus:
 * a [reprojection](./HOOKS.html#reprojectgeojson-options) to transform data from the Lambert 93 projection system to the WGS 84 projection system
