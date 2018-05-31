@@ -80,6 +80,7 @@
     "mathjs": "^4.1.2",
     "memory-blob-store": "^5.0.1",
     "merge-stream": "^1.0.1",
+    "moment": "^2.22.1",
     "pg": "^7.4.0",
     "proj4": "^2.4.4",
     "reproject": "^1.2.1",
@@ -100,7 +101,6 @@
     "chai-lint": "^0.1.1",
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.5.3",
-    "moment": "^2.19.0",
     "nock": "^9.2.6",
     "shx": "^0.2.2",
     "standard": "^10.0.3"

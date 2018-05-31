@@ -148,6 +148,7 @@ describe('krawler:hooks', () => {
       data: {
         first: {
           speed: 10,
+          time: '2018-05-31 13:25:13.431',
           nested: {
             value: 20
           },
@@ -156,6 +157,7 @@ describe('krawler:hooks', () => {
         },
         second: {
           speed: 30,
+          time: '2018-05-31 13:26:13.431',
           nested: {
             value: 40
           },
@@ -173,9 +175,10 @@ describe('krawler:hooks', () => {
         'nested.value': 'value'
       },
       unitMapping: {
-        speed: { from: 'kts', to: 'm/s' }
+        speed: { from: 'kts', to: 'm/s' },
+        time: { asDate: 'utc', from: 'YYYY-MM-DD HH:mm:ss.SSS' }
       },
-      pick: ['speed', 'value', 'omit'],
+      pick: ['speed', 'time', 'value', 'omit'],
       omit: ['omit'],
       merge: { new: 'new' }
     })(jsonHook)
@@ -189,6 +192,7 @@ describe('krawler:hooks', () => {
     expect(data.value).toExist()
     expect(data.value).to.equal(20)
     expect(data.speed).to.equal(10 * 0.514444)
+    expect(data.time.getTime()).to.equal(new Date('2018-05-31T13:25:13.431Z').getTime())
   })
 
   let geoJsonHook = {

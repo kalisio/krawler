@@ -2,6 +2,7 @@ import path from 'path'
 import _ from 'lodash'
 import fs from 'fs-extra'
 import sift from 'sift'
+import moment from 'moment'
 import math from 'mathjs'
 import makeDebug from 'debug'
 import { getStoreFromHook, addOutput, writeBufferToStore } from '../utils'
@@ -93,7 +94,28 @@ export function transformJson (options = {}) {
       _.forEach(json, object => {
         // Perform conversion
         const value = _.get(object, path)
-        if (value) _.set(object, path, math.unit(value, units.from).toNumber(units.to))
+        if (value) {
+          // Handle dates
+          if (units.asDate) {
+            let date
+            // Handle UTC or local dates using input format if provided
+            if (units.asDate === 'utc') {
+              date = (units.from ? moment.utc(value, units.from) : moment.utc(value))
+            } else {
+              date = (units.from ? moment(value, units.from) : moment(value))
+            }
+            // In this case we'd like to reformat as a string
+            // otherwise the moment object is converted to standard JS Date
+            if (units.to) {
+              date = date.format(units.to)
+            } else {
+              date = date.toDate()
+            }
+            _.set(object, path, date)
+          } else { // Handle numbers
+            _.set(object, path, math.unit(value, units.from).toNumber(units.to))
+          }
+        }
       })
     })
     // Then iterate over JSON objects to pick/omit properties in place
