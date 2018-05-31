@@ -18,20 +18,27 @@ These sections detail the external (i.e. CLI, REST or Websocket) as well as the 
 
 [Authentication](./HOOKS.MD#authentication-source) management
 
+[Clearing](./HOOKS.MD#clearing-source) of output files management
+
 [CSV](./HOOKS.MD#csv-source) file management
+
+[Geographic grid](./HOOKS.MD#geographic-grid-source) management
 
 [JSON](./HOOKS.MD#json-source) file and structure management
 
 [GeoJSON](./HOOKS.MD#geojson-source) file and structure management
 
+[OGC](./HOOKS.MD#ogc-source) specifications management
+
+[PostgreSQL](./HOOKS.MD#postgresql-source) database management
+
+[Raster](./HOOKS.MD#raster-source) file management
+
+[Store](./HOOKS.MD#store-source) management
+
 [XML](./HOOKS.MD#xml-source) file management
 
 [YAML](./HOOKS.MD#yaml-source) file management
 
-[Raster](./HOOKS.MD#raster-source) file management
 
-[PostgreSQL](./HOOKS.MD#postgresql-source) database management
 
-[Store](./HOOKS.MD#store-source) management
-
-[Clearing](./HOOKS.MD#clearing-source) of output files management
