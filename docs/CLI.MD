@@ -18,7 +18,7 @@ This function is responsible of parsing the job definition including all the req
 
 The jobfile is the sole mandatory argument of the CLI and options are read from the CLI arguments with the same names as in the internal API or using shortcuts like this:
 ```
-krawler --user user_name -p password -P proxy_url path_to_jobfile.json
+krawler --user user_name -p password -P proxy_url --cron "*/5 * * * * *" path_to_jobfile.json
 ```
 
 A jobfile could be a JSON or JS file (it will be `require()`) and its structure is the following:
