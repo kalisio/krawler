@@ -20,7 +20,9 @@ These sections detail the external (i.e. CLI, REST or Websocket) as well as the 
 
 [CSV](./HOOKS.MD#csv-source) file management
 
-[JSON](./HOOKS.MD#json-source) file and structures management
+[JSON](./HOOKS.MD#json-source) file and structure management
+
+[GeoJSON](./HOOKS.MD#geojson-source) file and structure management
 
 [XML](./HOOKS.MD#xml-source) file management
 
