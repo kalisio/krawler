@@ -50,11 +50,11 @@ The returned job object is a [promise](https://developer.mozilla.org/en-US/docs/
 
 Available common job options are the following:
 * **workersLimit**: the maximum number of tasks to be run in parallel by the job
+* **faultTolerant**: will catch erroneous tasks so that the job will continue anyway, the hook chain will be stopped on the faulty tasks however
 
 Available job types are the following:
-* `async` to run tasks in parallel by batch, available options are
-  * **faultTolerant**: will catch any erroneous task so that the job will continue anyway, the hook chain will be stopped on the faulty tasks however
-* `kue` to run tasks by the [Kue job sequencer](https://github.com/Automattic/kue), available options are
+* `async` to run tasks in parallel by batch
+* `kue` to run tasks by the [Kue job sequencer](https://github.com/Automattic/kue), available specific options are
   * **attemptsLimit**: the maximum number of attempts for a task before being declared as failed by Kue
 
 #### Task templates
