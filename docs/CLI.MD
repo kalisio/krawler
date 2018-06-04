@@ -26,7 +26,8 @@ A jobfile could be a JSON or JS file (it will be `require()`) and its structure 
 let job = {
   // Options for job executor
   options: {
-    workersLimit: 4
+    workersLimit: 4,
+    faultTolerant: true
   },
   // Store to be used for job output
   store: 'job-store',

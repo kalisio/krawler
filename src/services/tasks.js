@@ -19,7 +19,7 @@ class TasksService extends Service {
   async create (data, params = {}) {
     let { id, type, options, storageOptions } = data
     if (!options) options = {}
-
+    debug('Creating task ' + id)
     // Providing 'type-stream' as input type means we don't want to directly write the read stream
     // to the store but simply open it and return it for hooks to process
     const streamed = type.endsWith('-stream')

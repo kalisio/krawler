@@ -4,8 +4,11 @@
 
 All hooks can have the following options:
 * **match**: a match filter to be applied on the input hook data using any option supported by [sift](https://github.com/crcn/sift.js), if the data is filtered the hook will not be applied
+* **faultTolerant**: will catch any error raised in the hook so that the hook chain will continue anyway
 
 > Matching is for instance useful when you'd like to apply a hook to only a subset of your tasks, e.g. all the CSV files but not the JSON files.
+
+> Fault tolerance is for instance useful when you use unreliable data sources and you don't want the job to stop when some requests fail.
 
 All input/output hooks, i.e. reading/writing/removing data in a store like `readJson` or `writeJson`, can have the following options:
 * **storePath**: property path where to read the store to be used on the hook object or params, defaults to `data.store`

@@ -11,10 +11,15 @@ export function createStores (options = {}) {
     }
 
     // Transform to array
-    if (!Array.isArray(options)) options = [options]
+    const faultTolerant = options.faultTolerant
+    let stores = []
+    if (!Array.isArray(options)) {
+      if (options.stores) stores = options.stores
+      else stores = [options]
+    }
 
-    for (let i = 0; i < options.length; i++) {
-      const storeOptions = options[i]
+    for (let i = 0; i < stores.length; i++) {
+      const storeOptions = stores[i]
       debug('Looking for store ' + storeOptions.id)
       let store
       try {
@@ -23,9 +28,19 @@ export function createStores (options = {}) {
         debug('Found existing store ' + storeOptions.id)
       } catch (error) {
         debug('Creating store for ' + hook.data.id + ' with options ', storeOptions)
-        store = await hook.service.storesService.create(storeOptions)
+        try {
+          store = await hook.service.storesService.create(storeOptions)
+          if (storeOptions.storePath) _.set(hook.data, storeOptions.storePath, store)
+        } catch (error) {
+          if (faultTolerant) {
+            debug('Could not create store for ' + hook.data.id)
+            console.log(error)
+          } else {
+            throw error
+          }
+        }
       }
-      if (storeOptions.storePath) _.set(hook.data, storeOptions.storePath, store)
+      
     }
 
     return hook
@@ -40,7 +55,10 @@ export function removeStores (options = {}) {
     }
 
     // Transform to array
-    if (!Array.isArray(options)) options = [options]
+    if (!Array.isArray(options)) {
+      if (options.stores) options = options.stores
+      else options = [options]
+    }
 
     for (let i = 0; i < options.length; i++) {
       const storeOptions = options[i]

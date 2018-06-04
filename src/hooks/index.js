@@ -64,6 +64,33 @@ export function match (hookName, filter) {
   }
 }
 
+function getFaultTolerantHook(hookFunction) {
+  return function (hook) {
+    try {
+      return hookFunction(hook)
+    } catch (error) {
+      console.log(error)
+      console.log('fuck')
+      return hook
+    }
+  }
+}
+
+function addHook(hookName, hookOptions, pipeline) {
+  // Jump from name/options to the real hook function
+  let hook = getHookFunction(hookName)
+  if (hookOptions.faultTolerant) {
+    debug('Adding fault-tolerant hook for ' + hookName)
+    hook = getFaultTolerantHook(hook)
+  }
+  const filter = hookOptions.match
+  if (filter) debug('Adding hook ' + hookName + ' to hook chain with filter', filter)
+  else debug('Adding hook ' + hookName + ' to hook chain')
+  // Check if this hook has filtering options
+  hook = (filter ? when(match(hookName, filter), hook(hookOptions)) : hook(hookOptions))
+  pipeline.push(hook)
+}
+
 export function activateHooks (serviceHooks, service) {
   let feathersHooks = {}
   // Iterate over hook types (before, after)
@@ -74,17 +101,11 @@ export function activateHooks (serviceHooks, service) {
       // Check for parallel execution hook
       if (hookName === 'parallel') {
         try {
+          debug('Adding parallel hook to hook chain with following hooks')
           // In this case we have an array of hooks to be run in parallel
           // Each item contains the hook name as a 'hook' property and hook options
-          let hooks = hookOptions.map(item => {
-            // Jump from name/options to the real hook function
-            let hook = getHookFunction(item.hook)
-            const filter = item.match
-            if (filter) debug('Adding hook ' + hookName + ' to hook chain with filter', filter)
-            else debug('Adding hook ' + hookName + ' to hook chain')
-            // Check if this hook has filtering options
-            return (filter ? when(match(hookName, filter), hook(item)) : hook(item))
-          })
+          let hooks = []
+          hookOptions.map(item => addHook(item.hook, item, hooks))
           pipeline.push(parallel(hooks))
         } catch (error) {
           console.error(error.message)
@@ -96,13 +117,7 @@ export function activateHooks (serviceHooks, service) {
           // If hook name is given as 'hook' option property use it
           // otherwise us key as hook name
           hookName = _.get(hookOptions, 'hook', hookName)
-          hook = getHookFunction(hookName)
-          const filter = hookOptions.match
-          if (filter) debug('Adding hook ' + hookName + ' to hook chain with filter', filter)
-          else debug('Adding hook ' + hookName + ' to hook chain')
-          // Check if this hook has filtering options
-          hook = (filter ? when(match(hookName, filter), hook(hookOptions)) : hook(hookOptions))
-          pipeline.push(hook)
+          addHook(hookName, hookOptions, pipeline)
         } catch (error) {
           console.error(error.message)
         }

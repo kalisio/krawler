@@ -21,6 +21,7 @@ The `tasks` [service](https://docs.feathersjs.com/api/services.html) allow to ma
 * **create(data)**: create a task based on provided data object properties
   * **id**: unique task ID
   * **type**: task type (e.g. `http`)
+  * **faultTolerant**: will catch any error raised by the task execution so that the hook chain be stopped but the job will continue anyway
   * **options**: specific task implementation options plus
     * **outputType**: the type of output produced by this task, defaults to `intermediate`
 * **remove(id)**: remove the task with given ID, this will actually remove the produced output from the store given as a (query) parameters
@@ -47,11 +48,13 @@ The `jobs` [service](https://docs.feathersjs.com/api/services.html) allow to man
 
 The returned job object is a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) resolved or rejected when the job is finished or has failed.
 
+Available common job options are the following:
+* **workersLimit**: the maximum number of tasks to be run in parallel by the job
+
 Available job types are the following:
 * `async` to run tasks in parallel by batch, available options are
-  * **workersLimit**: the maximum number of tasks to be run in parallel by the job
+  * **faultTolerant**: will catch any erroneous task so that the job will continue anyway, the hook chain will be stopped on the faulty tasks however
 * `kue` to run tasks by the [Kue job sequencer](https://github.com/Automattic/kue), available options are
-  * **workersLimit**: the maximum number of tasks to be processed in parallel by Kue
   * **attemptsLimit**: the maximum number of attempts for a task before being declared as failed by Kue
 
 #### Task templates
