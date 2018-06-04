@@ -16,6 +16,8 @@ export function createStores (options = {}) {
     if (!Array.isArray(options)) {
       if (options.stores) stores = options.stores
       else stores = [options]
+    } else {
+      stores = options
     }
 
     for (let i = 0; i < stores.length; i++) {
@@ -40,7 +42,6 @@ export function createStores (options = {}) {
           }
         }
       }
-      
     }
 
     return hook
@@ -55,13 +56,16 @@ export function removeStores (options = {}) {
     }
 
     // Transform to array
+    let stores = []
     if (!Array.isArray(options)) {
       if (options.stores) options = options.stores
       else options = [options]
+    } else {
+      stores = options
     }
 
-    for (let i = 0; i < options.length; i++) {
-      const storeOptions = options[i]
+    for (let i = 0; i < stores.length; i++) {
+      const storeOptions = stores[i]
       const id = (typeof storeOptions === 'string' ? storeOptions : storeOptions.id)
       debug('Removing store ' + id + ' for ' + hook.data.id)
       await hook.service.storesService.remove(id)

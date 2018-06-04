@@ -48,10 +48,7 @@ describe('krawler:stores', () => {
   it('creates the memory storage', () => {
     return storesService.create({
       id: 'memory',
-      type: 'memory',
-      options: {
-        path: path.join(__dirname, 'output')
-      }
+      type: 'memory'
     })
     .then(_ => {
       return storesService.get('memory')
@@ -74,7 +71,6 @@ describe('krawler:stores', () => {
   it('creates the s3 storage', () => {
     return storesService.create({
       id: 's3',
-      type: 's3',
       options: {
         client: {
           accessKeyId: process.env.S3_ACCESS_KEY,

@@ -50,6 +50,7 @@ function createJob (options = {}, store = null, tasks, id) {
     queue.process('task-' + id, workersLimit, async (task, done) => {
       let result
       let params = {}
+      const faultTolerant = options.faultTolerant || task.data.faultTolerant
       if (store) params.store = store
       try {
         result = await this.tasksService.create(task.data, params)

@@ -71,7 +71,7 @@ describe('krawler:jobs', () => {
       done()
     })
   })
-  // Let enough time to download
+  // Let enough time to fail
   .timeout(5000)
 
   it('creates a failed HTTP job (timeout)', (done) => {
@@ -90,8 +90,45 @@ describe('krawler:jobs', () => {
       done()
     })
   })
-  // Let enough time to download
+  // Let enough time to fail
   .timeout(10000)
+
+  it('creates a fault-tolerant failed HTTP job (403)', () => {
+    nock('https://www.google.com')
+    .get('/')
+    .reply(403)
+    return jobsService.create({
+      id: 'job',
+      options: { faultTolerant: true },
+      tasks: [
+        { id: 'job-403-fault-tolerant.html', type: 'http', store: 'test-store', options: { url: 'https://www.google.com' } }
+      ]
+    })
+    .then(tasks => {
+      expect(tasks).toExist()
+      expect(tasks.length).to.equal(1)
+    })
+  })
+  // Let enough time to fail
+  .timeout(5000)
+
+  it('creates a fault-tolerant failed HTTP task in job (403)', () => {
+    nock('https://www.google.com')
+    .get('/')
+    .reply(403)
+    return jobsService.create({
+      id: 'job',
+      tasks: [
+        { id: 'job-403-fault-tolerant.html', type: 'http', store: 'test-store', faultTolerant: true, options: { url: 'https://www.google.com' } }
+      ]
+    })
+    .then(tasks => {
+      expect(tasks).toExist()
+      expect(tasks.length).to.equal(1)
+    })
+  })
+  // Let enough time to fail
+  .timeout(5000)
 
   it('creates a WCS job', (done) => {
     let datetime = moment.utc()

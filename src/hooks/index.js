@@ -64,19 +64,18 @@ export function match (hookName, filter) {
   }
 }
 
-function getFaultTolerantHook(hookFunction) {
+function getFaultTolerantHook (hookFunction) {
   return function (hook) {
     try {
       return hookFunction(hook)
     } catch (error) {
       console.log(error)
-      console.log('fuck')
       return hook
     }
   }
 }
 
-function addHook(hookName, hookOptions, pipeline) {
+function addHook (hookName, hookOptions, pipeline) {
   // Jump from name/options to the real hook function
   let hook = getHookFunction(hookName)
   if (hookOptions.faultTolerant) {
@@ -112,7 +111,6 @@ export function activateHooks (serviceHooks, service) {
         }
       } else {
         // Jump from name/options to the real hook function
-        let hook
         try {
           // If hook name is given as 'hook' option property use it
           // otherwise us key as hook name

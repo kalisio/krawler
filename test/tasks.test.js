@@ -67,7 +67,7 @@ describe('krawler:tasks', () => {
       done()
     })
   })
-  // Let enough time to download
+  // Let enough time to fail
   .timeout(5000)
 
   it('creates a failed HTTP task (timeout)', (done) => {
@@ -89,7 +89,7 @@ describe('krawler:tasks', () => {
       done()
     })
   })
-  // Let enough time to download
+  // Let enough time to fail
   .timeout(10000)
 
   it('creates a WCS task', (done) => {
