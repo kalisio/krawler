@@ -32,6 +32,9 @@ describe('krawler:tasks', () => {
   })
 
   it('creates a HTTP task', (done) => {
+    nock('https://www.google.com')
+    .get('/')
+    .reply(200, '<html></html>')
     tasksService.create({
       id: 'task.html',
       store: 'test-store',
