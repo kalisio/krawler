@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.4.0](https://github.com/kalisio/krawler/tree/v0.4.0) (2018-06-04)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.3.1...v0.4.0)
+
+**Implemented enhancements:**
+
+- Fault-tolerant jobs/tasks [\#15](https://github.com/kalisio/krawler/issues/15)
+
 ## [v0.3.1](https://github.com/kalisio/krawler/tree/v0.3.1) (2018-05-31)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.3.0...v0.3.1)
