@@ -325,6 +325,17 @@ Remove (a set of) store(s), hook options are (array of) the following:
 
 > As a shortcut the options provided can only be store IDs when **storePath** is not used
 
+### System [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.system.js)
+
+#### runCommand(options)
+
+Run a system command, hook options are the following the following:
+* **command**: the template of the command to be run with the hook object as context
+* **stdout**: boolean indicating if stdout is logged and stored in the hook object
+* **stderr**: boolean indicating if stderr is logged and stored in the hook object
+
+> Learn more about [templating](https://lodash.com/docs/4.17.4#template)
+
 ### XML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.xml.js)
 
 #### readXML(options)

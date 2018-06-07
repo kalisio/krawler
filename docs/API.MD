@@ -36,6 +36,8 @@ These sections detail the external (i.e. CLI, REST or Websocket) as well as the 
 
 [Store](./HOOKS.MD#store-source) management
 
+[System](./HOOKS.MD#system-source)
+
 [XML](./HOOKS.MD#xml-source) file management
 
 [YAML](./HOOKS.MD#yaml-source) file management

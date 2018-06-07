@@ -25,6 +25,7 @@
     * [PostgreSQL](./HOOKS.MD#postgresql-source)
     * [Raster](./HOOKS.MD#raster-source)
     * [Store](./HOOKS.MD#store-source)
+    * [System](./HOOKS.MD#system-source)
     * [XML](./HOOKS.MD#xml-source)
     * [YAML](./HOOKS.MD#yaml-source)
 * [Extending](./EXTENDING.MD)

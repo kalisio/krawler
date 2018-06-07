@@ -13,6 +13,7 @@ export * from './hooks.ogc'
 export * from './hooks.pg'
 export * from './hooks.raster'
 export * from './hooks.store'
+export * from './hooks.system'
 export * from './hooks.xml'
 export * from './hooks.yaml'
 

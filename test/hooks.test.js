@@ -355,4 +355,24 @@ describe('krawler:hooks', () => {
   })
   // Let enough time to proceed
   .timeout(5000)
+
+  let commandHook = {
+    type: 'before',
+    data: {
+      id: 'hello'
+    }
+  }
+
+  it('run a command', () => {
+    return pluginHooks.runCommand({
+      command: 'echo <%= id %>',
+      stdout: true
+    })(commandHook)
+    .then(hook => {
+      expect(hook.data.stdout).toExist()
+      expect(hook.data.stdout).to.include('hello')
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
 })

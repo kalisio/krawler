@@ -37,7 +37,7 @@ pkg . --target node8-win-x86
 When using krawler as a Docker container the arguments to the CLI have to be provided through the ARGS environment variable, along with any other required variables and the data volume to make inputs accessible within the container and get output files back:
 ```
 docker pull kalisio/krawler
-docker run --name krawler --rm -v /mnt/data:/opt/krawler/data -e "ARGS=/opt/krawler/data/jobfile.js" -e S3_BUCKET kalisio/krawler
+docker run --name krawler --rm -v /mnt/data:/opt/krawler/data -e "ARGS=/opt/krawler/data/jobfile.js" -e S3_BUCKET=krawler
 ```
 
 # Samples
