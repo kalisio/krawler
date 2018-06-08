@@ -10,6 +10,7 @@ export function runCommand (options = {}) {
   async function run(item) {
     let compiler = _.template(options.command)
     let command = compiler(item)
+    debug('Running command', command)
     const { stdout, stderr } = await exec(command)
     if (options.stdout) {
       item.stdout = stdout
