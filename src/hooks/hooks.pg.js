@@ -33,7 +33,7 @@ export function disconnectPG (options = {}) {
 
     debug('Disconnecting from PG for ' + hook.data.id)
     await client.end()
-    _.unset(hook, options.clientPath || 'client')
+    _.unset(hook, options.clientPath || 'data.client')
     return hook
   }
 }
@@ -41,9 +41,6 @@ export function disconnectPG (options = {}) {
 // Drop a table from the specific hook
 export function dropPGTable (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'dropTable' hook should only be used as a 'after' hook.`)
-    }
     let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to PostgresSQL before using the 'dropPGTable' hook`)
@@ -60,9 +57,6 @@ export function dropPGTable (options = {}) {
 // Create a table from the specific hook
 export function createPGTable (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'createTable' hook should only be used as a 'after' hook.`)
-    }
     let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to PostgresSQL before using the 'createPGTable' hook`)
@@ -80,7 +74,7 @@ export function createPGTable (options = {}) {
 export function writePGTable (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'writeTable' hook should only be used as a 'after' hook.`)
+      throw new Error(`The 'writePGTable' hook should only be used as a 'after' hook.`)
     }
     let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {

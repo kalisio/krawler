@@ -81,6 +81,7 @@
     "memory-blob-store": "^5.0.1",
     "merge-stream": "^1.0.1",
     "moment": "^2.22.1",
+    "mongodb": "^3.0.10",
     "pg": "^7.4.0",
     "proj4": "^2.4.4",
     "reproject": "^1.2.1",
