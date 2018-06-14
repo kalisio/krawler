@@ -1,4 +1,3 @@
-import util from 'util'
 import _ from 'lodash'
 import { MongoClient } from 'mongodb'
 import makeDebug from 'debug'
