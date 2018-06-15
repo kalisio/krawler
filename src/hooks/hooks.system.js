@@ -9,7 +9,8 @@ const debug = makeDebug('krawler:hooks:system')
 export function runCommand (options = {}) {
   async function run(item) {
     let compiler = _.template(options.command)
-    let command = compiler(item)
+    const context = Object.assign(item, process)
+    let command = compiler(context)
     debug('Running command', command)
     const { stdout, stderr } = await exec(command)
     if (options.stdout) {
