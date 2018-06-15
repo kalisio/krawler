@@ -28,6 +28,8 @@ These sections detail the external (i.e. CLI, REST or Websocket) as well as the 
 
 [GeoJSON](./HOOKS.MD#geojson-source) file and structure management
 
+[MongoDB](./HOOKS.MD#mongodb-source) database management
+
 [OGC](./HOOKS.MD#ogc-source) specifications management
 
 [PostgreSQL](./HOOKS.MD#postgresql-source) database management
