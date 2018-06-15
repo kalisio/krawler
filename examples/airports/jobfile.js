@@ -10,21 +10,21 @@ const spec = require('./spec')
 const debug = makeDebug('krawler:examples')
 const earthRadius = 6356752.31424518
 
-let generateTask = (id, feature) => {
+let generateTask = (id, feature, params) => {
   const longitude = feature.geometry.coordinates[0]
   const latitude = feature.geometry.coordinates[1]
   // Convert resolution/width from meters to degrees and
   // compute corresponding delta latitude/longitude at given latitude
   const convergenceFactor = Math.cos(latitude * Math.PI / 180)
-  const dLatitude = 360 * spec.resolution / (2 * Math.PI * earthRadius)
+  const dLatitude = 360 * params.resolution / (2 * Math.PI * earthRadius)
   const dLongitude = dLatitude * convergenceFactor
-  const halfWidthLatitude = 360 * spec.halfWidth / (2 * Math.PI * earthRadius)
+  const halfWidthLatitude = 360 * params.halfWidth / (2 * Math.PI * earthRadius)
   const halfWidthLongitude = halfWidthLatitude * convergenceFactor
   return {
     id,
     feature,
     resolution: spec.resolution,
-    layer: spec.layer,
+    layer: params.layer,
     dLongitude, dLatitude,
     minLongitude: longitude - halfWidthLongitude,
     maxLongitude: longitude + halfWidthLongitude,
@@ -38,7 +38,7 @@ let generateTask = (id, feature) => {
 let generateTasks = (options) => {
   return (hook) => {
     let tasks = []
-    options.runways.forEach(value => {
+    options.runways.list.forEach(value => {
       // Find runway
       const icao = value.substr(0,4)
       const id = value.substr(4,3)
@@ -52,9 +52,9 @@ let generateTasks = (options) => {
       }
       console.log('Adding runway to queue', icao, id)
       const runway = results[0]
-      tasks.push(generateTask(value, runway))
+      tasks.push(generateTask(value, runway, options.runways.params))
     })
-    options.airports.forEach(value => {
+    options.airports.list.forEach(value => {
       // Find airport
       const results = sift({
         'properties.ICAO': value
@@ -65,7 +65,7 @@ let generateTasks = (options) => {
       }
       console.log('Adding airport to queue', value)
       const airport = results[0]
-      tasks.push(generateTask(value, airport))
+      tasks.push(generateTask(value, airport, options.airports.params))
     })
     debug('Generated download tasks', tasks)
     hook.data.tasks = tasks
@@ -88,7 +88,7 @@ module.exports = {
           command: 'gdal_translate -of GTiff -co "TILED=YES" \
           -projwin <%= minLongitude %> <%= maxLatitude %> <%= maxLongitude %> <%= minLatitude %> \
           -tr <%= dLongitude %> <%= dLatitude %> \
-          -r lanczos <%= layer %> ../output/<%= id %>.tif'
+          -r lanczos <%= env.GDAL_SERVICES_PATH %>/<%= layer %> <%= env.KRAWLER_OUTPUT_PATH %>\\<%= id %>.tif'
         }
       }
     },

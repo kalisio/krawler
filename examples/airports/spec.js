@@ -1,7 +1,18 @@
 module.exports = {
-	runways: ['LFBO14L'],
-	airports: ['LEBL'],
-	resolution: 20,
-	halfWidth: 2000,
-  layer: 'satellite.xml'
+	runways: {
+		list: ['LFBO14L'],
+		params: {
+			resolution: 1,
+			halfWidth: 1000,	
+			layer: 'satellite.xml'
+		}
+	},
+	airports: {
+		list: ['LEBL'],
+		params: {
+			resolution: 20,
+			halfWidth: 5000,	
+			layer: 'satellite.xml'
+		}
+	}
 }
