@@ -213,6 +213,40 @@ Reproject a GeoJSON from a given projection system to another one, hook options 
 * **to**: EPSG code of the output projection, defaults to `EPSG:4326`
 * **dataPath**: property path where to store the resulting GeoJSON object on the hook object, defaults to `result.data`
 
+### MongoDB [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.mongo.js)
+
+#### connectMongo(options)
+
+Connect to a MongoDB database. The [connection options](http://mongodb.github.io/node-mongodb-native/3.0/api/MongoClient.html#.connect) of the client are defined in the hook options plus:
+* **url**: MongoDB [URI connection string](https://docs.mongodb.com/manual/reference/connection-string/)
+* **dbName**: the name of the DB to connect to
+* **clientPath**: property path where to store the client object to be used by the MongoDB hooks, defaults to `client`
+
+#### disconnectMongo(options)
+
+Disconnect from a MongoDB database. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
+#### dropMongoCollection(options)
+
+Drop if exists a collection in a MongoDB database. Hook options are the following:
+* **collection**: the name of the collection to be removed, defaults to the hook object ID
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
+#### createMongoCollection(options)
+
+Create a collection in a MongoDB database. Hook options are the following:
+* **collection**: the name of the collection to be created, defaults to the hook object ID
+* **index**: the [specification of the index](https://docs.mongodb.com/manual/indexes/#create-an-index) associated to the collection
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
+#### writeMongoCollection(options)
+
+Inserts a GeoJSON collection or an array of features into an existing collection. Hook options are the following:
+* **dataPath**: property path where to read the input JSON object on the hook object, defaults to `data.result`
+* **chunkSize**: number of GeoJson features for the [batch insert](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/)
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
 ### OGC [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.ogc.js)
 
 #### getCapabilities(options)
@@ -236,13 +270,8 @@ getCapabilities: {
 
 #### connectPG(options)
 
-Connect to a PostgreSQL database. The connection information are defined through the hook options:  
-* **user**: the database user
-* **paswword**: the user's password
-* **host**: the database server
-* **port**: the post to establish the connection
-* **database**: the database name
-* **clientPath**: property path where to stote the connection object to be used by the PostgreSQL hooks, defaults to `taskTemplate.client`
+Connect to a PostgreSQL database. The [connection options](https://node-postgres.com/api/client) of the client are defined in the hook options plus:
+* **clientPath**: property path where to store the client object to be used by the PostgreSQL hooks, defaults to `client`
 
 Also, this hook allows you to use the same environment variables as [node-postgres](https://node-postgres.com/features/connecting) to store the connection information:
 * `PGUSER=dbuser`
@@ -251,8 +280,7 @@ Also, this hook allows you to use the same environment variables as [node-postgr
 * `PGPORT=5432`
 * `PGDATABASE=database`
 
-Finnaly and for some security reason, it is highly recommended to combine both wways such as in the following example: 
-
+Finaly and for some security reason, it is highly recommended to combine both ways such as in the following example: 
 ```
 connectPG: {
   user: process.env.PG_USER,
@@ -267,12 +295,13 @@ connectPG: {
 #### disconnectPG(options)
 
 Disconnect from a PostgresSQL database. Hook options are the following:
-* **clientPath**: property path where to retrieve the connection object, defaults to `taskTemplate.client`
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
 
 #### dropPGTable(options)
 
 Drop if exists a table in a PostgreSQL database. Hook options are the following:
-* **clientPath**: property path where to retrieve the connection object, defaults to `taskTemplate.client`
+* **table**: the name of the table to be removed, defaults to the hook object ID
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
 
 #### createPGTable(options)
 
@@ -282,13 +311,16 @@ Create a table in a PostgreSQL database with the following structure:
 * `properties`: an object of type of JSON.
 > For now the structure has been defined to store GeoJSON collection.
 Hook options are the following:
-* **clientPath**: property path where to retrieve the connection object, defaults to `taskTemplate.client`
+* **table**: the name of the table to be created, defaults to the hook object ID
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
 
 #### writePGTable(options)
 
 Inserts a GeoJSON collection or an array of features into an existing table. THe table must have the same structured as a table created using the **createPGTable** hook.
 Hook options are the following:
-* **clientPath**: property path where to retrieve the connection object, defaults to `taskTemplate.client`
+* **dataPath**: property path where to read the input JSON object on the hook object, defaults to `data.result`
+* **chunkSize**: number of GeoJson features for the batch insert
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
 
 ### Raster [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.raster.js)
 
