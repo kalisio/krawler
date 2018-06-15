@@ -16,11 +16,11 @@ module.exports = {
         readCSV: {
           headers: true
         },
-        // For debug purpose
         convertToGeoJson: {
           latitude: 'lat',
           longitude: 'lng'
         },
+        writeJson: {},
         dropPGTable: {},
         createPGTable: {},
         writePGTable: {
@@ -33,7 +33,6 @@ module.exports = {
         createStores: [{
           id: 'job-store',
           type: 'fs',
-          storePath: 'taskTemplate.store',
           options: { path: path.join(__dirname, '..', 'output') }
         },
         {

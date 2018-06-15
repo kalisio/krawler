@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { MongoClient } from 'mongodb'
+import { MongoClient, MongoError } from 'mongodb'
 import makeDebug from 'debug'
 
 const debug = makeDebug('krawler:hooks:mongo')
@@ -15,6 +15,7 @@ export function connectMongo (options = {}) {
     let client = await MongoClient.connect(options.url, _.omit(options, ['url', 'dbName']))
     client.db = client.db(options.dbName || options.url.substring(options.url.lastIndexOf('/') + 1))
     _.set(hook.data, options.clientPath || 'client', client)
+    debug('Connected to MongoDB for ' + hook.data.id)
     return hook
   }
 }
@@ -33,6 +34,7 @@ export function disconnectMongo (options = {}) {
     debug('Disconnecting from MongoDB for ' + hook.data.id)
     await client.logout()
     _.unset(hook, options.clientPath || 'data.client')
+    debug('Disconnected from MongoDB for ' + hook.data.id)
     return hook
   }
 }
@@ -48,7 +50,18 @@ export function dropMongoCollection (options = {}) {
     // Drop the collection
     let collection = _.get(options, 'collection', _.snakeCase(hook.result.id))
     debug('Droping the ' + collection + ' collection')
-    await client.db.dropCollection(collection)
+    try {
+      await client.db.dropCollection(collection)
+    } catch (error) {
+      // If collection does not exist we do not raise
+      if (error instanceof MongoError && error.code === 26) {
+        debug(collection + ' collection does not exist, skipping drop')
+        return hook
+      } else {
+        // Rethrow
+        throw error
+      }
+    }
     return hook
   }
 }
@@ -95,8 +108,8 @@ export function writeMongoCollection (options = {}) {
     
     // Write the chunks
     let collection = _.get(options, 'collection', _.snakeCase(hook.result.id))
-    collection = client.db.collection(collection)
     debug('Inserting GeoJSON in the ' + collection + ' collection')
+    collection = client.db.collection(collection)
     for (let i = 0; i < chunks.length; ++i) {
       await collection.bulkWrite(chunks[i].map(chunk => {
         return { insertOne: { document: chunk } }

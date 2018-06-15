@@ -91,9 +91,9 @@ This sample is pretty similar to the ADS-B one plus:
 * a [reprojection](./HOOKS.html#reprojectgeojson-options) to transform data from the Lambert 93 projection system to the WGS 84 projection system
 * a [JSON transformation](./HOOKS.html#transformjsonoptions) with value mapping to generate styling information
 
-## csv2pg
+## csv2db
 
-Grab a CSV file from AWS S3, convert it to GeoJson and push it into a PostGIS database table (it will be dropped if it already exists). The [hooks](./HOOKS.MD) used are the following:
+Grab a CSV file from AWS S3, convert it to GeoJson and push it into a PostGIS database table or MongoDB database collection (it will be dropped if it already exists). The [hooks](./HOOKS.MD) used are the following for PG (MongoDB is similar):
 
 ![Hooks Blocks](https://cdn.rawgit.com/kalisio/krawler/c85a9a96f08e090ff8b60b9df4adfa108f70bd7a/examples/csv2pg/Hooks%20Diagram.svg)
 

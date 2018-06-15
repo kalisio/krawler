@@ -16,6 +16,7 @@ export function connectPG (options = {}) {
     let client = new pg.Client(options)
     await client.connect()
     _.set(hook.data, options.clientPath || 'client', client)
+    debug('Connected to PG for ' + hook.data.id)
     return hook
   }
 }
@@ -34,6 +35,7 @@ export function disconnectPG (options = {}) {
     debug('Disconnecting from PG for ' + hook.data.id)
     await client.end()
     _.unset(hook, options.clientPath || 'data.client')
+    debug('Disconnected from PG for ' + hook.data.id)
     return hook
   }
 }
