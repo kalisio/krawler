@@ -362,12 +362,27 @@ Remove (a set of) store(s), hook options are (array of) the following:
 
 #### runCommand(options)
 
-Run a system command, hook options are the following the following:
+Run a system command, hook options are the following:
 * **command**: the template of the command to be run with the hook object as context
 * **stdout**: boolean indicating if stdout is logged and stored in the hook object
 * **stderr**: boolean indicating if stderr is logged and stored in the hook object
 
 > Learn more about [templating](https://lodash.com/docs/4.17.4#template)
+
+#### runDockerContainer(options)
+
+Run a docker container using [dockerode](https://github.com/apocas/dockerode), hook options are the following:
+* **image**: the conatiner image to be used
+* **command**: the template of the command to be run with the hook object as context
+* **stdout**: boolean indicating if stdout is logged
+* **stderr**: boolean indicating if stderr is logged
+* any option supported by dockerode for [connection](https://github.com/apocas/dockerode#getting-started) and [run](https://github.com/apocas/dockerode#equivalent-of-docker-run-in-dockerode)
+
+#### runContainerCommand(options)
+
+Run a command against a docker container using [dockerode](https://github.com/apocas/dockerode), hook options are the following:
+* **command**: the name of the command to be run
+* any option supported by dockerode on [containers](https://github.com/apocas/dockerode#manipulating-a-container)
 
 ### XML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.xml.js)
 
