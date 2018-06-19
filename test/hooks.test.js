@@ -11,7 +11,7 @@ describe('krawler:hooks', () => {
   let inputStore = fsStore({ path: path.join(__dirname, 'data') })
   let outputStore = fsStore({ path: path.join(__dirname, 'output') })
 
-  before(() => {
+  before(async () => {
     chailint(chai, util)
   })
 
@@ -360,7 +360,8 @@ describe('krawler:hooks', () => {
     type: 'before',
     data: {
       id: 'hello'
-    }
+    },
+    params: { store: outputStore }
   }
 
   it('run a command', () => {
@@ -376,15 +377,27 @@ describe('krawler:hooks', () => {
   // Let enough time to proceed
   .timeout(5000)
 
-  it('run a container', () => {
-    return pluginHooks.runContainer({
+  it('create a container', () => {
+    return pluginHooks.createContainer({
       host: 'localhost',
       port: process.env.DOCKER_PORT || 2375,
-      image: 'v4tech/imagemagick',
-      command: ['/bin/sh'],
-      //stdout: true,
-      //stderr: true,
-      createOptions: { Tty: false }
+      Image: 'v4tech/imagemagick',
+      pull: true,
+      Cmd: ['/bin/sh'],
+      AttachStdout: true,
+      AttachStderr: true,
+      Tty: true
+    })(commandHook)
+    .then(hook => {
+      expect(hook.data.container).toExist()
+    })
+  })
+  // Let enough time to proceed, pull image on first run
+  .timeout(50000)
+
+  it('start a container', () => {
+    return pluginHooks.runContainerCommand({
+      command: 'start'
     })(commandHook)
     .then(hook => {
       expect(hook.data.container).toExist()
@@ -392,6 +405,57 @@ describe('krawler:hooks', () => {
   })
   // Let enough time to proceed
   .timeout(5000)
+
+  it('copy to a container', () => {
+    return pluginHooks.runContainerCommand({
+      command: 'putArchive',
+      arguments: [ path.join(__dirname, 'data', 'krawler-icon.tar'), { path: '/tmp' } ]
+    })(commandHook)
+    .then(hook => {
+      expect(hook.data.container).toExist()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('exec in a container', () => {
+    return pluginHooks.runContainerCommand({
+      command: 'exec',
+      arguments: {
+        Cmd: [ 'convert', '/tmp/krawler-icon.png', '/tmp/krawler-icon.jpg' ],
+        AttachStdout: true,
+        AttachStderr: true
+      }
+    })(commandHook)
+    .then(hook => {
+      expect(hook.data.container).toExist()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(10000)
+
+  it('copy from a container', () => {
+    return pluginHooks.runContainerCommand({
+      command: 'getArchive',
+      arguments: { path: '/tmp/' }
+    })(commandHook)
+    .then(hook => {
+      expect(hook.data.container).toExist()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('stop a container', () => {
+    return pluginHooks.runContainerCommand({
+      command: 'stop'
+    })(commandHook)
+    .then(hook => {
+      expect(hook.data.container).toExist()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(20000)
 
   it('destroy a container', () => {
     return pluginHooks.runContainerCommand({

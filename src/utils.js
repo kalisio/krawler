@@ -61,10 +61,10 @@ export function bufferToStream (buffer) {
   return stream
 }
 
-// Convert a data buffer to a stream piped to a target store
-export function writeBufferToStore (buffer, store, options) {
+// Pipe a stream to a target store
+export function writeStreamToStore (stream, store, options) {
   return new Promise((resolve, reject) => {
-    bufferToStream(buffer)
+    stream
     .on('error', reject)
     .pipe(store.createWriteStream(options, error => {
       if (error) reject(error)
@@ -74,4 +74,9 @@ export function writeBufferToStore (buffer, store, options) {
     })
     .on('error', reject)
   })
+}
+
+// Convert a data buffer to a stream piped to a target store
+export function writeBufferToStore (buffer, store, options) {
+  return writeStreamToStore(bufferToStream(buffer), store, options)
 }
