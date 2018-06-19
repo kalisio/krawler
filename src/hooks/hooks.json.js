@@ -70,23 +70,24 @@ export function transformJson (options = {}) {
     }
     // Iterate over path mapping
     _.forOwn(options.mapping, (output, inputPath) => {
-      let outputPath = output
-      if (typeof output === 'object') {
-        outputPath = outputPath.path
-      }
+      const isMappingObject = (typeof output === 'object')
+      const outputPath = (isMappingObject ? output.path : output)
+      const deleteInputPath = (isMappingObject ? _.get(output, 'delete', true) : true)
       // Then iterate over JSON objects
       _.forEach(json, object => {
         let value = _.get(object, inputPath)
         // Perform value mapping (if any)
-        if (typeof output === 'object' && output.values) {
+        if (isMappingObject && output.values) {
           value = output.values[value]
         }
         // Perform key mapping
         _.set(object, outputPath, value)
       })
-      _.forEach(json, object => {
-        _.unset(object, inputPath)
-      })
+      if (deleteInputPath) {
+        _.forEach(json, object => {
+          _.unset(object, inputPath)
+        })
+      }
     })
     // Iterate over unit mapping
     _.forOwn(options.unitMapping, (units, path) => {

@@ -141,6 +141,7 @@ Restructure in-memory JSON values, hook options are the following:
 * **mapping**: a map between input key path and output key path supporting dot notation, the values of the map can also be a structure like this:
   * **path**: output key path
   * **value**: a map between input values and output values
+  * **delete**: boolean indicating if the input key path should be deleted or not after mapping
 * **unitMapping**: a map between input key path supporting dot notation and from/to units to convert using [math.js](http://mathjs.org/docs/datatypes/units.html) for numbers or [moment.js](https://momentjs.com/) for dates, a value of the map is a structure like this:
   * **from**: the unit or date format to convert from, e.g. `feet` or `YYYY-MM-DD HH:mm:ss.SSS`
   * **to**: the unit or date format to convert to, e.g. `m` or `MM-DD-YYYY HH:mm:ss.SSS`, if given for a date the date object will be converted back to string
@@ -361,12 +362,27 @@ Remove (a set of) store(s), hook options are (array of) the following:
 
 #### runCommand(options)
 
-Run a system command, hook options are the following the following:
+Run a system command, hook options are the following:
 * **command**: the template of the command to be run with the hook object as context
 * **stdout**: boolean indicating if stdout is logged and stored in the hook object
 * **stderr**: boolean indicating if stderr is logged and stored in the hook object
 
 > Learn more about [templating](https://lodash.com/docs/4.17.4#template)
+
+#### runDockerContainer(options)
+
+Run a docker container using [dockerode](https://github.com/apocas/dockerode), hook options are the following:
+* **image**: the conatiner image to be used
+* **command**: the template of the command to be run with the hook object as context
+* **stdout**: boolean indicating if stdout is logged
+* **stderr**: boolean indicating if stderr is logged
+* any option supported by dockerode for [connection](https://github.com/apocas/dockerode#getting-started) and [run](https://github.com/apocas/dockerode#equivalent-of-docker-run-in-dockerode)
+
+#### runContainerCommand(options)
+
+Run a command against a docker container using [dockerode](https://github.com/apocas/dockerode), hook options are the following:
+* **command**: the name of the command to be run
+* any option supported by dockerode on [containers](https://github.com/apocas/dockerode#manipulating-a-container)
 
 ### XML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.xml.js)
 

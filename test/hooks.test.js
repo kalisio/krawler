@@ -375,4 +375,32 @@ describe('krawler:hooks', () => {
   })
   // Let enough time to proceed
   .timeout(5000)
+
+  it('run a container', () => {
+    return pluginHooks.runContainer({
+      host: 'localhost',
+      port: process.env.DOCKER_PORT || 2375,
+      image: 'v4tech/imagemagick',
+      command: ['/bin/sh'],
+      //stdout: true,
+      //stderr: true,
+      createOptions: { Tty: false }
+    })(commandHook)
+    .then(hook => {
+      expect(hook.data.container).toExist()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('destroy a container', () => {
+    return pluginHooks.runContainerCommand({
+      command: 'remove'
+    })(commandHook)
+    .then(hook => {
+      expect(hook.data.container).beUndefined()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
 })
