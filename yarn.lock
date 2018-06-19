@@ -4692,6 +4692,10 @@ void-elements@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
 
+"vuepress-theme-kalisio@https://github.com/kalisio/vuepress-theme-kalisio.git":
+  version "0.0.1"
+  resolved "https://github.com/kalisio/vuepress-theme-kalisio.git#cf4395fa46859b03aa9a4c4009cc0908e0c14611"
+
 which-module@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/which-module/-/which-module-1.0.0.tgz#bba63ca861948994ff307736089e3b96026c2a4f"

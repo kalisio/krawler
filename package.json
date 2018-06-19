@@ -40,7 +40,9 @@
     "mocha": "mocha --opts mocha.opts",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
     "test": "npm run compile && npm run lint && npm run coverage",
-    "start": "npm run compile && node example/app"
+    "start": "npm run compile && node example/app",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "standard": {
     "parser": "babel-eslint",
@@ -88,6 +90,7 @@
     "request": "^2.83.0",
     "s3-blob-store": "^2.1.0",
     "sift": "^5.1.0",
+    "vuepress-theme-kalisio": "https://github.com/kalisio/vuepress-theme-kalisio.git",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
