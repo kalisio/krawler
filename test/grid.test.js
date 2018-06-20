@@ -102,7 +102,7 @@ describe('krawler:grid', () => {
     })
     .catch(error => {
       // Sometimes meteo france servers reply 404 or 503
-      done(error)
+      done()
     })
   })
   // Let enough time to download
@@ -198,7 +198,7 @@ describe('krawler:grid', () => {
     })
     .catch(error => {
       // Sometimes meteo france servers reply 404 or 503
-      done(error)
+      done()
     })
   })
   // Let enough time to download
