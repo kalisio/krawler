@@ -50,7 +50,6 @@ export function createContainer (options = {}) {
 
   async function create(item) {
     debug('Creating docker container', options)
-    if (options.pull) await docker.pull(options.Image)
     let container = await docker.createContainer(options)
     _.set(item, options.containerPath || 'container', container)
   }
@@ -69,8 +68,9 @@ export function runContainerCommand (options = {}) {
     let result = await container[options.command](...args)
     if (options.command === 'exec') {
       result = await result.start()
+      //result.output.pipe(process.stdout)
       container.modem.demuxStream(result.output, process.stdout, process.stderr)
-      console.log(await result.inspect())
+      await result.inspect()
     } else if (options.command === 'remove') {
       _.unset(item, options.containerPath || 'container')
     } else if (options.command === 'getArchive') {

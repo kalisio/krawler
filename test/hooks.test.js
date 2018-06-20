@@ -382,7 +382,6 @@ describe('krawler:hooks', () => {
       host: 'localhost',
       port: process.env.DOCKER_PORT || 2375,
       Image: 'v4tech/imagemagick',
-      pull: true,
       Cmd: ['/bin/sh'],
       AttachStdout: true,
       AttachStderr: true,
@@ -422,9 +421,9 @@ describe('krawler:hooks', () => {
     return pluginHooks.runContainerCommand({
       command: 'exec',
       arguments: {
-        Cmd: [ 'convert', '/tmp/krawler-icon.png', '/tmp/krawler-icon.jpg' ],
-        AttachStdout: true,
-        AttachStderr: true
+        Cmd: [ 'convert', '/tmp/krawler-icon.png', '/tmp/krawler-icon.jpg' ]
+        //AttachStdout: true,
+        //AttachStderr: true
       }
     })(commandHook)
     .then(hook => {
