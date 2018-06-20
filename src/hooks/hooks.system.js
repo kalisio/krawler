@@ -1,49 +1,35 @@
 import _ from 'lodash'
-import { getItems, replaceItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
 import util from 'util'
+import Tar from 'tar'
 import Docker from 'dockerode'
-import { getStoreFromHook, writeStreamToStore } from '../utils'
+import { getStoreFromHook, writeStreamToStore, callOnHookItems, template, templateObject } from '../utils'
 
 const exec = util.promisify(require('child_process').exec)
 const debug = makeDebug('krawler:hooks:system')
 
-// Call a given function on each hook item
-function callOnHookItems(f) {
-  return async function (hook) {
-    // Retrieve the items from the hook
-    let items = getItems(hook)
-    const isArray = Array.isArray(items)
-    if (isArray) {
-      for (let i = 0; i < items.length; i++) {
-        await f(items[i], hook)
-      }
-    } else {
-      await f(items, hook)
-    }
-    // Replace the items within the hook
-    replaceItems(hook, items)
-    return hook
+export function tar (options = {}) {
+  if (_.isNil(options.files)) {
+    throw new Error(`You must provide a list of files to tar for the 'tar' hook`)
   }
+  async function tarc(item) {
+    const templatedOptions = templateObject(item, options, ['file', 'cwd', 'files'])
+    debug(`Tar ${item.id} with options`, templatedOptions)
+    return Tar.c(templatedOptions, templatedOptions.files)
+  }
+  return callOnHookItems(tarc)
 }
 
-// Template a string or array of strings property according to a given item
-function template(item, property) {
-  const isArray = Array.isArray(property)
-  let strings = (isArray ? property : [property])
-  strings = strings.map(string => { 
-    let compiler = _.template(string)
-    // Add env into templating context
-    const context = Object.assign(item, process)
-    return compiler(context)
-  })
-
-  const result = (isArray ? strings : strings[0])
-  return result
-}
-
-function templateObject(item, object, properties) {
-  return _.mapValues(object, (value, key) => (properties.includes(key) ? template(item, value) : value))
+export function untar (options = {}) {
+  if (_.isNil(options.file)) {
+    throw new Error(`You must provide a tar file for the 'untar' hook`)
+  }
+  async function tarx(item) {
+    const templatedOptions = templateObject(item, options, ['file', 'cwd', 'files'])
+    debug(`Untar ${item.id} with options`, templatedOptions)
+    return Tar.x(templatedOptions, templatedOptions.files)
+  }
+  return callOnHookItems(tarx)
 }
 
 export function runCommand (options = {}) {
@@ -67,8 +53,9 @@ export function createContainer (options = {}) {
   let docker = new Docker(options)
 
   async function create(item) {
-    debug('Creating docker container', options)
-    let container = await docker.createContainer(options)
+    const templatedOptions = templateObject(item, options, ['Cmd', 'Env'])
+    debug('Creating docker container', templatedOptions)
+    let container = await docker.createContainer(templatedOptions)
     _.set(item, options.containerPath || 'container', container)
   }
   return callOnHookItems(create)
@@ -100,13 +87,13 @@ export function runContainerCommand (options = {}) {
         .on('end', () => resolve())
         .on('error', (error) => reject(error))
       })
-      console.log(await result.inspect())
+      await result.inspect()
     } else if (options.command === 'remove') {
       _.unset(item, options.containerPath || 'container')
     } else if (options.command === 'getArchive') {
       let store = await getStoreFromHook(hook, 'runContainerCommand', options)
       await writeStreamToStore(result, store, {
-        key: item.id,
+        key: item.id + '.tar',
         params: Object.assign({}, options.storageOptions) // See https://github.com/kalisio/krawler/issues/7
       })
     }
