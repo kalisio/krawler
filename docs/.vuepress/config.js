@@ -1,9 +1,9 @@
 module.exports = {
   base: '/krawler/',
   title: 'Krawler',
-  description: 'A Terraform solution to build and operate Docker Swarm infrastructures',
+  description: 'A minimalist Geospatial ETL',
   head: [
-    ['link', { rel: 'icon', href: `https://s3.eu-central-1.amazonaws.com/kalisio-artwork/kalisio/kalisio-icon-64x64.png` }],
+    ['link', { rel: 'icon', href: `https://s3.eu-central-1.amazonaws.com/kalisioscope/kalisio/kalisio-icon-64x64.png` }],
     ['link', { rel: 'manifest', href: '/manifest.json' }]
   ],
   serviceWorker: false,
