@@ -1,8 +1,47 @@
 import _ from 'lodash'
+import { getItems, replaceItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
 import { Duplex } from 'stream'
 
 const debug = makeDebug('krawler:utils')
+
+// Call a given function on each hook item
+export function callOnHookItems(f) {
+  return async function (hook) {
+    // Retrieve the items from the hook
+    let items = getItems(hook)
+    const isArray = Array.isArray(items)
+    if (isArray) {
+      for (let i = 0; i < items.length; i++) {
+        await f(items[i], hook)
+      }
+    } else {
+      await f(items, hook)
+    }
+    // Replace the items within the hook
+    replaceItems(hook, items)
+    return hook
+  }
+}
+
+// Template a string or array of strings property according to a given item
+export function template(item, property) {
+  const isArray = Array.isArray(property)
+  let strings = (isArray ? property : [property])
+  strings = strings.map(string => { 
+    let compiler = _.template(string)
+    // Add env into templating context
+    const context = Object.assign({}, item, process)
+    return compiler(context)
+  })
+
+  const result = (isArray ? strings : strings[0])
+  return result
+}
+
+export function templateObject(item, object, properties) {
+  return _.mapValues(object, (value, key) => (properties.includes(key) ? template(item, value) : value))
+}
 
 // Add to the 'outputs' property of the given abject a new entry
 export function addOutput (object, output, type) {

@@ -3,11 +3,17 @@ import { reproject } from 'reproject'
 import proj4 from 'proj4'
 import epsg from '../epsg'
 import makeDebug from 'debug'
+import { writeJson } from './hooks.json'
 
 const debug = makeDebug('krawler:hooks:geojson')
 // Generate projection dictionary
 epsg(proj4)
 const crss = _.mapValues(proj4.defs, def => proj4.Proj(def))
+
+// Convenient name but similar to writeJson
+export function writeGeoJson (options = {}) {
+  return writeJson(options)
+}
 
 // Reproject a GeoJSON
 export function reprojectGeoJson (options = {}) {
