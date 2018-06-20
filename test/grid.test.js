@@ -91,10 +91,6 @@ describe('krawler:grid', () => {
       resolution: [0.5, 0.5],
       size: [2, 2]
     })
-    .catch(error => {
-      // Sometimes meteo france servers reply 404 or 503
-      done(error)
-    })
     .then(tasks => {
       return storesService.get('test-store')
     })
@@ -103,6 +99,10 @@ describe('krawler:grid', () => {
         if (error) done(error)
         else done(exist ? null : new Error('File not found in store'))
       })
+    })
+    .catch(error => {
+      // Sometimes meteo france servers reply 404 or 503
+      done(error)
     })
   })
   // Let enough time to download
@@ -176,10 +176,6 @@ describe('krawler:grid', () => {
       resolution: [0.5, 0.5],
       size: [2, 2]
     })
-    .catch(error => {
-      // Sometimes meteo france servers reply 404 or 503
-      done(error)
-    })
     .then(tasks => {
       return storesService.get('test-store')
     })
@@ -199,6 +195,10 @@ describe('krawler:grid', () => {
           else done(exist ? null : new Error('File not found in store'))
         })
       })
+    })
+    .catch(error => {
+      // Sometimes meteo france servers reply 404 or 503
+      done(error)
     })
   })
   // Let enough time to download
