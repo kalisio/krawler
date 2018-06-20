@@ -21,11 +21,18 @@ module.exports = {
       },
       {
         text: 'How to use it ?',
-        link: '/how-to-use-it/'
+        items: [
+          { text: 'Installation', link: '/how-to-use-it/installation' },
+          { text: 'CLI', link: '/how-to-use-it/cli' },
+          { text: 'Services', link: '/how-to-use-it/services.md' },
+          { text: 'Hooks', link: '/how-to-use-it/hooks.md' },
+          { text: 'Extending', link: '/how-to-use-it/extending' },
+          { text: 'Examples', link: '/how-to-use-it/examples' }
+        ]
       },
       {
         text: 'License',
-        link: '/license/'
+        link: '/license'
       },
       {
         text: 'GitHub',
