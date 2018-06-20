@@ -8,6 +8,7 @@ import { getStoreFromHook, writeStreamToStore } from '../utils'
 const exec = util.promisify(require('child_process').exec)
 const debug = makeDebug('krawler:hooks:system')
 
+// Call a given function on each hook item
 function callOnHookItems(f) {
   return async function (hook) {
     // Retrieve the items from the hook
@@ -26,11 +27,28 @@ function callOnHookItems(f) {
   }
 }
 
+// Template a string or array of strings property according to a given item
+function template(item, property) {
+  const isArray = Array.isArray(property)
+  let strings = (isArray ? property : [property])
+  strings = strings.map(string => { 
+    let compiler = _.template(string)
+    // Add env into templating context
+    const context = Object.assign(item, process)
+    return compiler(context)
+  })
+
+  const result = (isArray ? strings : strings[0])
+  return result
+}
+
+function templateObject(item, object, properties) {
+  return _.mapValues(object, (value, key) => (properties.includes(key) ? template(item, value) : value))
+}
+
 export function runCommand (options = {}) {
   async function run(item) {
-    let compiler = _.template(options.command)
-    const context = Object.assign(item, process)
-    let command = compiler(context)
+    let command = template(item, options.command)
     debug('Running command', command)
     const { stdout, stderr } = await exec(command)
     if (options.stdout) {
@@ -64,13 +82,20 @@ export function runContainerCommand (options = {}) {
     }
     let args = []
     if (options.arguments) args = (Array.isArray(options.arguments) ? options.arguments : [options.arguments])
+    for (let i = 0; i < args.length; i++) {
+      const arg = args[i]
+      // Any string parameter will be templated (e.g. covers path for putArchive)
+      if (typeof arg === 'string') args[i] = template(item, arg)
+      // For now we only allow a couple of options to be templated
+      else if (typeof arg === 'object') args[i] = templateObject(item, args[i], ['Cmd', 'Env', 'path'])
+    }
     debug(`Running docker container ${container.id} command`, options.command, args)
     let result = await container[options.command](...args)
     if (options.command === 'exec') {
-      result = await result.start()
+      result = await result.start({ Detach: false, Tty: false })
       //result.output.pipe(process.stdout)
       container.modem.demuxStream(result.output, process.stdout, process.stderr)
-      await result.inspect()
+      console.log(await result.inspect())
     } else if (options.command === 'remove') {
       _.unset(item, options.containerPath || 'container')
     } else if (options.command === 'getArchive') {
