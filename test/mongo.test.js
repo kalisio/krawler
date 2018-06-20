@@ -1,7 +1,6 @@
 import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
 import path from 'path'
-import mongodb from 'mongodb'
 import { hooks as pluginHooks } from '../src'
 
 describe('krawler:mongo', () => {
@@ -41,7 +40,7 @@ describe('krawler:mongo', () => {
     await pluginHooks.writeMongoCollection({ collection: 'geojson' })(mongoHook)
     let collection = mongoHook.data.client.db.collection('geojson')
     let results = await collection.find({
-      geometry: { $near: { $geometry: { type: "Point",  coordinates: [ 102, 0.5 ] }, $maxDistance: 5000 } }
+      geometry: { $near: { $geometry: { type: 'Point', coordinates: [ 102, 0.5 ] }, $maxDistance: 5000 } }
     }).toArray()
     expect(results.length > 0).beTrue()
     expect(results[0].properties).toExist()

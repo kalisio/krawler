@@ -6,7 +6,7 @@ import { Duplex } from 'stream'
 const debug = makeDebug('krawler:utils')
 
 // Call a given function on each hook item
-export function callOnHookItems(f) {
+export function callOnHookItems (f) {
   return async function (hook) {
     // Retrieve the items from the hook
     let items = getItems(hook)
@@ -25,10 +25,10 @@ export function callOnHookItems(f) {
 }
 
 // Template a string or array of strings property according to a given item
-export function template(item, property) {
+export function template (item, property) {
   const isArray = Array.isArray(property)
   let strings = (isArray ? property : [property])
-  strings = strings.map(string => { 
+  strings = strings.map(string => {
     let compiler = _.template(string)
     // Add env into templating context
     const context = Object.assign({}, item, process)
@@ -39,7 +39,7 @@ export function template(item, property) {
   return result
 }
 
-export function templateObject(item, object, properties) {
+export function templateObject (item, object, properties) {
   return _.mapValues(object, (value, key) => (properties.includes(key) ? template(item, value) : value))
 }
 

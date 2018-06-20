@@ -3,7 +3,7 @@ import makeDebug from 'debug'
 import util from 'util'
 import Tar from 'tar'
 import Docker from 'dockerode'
-import { getStoreFromHook, writeStreamToStore, callOnHookItems, template, templateObject } from '../utils'
+import { addOutput, getStoreFromHook, writeStreamToStore, callOnHookItems, template, templateObject } from '../utils'
 
 const exec = util.promisify(require('child_process').exec)
 const debug = makeDebug('krawler:hooks:system')
@@ -12,10 +12,13 @@ export function tar (options = {}) {
   if (_.isNil(options.files)) {
     throw new Error(`You must provide a list of files to tar for the 'tar' hook`)
   }
-  async function tarc(item) {
+  async function tarc (item) {
     const templatedOptions = templateObject(item, options, ['file', 'cwd', 'files'])
     debug(`Tar ${item.id} with options`, templatedOptions)
     return Tar.c(templatedOptions, templatedOptions.files)
+    .then(() => {
+      addOutput(item, templatedOptions.file, options.outputType)
+    })
   }
   return callOnHookItems(tarc)
 }
@@ -24,7 +27,7 @@ export function untar (options = {}) {
   if (_.isNil(options.file)) {
     throw new Error(`You must provide a tar file for the 'untar' hook`)
   }
-  async function tarx(item) {
+  async function tarx (item) {
     const templatedOptions = templateObject(item, options, ['file', 'cwd', 'files'])
     debug(`Untar ${item.id} with options`, templatedOptions)
     return Tar.x(templatedOptions, templatedOptions.files)
@@ -33,7 +36,7 @@ export function untar (options = {}) {
 }
 
 export function runCommand (options = {}) {
-  async function run(item) {
+  async function run (item) {
     let command = template(item, options.command)
     debug('Running command', command)
     const { stdout, stderr } = await exec(command)
@@ -52,7 +55,7 @@ export function runCommand (options = {}) {
 export function createContainer (options = {}) {
   let docker = new Docker(options)
 
-  async function create(item) {
+  async function create (item) {
     const templatedOptions = templateObject(item, options, ['Cmd', 'Env'])
     debug('Creating docker container', templatedOptions)
     let container = await docker.createContainer(templatedOptions)
@@ -62,7 +65,7 @@ export function createContainer (options = {}) {
 }
 
 export function runContainerCommand (options = {}) {
-  async function run(item, hook) {
+  async function run (item, hook) {
     let container = _.get(item, options.containerPath || 'container')
     if (_.isNil(container)) {
       throw new Error(`You must run a docker container before using the 'runContainerCommand' hook`)
@@ -96,6 +99,7 @@ export function runContainerCommand (options = {}) {
         key: item.id + '.tar',
         params: Object.assign({}, options.storageOptions) // See https://github.com/kalisio/krawler/issues/7
       })
+      addOutput(item, item.id + '.tar', options.outputType)
     }
   }
   return callOnHookItems(run)

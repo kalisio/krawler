@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
 import Service from './service'
-import { getStore, addOutput } from '../utils'
+import { getStore, addOutput, writeStreamToStore } from '../utils'
 import defaultTaskGenerators from '../tasks'
 
 const debug = makeDebug('krawler:tasks')
@@ -42,21 +42,18 @@ class TasksService extends Service {
     return new Promise((resolve, reject) => {
       taskStream
       .on('timeout', reject)
-      .on('error', reject)
       .on('response', (response) => {
         if (response.statusCode !== 200) reject(new Error('Request rejected with HTTP code ' + response.statusCode))
       })
-      .pipe(store.createWriteStream({
+      writeStreamToStore(taskStream, store, {
         key: id,
         params: Object.assign({}, storageOptions) // See https://github.com/kalisio/krawler/issues/7
-      }, error => {
-        if (error) reject(error)
-      }))
-      .on('finish', () => {
+      })
+      .then(() => {
         addOutput(data, id, options.outputType)
         resolve(data)
       })
-      .on('error', reject)
+      .catch(reject)
     })
   }
 

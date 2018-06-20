@@ -105,7 +105,7 @@ export function writeMongoCollection (options = {}) {
     } else if (geojson.type === 'Feature') {
       chunks.push([geojson])
     }
-    
+
     // Write the chunks
     let collection = _.get(options, 'collection', _.snakeCase(hook.result.id))
     debug('Inserting GeoJSON in the ' + collection + ' collection')

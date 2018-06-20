@@ -76,9 +76,7 @@ module.exports = {
         },
         untar: {
           cwd: outputPath,
-          preservePaths: false,
           file: path.join(outputPath, '<%= id %>.tar')
-          //files: []
         }
       }
     },

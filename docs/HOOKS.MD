@@ -13,6 +13,7 @@ All hooks can have the following options:
 All input/output hooks, i.e. reading/writing/removing data in a store like `readJson` or `writeJson`, can have the following options:
 * **storePath**: property path where to read the store to be used on the hook object or params, defaults to `data.store`
 * **store**: property containing the ID of the store to be used, not defined by default
+* **storageOptions**: write options for the underlying store
 
 ### Authentication [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.auth.js)
 
@@ -360,6 +361,22 @@ Remove (a set of) store(s), hook options are (array of) the following:
 
 ### System [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.system.js)
 
+#### tar(options)
+
+Tar files or directories using [node-tar](https://github.com/npm/node-tar), hook options are the following:
+* **files**: array of paths to add to the tarball
+* any option supported by node-tar for [packing](https://github.com/npm/node-tar#tarcoptions-filelist-callback-alias-tarcreate)
+
+> `file`, `files` and `cwd` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+
+#### untar(options)
+
+Untar files or directories using [node-tar](https://github.com/npm/node-tar), hook options are the following:
+* **files**: array of paths to extract from the tarball
+* any option supported by node-tar for [unpacking](https://github.com/npm/node-tar#tarxoptions-filelist-callback-alias-tarextract)
+
+> `file`, `files` and `cwd` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+
 #### runCommand(options)
 
 Run a system command, hook options are the following:
@@ -369,20 +386,28 @@ Run a system command, hook options are the following:
 
 > Learn more about [templating](https://lodash.com/docs/4.17.4#template)
 
-#### runDockerContainer(options)
+#### createContainer(options)
 
 Run a docker container using [dockerode](https://github.com/apocas/dockerode), hook options are the following:
-* **image**: the conatiner image to be used
-* **command**: the template of the command to be run with the hook object as context
-* **stdout**: boolean indicating if stdout is logged
-* **stderr**: boolean indicating if stderr is logged
-* any option supported by dockerode for [connection](https://github.com/apocas/dockerode#getting-started) and [run](https://github.com/apocas/dockerode#equivalent-of-docker-run-in-dockerode)
+* any option supported by dockerode for [connection](https://github.com/apocas/dockerode#getting-started) and [creation](https://github.com/apocas/dockerode#manipulating-a-container)
+
+> `Cmd` and `Env` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
 
 #### runContainerCommand(options)
 
 Run a command against a docker container using [dockerode](https://github.com/apocas/dockerode), hook options are the following:
 * **command**: the name of the command to be run
-* any option supported by dockerode on [containers](https://github.com/apocas/dockerode#manipulating-a-container)
+* **arguments**: the arguments of the command to be run
+  * support any command/option supported by dockerode on [containers](https://github.com/apocas/dockerode#manipulating-a-container)
+
+When the `getArchive` command is used, additional hook options are the following:
+* **storePath**: see description in [common options](./HOOKS.html#common-options)
+* **store**: see description in [common options](./HOOKS.html#common-options)
+* **outputType**: the type of output produced by this hook, defaults to `intermediate`
+
+> `Cmd`, `Env` and `path` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+
+> The hook take care to wait for `exec` to finish and automatically write the tar in the hook store for `getArchive`
 
 ### XML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.xml.js)
 

@@ -3,7 +3,6 @@ import chailint from 'chai-lint'
 import path from 'path'
 import fsStore from 'fs-blob-store'
 import fs from 'fs'
-import _ from 'lodash'
 import { hooks as pluginHooks } from '../src'
 
 describe('krawler:hooks:system', () => {
@@ -144,9 +143,7 @@ describe('krawler:hooks:system', () => {
   it('untar a file', () => {
     return pluginHooks.untar({
       cwd: outputStore.path,
-      preservePaths: false,
       file: path.join(outputStore.path, '<%= id %>.tar')
-      //files: []
     })(commandHook)
     .then(hook => {
       expect(fs.existsSync(path.join(outputStore.path, 'krawler-icon.jpg'))).beTrue()
