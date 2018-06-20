@@ -3,7 +3,7 @@ module.exports = {
   title: 'Krawler',
   description: 'A minimalist Geospatial ETL',
   head: [
-    ['link', { rel: 'icon', href: `https://s3.eu-central-1.amazonaws.com/kalisioscope/kalisio/kalisio-icon-64x64.png` }],
+    ['link', { rel: 'icon', href: `https://s3.eu-central-1.amazonaws.com/kalisioscope/kalisio/krawler-icon-64x64.png` }],
     ['link', { rel: 'manifest', href: '/manifest.json' }]
   ],
   serviceWorker: false,
