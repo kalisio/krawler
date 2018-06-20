@@ -27,7 +27,7 @@ jobs:
       code_climate:
         repo_token: ce3b24cd7b710c5ab893043eec49a13ee068b92c35d75a20a2b2cb4470fb1e42
     before_script:
-    - docker pull v4tech/imagemagic
+    - sudo docker pull v4tech/imagemagic
     - npm install -g codeclimate-test-reporter
     after_script:
     - codeclimate-test-reporter < coverage/lcov.info
