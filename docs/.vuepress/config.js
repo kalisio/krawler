@@ -7,7 +7,7 @@ module.exports = {
     ['link', { rel: 'manifest', href: '/manifest.json' }]
   ],
   serviceWorker: false,
-  theme: 'vue',
+  theme: 'kalisio',
   themeConfig: {
     docsDir: 'docs',
     nav: [

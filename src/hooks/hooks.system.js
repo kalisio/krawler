@@ -92,9 +92,14 @@ export function runContainerCommand (options = {}) {
     debug(`Running docker container ${container.id} command`, options.command, args)
     let result = await container[options.command](...args)
     if (options.command === 'exec') {
-      result = await result.start({ Detach: false, Tty: false })
-      //result.output.pipe(process.stdout)
+      result = await result.start()
       container.modem.demuxStream(result.output, process.stdout, process.stderr)
+      // Need to wait for output stream end to be sure the command has been executed
+      await new Promise((resolve, reject) => {
+        result.output
+        .on('end', () => resolve())
+        .on('error', (error) => reject(error))
+      })
       console.log(await result.inspect())
     } else if (options.command === 'remove') {
       _.unset(item, options.containerPath || 'container')
