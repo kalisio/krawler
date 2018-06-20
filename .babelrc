@@ -1,5 +1,0 @@
-{
-  "plugins": [ ["transform-runtime", { "polyfill": false }], "add-module-exports", "transform-export-extensions" ],
-  "presets": [ "es2015" ],
-  "ignore": [ "epsg.js" ]
-}
