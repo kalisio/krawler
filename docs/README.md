@@ -8,7 +8,7 @@ features:
   details: Make automated process of extracting and processing (geographic) data from heterogeneous sources with ease
 - title: Open and extensible
   details: Take benefits of the existing functionalities and add your owns operations to address your specific needs
-- title: Service oriented
+- title: Web oriented
   details: Deploy your jobs as web services  in a matter of minutes 
 footer: MIT Licensed | Copyright © 2017-2018-Kalisio
 ---
