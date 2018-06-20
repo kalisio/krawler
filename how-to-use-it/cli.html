@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Command-Line Interface | Krawler</title>
+    <meta name="description" content="A minimalist Geospatial ETL">
+    <link rel="icon" href="https://s3.eu-central-1.amazonaws.com/kalisioscope/krawler/krawler-icon-64x64.png">
+  <link rel="manifest" href="/krawler/manifest.json">
+    
+    <link rel="preload" href="/krawler/assets/css/11.styles.f53f3a61.css" as="style"><link rel="preload" href="/krawler/assets/js/app.a74f8539.js" as="script"><link rel="preload" href="/krawler/assets/js/7.674fd476.js" as="script"><link rel="prefetch" href="/krawler/assets/js/6.908abf6f.js"><link rel="prefetch" href="/krawler/assets/js/0.194c5bc7.js"><link rel="prefetch" href="/krawler/assets/js/1.6aa2d1ee.js"><link rel="prefetch" href="/krawler/assets/js/2.1c1fcd6e.js"><link rel="prefetch" href="/krawler/assets/js/3.6f419f06.js"><link rel="prefetch" href="/krawler/assets/js/4.62e7c345.js"><link rel="prefetch" href="/krawler/assets/js/5.43f8fc16.js"><link rel="prefetch" href="/krawler/assets/js/8.74be0555.js"><link rel="prefetch" href="/krawler/assets/js/9.4c9540ef.js"><link rel="prefetch" href="/krawler/assets/js/10.5846d16f.js">
+    <link rel="stylesheet" href="/krawler/assets/css/11.styles.f53f3a61.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div><a href="/krawler/" class="home-link router-link-active"><!----><span class="site-name">
+      Krawler
+    </span></a><div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""><!----></div><nav class="nav-links can-hide"><div class="nav-item"><a href="/krawler/what-is-it/" class="nav-link">What is it ?</a></div><div class="nav-item"><a href="/krawler/how-does-it-work/" class="nav-link">How doest it work ?</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">How to use it ?</span><span class="arrow right"></span></a><ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----><a href="/krawler/how-to-use-it/installation.html" class="nav-link">Installation</a></li><li class="dropdown-item"><!----><a href="/krawler/how-to-use-it/cli.html" class="nav-link router-link-exact-active router-link-active">CLI</a></li><li class="dropdown-item"><!----><a href="/krawler/how-to-use-it/services.html" class="nav-link">Services</a></li><li class="dropdown-item"><!----><a href="/krawler/how-to-use-it/hooks.html" class="nav-link">Hooks</a></li><li class="dropdown-item"><!----><a href="/krawler/how-to-use-it/extending.html" class="nav-link">Extending</a></li><li class="dropdown-item"><!----><a href="/krawler/how-to-use-it/examples.html" class="nav-link">Examples</a></li></ul></div></div><div class="nav-item"><a href="/krawler/license.html" class="nav-link">License</a></div><div class="nav-item"><a href="https://github.com/kalisio/krawler" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><!----></nav></div></header><div class="sidebar-mask"></div><div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/krawler/what-is-it/" class="nav-link">What is it ?</a></div><div class="nav-item"><a href="/krawler/how-does-it-work/" class="nav-link">How doest it work ?</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">How to use it ?</span><span class="arrow right"></span></a><ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----><a href="/krawler/how-to-use-it/installation.html" class="nav-link">Installation</a></li><li class="dropdown-item"><!----><a href="/krawler/how-to-use-it/cli.html" class="nav-link router-link-exact-active router-link-active">CLI</a></li><li class="dropdown-item"><!----><a href="/krawler/how-to-use-it/services.html" class="nav-link">Services</a></li><li class="dropdown-item"><!----><a href="/krawler/how-to-use-it/hooks.html" class="nav-link">Hooks</a></li><li class="dropdown-item"><!----><a href="/krawler/how-to-use-it/extending.html" class="nav-link">Extending</a></li><li class="dropdown-item"><!----><a href="/krawler/how-to-use-it/examples.html" class="nav-link">Examples</a></li></ul></div></div><div class="nav-item"><a href="/krawler/license.html" class="nav-link">License</a></div><div class="nav-item"><a href="https://github.com/kalisio/krawler" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><!----></nav><p align="center"><a href="https://kalisio.com"><img src="https://s3.eu-central-1.amazonaws.com/kalisioscope/kalisio/kalisio-logo-black-256x84.png"></a><br><i><small>Unleashing the potential of spatial information</small></i></p><ul class="sidebar-links"><li><div class="sidebar-group first"><p class="sidebar-heading open"><span>Command-Line Interface</span><!----></p><ul class="sidebar-group-items"><li><a href="/krawler/how-to-use-it/cli.html#internal-api" class="sidebar-link">Internal API</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/krawler/how-to-use-it/cli.html#external-api" class="sidebar-link">External API</a><ul class="sidebar-sub-headers"></ul></li></ul></div></li></ul></div><div class="page"><div class="content"><h1 id="command-line-interface"><a href="#command-line-interface" aria-hidden="true" class="header-anchor">#</a> Command-Line Interface</h1><h2 id="internal-api"><a href="#internal-api" aria-hidden="true" class="header-anchor">#</a> Internal API</h2><p>The problem with hooks is that they are configured at application setup time and usually fixed during the whole application lifecycle. It means you would have a to create an application instance for each pipeline you’d like to have, not so simple. This is the reason why krawler can also be used as a command-line utility, where each execution setup the hooks pipeline according to the job to be done. The underlying implementation is managed by the global <strong>run(jobfile, options)</strong> function:</p><ul><li><strong>jobfile</strong>: a path to a local job file or a jobfile JSON object</li><li><strong>options</strong>:
+<ul><li><strong>cron</strong>: a <a href="https://github.com/kelektiv/node-cron" target="_blank" rel="noopener noreferrer">CRON pattern<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a> to schedule the job at regular intervals, e.g. <code>*/5 * * * * *</code> will run it every 5 seconds, if not provided it will be run only once</li><li><strong>proxy</strong>: proxy URL to be used for HTTP requests</li><li><strong>proxy-https</strong>: proxy URL to be used for HTTPS requests</li><li><strong>user</strong>: user name to be used for proxy</li><li><strong>password</strong>: user password to be used for proxy</li><li><strong>debug</strong>: output debug messages</li></ul></li></ul><p>This function is responsible of parsing the job definition including all the required parameters to call the underlying services with the relevant hooks configured (see below).</p><h2 id="external-api"><a href="#external-api" aria-hidden="true" class="header-anchor">#</a> External API</h2><p>The jobfile is the sole mandatory argument of the CLI and options are read from the CLI arguments with the same names as in the internal API or using shortcuts like this:</p><div class="language-bash extra-class"><pre class="language-bash"><code>krawler --user user_name -p password -P proxy_url --cron <span class="token string">&quot;*/5 * * * * *&quot;</span> path_to_jobfile.json
+</code></pre></div><p>A jobfile could be a JSON or JS file (it will be <code>require()</code>) and its structure is the following:</p><div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">let</span> job <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token comment">// Options for job executor</span>
+  options<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    workersLimit<span class="token punctuation">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
+    faultTolerant<span class="token punctuation">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// Store to be used for job output</span>
+  store<span class="token punctuation">:</span> <span class="token string">'job-store'</span><span class="token punctuation">,</span>
+  <span class="token comment">// Common options for all generated tasks</span>
+  taskTemplate<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Store to be used for task output</span>
+    store<span class="token punctuation">:</span> <span class="token string">'job-store'</span><span class="token punctuation">,</span>
+    id<span class="token punctuation">:</span> <span class="token string">'&lt;%= jobId %&gt;-&lt;%= taskId %&gt;'</span><span class="token punctuation">,</span>
+    type<span class="token punctuation">:</span> <span class="token string">'xxx'</span><span class="token punctuation">,</span>
+    options<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token operator">...</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// Hooks setup</span>
+  hooks<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Tasks service hooks</span>
+    tasks<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token comment">// Hooks to be run after task creation</span>
+      after<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Each entry is a hook name and associated options object</span>
+        computeSomething<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+          hookOption<span class="token punctuation">:</span> <span class="token operator">...</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token comment">// Jobs service hooks</span>
+    jobs<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token comment">// Hooks to be run before job creation</span>
+      before<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        generateTasks<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+          hookOption<span class="token punctuation">:</span> <span class="token operator">...</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token comment">// Hooks to be run after job creation</span>
+      after<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        generateOutput<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+          hookOption<span class="token punctuation">:</span> <span class="token operator">...</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// The list of tasks to run if not generated by hooks</span>
+  tasks<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+  <span class="token operator">...</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>By default hook names are used as JSON object keys so you cannot have the same hook appearing twice in your pipeline using this notation. However, you can also use the <em>named hook syntax</em> if you want to use the same hook multiple times in your pipeline. In this case the key used in the configuration file can be whatever you want but the associated object value must have a <code>hook</code> property containing the name of the hook to be run like this:</p><div class="language-js extra-class"><pre class="language-js"><code>tasks<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  after<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    readXML<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    writeTemplateYaml<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      hook<span class="token punctuation">:</span> <span class="token string">'writeTemplate'</span><span class="token punctuation">,</span>
+      templateFile<span class="token punctuation">:</span> <span class="token string">'mapproxy-template.yaml'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    writeTemplateHtml<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      hook<span class="token punctuation">:</span> <span class="token string">'writeTemplate'</span><span class="token punctuation">,</span>
+      templateFile<span class="token punctuation">:</span> <span class="token string">'leaflet-template.html'</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>By default all hooks are run in sequence, if at given step of your pipeline you want a parallel execution of some you can use the reserved hook name <code>parallel</code> and give the hooks to be run in parallel as an array of items each containing the hook name as a <code>hook</code> property and its options as other properties:</p><div class="language-js extra-class"><pre class="language-js"><code>tasks<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  after<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    readXML<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    parallel<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        hook<span class="token punctuation">:</span> <span class="token string">'writeTemplate'</span><span class="token punctuation">,</span>
+        templateFile<span class="token punctuation">:</span> <span class="token string">'mapproxy-template.yaml'</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span>
+        hook<span class="token punctuation">:</span> <span class="token string">'writeTemplate'</span><span class="token punctuation">,</span>
+        templateFile<span class="token punctuation">:</span> <span class="token string">'leaflet-template.html'</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></div><div class="page-edit"><!----><!----></div><!----></div></div></div>
+    <script src="/krawler/assets/js/7.674fd476.js" defer></script><script src="/krawler/assets/js/app.a74f8539.js" defer></script>
+  </body>
+</html>
