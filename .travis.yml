@@ -36,7 +36,6 @@ jobs:
     language: node_js
     node_js:
     - '8'
-    install: true
     script:
     - yarn install
     - npm run docs:build
