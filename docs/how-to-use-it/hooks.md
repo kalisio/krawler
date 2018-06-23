@@ -1,3 +1,7 @@
+---
+sidebar: auto
+---
+
 # Hooks
 
 ## Common options
