@@ -32,7 +32,7 @@ module.exports = {
       },
       {
         text: 'License',
-        link: '/license'
+        link: '/license/'
       },
       {
         text: 'GitHub',
