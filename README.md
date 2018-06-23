@@ -10,11 +10,11 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/kalisio/krawler.svg?style=plastic)](https://hub.docker.com/r/kalisio/krawler/)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkalisio%2Fkrawler.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkalisio%2Fkrawler?ref=badge_shield)
 
-> Make automated process of extracting and processing (geographic) data from heterogeneous sources easy
+> A minimalist Geospatial ETL
 
 ## Documentation
 
-Please read the [documentation web site](https://kalisio.gitbooks.io/krawler/).
+Please read the [documentation web site](https://kalisio.github.io/krawler).
 
 
 ## License
