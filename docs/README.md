@@ -1,7 +1,7 @@
 ---
 home: true
 heroImage: https://s3.eu-central-1.amazonaws.com/kalisioscope/krawler/krawler-icon-256x256.png
-actionText: Dive into details ?
+actionText: Want more details ?
 actionLink: /what-is-it/
 features:
 - title: Minimalist ETL
