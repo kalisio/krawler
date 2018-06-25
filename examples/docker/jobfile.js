@@ -16,6 +16,11 @@ module.exports = {
   hooks: {
     tasks: {
       before: {
+        tar: {
+          cwd: inputPath,
+          file: path.join(outputPath, '<%= id %>.tar'),
+          files: [ '<%= id %>.png' ]
+        },
         create: {
           hook: 'createContainer',
           host: 'localhost',
@@ -32,17 +37,12 @@ module.exports = {
         }
       },
       after: {
-        tar: {
-          cwd: inputPath,
-          file: path.join(outputPath, '<%= id %>.tar'),
-          files: [ '<%= id %>.png' ]
-        },
-        copyImage: {
+        copyInputImage: {
           hook: 'runContainerCommand',
           command: 'putArchive',
           arguments: [ path.join(outputPath, '<%= id %>.tar'), { path: '/tmp' } ]
         },
-        print: {
+        convert: {
           hook: 'runContainerCommand',
           command: 'exec',
           arguments: {
@@ -52,7 +52,7 @@ module.exports = {
             Tty: true
           }
         },
-        copyImage: {
+        copyOutputImage: {
           hook: 'runContainerCommand',
           command: 'getArchive',
           arguments: { path: '/tmp/.' }
@@ -78,7 +78,7 @@ module.exports = {
         }
       },
       after: {
-        clearOutputs: {},
+        //clearOutputs: {},
         removeStores: 'fs'
       }
     }
