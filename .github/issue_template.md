@@ -21,9 +21,3 @@ Tell us about the applicable parts of your setup.
 **NodeJS version**:
 
 **Operating System**:
-
-**Browser Version**:
-
-**React Native Version**:
-
-**Module Loader**:
