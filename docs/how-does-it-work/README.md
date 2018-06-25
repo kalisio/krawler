@@ -37,3 +37,4 @@ The following figure depicts the global architecture and all concepts at play:
 * [abstract-blob-store](https://github.com/maxogden/abstract-blob-store) used to abstract storage
 * [request](https://github.com/request/request) used to manage HTTP requests
 * [node-postgres](https://github.com/brianc/node-postgres) used to manage PostgreSQL database
+* [node-mongodb](http://mongodb.github.io/node-mongodb-native/) used to manage MongoDB database
