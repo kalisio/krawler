@@ -1,4 +1,4 @@
-# Contributing to Feathers
+# Contributing to Krawler
 
 Thank you for contributing to Krawler! :heart: :tada:
 
