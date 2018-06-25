@@ -1,7 +1,12 @@
 import _ from 'lodash'
 import path from 'path'
+import compress from 'compression'
+import cors from 'cors'
+import helmet from 'helmet'
+import bodyParser from 'body-parser'
 import feathers from 'feathers'
 import feathersHooks from 'feathers-hooks'
+import rest from 'feathers-rest'
 import socketio from 'feathers-socketio'
 import program from 'commander'
 import { CronJob } from 'cron'
@@ -12,10 +17,6 @@ import plugin from './plugin'
 
 const debug = makeDebug('krawler:cli')
 
-// Create default services used by CLI
-export let StoresService = stores()
-export let TasksService = tasks()
-export let JobsService = jobs()
 export let app
 let server
 
@@ -31,21 +32,37 @@ export async function createApp (job, options = {}) {
 
   debug('Initializing krawler application')
   app = feathers()
+  // Enable CORS, security, compression, and body parsing
+  app.use(cors())
+  app.use(helmet())
+  app.use(compress())
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }))
+  
+  const apiPrefix = options.api
   app.configure(feathersHooks())
+  app.configure(rest())
   app.configure(socketio({
+    path: apiPrefix + 'ws',
     transports: ['websocket']
   }))
   app.configure(plugin())
-  app.use('stores', StoresService)
-  app.use('tasks', TasksService)
-  app.use('jobs', JobsService)
+  // Create default services used by CLI
+  let StoresService = stores()
+  let TasksService = tasks({ storesService: apiPrefix + '/stores' })
+  let JobsService = jobs({ storesService: apiPrefix + '/stores', tasksService: apiPrefix + '/tasks' })
+  app.use(apiPrefix + '/stores', StoresService)
+  app.use(apiPrefix + '/tasks', TasksService)
+  app.use(apiPrefix + '/jobs', JobsService)
   // Process hooks
   _.forOwn(job.hooks, (value, key) => {
-    let service = app.service(key)
+    let service = app.service(apiPrefix + '/' + key)
     hooks.activateHooks(value, service)
   })
   // Run the app, this is required to correctly setup Feathers
-  server = await app.listen(3030)
+  const port = options.port || 3030
+  if (options.api) console.log('Server listening to ' + port)
+  server = await app.listen(port)
   return server
 }
 
@@ -120,6 +137,8 @@ export function processOptions () {
     .version(require('../package.json').version)
     .usage('<jobfile> [options]')
     .option('-d, --debug', 'Verbose output for debugging')
+    .option('-a, --api [prefix]', 'Setup as web app by exposing an API with given prefix (defaults to /api)', '/api')
+    .option('-po, --port [port]', 'Change the port to be used (defaults to 3030)', 3030)
     .option('-c, --cron [pattern]', 'Schedule job using a cron pattern')
     .option('-P, --proxy [proxy]', 'Proxy to be used for HTTP (and HTTPS)')
     .option('-PS, --proxy-https [proxy-https]', 'Proxy to be used for HTTPS')
@@ -134,6 +153,9 @@ export function processOptions () {
   let job = require(jobfile)
   program.jobfile = jobfile
   program.job = job
+  if (program.api) {
+    program.mode = 'setup'
+  }
   return program
 }
 

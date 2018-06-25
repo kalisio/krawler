@@ -1,6 +1,5 @@
 const path = require('path')
 const fs = require('fs')
-const flightpath = require('./flightpath')
 const inputPath = __dirname
 const outputPath = path.join(__dirname, '..', 'output')
 
@@ -14,8 +13,14 @@ module.exports = {
     id: 'krawler-icon'
   }],
   hooks: {
+    stores: {
+      before: {
+        disallow: 'external'
+      }
+    },
     tasks: {
       before: {
+        disallow: 'external',
         tar: {
           cwd: inputPath,
           file: path.join(outputPath, '<%= id %>.tar'),
@@ -70,15 +75,17 @@ module.exports = {
     },
     jobs: {
       before: {
+        generateId: {},
         createStores: {
           id: 'fs',
           options: {
-            path: outputPath
+            path: outputPath,
+            storePath: 'store'
           }
         }
       },
       after: {
-        //clearOutputs: {},
+        clearOutputs: {},
         removeStores: 'fs'
       }
     }

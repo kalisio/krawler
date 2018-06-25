@@ -27,6 +27,7 @@ export function createStores (options = {}) {
       try {
         // Check if store does not already exist
         store = await hook.service.storesService.get(storeOptions.id)
+        if (storeOptions.storePath) _.set(hook.data, storeOptions.storePath, store)
         debug('Found existing store ' + storeOptions.id)
       } catch (error) {
         debug('Creating store for ' + hook.data.id + ' with options ', storeOptions)
@@ -59,7 +60,7 @@ export function removeStores (options = {}) {
     let stores = []
     if (!Array.isArray(options)) {
       if (options.stores) options = options.stores
-      else options = [options]
+      else stores = [options]
     } else {
       stores = options
     }

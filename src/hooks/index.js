@@ -2,6 +2,8 @@ import _ from 'lodash'
 import sift from 'sift'
 import { when } from 'feathers-hooks-common'
 import makeDebug from 'debug'
+// Feathers hooks
+export * from 'feathers-hooks-common'
 // Built-in hooks
 export * from './hooks.auth'
 export * from './hooks.clear'
@@ -85,7 +87,8 @@ function addHook (hookName, hookOptions, pipeline) {
     debug('Adding fault-tolerant hook for ' + hookName)
     hook = getFaultTolerantHook(hook)
   }
-  const filter = hookOptions.match
+  // Take care that sometimes options is simply a string object and a match function do exist in this case
+  const filter = (typeof hookOptions === 'string' ? undefined : hookOptions.match)
   if (filter) debug('Adding hook ' + hookName + ' to hook chain with filter', filter)
   else debug('Adding hook ' + hookName + ' to hook chain')
   // Check if this hook has filtering options
