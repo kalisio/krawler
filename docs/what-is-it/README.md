@@ -4,7 +4,7 @@ sidebar: auto
 
 # What is it ?
 
-Krawler aims at making the automated process of extracting and processing (geographic) data from heterogeneous sources easy. It can be viewed as a minimalist **Extract, Transform, Load** (ETL). **ETL** refers to a process where data is
+Krawler aims at making the automated process of extracting and processing (geographic) data from heterogeneous sources easy. It can be viewed as a minimalist **Extract, Transform, Load** (ETL). [**ETL**](https://en.wikipedia.org/wiki/Extract,_transform,_load) refers to a process where data is
 1. extracted from heterogeneous data sources (e.g. databases or web services);
 2. transformed in a target format or structure for the purposes of querying and analysis (e.g. JSON or CSV);
 3. loaded into a final target data store (e.g. a file system or a database).
