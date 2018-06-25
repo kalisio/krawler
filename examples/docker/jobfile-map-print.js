@@ -1,7 +1,6 @@
 const path = require('path')
 const fs = require('fs')
 const flightpath = require('./flightpath')
-const inputPath = __dirname
 const outputPath = path.join(__dirname, '..', 'output')
 
 module.exports = {
@@ -11,20 +10,34 @@ module.exports = {
     workersLimit: 4
   },
   tasks: [{
-    id: 'krawler-icon'
+    data: flightpath
+    /*{
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'LineString',
+            coordinates: [ [ 102.0, 0.0 ], [ 103.0, 1.0 ], [ 104.0, 0.0 ], [ 105.0, 1.0 ] ]
+          }
+        }
+      ]
+    }*/
   }],
   hooks: {
     tasks: {
       before: {
+        generateId: {},
         create: {
           hook: 'createContainer',
           host: 'localhost',
           port: process.env.DOCKER_PORT || 2375,
-          Image: 'v4tech/imagemagick',
-          Cmd: ['/bin/sh'],
+          Image: 'kalisio/gift-leaflet-print',
+          Entrypoint: 'ash',
           AttachStdout: true,
           AttachStderr: true,
-          Tty: true
+          Tty: true,
+          Env: [ 'GEOJSON_FILE=<%= id %>.json' ]
         },
         start: {
           hook: 'runContainerCommand',
@@ -32,21 +45,22 @@ module.exports = {
         }
       },
       after: {
+        writeGeoJson: {},
         tar: {
-          cwd: inputPath,
+          cwd: outputPath,
           file: path.join(outputPath, '<%= id %>.tar'),
-          files: [ '<%= id %>.png' ]
+          files: [ '<%= id %>.json' ]
         },
-        copyImage: {
+        copyGeoJson: {
           hook: 'runContainerCommand',
           command: 'putArchive',
-          arguments: [ path.join(outputPath, '<%= id %>.tar'), { path: '/tmp' } ]
+          arguments: [ path.join(outputPath, '<%= id %>.tar'), { path: '/opt/testcafe/data' } ]
         },
         print: {
           hook: 'runContainerCommand',
           command: 'exec',
           arguments: {
-            Cmd: [ 'convert', '/tmp/<%= id %>.png', '/tmp/<%= id %>.jpg' ],
+            Cmd: [ '/opt/testcafe/docker/testcafe-docker.sh', '\'chromium --no-sandbox\'', '/opt/testcafe/src/index.js' ],
             AttachStdout: true,
             AttachStderr: true,
             Tty: true
@@ -55,7 +69,7 @@ module.exports = {
         copyImage: {
           hook: 'runContainerCommand',
           command: 'getArchive',
-          arguments: { path: '/tmp/.' }
+          arguments: { path: '/home/user/Downloads/.' }
         },
         destroy: {
           hook: 'runContainerCommand',

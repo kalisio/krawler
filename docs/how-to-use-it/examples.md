@@ -88,3 +88,8 @@ However, processing time was too long on high resolution grids, the [hooks](./AP
 
 ![Hooks](https://cdn.rawgit.com/kalisio/krawler/b46277bd9ef6b866e1a4d634766882345b9fd198/examples/dem2csv/Hooks%20Diagram.svg)
 
+## docker
+
+Convert an image file from PNG to JPG using [ImageMagick](http://imagemagick.org) running in a temporary dedicated container. This ensure you don't have to pollute your own operating system by installing anything except [Docker](https://www.docker.com/) and allow to make the processing scale on-demand with an underlying [swarm cluster](https://docs.docker.com/engine/swarm/).
+
+Before using this sample you will need to perform: `docker pull v4tech/imagemagick`.
