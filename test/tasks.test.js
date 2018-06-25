@@ -121,6 +121,7 @@ describe('krawler:tasks', () => {
     })
     .catch(error => {
       // Sometimes meteo france servers reply 404 or 503
+      console.log(error)
       done()
     })
   })
