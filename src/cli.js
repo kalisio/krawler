@@ -38,8 +38,8 @@ export async function createApp (job, options = {}) {
   app.use(compress())
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
-  
-  const apiPrefix = options.apiPrefix
+
+  const apiPrefix = options.apiPrefix || ''
   debug('API prefix ' + apiPrefix)
   app.configure(feathersHooks())
   app.configure(rest())
@@ -158,7 +158,7 @@ export function processOptions () {
   if (program.api) {
     program.mode = 'setup'
   }
-  
+
   return program
 }
 

@@ -16,7 +16,7 @@ export function generateId (options = {}) {
 // Apply a template
 export function template (options = {}) {
   return callOnHookItems(item => {
-  	const templatedOptions = templateObject(item, options)
+    const templatedOptions = templateObject(item, options)
     _.merge(item, templatedOptions)
     debug('Templated item', item)
   })
