@@ -39,7 +39,7 @@ module.exports = {
         copyGeoJson: {
           hook: 'runContainerCommand',
           command: 'putArchive',
-          arguments: [ path.join(outputPath, '<%= id %>.tar'), { path: '/opt/testcafe' } ]
+          arguments: [ path.join(outputPath, '<%= id %>.tar'), { path: '/tmp' } ]
         },
         print: {
           hook: 'runContainerCommand',
