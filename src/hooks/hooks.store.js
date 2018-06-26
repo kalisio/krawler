@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
+import { getStoreFromHook, writeStreamToStore, callOnHookItems, templateObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:store')
 
@@ -75,4 +76,17 @@ export function removeStores (options = {}) {
 
     return hook
   }
+}
+
+export function copyToStore (options = {}) {
+  async function copy (item, hook) {
+    // Output store config given in options
+    const outputOptions = templateObject(item, options.output, ['key'])
+    let outStore = await hook.service.storesService.get(outputOptions.store)
+    const inputOptions = templateObject(item, options.input, ['key'])
+    let inStore = await getStoreFromHook(hook, 'copyToStore', inputOptions)
+    await writeStreamToStore(inStore.createReadStream(inputOptions), outStore, outputOptions)
+  }
+
+  return callOnHookItems(copy)
 }

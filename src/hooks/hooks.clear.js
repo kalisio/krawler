@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
-import { getStoreFromHook } from '../utils'
+import { getStoreFromHook, callOnHookItems } from '../utils'
 
 const debug = makeDebug('krawler:hooks:clear')
 
@@ -23,7 +23,10 @@ function clearObjectOutputs (object, store, type) {
       }
     })
   })))
-  .then(() => object)
+  .then(() => {
+    _.unset(object, outputType)
+    return object
+  })
 }
 
 // Clear outputs
@@ -46,16 +49,13 @@ export function clearOutputs (options = {}) {
 
 // Clear in-memory data
 export function clearData (options = {}) {
-  return function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'clearData' hook should only be used as a 'after' hook.`)
+  async function clear (item, hook) {
+    let dataPath = options.dataPath || 'data'
+    if (_.get(item, dataPath)) {
+      debug('Clearing data for ' + item.id + ' on path ' + dataPath)
+      _.unset(item, dataPath)
     }
-
-    let dataPath = options.dataPath || 'result.data'
-    if (_.get(hook, dataPath)) {
-      debug('Clearing data for ' + hook.data.id + ' on path ' + dataPath)
-      _.unset(hook, dataPath)
-    }
-    return hook
   }
+
+  return callOnHookItems(clear)
 }

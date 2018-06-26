@@ -2,10 +2,11 @@ import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
 import feathers from 'feathers'
 import path from 'path'
-import plugin from '../src'
+import fs from 'fs'
+import plugin, { hooks as pluginHooks } from '../src'
 
 describe('krawler:stores', () => {
-  let app, storesService
+  let app, storesService, fsStore, memoryStore, s3Store
 
   before(() => {
     chailint(chai, util)
@@ -31,17 +32,8 @@ describe('krawler:stores', () => {
       return storesService.get('fs')
     })
     .then(store => {
-      expect(store).toExist()
-    })
-  })
-
-  it('removes the fs storage', (done) => {
-    storesService.remove('fs')
-    .then(store => {
-      storesService.get('fs').catch(error => {
-        expect(error).toExist()
-        done()
-      })
+      fsStore = store
+      expect(fsStore).toExist()
     })
   })
 
@@ -54,17 +46,8 @@ describe('krawler:stores', () => {
       return storesService.get('memory')
     })
     .then(store => {
-      expect(store).toExist()
-    })
-  })
-
-  it('removes the memory storage', (done) => {
-    storesService.remove('memory')
-    .then(store => {
-      storesService.get('memory').catch(error => {
-        expect(error).toExist()
-        done()
-      })
+      memoryStore = store
+      expect(memoryStore).toExist()
     })
   })
 
@@ -83,7 +66,47 @@ describe('krawler:stores', () => {
       return storesService.get('s3')
     })
     .then(store => {
-      expect(store).toExist()
+      s3Store = store
+      expect(s3Store).toExist()
+    })
+  })
+
+  let copyHook = {
+    type: 'before',
+    data: {
+      id: 'world_cities.csv'
+    },
+    params: {}
+  }
+
+  it('copy to store', () => {
+    // Fake hook service
+    copyHook.service = { storesService }
+    return pluginHooks.copyToStore({ input: { store: 's3', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>' } })(copyHook)
+    .then(hook => {
+      expect(fs.existsSync(path.join(fsStore.path, copyHook.data.id))).beTrue()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(10000)
+
+  it('removes the fs storage', (done) => {
+    storesService.remove('fs')
+    .then(store => {
+      storesService.get('fs').catch(error => {
+        expect(error).toExist()
+        done()
+      })
+    })
+  })
+
+  it('removes the memory storage', (done) => {
+    storesService.remove('memory')
+    .then(store => {
+      storesService.get('memory').catch(error => {
+        expect(error).toExist()
+        done()
+      })
     })
   })
 

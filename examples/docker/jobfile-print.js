@@ -64,6 +64,10 @@ module.exports = {
         untar: {
           cwd: outputPath,
           file: path.join(outputPath, '<%= id %>.tar')
+        },
+        copyToStore: {
+          input: { key: 'map.png', store: 'fs' },
+          output: { key: '<%= id %>.png', store: 's3', params: { ACL: 'public-read' } }
         }
       }
     },
@@ -75,16 +79,29 @@ module.exports = {
             workersLimit: 4
           }
         },
-        createStores: {
+        createStores: [{
           id: 'fs',
           options: {
             path: outputPath
           }
-        }
+        }, {
+          id: 's3',
+          options: {
+            client: {
+              accessKeyId: process.env.S3_ACCESS_KEY,
+              secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+            },
+            bucket: process.env.S3_BUCKET
+          }
+        }]
       },
       after: {
         clearOutputs: {},
-        removeStores: 'fs'
+        clearData: {},
+        template: {
+          link: 'https://s3.eu-central-1.amazonaws.com/<%= env.S3_BUCKET %>/<%= id %>.png'
+        },
+        removeStores: ['fs', 's3']
       }
     }
   }

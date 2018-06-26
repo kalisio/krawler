@@ -365,6 +365,12 @@ Remove (a set of) store(s), hook options are (array of) the following:
 
 > As a shortcut the options provided can only be store IDs when **storePath** is not used
 
+### copyToStore(options)
+
+Copy the item(s) from an input store to an output store, hook options are the following:
+* **input**: the input store options
+* **output**: the output store options
+
 ## System [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.system.js)
 
 ### tar(options)
