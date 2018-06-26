@@ -15,6 +15,9 @@ The problem with hooks is that they are configured at application setup time and
   * **user**: user name to be used for proxy
   * **password**: user password to be used for proxy
   * **debug**: output debug messages
+  * **port**: port to be used by the krawler (defaults to 3030)
+  * **api**: launch the krawler as a web service/API
+  * **api-prefix**: api prefix to be used when launching the krawler as a web service/API (defaults to `/api`)
 
 This function is responsible of parsing the job definition including all the required parameters to call the underlying services with the relevant hooks configured (see below).
 

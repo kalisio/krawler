@@ -25,7 +25,7 @@ _.forOwn(hooks, (hook, name) => hooks.registerHook(name, hook))
 
 export async function createApp (job, options = {}) {
   if (options.proxy) process.env.HTTP_PROXY = options.proxy
-  if (options['proxy-https']) process.env.HTTPS_PROXY = options['proxy-https']
+  if (options.proxyHttps) process.env.HTTPS_PROXY = options.proxyHttps
   if (options.debug) process.env.DEBUG = 'krawler*'
   if (options.user) process.env.USER_NAME = options.user
   if (options.password) process.env.USER_PASSWORD = options.password
@@ -39,7 +39,8 @@ export async function createApp (job, options = {}) {
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
   
-  const apiPrefix = options.api
+  const apiPrefix = options.apiPrefix
+  debug('API prefix ' + apiPrefix)
   app.configure(feathersHooks())
   app.configure(rest())
   app.configure(socketio({
@@ -137,7 +138,8 @@ export function processOptions () {
     .version(require('../package.json').version)
     .usage('<jobfile> [options]')
     .option('-d, --debug', 'Verbose output for debugging')
-    .option('-a, --api [prefix]', 'Setup as web app by exposing an API with given prefix (defaults to /api)', '/api')
+    .option('-a, --api', 'Setup as web app by exposing an API')
+    .option('-ap, --api-prefix [prefix]', 'When exposed as an API change the prefix (defaults to /api)', '/api')
     .option('-po, --port [port]', 'Change the port to be used (defaults to 3030)', 3030)
     .option('-c, --cron [pattern]', 'Schedule job using a cron pattern')
     .option('-P, --proxy [proxy]', 'Proxy to be used for HTTP (and HTTPS)')
@@ -156,6 +158,7 @@ export function processOptions () {
   if (program.api) {
     program.mode = 'setup'
   }
+  
   return program
 }
 

@@ -4,14 +4,6 @@ const inputPath = __dirname
 const outputPath = path.join(__dirname, '..', 'output')
 
 module.exports = {
-  id: 'docker',
-  store: 'fs',
-  options: {
-    workersLimit: 4
-  },
-  tasks: [{
-    id: 'krawler-icon'
-  }],
   hooks: {
     stores: {
       before: {
@@ -75,6 +67,12 @@ module.exports = {
     },
     jobs: {
       before: {
+        template: {
+          store: 'fs',
+          options: {
+            workersLimit: 4
+          }
+        },
         generateId: {},
         createStores: {
           id: 'fs',

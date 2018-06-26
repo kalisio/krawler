@@ -1,38 +1,23 @@
 const path = require('path')
 const fs = require('fs')
-const flightpath = require('./flightpath')
 const outputPath = path.join(__dirname, '..', 'output')
 
 module.exports = {
-  id: 'docker',
-  store: 'fs',
-  options: {
-    workersLimit: 4
-  },
-  tasks: [{
-    data: flightpath
-    /*{
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          geometry: {
-            type: 'LineString',
-            coordinates: [ [ 102.0, 0.0 ], [ 103.0, 1.0 ], [ 104.0, 0.0 ], [ 105.0, 1.0 ] ]
-          }
-        }
-      ]
-    }*/
-  }],
   hooks: {
+    stores: {
+      before: {
+        disallow: 'external'
+      }
+    },
     tasks: {
       before: {
+        disallow: 'external',
         generateId: {},
         create: {
           hook: 'createContainer',
           host: 'localhost',
           port: process.env.DOCKER_PORT || 2375,
-          Image: 'kalisio/gift-leaflet-print',
+          Image: 'kalisio/leaflet-print',
           Entrypoint: 'ash',
           AttachStdout: true,
           AttachStderr: true,
@@ -54,7 +39,7 @@ module.exports = {
         copyGeoJson: {
           hook: 'runContainerCommand',
           command: 'putArchive',
-          arguments: [ path.join(outputPath, '<%= id %>.tar'), { path: '/opt/testcafe/data' } ]
+          arguments: [ path.join(outputPath, '<%= id %>.tar'), { path: '/opt/testcafe' } ]
         },
         print: {
           hook: 'runContainerCommand',
@@ -84,6 +69,12 @@ module.exports = {
     },
     jobs: {
       before: {
+        template: {
+          store: 'fs',
+          options: {
+            workersLimit: 4
+          }
+        },
         createStores: {
           id: 'fs',
           options: {

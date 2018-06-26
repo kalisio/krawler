@@ -4,6 +4,8 @@ sidebar: auto
 
 # Hooks
 
+> Altough all are not applicable, [common FeathersJS hooks](https://auk.docs.feathersjs.com/api/hooks-common.html) are exposed in addition to krawler hooks and can be used in jobs, e.g. you can add `disallow: 'external'` to avoid exposing some services when deploying as a web app. 
+
 ## Common options
 
 All hooks can have the following options:
@@ -412,6 +414,16 @@ When the `getArchive` command is used, additional hook options are the following
 > `Cmd`, `Env` and `path` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
 
 > The hook take care to wait for `exec` to finish and automatically write the tar in the hook store for `getArchive`
+
+## Utils [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.utils.js)
+
+### generateId(options)
+
+Generate a UUID (V1) for the item using [node-uuid](https://github.com/kelektiv/node-uuid).
+
+### template(options)
+
+Perform [templating](https://lodash.com/docs/4.17.4#template) of the options using the item as context and merge it with item.
 
 ## XML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.xml.js)
 

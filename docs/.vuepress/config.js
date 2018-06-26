@@ -26,9 +26,12 @@ module.exports = {
           { text: 'CLI', link: '/how-to-use-it/cli' },
           { text: 'Services', link: '/how-to-use-it/services.md' },
           { text: 'Hooks', link: '/how-to-use-it/hooks.md' },
-          { text: 'Extending', link: '/how-to-use-it/extending' },
-          { text: 'Examples', link: '/how-to-use-it/examples' }
+          { text: 'Extending', link: '/how-to-use-it/extending' }
         ]
+      },
+      {
+        text: 'Examples',
+        link: '/examples/'
       },
       {
         text: 'License',

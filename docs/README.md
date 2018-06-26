@@ -13,10 +13,9 @@ features:
 footer: MIT Licensed | Copyright © 2017-2018-Kalisio
 ---
 
-::: tip Trusted by
-<a href="https://www.airbus.com/"><img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Airbus_logo_2017.png" width="256"/></a>
-:::
-
 <p align="center">
-  <a href="https://kalisio.com"><img src="https://s3.eu-central-1.amazonaws.com/kalisioscope/kalisio/kalisio-logo-black-256x84.png"></a>
+	<center><h3>Trusted by</h3></center>
+	<a href="https://www.airbus.com/"><img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Airbus_logo_2017.png" width="256"/></a>
+	<center><h3>Sponsored by</h3></center>
+	<a href="https://kalisio.com"><img src="https://s3.eu-central-1.amazonaws.com/kalisioscope/kalisio/kalisio-logo-black-256x84.png"></a>
 </p>
