@@ -72,6 +72,8 @@ export function runContainerCommand (options = {}) {
     }
     let args = []
     if (options.arguments) args = (Array.isArray(options.arguments) ? options.arguments : [options.arguments])
+    args = _.clone(args)
+    // Take care to clone the array because we update it in place and don't want to alter original options
     for (let i = 0; i < args.length; i++) {
       const arg = args[i]
       // Any string parameter will be templated (e.g. covers path for putArchive)

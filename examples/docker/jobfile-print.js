@@ -12,6 +12,10 @@ module.exports = {
     tasks: {
       before: {
         disallow: 'external',
+        template: {
+          appUrl: 'http://kargo-www.s3-website.eu-central-1.amazonaws.com/',
+          width: 1024, height: 768, format: 'Current Size', baseLayer: 'PlanetSat', overlayLayer: ''
+        },
         generateId: {},
         create: {
           hook: 'createContainer',
@@ -22,7 +26,8 @@ module.exports = {
           AttachStdout: true,
           AttachStderr: true,
           Tty: true,
-          Env: [ 'GEOJSON_FILE=<%= id %>.json' ]
+          Env: [ 'APP_URL=<%= appUrl %>', 'SCREEN_WIDTH=<%= width %>', 'SCREEN_HEIGHT=<%= height %>', 'PRINT_FORMAT=<%= format %>',
+            'BASE_LAYER=<%= baseLayer %>', 'OVERLAY_LAYER=<%= overlayLayer %>', 'GEOJSON_FILE=<%= id %>.json' ]
         },
         start: {
           hook: 'runContainerCommand',
@@ -65,8 +70,14 @@ module.exports = {
           cwd: outputPath,
           file: path.join(outputPath, '<%= id %>.tar')
         },
-        copyToStore: {
+        copyToFS: { // Because the output file is always map.png rename it according to task ID
+          hook: 'copyToStore',
           input: { key: 'map.png', store: 'fs' },
+          output: { key: '<%= id %>.png', store: 'fs' }
+        },
+        copyToS3: {
+          hook: 'copyToStore',
+          input: { key: '<%= id %>.png', store: 'fs' },
           output: { key: '<%= id %>.png', store: 's3', params: { ACL: 'public-read' } }
         }
       }
@@ -100,8 +111,8 @@ module.exports = {
         clearData: {},
         template: {
           link: 'https://s3.eu-central-1.amazonaws.com/<%= env.S3_BUCKET %>/<%= id %>.png'
-        },
-        removeStores: ['fs', 's3']
+        }/*, If used as a web service stores need to persist across requests
+        removeStores: ['fs', 's3']*/
       }
     }
   }

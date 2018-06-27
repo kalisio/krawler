@@ -79,12 +79,23 @@ describe('krawler:stores', () => {
     params: {}
   }
 
-  it('copy to store', () => {
+  it('copy between stores', () => {
     // Fake hook service
     copyHook.service = { storesService }
     return pluginHooks.copyToStore({ input: { store: 's3', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>' } })(copyHook)
     .then(hook => {
       expect(fs.existsSync(path.join(fsStore.path, copyHook.data.id))).beTrue()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(10000)
+
+  it('copy inside the same store', () => {
+    // Fake hook service
+    copyHook.service = { storesService }
+    return pluginHooks.copyToStore({ input: { store: 'fs', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>.copy' } })(copyHook)
+    .then(hook => {
+      expect(fs.existsSync(path.join(fsStore.path, copyHook.data.id + '.copy'))).beTrue()
     })
   })
   // Let enough time to proceed

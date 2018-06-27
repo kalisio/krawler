@@ -11,9 +11,9 @@ graph TB
     PRINT_JOB[PRINT JOB] --> applyRequestTemplate(apply request template)
     applyRequestTemplate --> createStores(create required stores)
     createStores --> PRINT_TASKS[EXECUTE PRINT TASKS]
-    PRINT_TASKS --> removeStores(remove existing stores)
-    removeStores --> clearOutputs(clear intermediate outputs)
+    PRINT_TASKS --> clearOutputs(clear intermediate outputs)
     clearOutputs --> applyResponseTemplate(apply response template)
+    applyResponseTemplate --> removeStores(remove existing stores)
     end
 
     linkStyle default stroke-width:2px,fill:none,stroke:black

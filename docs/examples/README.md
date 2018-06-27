@@ -90,7 +90,7 @@ However, processing time was too long on high resolution grids, the [hooks](../h
 
 ## Docker
 
-Provide web services with underlying pipeline functions managed using containers. This ensure you don't have to pollute your own operating system by installing anything except [Docker](https://www.docker.com/) and allow to make the processing scale on-demand with an underlying [swarm cluster](https://docs.docker.com/engine/swarm/).
+Provide web services with underlying pipeline functions managed using containers. This ensure you don't have to pollute your own operating system by installing anything except [Docker](https://www.docker.com/) and allow to make the processing scale on-demand, e.g. with an underlying [swarm cluster](https://docs.docker.com/engine/swarm/).
 
 ### Image conversion service
 
@@ -109,40 +109,34 @@ You should see a *krawler-icon.jpg* file in the output folder once the job has b
 
 ### Map print service
 
-Take a screenshot of a map using [TestCafé](https://github.com/DevExpress/testcafe) running a [Leflet-based](https://leafletjs.com/) [web mapping client](http://kargo-www.s3-website.eu-central-1.amazonaws.com/) in a temporary dedicated container. 
+Take a screenshot of a map using [TestCafé](https://github.com/DevExpress/testcafe) running a [Leaflet-based](https://leafletjs.com/) [web mapping client](http://kargo-www.s3-website.eu-central-1.amazonaws.com/) in a temporary dedicated container and output the resulting image on S3. 
 
 > Before using this sample you will need to build the required image from the sample directory: `docker build -t kalisio/leaflet-print .`.
 
-Launch the krawler as a web API with the job `krawler jobfile-print.js --api` then POST the following request to `http://localhost:3030/api/jobs`:
+Launch the krawler as a web API with the job `krawler jobfile-print.js --api` then POST the following request containing the GeoJson data and print parameters to `http://localhost:3030/api/jobs`:
 ```json
 {
 	"tasks": [{
+		"format": "A4 Landscape",
+		"baseLayer": "PlanetSAT",
 		"data": {
     		"type": "Feature",
 			"geometry": {
 				"type": "LineString",
-				"coordinates": [
-				  [
-				    102.0,
-				    0.0
-				  ],
-				  [
-				    103.0,
-				    1.0
-				  ],
-				  [
-				    104.0,
-				    0.0
-				  ],
-				  [
-				    105.0,
-				    1.0
-				  ]
-				]
+				"coordinates": [[102.0,0.0],[103.0,1.0],[104.0,0.0],[105.0,1.0]]
 			}
     	}
     }]
 }
 ```
 
-You should see a *map.png* file in the output folder once the job has been executed.
+Once the job has been executed the response contains the link to download the printed image on S3 for each task:
+```json
+[
+    {
+        "id": "bc185cb0-7983-11e8-883f-a333a7402f4a",
+        ...
+        "link": "https://s3.eu-central-1.amazonaws.com/krawler/bc185cb0-7983-11e8-883f-a333a7402f4a.png"
+    }
+]
+```

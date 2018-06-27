@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
-import { getStoreFromHook, writeStreamToStore, callOnHookItems, templateObject } from '../utils'
+import { addOutput, getStoreFromHook, writeStreamToStore, callOnHookItems, templateObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:store')
 
@@ -86,6 +86,7 @@ export function copyToStore (options = {}) {
     const inputOptions = templateObject(item, options.input, ['key'])
     let inStore = await getStoreFromHook(hook, 'copyToStore', inputOptions)
     await writeStreamToStore(inStore.createReadStream(inputOptions), outStore, outputOptions)
+    addOutput(item, outputOptions.key, outputOptions.outputType)
   }
 
   return callOnHookItems(copy)

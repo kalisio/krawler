@@ -17,7 +17,10 @@ export function generateId (options = {}) {
 export function template (options = {}) {
   return callOnHookItems(item => {
     const templatedOptions = templateObject(item, options)
-    _.merge(item, templatedOptions)
+    // Use templated property if not provided in item
+    _.forOwn(templatedOptions, function(value, key) {
+	  if (!_.has(item, key)) _.set(item, key, value)
+	})
     debug('Templated item', item)
   })
 }
