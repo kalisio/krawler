@@ -1,5 +1,15 @@
 # Changelog
 
+## [v0.5.0](https://github.com/kalisio/krawler/tree/v0.5.0) (2018-06-27)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.4.0...v0.5.0)
+
+**Implemented enhancements:**
+
+- Tag which hooks to be run in case of errors [\#19](https://github.com/kalisio/krawler/issues/19)
+- Generate web app from job description [\#18](https://github.com/kalisio/krawler/issues/18)
+- Support MongoDB like PG [\#16](https://github.com/kalisio/krawler/issues/16)
+
 ## [v0.4.0](https://github.com/kalisio/krawler/tree/v0.4.0) (2018-06-04)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.3.1...v0.4.0)
