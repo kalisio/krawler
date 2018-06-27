@@ -31,25 +31,17 @@ function clearObjectOutputs (object, store, type) {
 
 // Clear outputs
 export function clearOutputs (options = {}) {
-  return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'clearOutputs' hook should only be used as a 'after' hook.`)
-    }
-
+  async function clearItemOutputs (item, hook) {
     let store = await getStoreFromHook(hook, 'clearOutputs', options)
-    if (Array.isArray(hook.result)) {
-      await Promise.all(hook.result.map(result => clearObjectOutputs(result, store, options.type)))
-    } else {
-      await clearObjectOutputs(hook.result, store, options.type)
-    }
-
-    return hook
+    await clearObjectOutputs(item, store, options.type)
   }
+
+  return callOnHookItems(clearItemOutputs)
 }
 
 // Clear in-memory data
 export function clearData (options = {}) {
-  async function clear (item, hook) {
+  async function clearItemData (item, hook) {
     let dataPath = options.dataPath || 'data'
     if (_.get(item, dataPath)) {
       debug('Clearing data for ' + item.id + ' on path ' + dataPath)
@@ -57,5 +49,5 @@ export function clearData (options = {}) {
     }
   }
 
-  return callOnHookItems(clear)
+  return callOnHookItems(clearItemData)
 }

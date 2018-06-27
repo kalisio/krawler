@@ -8,19 +8,26 @@ const debug = makeDebug('krawler:utils')
 // Call a given function on each hook item
 export function callOnHookItems (f) {
   return async function (hook) {
+    let hookObject = hook
+    // Handle error hooks as usual
+    if (hook.type === 'error') hookObject = hook.original
     // Retrieve the items from the hook
-    let items = getItems(hook)
+    let items = getItems(hookObject)
     const isArray = Array.isArray(items)
     if (isArray) {
       for (let i = 0; i < items.length; i++) {
-        await f(items[i], hook)
+        // Handle error hooks as usual
+        if (hook.type === 'error') items[i].error = _.omit(hook.error, ['hook']) // Avoid circular reference
+        await f(items[i], hookObject)
       }
     } else {
-      await f(items, hook)
+      // Handle error hooks as usual
+      if (hook.type === 'error') items.error = _.omit(hook.error, ['hook']) // Avoid circular reference
+      await f(items, hookObject)
     }
     // Replace the items within the hook
-    replaceItems(hook, items)
-    return hook
+    replaceItems(hookObject, items)
+    return hookObject
   }
 }
 

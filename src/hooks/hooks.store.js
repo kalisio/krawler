@@ -53,8 +53,8 @@ export function createStores (options = {}) {
 // Remove an existing (set of) store(s)
 export function removeStores (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'removeStore' hook should only be used as a 'after' hook.`)
+    if ((hook.type !== 'after') && (hook.type !== 'error')) {
+      throw new Error(`The 'removeStore' hook should only be used as a 'after/error' hook.`)
     }
 
     // Transform to array

@@ -24,8 +24,8 @@ export function connectPG (options = {}) {
 // Disconnect from the database
 export function disconnectPG (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'disconnectPG' hook should only be used as a 'after' hook.`)
+    if ((hook.type !== 'after') && (hook.type !== 'error')) {
+      throw new Error(`The 'disconnectPG' hook should only be used as a 'after/error' hook.`)
     }
     let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {

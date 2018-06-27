@@ -113,6 +113,16 @@ module.exports = {
           link: 'https://s3.eu-central-1.amazonaws.com/<%= env.S3_BUCKET %>/<%= id %>.png'
         }/*, If used as a web service stores need to persist across requests
         removeStores: ['fs', 's3']*/
+      },
+      error: {
+        // In case of error clear everything
+        destroy: {
+          hook: 'runContainerCommand',
+          command: 'remove',
+          arguments: { force: true }
+        },
+        clearOutputs: {},
+        clearData: {}
       }
     }
   }
