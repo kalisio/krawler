@@ -2,11 +2,15 @@
 sidebar: auto
 ---
 
+The problem with hooks is that they are configured at application setup time and usually fixed during the whole application lifecycle. It means you would have a to create an application instance for each pipeline you’d like to have, not so simple. This is the reason why krawler is mainly used as a command-line utility (CLI), where each execution setup a new application with a hooks pipeline according to the job to be done.
+
+However, using the CLI, you can also launch it as standard wep application/API. You can then POST job or task requests to the exposed services, e.g. on `localhost:3030/api/jobs`.
+
 # Command-Line Interface
 
 ## Internal API
 
-The problem with hooks is that they are configured at application setup time and usually fixed during the whole application lifecycle. It means you would have a to create an application instance for each pipeline you’d like to have, not so simple. This is the reason why krawler can also be used as a command-line utility, where each execution setup the hooks pipeline according to the job to be done. The underlying implementation is managed by the global **run(jobfile, options)** function:
+ The underlying implementation is managed by the global **run(jobfile, options)** function:
 * **jobfile**: a path to a local job file or a jobfile JSON object
 * **options**:
   * **cron**: a [CRON pattern](https://github.com/kelektiv/node-cron) to schedule the job at regular intervals, e.g. `*/5 * * * * *` will run it every 5 seconds, if not provided it will be run only once
@@ -85,6 +89,10 @@ let job = {
 }
 ```
 
+> When running the krawler as a web API note that only the hooks pipeline is mandatory in the job file. Indeed, job and task objects will be then sent by requesting the exposed web services.
+
+## Known issues
+
 By default hook names are used as JSON object keys so you cannot have the same hook appearing twice in your pipeline using this notation. However, you can also use the *named hook syntax* if you want to use the same hook multiple times in your pipeline. In this case the key used in the configuration file can be whatever you want but the associated object value must have a `hook` property containing the name of the hook to be run like this:
 
 ```js
@@ -124,3 +132,4 @@ tasks: {
   }
 }
 ```
+
