@@ -19,8 +19,8 @@ export function template (options = {}) {
     const templatedOptions = templateObject(item, options)
     // Use templated property if not provided in item
     _.forOwn(templatedOptions, function(value, key) {
-	  if (!_.has(item, key)) _.set(item, key, value)
-	})
+      if (!_.has(item, key)) _.set(item, key, value)
+    })
     debug('Templated item', item)
   })
 }
