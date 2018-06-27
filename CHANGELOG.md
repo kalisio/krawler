@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.5.1](https://github.com/kalisio/krawler/tree/v0.5.1) (2018-06-27)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.5.0...v0.5.1)
+
+**Fixed bugs:**
+
+- CLI mode broken since v0.5 [\#20](https://github.com/kalisio/krawler/issues/20)
+
 ## [v0.5.0](https://github.com/kalisio/krawler/tree/v0.5.0) (2018-06-27)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.4.0...v0.5.0)
