@@ -39,7 +39,7 @@ export async function createApp (job, options = {}) {
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
 
-  const apiPrefix = options.apiPrefix || ''
+  const apiPrefix = (options.api ? options.apiPrefix : '')
   debug('API prefix ' + apiPrefix)
   app.configure(feathersHooks())
   app.configure(rest())
