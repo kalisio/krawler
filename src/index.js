@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // import cluster from 'cluster'
 import { processOptions, cli } from './cli'
 import plugin from './plugin'
