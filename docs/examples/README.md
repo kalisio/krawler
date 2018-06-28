@@ -71,6 +71,8 @@ Some parameters like the input file name of the PostGIS host can be directly edi
 
 Extract Digital Elevation Model [DEM](https://en.wikipedia.org/wiki/Digital_elevation_model) data from a WCS server and produces a CSV file. The output consists in a geographic grid of a given *width* (in meter) and *resolution* (in meter), centered around a location defined by [*longitude*, *latitude*] (in WGS84 degrees). Each row of the CSV contains the bounding box of a cell and the corresponding elevation value.
 
+This sample is detailed in this [article](https://blog.feathersjs.com/a-minimalist-etl-using-feathersjs-part-2-6aa89bd73d66).
+
 > The original purpose was to ease ingestion of this data in a Hadoop system to perform some analysis
 
 The sample folder contains a job configuration stored in [`jobfile.js`](https://github.com/kalisio/krawler/blob/master/examples/dem2csv/jobfile.js) to perform the process around a given location, which includes the hooks configuration in [`hooks-blocks.js`](https://github.com/kalisio/krawler/blob/master/examples/dem2csv/hooks-blocks.js).
@@ -111,6 +113,8 @@ You should see a *krawler-icon.jpg* file in the output folder once the job has b
 
 Take a screenshot of a map using [TestCafé](https://github.com/DevExpress/testcafe) running a [Leaflet-based](https://leafletjs.com/) [web mapping client](http://kargo-www.s3-website.eu-central-1.amazonaws.com/) in a temporary dedicated container and output the resulting image on S3. 
 
+This sample is detailed in this [article](https://hackernoon.com/how-to-build-a-map-print-service-in-minutes-c5a24b1f0f41).
+
 > Before using this sample you will need to build the required image from the sample directory: `docker build -t kalisio/leaflet-print .`.
 
 Launch the krawler as a web API with the job `krawler jobfile-print.js --api` then POST the following request containing the GeoJson data and print parameters to `http://localhost:3030/api/jobs`:
@@ -118,7 +122,7 @@ Launch the krawler as a web API with the job `krawler jobfile-print.js --api` th
 {
 	"tasks": [{
 		"format": "A4 Landscape",
-		"baseLayer": "PlanetSAT",
+		"baseLayer": "PlanetSat",
 		"data": {
     		"type": "Feature",
 			"geometry": {
