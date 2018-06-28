@@ -10,7 +10,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/kalisio/krawler.svg?style=plastic)](https://hub.docker.com/r/kalisio/krawler/)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkalisio%2Fkrawler.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkalisio%2Fkrawler?ref=badge_shield)
 
-> A minimalist Geospatial ETL
+> A minimalist (geospatial) ETL
 
 ## Documentation
 
