@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.5.2](https://github.com/kalisio/krawler/tree/v0.5.2) (2018-06-28)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.5.1...v0.5.2)
+
+**Fixed bugs:**
+
+- krawler command not available [\#21](https://github.com/kalisio/krawler/issues/21)
+
 ## [v0.5.1](https://github.com/kalisio/krawler/tree/v0.5.1) (2018-06-27)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.5.0...v0.5.1)
