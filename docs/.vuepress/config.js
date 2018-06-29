@@ -26,7 +26,8 @@ module.exports = {
           { text: 'API', link: '/how-to-use-it/api' },
           { text: 'Services', link: '/how-to-use-it/services.md' },
           { text: 'Hooks', link: '/how-to-use-it/hooks.md' },
-          { text: 'Extending', link: '/how-to-use-it/extending' }
+          { text: 'Extending', link: '/how-to-use-it/extending' },
+          { text: 'Known issues', link: '/how-to-use-it/known-issues' }
         ]
       },
       {
