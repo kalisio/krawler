@@ -34,15 +34,21 @@ export function callOnHookItems (f) {
 // Template a string or array of strings property according to a given item
 export function template (item, property) {
   const isArray = Array.isArray(property)
-  let strings = (isArray ? property : [property])
-  strings = strings.map(string => {
-    let compiler = _.template(string)
-    // Add env into templating context
-    const context = Object.assign({}, item, process)
-    return compiler(context)
+  // Recurse
+  if (!isArray && (typeof property === 'object')) return templateObject(item, property)
+  let values = (isArray ? property : [property])
+  values = values.map(value => {
+    if (typeof value === 'string') {
+      let compiler = _.template(value)
+      // Add env into templating context
+      const context = Object.assign({}, item, process)
+      return compiler(context)
+    } else {
+      return value
+    }
   })
 
-  const result = (isArray ? strings : strings[0])
+  const result = (isArray ? values : values[0])
   return result
 }
 
