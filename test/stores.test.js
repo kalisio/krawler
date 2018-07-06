@@ -71,7 +71,7 @@ describe('krawler:stores', () => {
     })
   })
 
-  let copyHook = {
+  let storeHook = {
     type: 'before',
     data: {
       id: 'world_cities.csv'
@@ -81,21 +81,43 @@ describe('krawler:stores', () => {
 
   it('copy between stores', () => {
     // Fake hook service
-    copyHook.service = { storesService }
-    return pluginHooks.copyToStore({ input: { store: 's3', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>' } })(copyHook)
+    storeHook.service = { storesService }
+    return pluginHooks.copyToStore({ input: { store: 's3', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>' } })(storeHook)
     .then(hook => {
-      expect(fs.existsSync(path.join(fsStore.path, copyHook.data.id))).beTrue()
+      expect(fs.existsSync(path.join(fsStore.path, storeHook.data.id))).beTrue()
     })
   })
   // Let enough time to proceed
   .timeout(10000)
 
   it('copy inside the same store', () => {
-    // Fake hook service
-    copyHook.service = { storesService }
-    return pluginHooks.copyToStore({ input: { store: 'fs', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>.copy' } })(copyHook)
+    return pluginHooks.copyToStore({ input: { store: 'fs', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>.copy' } })(storeHook)
     .then(hook => {
-      expect(fs.existsSync(path.join(fsStore.path, copyHook.data.id + '.copy'))).beTrue()
+      expect(fs.existsSync(path.join(fsStore.path, storeHook.data.id + '.copy'))).beTrue()
+      const originalStat = fs.statSync(path.join(fsStore.path, storeHook.data.id))
+      const deflateStat = fs.statSync(path.join(fsStore.path, storeHook.data.id + '.copy'))
+      expect(originalStat.size).to.equal(deflateStat.size)
+    })
+  })
+  // Let enough time to proceed
+  .timeout(10000)
+
+  it('gzip in a store', () => {
+    return pluginHooks.gzipToStore({ input: { store: 'fs', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>.gz' } })(storeHook)
+    .then(hook => {
+      expect(fs.existsSync(path.join(fsStore.path, storeHook.data.id + '.gz'))).beTrue()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(10000)
+
+  it('gunzip in a store', () => {
+    return pluginHooks.gunzipFromStore({ input: { store: 'fs', key: '<%= id %>.gz' }, output: { store: 'fs', key: '<%= id %>.guz' } })(storeHook)
+    .then(hook => {
+      expect(fs.existsSync(path.join(fsStore.path, storeHook.data.id + '.guz'))).beTrue()
+      const originalStat = fs.statSync(path.join(fsStore.path, storeHook.data.id))
+      const deflateStat = fs.statSync(path.join(fsStore.path, storeHook.data.id + '.guz'))
+      expect(originalStat.size).to.equal(deflateStat.size)
     })
   })
   // Let enough time to proceed

@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import zlib from 'zlib'
 import makeDebug from 'debug'
 import { addOutput, getStoreFromHook, writeStreamToStore, callOnHookItems, templateObject } from '../utils'
 
@@ -91,3 +92,32 @@ export function copyToStore (options = {}) {
 
   return callOnHookItems(copy)
 }
+
+export function gzipToStore (options = {}) {
+  async function gzip (item, hook) {
+    // Output store config given in options
+    const outputOptions = templateObject(item, options.output, ['key'])
+    let outStore = await hook.service.storesService.get(outputOptions.store)
+    const inputOptions = templateObject(item, options.input, ['key'])
+    let inStore = await getStoreFromHook(hook, 'gzipToStore', inputOptions)
+    await writeStreamToStore(inStore.createReadStream(inputOptions).pipe(zlib.createGzip(options)), outStore, outputOptions)
+    addOutput(item, outputOptions.key, outputOptions.outputType)
+  }
+
+  return callOnHookItems(gzip)
+}
+
+export function gunzipFromStore (options = {}) {
+  async function gunzip (item, hook) {
+    // Output store config given in options
+    const outputOptions = templateObject(item, options.output, ['key'])
+    let outStore = await hook.service.storesService.get(outputOptions.store)
+    const inputOptions = templateObject(item, options.input, ['key'])
+    let inStore = await getStoreFromHook(hook, 'gunzipFromStore', inputOptions)
+    await writeStreamToStore(inStore.createReadStream(inputOptions).pipe(zlib.createGunzip(options)), outStore, outputOptions)
+    addOutput(item, outputOptions.key, outputOptions.outputType)
+  }
+
+  return callOnHookItems(gunzip)
+}
+
