@@ -29,7 +29,7 @@ describe('krawler:nwp', () => {
     jobsService.hooks({
       before: {
         create: [
-          pluginHooks.generateNwpDownloadTasks({
+          pluginHooks.generateNwpTasks({
             runInterval: 6 * 3600,          // Produced every 6h
             interval: 3 * 3600,             // Steps of 3h
             lowerLimit: 3 * 3600,           // From T0 + 3h

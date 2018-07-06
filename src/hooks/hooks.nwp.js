@@ -23,7 +23,7 @@ function getNearestForecastTime (datetime, interval) {
 }
 */
 // Generate download tasks for NWP models
-export function generateNwpDownloadTasks (options) {
+export function generateNwpTasks (options) {
   return function (hook) {
     if (hook.type !== 'before') {
       throw new Error(`The 'generateNwpDownloadTasks' hook should only be used as a 'before' hook.`)
