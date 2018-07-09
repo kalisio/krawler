@@ -5,7 +5,7 @@ import sift from 'sift'
 import moment from 'moment'
 import math from 'mathjs'
 import makeDebug from 'debug'
-import { getStoreFromHook, addOutput, writeBufferToStore } from '../utils'
+import { getStoreFromHook, addOutput, writeBufferToStore, template } from '../utils'
 
 const debug = makeDebug('krawler:hooks:json')
 // Add knot unit not defined by default
@@ -22,12 +22,12 @@ export function writeJson (options = {}) {
 
     debug('Creating JSON for ' + hook.data.id)
     let json = _.get(hook, options.dataPath || 'result.data', {})
-    let jsonName = hook.data.id + '.json'
+    let jsonName = template(hook.data, options.key || (hook.data.id + '.json'))
     await writeBufferToStore(
       Buffer.from(JSON.stringify(json), 'utf8'),
       store, {
         key: jsonName,
-        params: Object.assign({}, options.storageOptions) // See https://github.com/kalisio/krawler/issues/7
+        params: options.storageOptions
       }
     )
     addOutput(hook.result, jsonName, options.outputType)
@@ -138,6 +138,7 @@ export function transformJson (options = {}) {
       _.set(rootJson, options.transformPath, json)
       json = rootJson
     }
+    if (options.asObject) json = (json.length > 0 ? json[0] : {})
     _.set(hook, options.dataPath || 'result.data', json)
   }
 }
@@ -247,7 +248,8 @@ export function readJson (options = {}) {
     }
 
     let json = {}
-    const jsonName = hook.result.id
+    const jsonName = template(hook.result, options.key || hook.result.id)
+
     if (store.path) {
       const filePath = path.join(store.path, jsonName)
       debug('Reading JSON file ' + filePath)

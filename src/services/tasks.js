@@ -47,7 +47,7 @@ class TasksService extends Service {
       })
       writeStreamToStore(taskStream, store, {
         key: id,
-        params: Object.assign({}, storageOptions) // See https://github.com/kalisio/krawler/issues/7
+        params: storageOptions
       })
       .then(() => {
         addOutput(data, id, options.outputType)

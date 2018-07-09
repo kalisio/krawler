@@ -120,7 +120,8 @@ export function writeStreamToStore (stream, store, options) {
   return new Promise((resolve, reject) => {
     stream
     .on('error', reject)
-    .pipe(store.createWriteStream(options, error => {
+    // See https://github.com/kalisio/krawler/issues/7
+    .pipe(store.createWriteStream(_.cloneDeep(options), error => {
       if (error) reject(error)
     }))
     .on('finish', () => {

@@ -86,6 +86,7 @@ export function copyToStore (options = {}) {
     let outStore = await hook.service.storesService.get(outputOptions.store)
     const inputOptions = templateObject(item, options.input, ['key'])
     let inStore = await getStoreFromHook(hook, 'copyToStore', inputOptions)
+    debug('Copying to store', inputOptions, outputOptions)
     await writeStreamToStore(inStore.createReadStream(inputOptions), outStore, outputOptions)
     addOutput(item, outputOptions.key, outputOptions.outputType)
   }
@@ -100,6 +101,7 @@ export function gzipToStore (options = {}) {
     let outStore = await hook.service.storesService.get(outputOptions.store)
     const inputOptions = templateObject(item, options.input, ['key'])
     let inStore = await getStoreFromHook(hook, 'gzipToStore', inputOptions)
+    debug('Gzipping to store', inputOptions, outputOptions)
     await writeStreamToStore(inStore.createReadStream(inputOptions).pipe(zlib.createGzip(options)), outStore, outputOptions)
     addOutput(item, outputOptions.key, outputOptions.outputType)
   }
@@ -114,10 +116,10 @@ export function gunzipFromStore (options = {}) {
     let outStore = await hook.service.storesService.get(outputOptions.store)
     const inputOptions = templateObject(item, options.input, ['key'])
     let inStore = await getStoreFromHook(hook, 'gunzipFromStore', inputOptions)
+    debug('Gunzipping from store', inputOptions, outputOptions)
     await writeStreamToStore(inStore.createReadStream(inputOptions).pipe(zlib.createGunzip(options)), outStore, outputOptions)
     addOutput(item, outputOptions.key, outputOptions.outputType)
   }
 
   return callOnHookItems(gunzip)
 }
-

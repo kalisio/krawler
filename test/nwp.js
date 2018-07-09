@@ -34,14 +34,14 @@ describe('krawler:nwp', () => {
             interval: 3 * 3600,             // Steps of 3h
             lowerLimit: 3 * 3600,           // From T0 + 3h
             upperLimit: 6 * 3600,           // Up to T0 + 6h
-            runIndex: -1,                   // Not current run but previous one to ensure it is already available
+            runIndex: -2,                   // Not current run but previous one to ensure it is already available
             elements: [{
               name: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND',
               levels: [ 100, 3000 ]
             }, {
               name: 'TEMPERATURE__ISOBARIC_SURFACE',
               levels: [ 850 ]
-            }],
+            }]
           })
         ]
       }
@@ -53,13 +53,13 @@ describe('krawler:nwp', () => {
       id: 'MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
       options: { faultTolerant: true },
       taskTemplate: {
-        id: '<%= element %>_<%= level %>_<%= runTime.format(\'YYYY-MM-DD[_]HH-mm-ss\') %>_<%= forecastTime.format(\'YYYY-MM-DD[_]HH-mm-ss\') %>.tif',
+        id: '<%= name %>_<%= level %>_<%= runTime.format(\'YYYY-MM-DD[_]HH-mm-ss\') %>_<%= forecastTime.format(\'YYYY-MM-DD[_]HH-mm-ss\') %>.tif',
         type: 'wcs',
         options: {
           url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
           version: '2.0.1',
           token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
-          coverageid: '<%= element %>___<%= runTime.format() %>',
+          coverageid: '<%= name %>___<%= runTime.format() %>',
           subsets: {
             time: '<%= forecastTime.format() %>',
             height: '<%= level %>',

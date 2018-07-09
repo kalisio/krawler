@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import moment from 'moment'
 import makeDebug from 'debug'
 
@@ -45,12 +46,12 @@ export function generateNwpTasks (options) {
         // Check for each forecast step if update is required
         for (let timeOffset = options.lowerLimit; timeOffset <= options.upperLimit; timeOffset += options.interval) {
           let forecastTime = nearestForecastTime.clone().add({ seconds: timeOffset })
-          let task = {
-            element: element.name,
+          let task = Object.assign({
             level,
             runTime,
-            forecastTime
-          }
+            forecastTime,
+            timeOffset
+          }, _.omit(element, ['levels']))
           if (!forecastTime.isBefore(lowerTime)) tasks.push(task)
         }
       })

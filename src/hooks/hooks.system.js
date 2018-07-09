@@ -99,7 +99,7 @@ export function runContainerCommand (options = {}) {
       let store = await getStoreFromHook(hook, 'runContainerCommand', options)
       await writeStreamToStore(result, store, {
         key: item.id + '.tar',
-        params: Object.assign({}, options.storageOptions) // See https://github.com/kalisio/krawler/issues/7
+        params: options.storageOptions
       })
       addOutput(item, item.id + '.tar', options.outputType)
     }

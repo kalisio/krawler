@@ -35,9 +35,9 @@ class JobsService extends Service {
       idCompiler = _.template(taskTemplate.id)
       debug('Launching job with following template', taskTemplate)
     }
-    // ID is templated on his own to have access to the job ID as well
-    let taskTemplateWithoutId = _.omit(taskTemplate, ['id'])
     tasks = tasks.map(task => {
+      // ID is templated on his own to have access to the job ID as well
+      let taskTemplateWithoutId = _.omit(taskTemplate, ['id'])
       // Perform templating of task options
       taskTemplateWithoutId.options = templateObject(task, taskTemplateWithoutId.options || {})
       // ID is templated on his own to have access to the job ID as well
