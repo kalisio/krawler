@@ -33,7 +33,15 @@ describe('krawler:nwp', () => {
             runInterval: 6 * 3600,          // Produced every 6h
             interval: 3 * 3600,             // Steps of 3h
             lowerLimit: 3 * 3600,           // From T0 + 3h
-            upperLimit: 9 * 3600            // Up to T0 + 9h
+            upperLimit: 6 * 3600,           // Up to T0 + 6h
+            runIndex: -1,                   // Not current run but previous one to ensure it is already available
+            elements: [{
+              name: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND',
+              levels: [ 100, 3000 ]
+            }, {
+              name: 'TEMPERATURE__ISOBARIC_SURFACE',
+              levels: [ 850 ]
+            }],
           })
         ]
       }
@@ -45,23 +53,24 @@ describe('krawler:nwp', () => {
       id: 'MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
       options: { faultTolerant: true },
       taskTemplate: {
-        id: '<%= runTime.format(\'YYYY-MM-DD[_]HH-mm-ss\') %>_<%= forecastTime.format(\'YYYY-MM-DD[_]HH-mm-ss\') %>.tif',
+        id: '<%= element %>_<%= level %>_<%= runTime.format(\'YYYY-MM-DD[_]HH-mm-ss\') %>_<%= forecastTime.format(\'YYYY-MM-DD[_]HH-mm-ss\') %>.tif',
         type: 'wcs',
         options: {
           url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
           version: '2.0.1',
           token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
-          coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND___<%= runTime.format() %>',
+          coverageid: '<%= element %>___<%= runTime.format() %>',
           subsets: {
             time: '<%= forecastTime.format() %>',
-            height: 3000,
-            long: [-180, 180],
-            lat: [-90, 90]
+            height: '<%= level %>',
+            long: [-10, 10],
+            lat: [-10, 10]
           }
         }
       }
     }, { store: outputStore })
     .then(tasks => {
+      expect(tasks.length).to.equal(6)
       tasks.forEach(task => {
         expect(fs.existsSync(path.join(outputStore.path, task.id))).beTrue()
       })
