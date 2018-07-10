@@ -163,6 +163,7 @@ Restructure in-memory JSON values, hook options are the following:
 * **pick**: an array of properties to be picked using [Lodash](https://lodash.com/docs#pick)
 * **omit**: an array of properties to be omitted using [Lodash](https://lodash.com/docs#omit)
 * **merge**: an object to be merged with each JSON objects using [Lodash](https://lodash.com/docs#merge)
+* **asObject**: by default the hook output JSON object(s) in an array, this boolean indicates if the output should be transformed into an object if the array contains a single object, defaults to `false`
 
 Example:
 ```js
