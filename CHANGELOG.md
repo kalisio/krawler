@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.6.0](https://github.com/kalisio/krawler/tree/v0.6.0) (2018-07-10)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.5.2...v0.6.0)
+
+**Implemented enhancements:**
+
+- Added numerical weather prediction models management [\#22](https://github.com/kalisio/krawler/issues/22)
+
 ## [v0.5.2](https://github.com/kalisio/krawler/tree/v0.5.2) (2018-06-28)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.5.1...v0.5.2)
