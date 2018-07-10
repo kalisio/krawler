@@ -86,7 +86,7 @@ export function createMongoCollection (options = {}) {
   }
 }
 
-// Insert a JSON
+// Insert a JSON in a collection
 export function writeMongoCollection (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
@@ -98,19 +98,24 @@ export function writeMongoCollection (options = {}) {
     }
 
     // Defines the chunks
-    let geojson = _.get(hook, options.dataPath || 'result.data', {})
+    let json = _.get(hook, options.dataPath || 'result.data', {})
     let chunks = []
-    if (geojson.type === 'FeatureCollection') {
-      chunks = _.chunk(geojson.features, _.get(options, 'chunkSize', 10))
-    } else if (geojson.type === 'Feature') {
-      chunks.push([geojson])
+    // Handle specific case of GeoJson
+    if (json.type === 'FeatureCollection') {
+      chunks = _.chunk(json.features, _.get(options, 'chunkSize', 10))
+    } else if (json.type === 'Feature') {
+      chunks.push([json])
+    } else if (Array.isArray(json)) {
+      chunks = _.chunk(json, _.get(options, 'chunkSize', 10))
+    } else {
+      chunks.push([json])
     }
 
     // Write the chunks
-    let collection = _.get(options, 'collection', _.snakeCase(hook.result.id))
-    debug('Inserting GeoJSON in the ' + collection + ' collection')
-    collection = client.db.collection(collection)
+    let collectionName = _.get(options, 'collection', _.snakeCase(hook.result.id))
+    let collection = client.db.collection(collectionName)
     for (let i = 0; i < chunks.length; ++i) {
+      debug(`Inserting ${chunks.length} JSON document in the ${collectionName} collection `)
       await collection.bulkWrite(chunks[i].map(chunk => {
         return { insertOne: { document: chunk } }
       }))
