@@ -54,8 +54,11 @@ export function template (item, property) {
 
 export function templateObject (item, object, properties) {
   // Restrict to some properties only ?
-  if (properties) return _.mapValues(object, (value, key) => (properties.includes(key) ? template(item, value) : value))
-  else return _.mapValues(object, (value, key) => template(item, value))
+  let keys = (properties || _.keys(object))
+  // First key requiring templating
+  let result = _.mapKeys(object, (value, key) => (keys.includes(key) && key.includes('<%') && key.includes('%>')) ? template(item, key) : key)
+  // Then values
+  return _.mapValues(result, (value, key) => (keys.includes(key) ? template(item, value) : value))
 }
 
 // Add to the 'outputs' property of the given abject a new entry
