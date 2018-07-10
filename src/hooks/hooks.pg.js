@@ -49,7 +49,7 @@ export function dropPGTable (options = {}) {
     }
 
     // Drop the table
-    let table = _.get(options, 'table', _.snakeCase(hook.result.id))
+    let table = _.get(options, 'table', _.snakeCase(hook.data.id))
     debug('Droping the ' + table + ' table')
     await client.query('DROP TABLE IF EXISTS ' + table)
     return hook
@@ -65,7 +65,7 @@ export function createPGTable (options = {}) {
     }
 
     // Create the table
-    let table = _.get(options, 'table', _.snakeCase(hook.result.id))
+    let table = _.get(options, 'table', _.snakeCase(hook.data.id))
     debug('Creating the ' + table + ' table')
     await client.query('CREATE TABLE ' + table + ' (id SERIAL PRIMARY KEY, geom GEOMETRY(POINTZ, 4326), properties JSON)')
     return hook

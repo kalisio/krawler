@@ -12,7 +12,7 @@ export function connectMongo (options = {}) {
     }
 
     debug('Connecting to MongoDB for ' + hook.data.id)
-    let client = await MongoClient.connect(options.url, _.omit(options, ['url', 'dbName']))
+    let client = await MongoClient.connect(options.url, _.omit(options, ['url', 'dbName', 'clientPath']))
     client.db = client.db(options.dbName || options.url.substring(options.url.lastIndexOf('/') + 1))
     _.set(hook.data, options.clientPath || 'client', client)
     debug('Connected to MongoDB for ' + hook.data.id)
@@ -48,7 +48,7 @@ export function dropMongoCollection (options = {}) {
     }
 
     // Drop the collection
-    let collection = _.get(options, 'collection', _.snakeCase(hook.result.id))
+    let collection = _.get(options, 'collection', _.snakeCase(hook.data.id))
     debug('Droping the ' + collection + ' collection')
     try {
       await client.db.dropCollection(collection)
@@ -75,7 +75,7 @@ export function createMongoCollection (options = {}) {
     }
 
     // Create the collection
-    let collection = _.get(options, 'collection', _.snakeCase(hook.result.id))
+    let collection = _.get(options, 'collection', _.snakeCase(hook.data.id))
     debug('Creating the ' + collection + ' collection')
     collection = await client.db.createCollection(collection)
     // Add index if required
