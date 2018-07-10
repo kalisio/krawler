@@ -19,6 +19,7 @@ All hooks can have the following options:
 All input/output hooks, i.e. reading/writing/removing data in a store like `readJson` or `writeJson`, can have the following options:
 * **storePath**: property path where to read the store to be used on the hook object or params, defaults to `data.store`
 * **store**: property containing the ID of the store to be used, not defined by default
+* **key**: input/output key for the file in store, can be a template with item as context, learn more about [templating](https://lodash.com/docs/4.17.4#template)
 * **storageOptions**: write options for the underlying store
 
 ## Authentication [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.auth.js)
@@ -67,6 +68,7 @@ Read a CSV from an input stream/store and convert it to in-memory JSON values, h
 * **dataPath**: property path where to store the resulting JSON object on the hook object, defaults to `result.data`
 * **storePath**: see description in [common options](./HOOKS.html#common-options)
 * **store**: see description in [common options](./HOOKS.html#common-options)
+* **key**: see description in [common options](./HOOKS.html#common-options)
 * any option supported by [fast-csv](https://github.com/C2FO/fast-csv#parsing)
 
 ### writeCSV(options)
@@ -75,6 +77,7 @@ Generate a CSV file from in-memory JSON values, hook options are the following:
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result`
 * **storePath**: see description in [common options](./HOOKS.html#common-options)
 * **store**: see description in [common options](./HOOKS.html#common-options)
+* **key**: see description in [common options](./HOOKS.html#common-options)
 * **outputType**: the type of output produced by this hook, defaults to `intermediate`
 * any option supported by [fast-csv](https://github.com/C2FO/fast-csv#parsing)
 
@@ -83,6 +86,8 @@ Generate a CSV file from in-memory JSON values, hook options are the following:
 Generate a CSV file from a set of input CSV files, hook options are the following:
 * **storePath**: see description in [common options](./HOOKS.html#common-options)
 * **store**: see description in [common options](./HOOKS.html#common-options)
+* **mergeKey**: input key for the CSV files to be merged in store, must be a template with item as context, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+* **key**: see description in [common options](./HOOKS.html#common-options)
 * **outputType**: the type of output produced by this hook, defaults to `intermediate`
 * any option supported by [fast-csv](https://github.com/C2FO/fast-csv#parsing)
 
@@ -128,6 +133,7 @@ Read a JSON from an input stream/store and convert it to in-memory JSON values, 
 * **dataPath**: property path where to store the resulting JSON object on the hook object, defaults to `result.data`
 * **storePath**: see description in [common options](./HOOKS.html#common-options)
 * **store**: see description in [common options](./HOOKS.html#common-options)
+* **key**: see description in [common options](./HOOKS.html#common-options)
 
 ### writeJson(options)
 
@@ -135,6 +141,7 @@ Generate a JSON file from in-memory JSON values, hook options are the following:
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result`
 * **storePath**: see description in [common options](./HOOKS.html#common-options)
 * **store**: see description in [common options](./HOOKS.html#common-options)
+* **key**: see description in [common options](./HOOKS.html#common-options)
 * **outputType**: the type of output produced by this hook, defaults to `intermediate`
 
 ### transformJson(options)
@@ -410,11 +417,12 @@ Run a docker container using [dockerode](https://github.com/apocas/dockerode), h
 Run a command against a docker container using [dockerode](https://github.com/apocas/dockerode), hook options are the following:
 * **command**: the name of the command to be run
 * **arguments**: the arguments of the command to be run
-  * support any command/option supported by dockerode on [containers](https://github.com/apocas/dockerode#manipulating-a-container)
+* support any command/option supported by dockerode on [containers](https://github.com/apocas/dockerode#manipulating-a-container)
 
 When the `getArchive` command is used, additional hook options are the following:
 * **storePath**: see description in [common options](./HOOKS.html#common-options)
 * **store**: see description in [common options](./HOOKS.html#common-options)
+* **key**: see description in [common options](./HOOKS.html#common-options)
 * **outputType**: the type of output produced by this hook, defaults to `intermediate`
 
 > `Cmd`, `Env` and `path` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
@@ -448,6 +456,7 @@ Read a YAML file from a store and convert it to in-memory JSON values, hook opti
 * **dataPath**: property path where to store the resulting JSON object on the hook object, defaults to `result.data`
 * **storePath**: see description in [common options](./HOOKS.html#common-options)
 * **store**: see description in [common options](./HOOKS.html#common-options)
+* **key**: see description in [common options](./HOOKS.html#common-options)
 
 ### writeYAML(options)
 
@@ -455,6 +464,7 @@ Generate a YAML file from in-memory JSON values, hook options are the following:
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result`
 * **storePath**: see description in [common options](./HOOKS.html#common-options)
 * **store**: see description in [common options](./HOOKS.html#common-options)
+* **key**: see description in [common options](./HOOKS.html#common-options)
 * **outputType**: the type of output produced by this hook, defaults to `intermediate`
 * any option supported by [js-yaml](https://github.com/nodeca/js-yaml#safedump-object---options-)
 

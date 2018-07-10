@@ -3,7 +3,7 @@ import fastcsv from 'fast-csv'
 import merge from 'merge-stream'
 import _ from 'lodash'
 import makeDebug from 'debug'
-import { getStoreFromHook, addOutput, writeBufferToStore } from '../utils'
+import { getStoreFromHook, addOutput, writeBufferToStore, template } from '../utils'
 
 const debug = makeDebug('krawler:hooks:csv')
 
@@ -19,7 +19,7 @@ export function writeCSV (options = {}) {
     debug('Creating CSV for ' + hook.data.id)
     const data = _.get(hook, options.dataPath || 'result')
     let csv = json2csv({ data, fields: options.fields })
-    let csvName = hook.data.id + '.csv'
+    let csvName = template(hook.data, options.key || (hook.data.id + '.csv'))
     await writeBufferToStore(
       Buffer.from(csv, 'utf8'),
       store, {
@@ -44,15 +44,17 @@ export function mergeCSV (options = {}) {
     return new Promise((resolve, reject) => {
       debug('Merging CSV for ' + hook.data.id)
       let inputStreams = hook.result.map(result => {
-        let stream = store.createReadStream(result.id + '.csv')
+        const mergedCsvName = template(result, options.mergeKey || (result.id + '.csv'))
+        let stream = store.createReadStream(mergedCsvName)
         return fastcsv.fromStream(stream, options)
       })
 
+      let csvName = template(hook.data, options.key || (hook.data.id + '.csv'))
       merge.apply(null, inputStreams)
       .pipe(fastcsv.createWriteStream(options))
-      .pipe(store.createWriteStream(hook.data.id + '.csv'))
+      .pipe(store.createWriteStream(csvName))
       .on('finish', () => {
-        addOutput(hook.result, hook.data.id + '.csv', options.outputType)
+        addOutput(hook.result, csvName, options.outputType)
         resolve(hook)
       })
       .on('error', reject)
@@ -68,11 +70,12 @@ export function readCSV (options = {}) {
     }
 
     let store = await getStoreFromHook(hook, 'readCSV', options)
+    const csvName = template(hook.result, options.key || hook.result.id)
 
     return new Promise((resolve, reject) => {
       debug('Reading CSV for ' + hook.result.id)
       let stream = hook.result.stream
-        ? hook.result.stream : store.createReadStream(hook.result.id)
+        ? hook.result.stream : store.createReadStream(csvName)
       // Clear previous data if any as we append
       _.unset(hook, options.dataPath || 'result.data')
       fastcsv.fromStream(stream, options)

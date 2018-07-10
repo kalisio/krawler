@@ -97,8 +97,9 @@ export function runContainerCommand (options = {}) {
       _.unset(item, options.containerPath || 'container')
     } else if (options.command === 'getArchive') {
       let store = await getStoreFromHook(hook, 'runContainerCommand', options)
+      let tarName = template(item, options.key || (item.id + '.tar'))
       await writeStreamToStore(result, store, {
-        key: item.id + '.tar',
+        key: tarName,
         params: options.storageOptions
       })
       addOutput(item, item.id + '.tar', options.outputType)
