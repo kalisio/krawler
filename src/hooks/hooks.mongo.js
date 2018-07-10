@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { MongoClient, MongoError } from 'mongodb'
 import makeDebug from 'debug'
+import { template } from '../utils'
 
 const debug = makeDebug('krawler:hooks:mongo')
 
@@ -48,7 +49,7 @@ export function dropMongoCollection (options = {}) {
     }
 
     // Drop the collection
-    let collection = _.get(options, 'collection', _.snakeCase(hook.data.id))
+    let collection = template(hook.data, _.get(options, 'collection', _.snakeCase(hook.data.id)))
     debug('Droping the ' + collection + ' collection')
     try {
       await client.db.dropCollection(collection)
@@ -75,7 +76,7 @@ export function createMongoCollection (options = {}) {
     }
 
     // Create the collection
-    let collection = _.get(options, 'collection', _.snakeCase(hook.data.id))
+    let collection = template(hook.data, _.get(options, 'collection', _.snakeCase(hook.data.id)))
     debug('Creating the ' + collection + ' collection')
     collection = await client.db.createCollection(collection)
     // Add index if required
@@ -112,7 +113,7 @@ export function writeMongoCollection (options = {}) {
     }
 
     // Write the chunks
-    let collectionName = _.get(options, 'collection', _.snakeCase(hook.result.id))
+    let collectionName = template(hook.result, _.get(options, 'collection', _.snakeCase(hook.result.id)))
     let collection = client.db.collection(collectionName)
     for (let i = 0; i < chunks.length; ++i) {
       debug(`Inserting ${chunks.length} JSON document in the ${collectionName} collection `)
