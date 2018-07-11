@@ -98,8 +98,12 @@ export function writeMongoCollection (options = {}) {
       throw new Error(`You must be connected to MongoDB before using the 'writeMongoCollection' hook`)
     }
 
+    let collectionName = template(hook.result, _.get(options, 'collection', _.snakeCase(hook.result.id)))
+    let collection = client.db.collection(collectionName)
     // Defines the chunks
     let json = _.get(hook, options.dataPath || 'result.data', {})
+    // FIXME: allow transform before write
+    // json = transformJsonObject (json, options)
     let chunks = []
     // Handle specific case of GeoJson
     if (json.type === 'FeatureCollection') {
@@ -113,8 +117,6 @@ export function writeMongoCollection (options = {}) {
     }
 
     // Write the chunks
-    let collectionName = template(hook.result, _.get(options, 'collection', _.snakeCase(hook.result.id)))
-    let collection = client.db.collection(collectionName)
     for (let i = 0; i < chunks.length; ++i) {
       debug(`Inserting ${chunks.length} JSON document in the ${collectionName} collection `)
       await collection.bulkWrite(chunks[i].map(chunk => {

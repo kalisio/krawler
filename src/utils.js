@@ -1,9 +1,116 @@
 import _ from 'lodash'
+import sift from 'sift'
+import moment from 'moment'
+import math from 'mathjs'
 import { getItems, replaceItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
 import { Duplex } from 'stream'
 
 const debug = makeDebug('krawler:utils')
+// Add knot unit not defined by default
+math.createUnit('knot', { definition: '0.514444 m/s', aliases: ['knots', 'kt', 'kts'] })
+// This ensure moment objects are correctly serialized in MongoDB
+Object.getPrototypeOf(moment()).toBSON = function () {
+  return this.toDate()
+}
+
+export function transformJsonObject (json, options) {
+  let rootJson = json
+  if (options.transformPath) {
+    json = _.get(json, options.transformPath)
+  }
+  if (options.toArray) {
+    json = _.toArray(json)
+  }
+  if (options.toObjects) {
+    json = json.map(array => array.reduce((object, value, index) => {
+      // Set the value at index on object using key provided in input list
+      const propertyName = options.toObjects[index]
+      object[propertyName] = value
+      return object
+    }, {}))
+  }
+  // Safety check
+  let isArray = Array.isArray(json)
+  if (!isArray) {
+    json = [json]
+  }
+  if (options.filter) {
+    json = sift(options.filter, json)
+  }
+  // Iterate over path mapping
+  _.forOwn(options.mapping, (output, inputPath) => {
+    const isMappingObject = (typeof output === 'object')
+    const outputPath = (isMappingObject ? output.path : output)
+    const deleteInputPath = (isMappingObject ? _.get(output, 'delete', true) : true)
+    // Then iterate over JSON objects
+    _.forEach(json, object => {
+      let value = _.get(object, inputPath)
+      // Perform value mapping (if any)
+      if (isMappingObject && output.values) {
+        value = output.values[value]
+      }
+      // Perform key mapping
+      _.set(object, outputPath, value)
+    })
+    if (deleteInputPath) {
+      _.forEach(json, object => {
+        _.unset(object, inputPath)
+      })
+    }
+  })
+  // Iterate over unit mapping
+  _.forOwn(options.unitMapping, (units, path) => {
+    // Then iterate over JSON objects
+    _.forEach(json, object => {
+      // Perform conversion
+      const value = _.get(object, path)
+      if (value) {
+        // Handle dates
+        if (units.asDate) {
+          let date
+          // Handle UTC or local dates using input format if provided
+          if (units.asDate === 'utc') {
+            date = (units.from ? moment.utc(value, units.from) : moment.utc(value))
+          } else {
+            date = (units.from ? moment(value, units.from) : moment(value))
+          }
+          // In this case we'd like to reformat as a string
+          // otherwise the moment object is converted to standard JS Date
+          if (units.to) {
+            date = date.format(units.to)
+          } else {
+            date = date.toDate()
+          }
+          _.set(object, path, date)
+        } else { // Handle numbers
+          _.set(object, path, math.unit(value, units.from).toNumber(units.to))
+        }
+      }
+    })
+  })
+  // Then iterate over JSON objects to pick/omit properties in place
+  for (let i = 0; i < json.length; i++) {
+    let object = json[i]
+    if (options.pick) {
+      object = _.pick(object, options.pick)
+    }
+    if (options.omit) {
+      object = _.omit(object, options.omit)
+    }
+    if (options.merge) {
+      object = _.merge(object, options.merge)
+    }
+    json[i] = object
+  }
+  // Then update JSON in place in memory
+  if (options.transformPath) {
+    _.set(rootJson, options.transformPath, json)
+    json = rootJson
+  }
+  if (options.asObject) json = (json.length > 0 ? json[0] : {})
+  return json
+}
 
 // Call a given function on each hook item
 export function callOnHookItems (f) {
