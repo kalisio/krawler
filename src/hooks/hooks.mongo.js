@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { MongoClient, MongoError } from 'mongodb'
 import makeDebug from 'debug'
-import { template } from '../utils'
+import { template, transformJsonObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:mongo')
 
@@ -81,7 +81,9 @@ export function createMongoCollection (options = {}) {
     collection = await client.db.createCollection(collection)
     // Add index if required
     if (options.index) {
-      collection.ensureIndex(options.index)
+      // As arguments or single object ?
+      if (Array.isArray(options.index)) collection.ensureIndex(...options.index)
+      else collection.ensureIndex(options.index)
     }
     return hook
   }
@@ -102,8 +104,8 @@ export function writeMongoCollection (options = {}) {
     let collection = client.db.collection(collectionName)
     // Defines the chunks
     let json = _.get(hook, options.dataPath || 'result.data', {})
-    // FIXME: allow transform before write
-    // json = transformJsonObject (json, options)
+    // Allow transform before write
+    if (options.transform) json = transformJsonObject (json, options.transform)
     let chunks = []
     // Handle specific case of GeoJson
     if (json.type === 'FeatureCollection') {

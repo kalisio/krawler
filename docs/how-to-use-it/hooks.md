@@ -143,6 +143,7 @@ Generate a JSON file from in-memory JSON values, hook options are the following:
 * **store**: see description in [common options](./hooks.md#common-options)
 * **key**: see description in [common options](./hooks.md#common-options)
 * **outputType**: the type of output produced by this hook, defaults to `intermediate`
+* **transform**: perform transformation using these options before write, see description in [transformJson](./hooks.md#transformjson-options)
 
 ### transformJson(options)
 
@@ -262,6 +263,7 @@ Inserts a GeoJSON collection or an array of features into an existing collection
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `data.result`
 * **chunkSize**: number of GeoJson features for the [batch insert](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/)
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
+* **transform**: perform transformation using these options before write, see description in [transformJson](./hooks.md#transformjson-options)
 
 ## Numerical Weather Prediction [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.nwp.js)
 
