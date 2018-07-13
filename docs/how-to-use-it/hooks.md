@@ -9,8 +9,10 @@ sidebar: auto
 ## Common options
 
 All hooks can have the following options:
-* **match**: a match filter to be applied on the input hook data using any option supported by [sift](https://github.com/crcn/sift.js), if the data is filtered the hook will not be applied
+* **match**: a match filter to be applied on the input hook data using any option supported by [sift](https://github.com/crcn/sift.js), fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template), if the data is filtered the hook will not be applied
 * **faultTolerant**: will catch any error raised in the hook so that the hook chain will continue anyway
+
+> Due to templating restricted to string output any ISO date string or comparison operator value in the match filter will be converted back to native types so that matching will work as expected in JS
 
 > Matching is for instance useful when you'd like to apply a hook to only a subset of your tasks, e.g. all the CSV files but not the JSON files.
 
@@ -151,6 +153,7 @@ Read a JSON from an input stream/store and convert it to in-memory JSON values, 
 * **storePath**: see description in [common options](./hooks.md#common-options)
 * **store**: see description in [common options](./hooks.md#common-options)
 * **key**: see description in [common options](./hooks.md#common-options)
+* **transform**: perform transformation using these options after read, see description in [transformJson](./hooks.md#transformjson-options)
 
 ### writeJson(options)
 
@@ -274,13 +277,29 @@ Create a collection in a MongoDB database. Hook options are the following:
 * **index**: the [specification of the index](https://docs.mongodb.com/manual/indexes/#create-an-index) associated to the collection
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 
+### readMongoCollection(options)
+
+Read JSON documents from an existing collection. Hook options are the following:
+* **dataPath**: property path where to write the output JSON objects on the hook object, defaults to `data.result`
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* **transform**: perform transformation using these options after read, see description in [transformJson](./hooks.md#transformjson-options)
+* **query**: [find query](http://mongodb.github.io/node-mongodb-native/3.1/api/Collection.html#find) to be performed, fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+* **project**: project options for [cursor](http://mongodb.github.io/node-mongodb-native/3.1/api/Cursor.html)
+* **sort**: sort options for [cursor](http://mongodb.github.io/node-mongodb-native/3.1/api/Cursor.html)
+* **skip**: skip options for [cursor](http://mongodb.github.io/node-mongodb-native/3.1/api/Cursor.html)
+* **limit**: limit options for [cursor](http://mongodb.github.io/node-mongodb-native/3.1/api/Cursor.html)
+
+> Due to templating restricted to string output any ISO date string or comparison operator value in the query object will be converted back to native types so that matching will work as expected in JS
+
 ### writeMongoCollection(options)
 
-Inserts a GeoJSON collection or an array of features into an existing collection. Hook options are the following:
+Inserts JSON into an existing collection. Hook options are the following:
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `data.result`
 * **chunkSize**: number of GeoJson features for the [batch insert](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/)
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **transform**: perform transformation using these options before write, see description in [transformJson](./hooks.md#transformjson-options)
+
+> If the input data is a GeoJSON collection the array of features will be pushed into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections
 
 ## Numerical Weather Prediction [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.nwp.js)
 
@@ -490,6 +509,10 @@ Generate a UUID (V1) for the item using [node-uuid](https://github.com/kelektiv/
 ### template(options)
 
 Perform [templating](https://lodash.com/docs/4.17.4#template) of the options using the item as context and merge it with item.
+
+### discardIf(options)
+
+Discard all subsequent hooks and task if the input data passes the given match filter options, options are similar to the match filter described in [common options](./hooks.md#common-options)
 
 ## XML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.xml.js)
 

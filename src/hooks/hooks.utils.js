@@ -1,7 +1,8 @@
 import uuid from 'uuid/v1'
+import sift from 'sift'
 import _ from 'lodash'
 import makeDebug from 'debug'
-import { callOnHookItems, templateObject } from '../utils'
+import { callOnHookItems, templateObject, templateQueryObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:utils')
 
@@ -22,5 +23,19 @@ export function template (options = {}) {
       if (!_.has(item, key)) _.set(item, key, value)
     })
     debug('Templated item', item)
+  })
+}
+
+// Set the skip flag based on item properties
+export function discardIf (options = {}) {
+  return callOnHookItems(item => {
+    const templatedFilter = templateQueryObject(item, options)
+    console.log(templatedFilter, item)
+    // Check if hooks have to be executed or not depending on item properties
+    const discard = !_.isEmpty(sift(templatedFilter, [item]))
+    if (discard) {
+      debug('Discarding ' + item.id + ' due to filter', templatedFilter)
+      item.skip = true
+    }
   })
 }

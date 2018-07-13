@@ -20,6 +20,10 @@ class TasksService extends Service {
     let { id, type, options, storageOptions } = data
     if (!type) type = 'noop'
     if (!options) options = {}
+    if (data.skip) {
+      debug('Skipping task ' + id)
+      return data
+    }
     debug('Creating task ' + id)
     // Providing 'type-stream' as input type means we don't want to directly write the read stream
     // to the store but simply open it and return it for hooks to process

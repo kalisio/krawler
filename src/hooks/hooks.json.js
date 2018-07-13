@@ -173,9 +173,10 @@ export function readJson (options = {}) {
         debug('Impossible to parse json', data, error)
       }
     }
-    if (options.objectPath) {
-      json = _.get(json, options.objectPath)
-    }
+    if (options.objectPath) json = _.get(json, options.objectPath)
+    // Allow transform after read
+    if (options.transform) json = transformJsonObject(json, options.transform)
+
     _.set(hook, options.dataPath || 'result.data', json)
     return hook
   }

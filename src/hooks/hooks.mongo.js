@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { MongoClient, MongoError } from 'mongodb'
 import makeDebug from 'debug'
-import { template, transformJsonObject } from '../utils'
+import { template, templateQueryObject, transformJsonObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:mongo')
 
@@ -85,6 +85,32 @@ export function createMongoCollection (options = {}) {
       if (Array.isArray(options.index)) collection.ensureIndex(...options.index)
       else collection.ensureIndex(options.index)
     }
+    return hook
+  }
+}
+
+// Retrieve JSON from a collection
+export function readMongoCollection (options = {}) {
+  return async function (hook) {
+    let client = _.get(hook.data, options.clientPath || 'client')
+    if (_.isNil(client)) {
+      throw new Error(`You must be connected to MongoDB before using the 'readMongoCollection' hook`)
+    }
+
+    let collectionName = template(hook.data, _.get(options, 'collection', _.snakeCase(hook.data.id)))
+    let collection = client.db.collection(collectionName)
+    const templatedQuery = templateQueryObject(hook.data, options.query || {})
+    let query = collection.find(templatedQuery)
+    if (options.project) query.project(options.project)
+    if (options.sort) query.sort(options.sort)
+    if (options.limit) query.limit(options.limit)
+    if (options.skip) query.skip(options.skip)
+    debug(`Querying collection ${collectionName} with`, templatedQuery)
+    let json = await query.toArray()
+    // Allow transform after read
+    if (options.transform) json = transformJsonObject(json, options.transform)
+
+    _.set(hook, options.dataPath || 'result.data', json)
     return hook
   }
 }

@@ -138,6 +138,42 @@ export function callOnHookItems (f) {
   }
 }
 
+// Utility function used to convert from string to Dates a fixed set of properties on a given object (recursive)
+export function convertDates (object, properties) {
+  // Restrict to some properties only ?
+  let keys = (properties || _.keys(object))
+  return _.mapValues(object, (value, key) => {
+    if (keys.includes(key)) {
+      // Recurse on sub objects
+      if (typeof value === 'object') {
+        return convertDates(value)
+      } else {
+        // We use moment to validate the date
+        let date = moment.utc(value, moment.ISO_8601)
+        return (date.isValid() ? date.toDate() : value)
+      }
+    } else {
+      return value
+    }
+  })
+}
+
+export function convertComparisonOperators (queryObject) {
+  _.forOwn(queryObject, (value, key) => {
+    // Process current attributes or  recurse
+    if (typeof value === 'object') {
+      convertComparisonOperators(value)
+    } else if ((key === '$eq') || (key === '$lt') || (key === '$lte') || (key === '$gt') || (key === '$gte')) {
+      let number = _.toNumber(value)
+      // Update from query string to number if required
+      if (!Number.isNaN(number)) {
+        queryObject[key] = number
+      }
+    }
+  })
+  return queryObject
+}
+
 // Template a string or array of strings property according to a given item
 export function template (item, property) {
   const isArray = Array.isArray(property)
@@ -159,6 +195,7 @@ export function template (item, property) {
   return result
 }
 
+// Utility function used to template strings from a fixed set of properties on a given object (recursive)
 export function templateObject (item, object, properties) {
   // Restrict to some properties only ?
   let keys = (properties || _.keys(object))
@@ -166,6 +203,12 @@ export function templateObject (item, object, properties) {
   let result = _.mapKeys(object, (value, key) => (keys.includes(key) && key.includes('<%') && key.includes('%>')) ? template(item, key) : key)
   // Then values
   return _.mapValues(result, (value, key) => (keys.includes(key) ? template(item, value) : value))
+}
+
+// Utility function used to template strings from a fixed set of properties on a given query object (recursive)
+// Will then transform back to right types dates and numbers for comparison operators
+export function templateQueryObject (item, object, properties) {
+  return convertDates(convertComparisonOperators(templateObject(item, object, properties)))
 }
 
 // Add to the 'outputs' property of the given abject a new entry
