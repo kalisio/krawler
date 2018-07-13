@@ -16,7 +16,7 @@ All hooks can have the following options:
 
 > Fault tolerance is for instance useful when you use unreliable data sources and you don't want the job to stop when some requests fail.
 
-All input/output hooks, i.e. reading/writing/removing data in a store like `readJson` or `writeJson`, can have the following options:
+All input/output hooks and store hooks manipulating items, i.e. reading/writing/transforming/removing data in a store like `readJson`, `writeJson` or `gzipToStore`, can have the following options:
 * **storePath**: property path where to read the store to be used on the hook object or params, defaults to `data.store`
 * **store**: property containing the ID of the store to be used, not defined by default
 * **key**: input/output key for the file in store, can be a template with item as context, learn more about [templating](https://lodash.com/docs/4.17.4#template)
@@ -415,8 +415,20 @@ Remove (a set of) store(s), hook options are (array of) the following:
 ### copyToStore(options)
 
 Copy the item(s) from an input store to an output store, hook options are the following:
-* **input**: the input store options
-* **output**: the output store options
+* **input**: the input store options, see description in [common options](./hooks.md#common-options)
+* **output**: the output store options, see description in [common options](./hooks.md#common-options)
+
+### gzipToStore(options)
+
+Gzip the item(s) from an input store to an output store, hook options are the following:
+* **input**: the input store options, see description in [common options](./hooks.md#common-options)
+* **output**: the output store options, see description in [common options](./hooks.md#common-options)
+
+### gunzipFromStore(options)
+
+Gunzip the item(s) from an input store to an output store, hook options are the following:
+* **input**: the input store options, see description in [common options](./hooks.md#common-options)
+* **output**: the output store options, see description in [common options](./hooks.md#common-options)
 
 ## System [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.system.js)
 
