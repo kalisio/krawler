@@ -7,7 +7,7 @@ import fs from 'fs'
 import _ from 'lodash'
 import { hooks as pluginHooks } from '../src'
 
-describe('krawler:hooks', () => {
+describe('krawler:hooks:main', () => {
   let inputStore = fsStore({ path: path.join(__dirname, 'data') })
   let outputStore = fsStore({ path: path.join(__dirname, 'output') })
 
@@ -15,9 +15,13 @@ describe('krawler:hooks', () => {
     chailint(chai, util)
   })
 
-  it('registers custom hook', () => {
-    let hookFunction = (hook) => hook
-    pluginHooks.registerHook('custom', (options) => hookFunction)
+  it('registers custom hook', async () => {
+    let testHook = { type: 'before', method: 'create', data: {}, result: {} }
+    pluginHooks.registerHook('custom', (options) => (hook) => {
+      let item = (hook.type === 'before' ? hook.data : hook.result)
+      item.n = options.parameter
+      return hook
+    })
     let hooks = {
       before: {
         custom: { parameter: 1 }
@@ -27,8 +31,16 @@ describe('krawler:hooks', () => {
       }
     }
     hooks = pluginHooks.activateHooks(hooks)
-    expect(hooks.before.create.includes(hookFunction)).beTrue()
-    expect(hooks.after.create.includes(hookFunction)).beTrue()
+    // Check the right hooks have been added
+    expect(hooks.before.create.length).to.equal(1)
+    expect(typeof hooks.before.create[0]).to.equal('function')
+    await hooks.before.create[0](testHook)
+    expect(testHook.data.n).to.equal(1)
+    expect(hooks.after.create.length).to.equal(1)
+    expect(typeof hooks.after.create[0]).to.equal('function')
+    testHook.type = 'after'
+    await hooks.after.create[0](testHook)
+    expect(testHook.result.n).to.equal(2)
   })
 
   it('manages auth on requests', () => {
