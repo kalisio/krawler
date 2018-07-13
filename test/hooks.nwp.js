@@ -7,7 +7,7 @@ import fsStore from 'fs-blob-store'
 import fs from 'fs'
 import plugin, { hooks as pluginHooks } from '../src'
 
-describe('krawler:nwp', () => {
+describe('krawler:hooks:nwp', () => {
   let app, server, tasksService, jobsService
   let outputStore = fsStore({ path: path.join(__dirname, 'output') })
 

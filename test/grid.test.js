@@ -1,213 +1,73 @@
 import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
-import feathers from 'feathers'
-import hooks from 'feathers-hooks'
-import path from 'path'
-import moment from 'moment'
-import plugin, { hooks as pluginHooks } from '../src'
+import { Grid } from '../src'
 
 describe('krawler:grid', () => {
-  let app, server, storesService, tasksService, jobsService
+  let grid
 
   before(() => {
     chailint(chai, util)
-    app = feathers()
-    app.configure(hooks())
-    app.configure(plugin())
-    server = app.listen(3030)
   })
 
-  it('adds hooks to the jobs service', () => {
-    app.use('stores', plugin.stores())
-    storesService = app.service('stores')
-    app.use('tasks', plugin.tasks())
-    tasksService = app.service('tasks')
-    expect(tasksService).toExist()
-    app.use('jobs', plugin.jobs())
-    jobsService = app.service('jobs')
-    expect(jobsService).toExist()
-    jobsService.hooks({
-      before: {
-        create: [
-          pluginHooks.createStores([{
-            id: 'test-store',
-            type: 'fs',
-            options: { path: path.join(__dirname, 'output') }
-          }]),
-          pluginHooks.generateGrid(),
-          pluginHooks.generateGridTasks()
-        ]
-      }
-    })
+  it('is CommonJS compatible', () => {
+    expect(typeof Grid).to.equal('function')
   })
 
-  it('converts zone spec to grid spec', () => {
-    // We want 1° resolution grid centered at given latitude/longitude and 10 cells long
-    const latitude = 40
-    const longitude = 0
-    const n = 10
-    const convergenceFactor = Math.cos(latitude * Math.PI / 180)
-    const earthRadius = 6356752.31424518
-    const resolution = 2 * Math.PI * earthRadius / 360
-    let hook = {
-      type: 'before',
-      data: {
-        longitude,
-        latitude,
-        resolution,
-        halfWidth: n * resolution
-      }
-    }
-    pluginHooks.generateGrid()(hook)
-    expect(hook.data.resolution).to.deep.equal([convergenceFactor, 1])
-    expect(hook.data.origin).to.deep.equal([longitude - n * convergenceFactor, latitude - n])
-    expect(hook.data.size).to.deep.equal([20, 20])
+  it('gets grid values', () => {
+    grid = new Grid({
+      bounds: [-180, -90, 180, 90],
+      origin: [-180, 90],
+      size: [4, 3],
+      resolution: [90, 90],
+      data: [
+        0, 1, 1, 0,
+        1, 2, 2, 1,
+        0, 1, 1, 0
+      ]
+    })
+    expect(grid.getValue(0, 0), 'vertex [0,0]').to.equal(0)
+    expect(grid.getValue(1, 0), 'vertex [1,0]').to.equal(1)
+    expect(grid.getValue(0, 1), 'vertex [0,1]').to.equal(1)
+    expect(grid.getValue(1, 1), 'vertex [1,1]').to.equal(2)
   })
 
-  it('creates a WMS gridded job', (done) => {
-    let datetime = moment.utc()
-    datetime.startOf('day')
-    jobsService.create({
-      id: 'wms-grid',
-      taskTemplate: {
-        id: '<%= jobId %>-<%= taskId %>.png',
-        store: 'test-store',
-        type: 'wms',
-        options: {
-          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS',
-          version: '1.3.0',
-          token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
-          layers: 'TEMPERATURE__ISOBARIC_SURFACE',
-          crs: 'EPSG:4326',
-          styles: 'T__ISOBARIC__SHADING',
-          format: 'image/png',
-          width: 512,
-          height: 512,
-          dim_reference_time: datetime.format(),
-          time: datetime.format()
-        }
-      },
-      origin: [-10, 35],
-      resolution: [0.5, 0.5],
-      size: [2, 2]
-    })
-    .then(tasks => {
-      return storesService.get('test-store')
-    })
-    .then(store => {
-      store.exists('wms-grid-0-0.png', (error, exist) => {
-        if (error) done(error)
-        else done(exist ? null : new Error('File not found in store'))
-      })
-    })
-    .catch(error => {
-      // Sometimes meteo france servers reply 404 or 503
-      console.log(error)
-      done()
-    })
+  it('interpolates grid values', () => {
+    // Grid vertex values
+    expect(grid.interpolate(-90, 0), 'left-centered vertex').to.equal(2)
+    expect(grid.interpolate(0, 0), 'right-centered vertex').to.equal(2)
+    // Ensure it is fine on borders as well
+    expect(grid.interpolate(-180, 90), 'top-left border').to.equal(0)
+    expect(grid.interpolate(-180, -90), 'bottom-left border').to.equal(0)
+    // Due to longitude wrapping +180° is similar to -180°
+    expect(grid.interpolate(180, 90), 'top-right border').to.equal(0)
+    expect(grid.interpolate(180, -90), 'bottom-right border').to.equal(0)
+    // Test that we do not try to interpolate values outside grid bounds
+    expect(grid.interpolate(-254, 0), 'longitude overflow').beUndefined()
+    expect(grid.interpolate(0, 128), 'latitude overflow').beUndefined()
+    // Then test interpolation
+    expect(grid.interpolate(-135, 45), 'top-left quad center').to.equal(1)
+    expect(grid.interpolate(-135, -45), 'bottom-left quad center').to.equal(1)
+    expect(grid.interpolate(135, 45), 'top-right quad center').to.equal(0.5)
+    expect(grid.interpolate(135, -45), 'bottom-right quad center').to.equal(0.5)
+    expect(grid.interpolate(-45, 0), 'grid center').to.equal(2)
   })
-  // Let enough time to download
-  .timeout(30000)
 
-  it('creates a WCS gridded job', (done) => {
-    // These hooke only work with Geotiff
-    tasksService.hooks({
-      after: {
-        create: [ pluginHooks.computeStatistics({ max: true }), pluginHooks.readGeoTiff(), pluginHooks.writeJson() ]
-      }
+  it('resamples grid values', () => {
+    grid = new Grid({
+      bounds: [-180, -90, 180, 90],
+      origin: [-180, 90],
+      size: [4, 3],
+      resolution: [90, 90],
+      data: [
+        0, 1, 1, 0,
+        1, 2, 2, 1,
+        0, 1, 1, 0
+      ]
     })
-    jobsService.hooks({
-      after: {
-        create: pluginHooks.writeCSV({
-          fields: [
-            {
-              label: 'Latmin',
-              value: 'bbox[1]'
-            },
-            {
-              label: 'Lonmin',
-              value: 'bbox[0]'
-            },
-            {
-              label: 'Latmax',
-              value: 'bbox[3]'
-            },
-            {
-              label: 'Lonmax',
-              value: 'bbox[2]'
-            },
-            {
-              label: 'Elev',
-              value: 'max'
-            }
-          ]
-        })
-      }
-    })
-
-    let datetime = moment.utc()
-    datetime.startOf('day')
-    jobsService.create({
-      id: 'wcs-grid',
-      store: 'test-store',
-      taskTemplate: {
-        id: '<%= jobId %>-<%= taskId %>.tif',
-        store: 'test-store',
-        type: 'wcs',
-        options: {
-          /*
-          url: 'http://geoserver.kalisio.xyz/geoserver/Kalisio/wcs',
-          version: '2.0.1',
-          format: 'image/tiff',
-          coverageid: 'Kalisio:GMTED2010_15',
-          longitudeLabel: 'Long',
-          latitudeLabel: 'Lat'
-          */
-          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
-          version: '2.0.1',
-          token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
-          coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
-          subsets: {
-            time: datetime.format(),
-            height: 3000
-          }
-        }
-      },
-      origin: [-10, 35],
-      resolution: [0.5, 0.5],
-      size: [2, 2]
-    })
-    .then(tasks => {
-      return storesService.get('test-store')
-    })
-    .then(store => {
-      store.exists('wcs-grid-0-0.tif', (error, exist) => {
-        if (error) {
-          done(error)
-          return
-        }
-        if (!exist) {
-          done(new Error('File not found in store'))
-          return
-        }
-
-        store.exists('wcs-grid-0-0.tif.json', (error, exist) => {
-          if (error) done(error)
-          else done(exist ? null : new Error('File not found in store'))
-        })
-      })
-    })
-    .catch(error => {
-      // Sometimes meteo france servers reply 404 or 503
-      console.log(error)
-      done()
-    })
-  })
-  // Let enough time to download
-  .timeout(30000)
-
-  // Cleanup
-  after(() => {
-    if (server) server.close()
+    let resampled = grid.resample([-135, 45], [90, 90], [3, 2])
+    // Interpolated grid at grid quad centers should be the following
+    // [ 1 1.5 1
+    //   1 1.5 1 ]
+    expect(resampled).to.deep.equal([ 1, 1.5, 1, 1, 1.5, 1 ])
   })
 })

@@ -3,7 +3,7 @@ import chailint from 'chai-lint'
 import path from 'path'
 import { hooks as pluginHooks } from '../src'
 
-describe('krawler:mongo', () => {
+describe('krawler:hooks:mongo', () => {
   const geojson = require(path.join(__dirname, 'data', 'geojson'))
 
   before(() => {

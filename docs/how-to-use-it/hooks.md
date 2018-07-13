@@ -124,6 +124,23 @@ Generate WMS/WCS request tasks to download data for each cell of a geographic gr
 
 > This hook works only for EPSG 4326
 
+### resampleGrid(options)
+
+A lot of geographical data (e.g. weather data) are distributed as gridded data, which is two-dimensional data representing an element value along an evenly spaced matrix of geographical positions. Usually, the grid has a longitude (x-axis or width) and a latitude (y-axis or height) dimension and is computed using the [Equirectangular projection](https://en.wikipedia.org/wiki/Equirectangular_projection) with a constant spacing called the resolution of the grid. The gridded data is assumed to be internally stored as a Javascript array (1D).
+
+You can use this hook to compute element value at any location from input gridded data (a process called interpolation) with the following options:
+* **input**: input grid specification
+  * **bounds**: the geographical bounds covered by the input grid as an array of decimal values `[min longitude, min latitude, max longitude, max latitude]`,
+  * **origin**: the geographical origin of the input data grid as an array of decimal values `[longitude origin, latitude origin]`,
+  * **size**: the size of the input data grid as an array of integer values `[width, height]`,
+  * **resolution** : the geographical resolution of the input data grid as an array of decimal values `[longitude resolution, latitude resolution]`
+* **output**: output/resampled grid specification
+  * **origin**: the geographical origin of the data grid as an array of decimal values `[longitude origin, latitude origin]`,
+  * **size**: the size of the data grid as an array of integer values `[width, height]`,
+  * **resolution**: the geographical resolution of the data grid as an array of decimal values `[longitude resolution, latitude resolution]`
+
+> The values of the element are assumed to be the one measured at the grid vertices
+
 ## JSON [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.json.js)
 
 ### readJson(options)

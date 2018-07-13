@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
 import SphericalMercator from '@mapbox/sphericalmercator'
+import { Grid } from '../grid'
 
 const debug = makeDebug('krawler:hooks:grid')
 
@@ -137,5 +138,27 @@ export function generateGridTasks (options = {}) {
     }
 
     return hook
+  }
+}
+
+// Resample a grid
+export function resampleGrid (options = {}) {
+  return function (hook) {
+    if (hook.type !== 'after') {
+      throw new Error(`The 'resampleGrid' hook should only be used as a 'after' hook.`)
+    }
+
+    debug('Resampling grid for ' + hook.result.id)
+
+    let data = _.get(hook, options.dataPath || 'result.data', {})
+    let grid = new Grid({
+      bounds: options.input.bounds,
+      origin: options.input.origin,
+      size: options.input.size,
+      resolution: options.input.resolution,
+      data
+    })
+    data = grid.resample(options.output.origin, options.output.resolution, options.output.size)
+    _.set(hook, options.dataPath || 'result.data', data)
   }
 }

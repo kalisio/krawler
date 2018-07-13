@@ -105,7 +105,7 @@ export function writeMongoCollection (options = {}) {
     // Defines the chunks
     let json = _.get(hook, options.dataPath || 'result.data', {})
     // Allow transform before write
-    if (options.transform) json = transformJsonObject (json, options.transform)
+    if (options.transform) json = transformJsonObject(json, options.transform)
     let chunks = []
     // Handle specific case of GeoJson
     if (json.type === 'FeatureCollection') {

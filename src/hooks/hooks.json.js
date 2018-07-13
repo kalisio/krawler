@@ -18,7 +18,7 @@ export function writeJson (options = {}) {
     debug('Creating JSON for ' + hook.data.id)
     let json = _.get(hook, options.dataPath || 'result.data', {})
     // Allow transform before write
-    if (options.transform) json = transformJsonObject (json, options.transform)
+    if (options.transform) json = transformJsonObject(json, options.transform)
     let jsonName = template(hook.data, options.key || (hook.data.id + '.json'))
     await writeBufferToStore(
       Buffer.from(JSON.stringify(json), 'utf8'),
