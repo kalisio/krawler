@@ -47,6 +47,7 @@ describe('krawler:cli', () => {
     cli(jobfile, { mode: 'setup' })
     .then(server => {
       let app = getApp()
+      let taskService = app.service('tasks')
       // Add hook to know how many times the job will run
       let jobService = app.service('jobs')
       let count = 0
@@ -58,12 +59,16 @@ describe('krawler:cli', () => {
           }
         }
       })
+      // Check for event emission
+      app.on('krawler', event => {
+        if ((event.type === 'task-done') || (event.type === 'job-done')) count++
+      })
       // Only run as we already setup the app
       // As it runs every 15 seconds we know that in 20s it has ran at least once again
       cli(jobfile, { cron: '*/15 * * * * *', mode: 'runJob' })
       setTimeout(() => {
         server.close()
-        expect(count).to.be.at.least(2)
+        expect(count).to.be.at.least(6) // 2 run + 6 events
         done()
       }, 20000)
     })

@@ -14,6 +14,7 @@ class JobsService extends Service {
   }
 
   setup (app, path) {
+    super.setup(app, path)
     this.tasksService = app.service(this.tasksService)
     this.storesService = app.service(this.storesService)
   }

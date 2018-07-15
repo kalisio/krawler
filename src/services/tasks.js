@@ -13,6 +13,7 @@ class TasksService extends Service {
   }
 
   setup (app, path) {
+    super.setup(app, path)
     this.storesService = app.service(this.storesService)
   }
 
