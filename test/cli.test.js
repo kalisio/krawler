@@ -38,7 +38,6 @@ describe('krawler:cli', () => {
     cli(jobfile, { mode: 'setup', sync: 'mongodb://127.0.0.1:27017/krawler-test' })
     .then(server => {
       let app = getApp()
-      let taskService = app.service('tasks')
       // Add hook to know how many times the job will run
       let jobService = app.service('jobs')
       let runCount = 0
