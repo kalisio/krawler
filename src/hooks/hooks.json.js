@@ -1,6 +1,7 @@
 import path from 'path'
 import _ from 'lodash'
 import fs from 'fs-extra'
+import { getItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
 import { getStoreFromHook, addOutput, writeBufferToStore, template, transformJsonObject } from '../utils'
 
@@ -142,9 +143,7 @@ export function mergeJson (options = {}) {
 // Read a JSON from an input stream/store
 export function readJson (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'readJson' hook should only be used as a 'after' hook.`)
-    }
+    let item = getItems(hook)
 
     let store = await getStoreFromHook(hook, 'readJson', options)
     if (!store.path && !store.buffers) {
@@ -152,7 +151,7 @@ export function readJson (options = {}) {
     }
 
     let json = {}
-    const jsonName = template(hook.result, options.key || hook.result.id)
+    const jsonName = template(item, options.key || item.id)
 
     if (store.path) {
       const filePath = path.join(store.path, jsonName)
