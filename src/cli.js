@@ -8,6 +8,7 @@ import feathers from 'feathers'
 import feathersHooks from 'feathers-hooks'
 import rest from 'feathers-rest'
 import socketio from 'feathers-socketio'
+import sync from 'feathers-sync'
 import program from 'commander'
 import { CronJob } from 'cron'
 import makeDebug from 'debug'
@@ -47,6 +48,13 @@ export async function createApp (job, options = {}) {
     path: apiPrefix + 'ws',
     transports: ['websocket']
   }))
+  if (options.sync) {
+    const protocol = options.sync.split('://')[0]
+    // AMQP
+    if (protocol === 'amqp') app.configure(sync({ uri: options.sync }))
+    // Mongo/Redis
+    else app.configure(sync({ db: options.sync }))
+  }
   app.configure(plugin())
   // Create default services used by CLI
   let StoresService = stores()
@@ -146,6 +154,7 @@ export function processOptions () {
     .option('-PS, --proxy-https [proxy-https]', 'Proxy to be used for HTTPS')
     .option('-u, --user [user]', 'User name to be used for authentication')
     .option('-p, --password [password]', 'User password to be used for authentication')
+    .option('-s, --sync [uri]', 'Activate sync module with given connection URI')
     .parse(process.argv)
 
   let jobfile = program.args[0]

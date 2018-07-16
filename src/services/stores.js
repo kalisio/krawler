@@ -10,6 +10,10 @@ class StoresService extends Service {
     this.stores = {}
   }
 
+  setup (app, path) {
+    super.setup(app, path)
+  }
+
   async create (data, params = {}) {
     let { id, type, options } = data
 

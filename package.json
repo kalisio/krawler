@@ -76,6 +76,7 @@
     "feathers-hooks-common": "^3.0.0",
     "feathers-rest": "^1.7.1",
     "feathers-socketio": "^2.0.0",
+    "feathers-sync": "^0.1.4",
     "fs-blob-store": "^5.2.1",
     "fs-extra": "^4.0.2",
     "gdal": "^0.9.6",

@@ -80,7 +80,6 @@ module.exports = {
         removeStores: ['job-store', 'task-store'],
         emitEvent: {
           type: 'job-done',
-          asObject: true,
           pick: ['id']
         }
       }
