@@ -514,6 +514,12 @@ Perform [templating](https://lodash.com/docs/4.17.4#template) of the options usi
 
 Discard all subsequent hooks and task if the input data passes the given match filter options, options are similar to the match filter described in [common options](./hooks.md#common-options)
 
+### emitEvent(options)
+
+Emit a `'krawler'` event on the underlying service, hook options are the following:
+* **type**: the custom type of the event to be emitted
+* any transformation option, see description in [transformJson](./hooks.md#transformjson-options), the transformed object will be used as event payload in the `data` field
+
 ## XML [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.xml.js)
 
 ### readXML(options)

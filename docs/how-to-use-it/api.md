@@ -19,6 +19,7 @@ However, using the CLI, you can also launch it as standard wep application/API. 
   * **user**: user name to be used for proxy
   * **password**: user password to be used for proxy
   * **debug**: output debug messages
+  * **sync**: activate [sync module](https://github.com/feathersjs-ecosystem/feathers-sync) with given connection URI so that internal events can be listened externally
   * **port**: port to be used by the krawler (defaults to 3030)
   * **api**: launch the krawler as a web service/API
   * **api-prefix**: api prefix to be used when launching the krawler as a web service/API (defaults to `/api`)
