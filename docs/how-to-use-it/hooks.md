@@ -476,6 +476,15 @@ Run a system command, hook options are the following:
 
 > Learn more about [templating](https://lodash.com/docs/4.17.4#template)
 
+### pullImage(options)
+
+Pull a docker image using [dockerode](https://github.com/apocas/dockerode), hook options are the following:
+* any option supported by dockerode for [connection](https://github.com/apocas/dockerode#getting-started) and [pulling](https://github.com/apocas/dockerode#equivalent-of-docker-pull-in-dockerode)
+
+::: tip
+`options` can contain an `auth` object to pull the image from a private repository.
+:::
+
 ### createContainer(options)
 
 Run a docker container using [dockerode](https://github.com/apocas/dockerode), hook options are the following:

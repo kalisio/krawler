@@ -52,6 +52,16 @@ export function runCommand (options = {}) {
   return callOnHookItems(run)
 }
 
+export function pullImage (options = {}) {
+  let docker = new Docker(options)
+
+  async function pull (item) {
+    debug('Pulling docker image', item)
+    await docker.pullImage(item, _.isNil(options.auth) ? null : options.auth)
+  }
+  return callOnHookItems(pull)
+}
+
 export function createContainer (options = {}) {
   let docker = new Docker(options)
 
