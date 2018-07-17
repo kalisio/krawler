@@ -58,6 +58,11 @@ export function convertToGeoJson (options = {}) {
     debug('Converting to GeoJSON for ' + hook.result.id)
 
     let json = _.get(hook, options.dataPath || 'result.data', {})
+    // Safety check
+    let isArray = Array.isArray(json)
+    if (!isArray) {
+      json = [json]
+    }
 
     // Declare the output GeoJson collection
     let collection = {
