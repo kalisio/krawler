@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.7.0](https://github.com/kalisio/krawler/tree/v0.7.0) (2018-07-17)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.6.0...v0.7.0)
+
+**Implemented enhancements:**
+
+- Make krawler able to communicate with external systems [\#24](https://github.com/kalisio/krawler/issues/24)
+
+**Fixed bugs:**
+
+- MongoDB job never completes [\#26](https://github.com/kalisio/krawler/issues/26)
+
 ## [v0.6.0](https://github.com/kalisio/krawler/tree/v0.6.0) (2018-07-10)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.5.2...v0.6.0)
