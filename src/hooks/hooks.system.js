@@ -53,11 +53,15 @@ export function runCommand (options = {}) {
 }
 
 export function pullImage (options = {}) {
+  if (_.isNil(options.image)) {
+    throw new Error(`You must provide an image name for the 'pullImage' hook`)
+  }
+
   let docker = new Docker(options)
 
   async function pull (item) {
     debug('Pulling docker image', item)
-    await docker.pullImage(item, _.isNil(options.auth) ? null : options.auth)
+    await docker.pull(options.image, _.isNil(options.auth) ? null : options.auth)
   }
   return callOnHookItems(pull)
 }
