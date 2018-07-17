@@ -103,12 +103,18 @@ export function transformJsonObject (json, options) {
     }
     json[i] = object
   }
+  // Transform back to object when required
+  if (!isArray) {
+    if (!options.asArray) json = (json.length > 0 ? json[0] : {})
+  } else {
+    if (options.asObject) json = (json.length > 0 ? json[0] : {})
+  }
   // Then update JSON in place in memory
   if (options.transformPath) {
     _.set(rootJson, options.transformPath, json)
     json = rootJson
   }
-  if (options.asObject) json = (json.length > 0 ? json[0] : {})
+
   return json
 }
 
