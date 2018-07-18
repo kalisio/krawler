@@ -18,6 +18,10 @@ import plugin from './plugin'
 
 const debug = makeDebug('krawler:cli')
 
+// Create default services used by CLI
+export let StoresService = stores()
+export let TasksService = tasks()
+export let JobsService = jobs()
 export let app
 let server
 
@@ -56,10 +60,10 @@ export async function createApp (job, options = {}) {
     else app.configure(sync({ db: options.sync }))
   }
   app.configure(plugin())
-  // Create default services used by CLI
-  let StoresService = stores()
-  let TasksService = tasks({ storesService: apiPrefix + '/stores' })
-  let JobsService = jobs({ storesService: apiPrefix + '/stores', tasksService: apiPrefix + '/tasks' })
+  // Setup default services used by CLI
+  TasksService.storesService = apiPrefix + '/stores'
+  JobsService.storesService = apiPrefix + '/stores'
+  JobsService.tasksService = apiPrefix + '/tasks'
   app.use(apiPrefix + '/stores', StoresService)
   app.use(apiPrefix + '/tasks', TasksService)
   app.use(apiPrefix + '/jobs', JobsService)
