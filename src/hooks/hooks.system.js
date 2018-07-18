@@ -61,7 +61,16 @@ export function pullImage (options = {}) {
 
   async function pull (item) {
     debug('Pulling docker image', item)
-    await docker.pull(options.image, _.isNil(options.auth) ? null : options.auth)
+
+    await new Promise((resolve, reject) => {
+      docker.pull(options.image, _.isNil(options.auth) ? null : options.auth)
+      .then(stream => {
+        stream.on('end', () => resolve())
+      }).catch(err => {
+        reject(err)
+      })
+    })
+   
   }
   return callOnHookItems(pull)
 }
