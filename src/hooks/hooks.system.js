@@ -63,17 +63,18 @@ export function pullImage (options = {}) {
     debug('Pulling docker image', item)
 
     await new Promise((resolve, reject) => {
-      docker.pull(options.image, _.isNil(options.auth) ? null : options.auth)
-      .then(stream => {
-        stream.on('end', () => resolve())
-      }).catch(err => {
-        reject(err)
+      docker.pull(options.image, _.isNil(options.auth) ? null : options.auth, (err, stream) => {
+        if (err) reject(err)
+        docker.modem.followProgress(stream, (err, output) => {
+          if (err) reject(err)
+          resolve()
+        })
       })
     })
-   
   }
   return callOnHookItems(pull)
 }
+
 
 export function createContainer (options = {}) {
   let docker = new Docker(options)
