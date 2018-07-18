@@ -12,8 +12,13 @@ export function connectMongo (options = {}) {
       throw new Error(`The 'connectMongo' hook should only be used as a 'before' hook.`)
     }
 
+    let client = _.get(hook.data, options.clientPath || 'client')
+    if (client) {
+      debug('Already connected to MongoDB for ' + hook.data.id)
+      return hook
+    }
     debug('Connecting to MongoDB for ' + hook.data.id)
-    let client = await MongoClient.connect(options.url, _.omit(options, ['url', 'dbName', 'clientPath']))
+    client = await MongoClient.connect(options.url, _.omit(options, ['url', 'dbName', 'clientPath']))
     client.db = client.db(options.dbName || options.url.substring(options.url.lastIndexOf('/') + 1))
     _.set(hook.data, options.clientPath || 'client', client)
     debug('Connected to MongoDB for ' + hook.data.id)
