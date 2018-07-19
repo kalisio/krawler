@@ -144,3 +144,9 @@ Once the job has been executed the response contains the link to download the pr
     }
 ]
 ```
+
+### Seeder
+
+The seeder take advantage of [Kargo](https://kalisio.github.io/kargo/) to seed a dataset. It relies on the seeding capabilities of [MapProxy](https://mapproxy.org/docs/nightly/seed.html). The global approach is to subdivide the job into multiple tasks and run `mapprroxy-seed` utility for each task. To subdivide the job, we use a spatial grid and each cell is used as a coverage entry to limit the extend of the corresponding task. All the tasks, i.e. `mapproxy-seed` share the same MapProxy configuration file and use a generated seed file.
+
+We use the same image of MapProxy as the one used in Kargo, but for now we do not use the benefits of a Swarm infrastructure to deploy the task. Meanwhile, if you plan to seed a layer with a source exposed by TileserverGL, you can easily scale the number of instances of TileserverGL to fit the required charge.
