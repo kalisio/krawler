@@ -81,24 +81,18 @@ module.exports = {
           Tty: true
         },
         startSeeder: {
-          host: config.docker.host,
-          port: process.env.DOCKER_PORT || 2376,
-          ca: fs.readFileSync('/home/ubuntu/.docker/ca.pem'),
-          cert: fs.readFileSync('/home/ubuntu/.docker/cert.pem'),
-          key: fs.readFileSync('/home/ubuntu/.docker/key.pem'),
           hook: 'runContainerCommand',
-          command: 'start',
-        }/*,
+          command: 'start'
+        },
+        waitSeeder: {
+          hook: 'runContainerCommand',
+          command: 'wait'
+        },
         removeSeeder: {
-          host: config.docker.host,
-          port: process.env.DOCKER_PORT || 2376,
-          ca: fs.readFileSync('/home/ubuntu/.docker/ca.pem'),
-          cert: fs.readFileSync('/home/ubuntu/.docker/cert.pem'),
-          key: fs.readFileSync('/home/ubuntu/.docker/key.pem'),
           hook: 'runContainerCommand',
           command: 'remove',
           arguments: { force: true }
-        }*/
+        }
       }
     },
     jobs: {
