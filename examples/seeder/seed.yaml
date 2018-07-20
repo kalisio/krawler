@@ -3,7 +3,7 @@ seeds:
     caches: [<%= seed.layer %>_cache]
     coverages: [cell]
     levels:
-      to: <%= seed.depth %>
+      to: <%= seed.levelMin %>
 
 coverages:
   cell:
