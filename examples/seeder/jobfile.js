@@ -9,15 +9,6 @@ const config = require('./config')
 
 const debug = makeDebug('krawler:examples')
 
-// Configuration to get connected to secure Docker API
-const dockerConfig = {
-  host: '172.31.41.151',
-  port: process.env.DOCKER_PORT || 2376,
-  ca: fs.readFileSync('/home/ubuntu/.docker/ca.pem'),
-  cert: fs.readFileSync('/home/ubuntu/.docker/cert.pem'),
-  key: fs.readFileSync('/home/ubuntu/.docker/key.pem')
-}
-
 // Create a custom hook to generate tasks
 let generateTasks = () => {
   return (hook) => {
@@ -96,7 +87,7 @@ module.exports = {
           key: fs.readFileSync('/home/ubuntu/.docker/key.pem'),
           hook: 'runContainerCommand',
           command: 'start',
-        },
+        }/*,
         removeSeeder: {
           host: config.docker.host,
           port: process.env.DOCKER_PORT || 2376,
@@ -106,7 +97,7 @@ module.exports = {
           hook: 'runContainerCommand',
           command: 'remove',
           arguments: { force: true }
-        }
+        }*/
       }
     },
     jobs: {

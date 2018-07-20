@@ -1,6 +1,6 @@
 module.exports = {
   docker: {
-    host: '172-31-41-75'
+    host: '172.31.41.75'
   },
   layer: 'osm-bright',
   grid: {
