@@ -75,7 +75,6 @@ export function pullImage (options = {}) {
   return callOnHookItems(pull)
 }
 
-
 export function createContainer (options = {}) {
   let docker = new Docker(options)
 

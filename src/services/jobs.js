@@ -40,7 +40,7 @@ class JobsService extends Service {
       idCompiler = _.template(taskTemplate.id)
     }
     debug('Launching job with following template', taskTemplate)
-    
+
     tasks = tasks.map(task => {
       // ID is templated on his own to have access to the job ID as well
       let taskTemplateWithoutId = _.omit(taskTemplate, ['id'])
@@ -58,7 +58,7 @@ class JobsService extends Service {
       // Then affect template and object
       _.merge(newTask, taskTemplateWithoutId)
       _.merge(newTask, taskWithoutId)
-      
+
       return newTask
     })
     // Always default to async if no type given
