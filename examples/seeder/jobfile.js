@@ -25,7 +25,8 @@ let generateTasks = () => {
           id: i + '-' + j,
           seed: {
             layer: config.layer,
-            depth: config.depth,
+            levelMin: config.levelMin,
+            levelMax: config.levelMax,
             bbox: [minx, miny, minx + width, miny + height],
           },
           type: 'noop'
