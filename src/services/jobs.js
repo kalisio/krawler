@@ -32,10 +32,15 @@ class JobsService extends Service {
 
     // The task template ID is used as a template string for the task ID
     let idCompiler
-    if (taskTemplate) {
-      idCompiler = _.template(taskTemplate.id)
-      debug('Launching job with following template', taskTemplate)
+    // Ensure a default empty that could be used to store shared information for tasks, e.g. DB client
+    if (!taskTemplate) {
+      taskTemplate = data.taskTemplate = {}
     }
+    if (taskTemplate.id) {
+      idCompiler = _.template(taskTemplate.id)
+    }
+    debug('Launching job with following template', taskTemplate)
+    
     tasks = tasks.map(task => {
       // ID is templated on his own to have access to the job ID as well
       let taskTemplateWithoutId = _.omit(taskTemplate, ['id'])
@@ -44,18 +49,16 @@ class JobsService extends Service {
       // ID is templated on his own to have access to the job ID as well
       let taskWithoutId = _.omit(task, ['id'])
       let newTask = {}
-      if (taskTemplate) {
-        // Create a new task with compiled ID
+      // Create a new task with compiled ID
+      if (idCompiler) {
         newTask.id = idCompiler(Object.assign({ jobId: data.id, taskId: task.id }, taskWithoutId))
-        // When there is nothing to interpolate the returned ID is empty
-        if (!newTask.id) newTask.id = task.id
-        // Then affect template and object
-        _.merge(newTask, taskTemplateWithoutId)
-        _.merge(newTask, taskWithoutId)
-      } else {
-        // Simply copy input object when no template is given
-        Object.assign(newTask, task)
       }
+      // When there is nothing to interpolate the returned ID is empty
+      if (!newTask.id) newTask.id = task.id
+      // Then affect template and object
+      _.merge(newTask, taskTemplateWithoutId)
+      _.merge(newTask, taskWithoutId)
+      
       return newTask
     })
     // Always default to async if no type given
