@@ -59,12 +59,6 @@ module.exports = {
           templateFile: 'seed.yaml'
         },
         createDockerContainer: {
-          host: config.docker.host,
-          port: process.env.DOCKER_PORT || 2376,
-          ca: fs.readFileSync('/home/ubuntu/.docker/ca.pem'),
-          cert: fs.readFileSync('/home/ubuntu/.docker/cert.pem'),
-          key: fs.readFileSync('/home/ubuntu/.docker/key.pem'),
-          Image: 'yagajs/mapproxy:1.11-alpine',
           Cmd: ['mapproxy-seed', '-f', '/mapproxy/mapproxy.yaml', '-s', '/mapproxy/<%= id %>.yaml'],
           HostConfig: {
             Binds: ['/home/ubuntu/krawler/examples/seeder/mapproxy:/mapproxy']
@@ -75,10 +69,7 @@ module.exports = {
             }
           },
           Env: [ 'AWS_ACCESS_KEY_ID=' + process.env.S3_ACCESS_KEY, 
-                 'AWS_SECRET_ACCESS_KEY=' + process.env.S3_SECRET_ACCESS_KEY ],
-          AttachStdout: true,
-          AttachStderr: true,
-          Tty: true
+                 'AWS_SECRET_ACCESS_KEY=' + process.env.S3_SECRET_ACCESS_KEY ]
         },
         startSeeder: {
           hook: 'runDockerContainerCommand',
