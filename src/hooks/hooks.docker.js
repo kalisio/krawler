@@ -1,8 +1,9 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
-import util from 'util'
 import Docker from 'dockerode'
 import { addOutput, getStoreFromHook, writeStreamToStore, callOnHookItems, template, templateObject } from '../utils'
+
+const debug = makeDebug('krawler:hooks:docker')
 
 export function connectDocker (options = {}) {
   return async function (hook) {
@@ -68,12 +69,12 @@ export function createDockerContainer (options = {}) {
     if (_.isNil(client)) {
       throw new Error(`You must be connected to Docker before using the 'createDockerContainer' hook`)
     }
-    
+
     debug('Creating container', item)
 
     const templatedOptions = templateObject(item, options, ['Cmd', 'Env'])
     debug('Creating docker container', templatedOptions)
-    let container = await docker.createContainer(templatedOptions)
+    let container = await client.createContainer(templatedOptions)
     _.set(item, options.containerPath || 'container', container)
   }
   return callOnHookItems(create)
