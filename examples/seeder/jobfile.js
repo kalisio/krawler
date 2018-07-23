@@ -107,15 +107,19 @@ module.exports = {
           port: process.env.DOCKER_PORT || 2376,
           ca: fs.readFileSync('/home/ubuntu/.docker/ca.pem'),
           cert: fs.readFileSync('/home/ubuntu/.docker/cert.pem'),
-          key: fs.readFileSync('/home/ubuntu/.docker/key.pem')
+          key: fs.readFileSync('/home/ubuntu/.docker/key.pem'),
+          clientPath: 'taskTemplate.client'
         },
         pullDockerImage: {
+          clientPath: 'taskTemplate.client',
           image: 'yagajs/mapproxy:1.11-alpine'
         },
         generateTasks: {}
       },
       after: {
-        disconnectDocker: {},
+        disconnectDocker: {
+          clientPath: 'taskTemplate.client'
+        },
         removeStores: ['output-store', 'template-store']
       }
     }
