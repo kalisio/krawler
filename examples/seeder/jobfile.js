@@ -58,7 +58,7 @@ module.exports = {
           templateStore: 'template-store',
           templateFile: 'seed.yaml'
         },
-        createContainer: {
+        createDockerContainer: {
           host: config.docker.host,
           port: process.env.DOCKER_PORT || 2376,
           ca: fs.readFileSync('/home/ubuntu/.docker/ca.pem'),
@@ -81,15 +81,15 @@ module.exports = {
           Tty: true
         },
         startSeeder: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'start'
         },
         waitSeeder: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'wait'
         },
         removeSeeder: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'remove',
           arguments: { force: true }
         }
@@ -111,17 +111,20 @@ module.exports = {
             options: { path: __dirname }
           }
         ],
-        pullImage: {
+        connectDocker: {
           host: config.docker.host,
           port: process.env.DOCKER_PORT || 2376,
           ca: fs.readFileSync('/home/ubuntu/.docker/ca.pem'),
           cert: fs.readFileSync('/home/ubuntu/.docker/cert.pem'),
-          key: fs.readFileSync('/home/ubuntu/.docker/key.pem'),
+          key: fs.readFileSync('/home/ubuntu/.docker/key.pem')
+        },
+        pullDockerImage: {
           image: 'yagajs/mapproxy:1.11-alpine'
         },
         generateTasks: {}
       },
       after: {
+        disconnectDocker: {},
         removeStores: ['output-store', 'template-store']
       }
     }
