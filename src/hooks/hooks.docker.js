@@ -42,6 +42,7 @@ export function pullDockerImage (options = {}) {
     let client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to Docker before using the 'pullImage' hook`)
+    }
     if (_.isNil(options.image)) {
       throw new Error(`You must provide an image name for the 'pullDockerImage' hook`)
     }
