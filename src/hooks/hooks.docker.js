@@ -38,8 +38,8 @@ export function disconnectDocker (options = {}) {
 }
 
 export function pullDockerImage (options = {}) {
-  async function pull (item) {
-    let client = _.get(item, options.clientPath || 'client')
+  async function pull (item, hook) {
+    let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to Docker before using the 'pullImage' hook`)
     }
@@ -63,8 +63,8 @@ export function pullDockerImage (options = {}) {
 }
 
 export function createDockerContainer (options = {}) {
-  async function create (item) {
-    let client = _.get(item, options.clientPath || 'client')
+  async function create (item, hook) {
+    let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to Docker before using the 'createDockerContainer' hook`)
     }
