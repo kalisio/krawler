@@ -9,6 +9,7 @@ const config = require('./config')
 
 const debug = makeDebug('krawler:examples')
 
+
 // Create a custom hook to generate tasks
 let generateTasks = () => {
   return (hook) => {
@@ -59,6 +60,7 @@ module.exports = {
           templateFile: 'seed.yaml'
         },
         createDockerContainer: {
+          Image: 'yagajs/mapproxy:1.11-alpine',
           Cmd: ['mapproxy-seed', '-f', '/mapproxy/mapproxy.yaml', '-s', '/mapproxy/<%= id %>.yaml'],
           HostConfig: {
             Binds: ['/home/ubuntu/krawler/examples/seeder/mapproxy:/mapproxy']
