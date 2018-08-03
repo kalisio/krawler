@@ -458,7 +458,9 @@ Tar files or directories using [node-tar](https://github.com/npm/node-tar), hook
 * **files**: array of paths to add to the tarball
 * any option supported by node-tar for [packing](https://github.com/npm/node-tar#tarcoptions-filelist-callback-alias-tarcreate)
 
-> `file`, `files` and `cwd` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+::: tip
+`file`, `files` and `cwd` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+:::
 
 ### untar(options)
 
@@ -466,36 +468,60 @@ Untar files or directories using [node-tar](https://github.com/npm/node-tar), ho
 * **files**: array of paths to extract from the tarball
 * any option supported by node-tar for [unpacking](https://github.com/npm/node-tar#tarxoptions-filelist-callback-alias-tarextract)
 
-> `file`, `files` and `cwd` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+::: tip
+`file`, `files` and `cwd` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+:::
 
 ### runCommand(options)
 
-Run a system command, hook options are the following:
+Run a system command. Hook options are the following:
 * **command**: the template of the command to be run with the hook object as context
 * **stdout**: boolean indicating if stdout is logged and stored in the hook object
 * **stderr**: boolean indicating if stderr is logged and stored in the hook object
 
-> Learn more about [templating](https://lodash.com/docs/4.17.4#template)
+::: tip
+Learn more about [templating](https://lodash.com/docs/4.17.4#template)
+:::
 
-### pullImage(options)
+## Docker [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.docker.js)
 
-Pull a docker image using [dockerode](https://github.com/apocas/dockerode), hook options are the following:
-* any option supported by dockerode for [connection](https://github.com/apocas/dockerode#getting-started) and [pulling](https://github.com/apocas/dockerode#equivalent-of-docker-pull-in-dockerode)
+The Docker hooks allows you to interact with a Docker daemon. It is based on [dockerode](https://github.com/apocas/dockerode), a Docker remote API.
+
+### connectDocker(options)
+
+Connect to the Docker daemon. The [connection options](https://github.com/apocas/dockerode#getting-started) of the client are defined in the hook options plus:
+* **clientPath**: property path where to store the client object to be used by the Docker hooks, defaults to `client`
+
+### disconnectDocker(options)
+
+Disconnect from the Docker daemon. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
+### pullDockerImage(options)
+
+Pull a docker image. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* any options supported by dockerode for [image pulling](https://github.com/apocas/dockerode#equivalent-of-docker-pull-in-dockerode)
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
 
 ::: tip
 `options` can contain an `auth` object to pull the image from a private repository.
 :::
 
-### createContainer(options)
+### createDockerContainer(options)
 
-Run a docker container using [dockerode](https://github.com/apocas/dockerode), hook options are the following:
-* any option supported by dockerode for [connection](https://github.com/apocas/dockerode#getting-started) and [creation](https://github.com/apocas/dockerode#manipulating-a-container)
+Run a docker container. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* any options supported by dockerode for [container creation](https://github.com/apocas/dockerode#manipulating-a-container)
+  
+::: tip
+`Cmd` and `Env` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+:::
 
-> `Cmd` and `Env` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+### runDockerContainerCommand(options)
 
-### runContainerCommand(options)
-
-Run a command against a docker container using [dockerode](https://github.com/apocas/dockerode), hook options are the following:
+Run a command against a docker container. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **command**: the name of the command to be run
 * **arguments**: the arguments of the command to be run
 * support any command/option supported by dockerode on [containers](https://github.com/apocas/dockerode#manipulating-a-container)
@@ -506,9 +532,13 @@ When the `getArchive` command is used, additional hook options are the following
 * **key**: see description in [common options](./hooks.md#common-options)
 * **outputType**: the type of output produced by this hook, defaults to `intermediate`
 
-> `Cmd`, `Env` and `path` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+::: tip
+`Cmd`, `Env` and `path` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+:::
 
-> The hook take care to wait for `exec` to finish and automatically write the tar in the hook store for `getArchive`
+::: tip
+The hook take care to wait for `exec` to finish and automatically write the tar in the hook store for `getArchive`
+:::
 
 ## Utils [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.utils.js)
 
