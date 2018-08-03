@@ -2,8 +2,7 @@ import _ from 'lodash'
 import makeDebug from 'debug'
 import util from 'util'
 import Tar from 'tar'
-import Docker from 'dockerode'
-import { addOutput, getStoreFromHook, writeStreamToStore, callOnHookItems, template, templateObject } from '../utils'
+import { addOutput, callOnHookItems, template, templateObject } from '../utils'
 
 const exec = util.promisify(require('child_process').exec)
 const debug = makeDebug('krawler:hooks:system')
@@ -47,85 +46,6 @@ export function runCommand (options = {}) {
     if (options.stderr) {
       item.stderr = stderr
       console.log(stderr)
-    }
-  }
-  return callOnHookItems(run)
-}
-
-export function pullImage (options = {}) {
-  if (_.isNil(options.image)) {
-    throw new Error(`You must provide an image name for the 'pullImage' hook`)
-  }
-
-  let docker = new Docker(options)
-
-  async function pull (item) {
-    debug('Pulling docker image', item)
-
-    await new Promise((resolve, reject) => {
-      docker.pull(options.image, _.isNil(options.auth) ? null : options.auth, (err, stream) => {
-        if (err) reject(err)
-        docker.modem.followProgress(stream, (err, output) => {
-          if (err) reject(err)
-          resolve()
-        })
-      })
-    })
-  }
-  return callOnHookItems(pull)
-}
-
-export function createContainer (options = {}) {
-  let docker = new Docker(options)
-
-  async function create (item) {
-    const templatedOptions = templateObject(item, options, ['Cmd', 'Env'])
-    debug('Creating docker container', templatedOptions)
-    let container = await docker.createContainer(templatedOptions)
-    _.set(item, options.containerPath || 'container', container)
-  }
-  return callOnHookItems(create)
-}
-
-export function runContainerCommand (options = {}) {
-  async function run (item, hook) {
-    let container = _.get(item, options.containerPath || 'container')
-    if (_.isNil(container)) {
-      throw new Error(`You must run a docker container before using the 'runContainerCommand' hook`)
-    }
-    let args = []
-    if (options.arguments) args = (Array.isArray(options.arguments) ? options.arguments : [options.arguments])
-    args = _.clone(args)
-    // Take care to clone the array because we update it in place and don't want to alter original options
-    for (let i = 0; i < args.length; i++) {
-      const arg = args[i]
-      // Any string parameter will be templated (e.g. covers path for putArchive)
-      if (typeof arg === 'string') args[i] = template(item, arg)
-      // For now we only allow a couple of options to be templated
-      else if (typeof arg === 'object') args[i] = templateObject(item, args[i], ['Cmd', 'Env', 'path'])
-    }
-    debug(`Running docker container ${container.id} command`, options.command, args)
-    let result = await container[options.command](...args)
-    if (options.command === 'exec') {
-      result = await result.start()
-      container.modem.demuxStream(result.output, process.stdout, process.stderr)
-      // Need to wait for output stream end to be sure the command has been executed
-      await new Promise((resolve, reject) => {
-        result.output
-        .on('end', () => resolve())
-        .on('error', (error) => reject(error))
-      })
-      await result.inspect()
-    } else if (options.command === 'remove') {
-      _.unset(item, options.containerPath || 'container')
-    } else if (options.command === 'getArchive') {
-      let store = await getStoreFromHook(hook, 'runContainerCommand', options)
-      let tarName = template(item, options.key || (item.id + '.tar'))
-      await writeStreamToStore(result, store, {
-        key: tarName,
-        params: options.storageOptions
-      })
-      addOutput(item, item.id + '.tar', options.outputType)
     }
   }
   return callOnHookItems(run)

@@ -19,9 +19,7 @@ module.exports = {
           files: [ '<%= id %>.png' ]
         },
         create: {
-          hook: 'createContainer',
-          host: 'localhost',
-          port: process.env.DOCKER_PORT || 2375,
+          hook: 'createDockerContainer',
           Image: 'v4tech/imagemagick',
           Cmd: ['/bin/sh'],
           AttachStdout: true,
@@ -29,18 +27,18 @@ module.exports = {
           Tty: true
         },
         start: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'start'
         }
       },
       after: {
         copyInputImage: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'putArchive',
           arguments: [ path.join(outputPath, '<%= id %>.tar'), { path: '/tmp' } ]
         },
         convert: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'exec',
           arguments: {
             Cmd: [ 'convert', '/tmp/<%= id %>.png', '/tmp/<%= id %>.jpg' ],
@@ -50,12 +48,12 @@ module.exports = {
           }
         },
         copyOutputImage: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'getArchive',
           arguments: { path: '/tmp/.' }
         },
         destroy: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'remove',
           arguments: { force: true }
         },
@@ -80,10 +78,17 @@ module.exports = {
             path: outputPath,
             storePath: 'store'
           }
+        },
+        connectDocker: {
+          host: 'localhost',
+          port: process.env.DOCKER_PORT || 2375,
+          // Required so that client is forwarded from job to tasks
+          clientPath: 'taskTemplate.client'
         }
       },
       after: {
         clearOutputs: {},
+        disconnectDocker: { clientPath: 'taskTemplate.client' },
         removeStores: 'fs'
       }
     }

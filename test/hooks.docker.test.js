@@ -5,7 +5,7 @@ import fsStore from 'fs-blob-store'
 import fs from 'fs'
 import { hooks as pluginHooks } from '../src'
 
-describe('krawler:hooks:system', () => {
+describe('krawler:hooks:docker', () => {
   let inputStore = fsStore({ path: path.join(__dirname, 'data') })
   let outputStore = fsStore({ path: path.join(__dirname, 'output') })
 
@@ -13,63 +13,58 @@ describe('krawler:hooks:system', () => {
     chailint(chai, util)
   })
 
-  let commandHook = {
+  let dockerHook = {
     type: 'before',
     data: {
-      id: 'command'
+      id: 'krawler-icon'
     },
     params: { store: outputStore }
   }
 
-  it('run a command', () => {
-    return pluginHooks.runCommand({
-      command: 'echo <%= id %>',
-      stdout: true
-    })(commandHook)
-    .then(hook => {
-      expect(hook.data.stdout).toExist()
-      expect(hook.data.stdout).to.include('command')
-    })
-  })
-  // Let enough time to proceed
-  .timeout(5000)
-
-  it('tar a file', () => {
-    commandHook.data.id = 'krawler-icon'
+  it('tar input file', () => {
     return pluginHooks.tar({
       cwd: inputStore.path,
       file: path.join(outputStore.path, '<%= id %>-in.tar'),
       files: [ '<%= id %>.png' ]
-    })(commandHook)
+    })(dockerHook)
     .then(hook => {
-      expect(hook.data.stdout).toExist()
-      expect(hook.data.stdout).to.include('command')
+      expect(fs.existsSync(path.join(outputStore.path, 'krawler-icon-in.tar'))).beTrue()
     })
   })
   // Let enough time to proceed
   .timeout(5000)
 
-  it('create a container', () => {
-    return pluginHooks.createContainer({
+  it('connect to docker', () => {
+    return pluginHooks.connectDocker({
       host: 'localhost',
-      port: process.env.DOCKER_PORT || 2375,
+      port: process.env.DOCKER_PORT || 2375
+    })(dockerHook)
+    .then(hook => {
+      expect(hook.data.client).toExist()
+    })
+  })
+  // Let enough time to proceed, pull image on first run
+  .timeout(5000)
+
+  it('create a container', () => {
+    return pluginHooks.createDockerContainer({
       Image: 'v4tech/imagemagick',
       Cmd: ['/bin/sh'],
       AttachStdout: true,
       AttachStderr: true,
       Tty: true
-    })(commandHook)
+    })(dockerHook)
     .then(hook => {
       expect(hook.data.container).toExist()
     })
   })
   // Let enough time to proceed, pull image on first run
-  .timeout(50000)
+  .timeout(5000)
 
   it('start a container', () => {
-    return pluginHooks.runContainerCommand({
+    return pluginHooks.runDockerContainerCommand({
       command: 'start'
-    })(commandHook)
+    })(dockerHook)
     .then(hook => {
       expect(hook.data.container).toExist()
     })
@@ -78,10 +73,10 @@ describe('krawler:hooks:system', () => {
   .timeout(5000)
 
   it('copy to a container', () => {
-    return pluginHooks.runContainerCommand({
+    return pluginHooks.runDockerContainerCommand({
       command: 'putArchive',
       arguments: [ path.join(outputStore.path, '<%= id %>-in.tar'), { path: '/tmp' } ]
-    })(commandHook)
+    })(dockerHook)
     .then(hook => {
       expect(hook.data.container).toExist()
     })
@@ -90,7 +85,7 @@ describe('krawler:hooks:system', () => {
   .timeout(5000)
 
   it('exec in a container', () => {
-    return pluginHooks.runContainerCommand({
+    return pluginHooks.runDockerContainerCommand({
       command: 'exec',
       arguments: {
         Cmd: [ 'convert', '/tmp/<%= id %>.png', '/tmp/<%= id %>.jpg' ],
@@ -98,7 +93,7 @@ describe('krawler:hooks:system', () => {
         AttachStderr: true,
         Tty: true
       }
-    })(commandHook)
+    })(dockerHook)
     .then(hook => {
       expect(hook.data.container).toExist()
     })
@@ -107,10 +102,10 @@ describe('krawler:hooks:system', () => {
   .timeout(10000)
 
   it('copy from a container', () => {
-    return pluginHooks.runContainerCommand({
+    return pluginHooks.runDockerContainerCommand({
       command: 'getArchive',
       arguments: { path: '/tmp/.' }
-    })(commandHook)
+    })(dockerHook)
     .then(hook => {
       expect(hook.data.container).toExist()
     })
@@ -119,9 +114,9 @@ describe('krawler:hooks:system', () => {
   .timeout(5000)
 
   it('stop a container', () => {
-    return pluginHooks.runContainerCommand({
+    return pluginHooks.runDockerContainerCommand({
       command: 'stop'
-    })(commandHook)
+    })(dockerHook)
     .then(hook => {
       expect(hook.data.container).toExist()
     })
@@ -130,9 +125,9 @@ describe('krawler:hooks:system', () => {
   .timeout(20000)
 
   it('destroy a container', () => {
-    return pluginHooks.runContainerCommand({
+    return pluginHooks.runDockerContainerCommand({
       command: 'remove'
-    })(commandHook)
+    })(dockerHook)
     .then(hook => {
       expect(hook.data.container).beUndefined()
     })
@@ -140,11 +135,22 @@ describe('krawler:hooks:system', () => {
   // Let enough time to proceed
   .timeout(5000)
 
-  it('untar a file', () => {
+  it('disconnect from docker', () => {
+    dockerHook.type = 'after'
+    dockerHook.result = dockerHook.data
+    return pluginHooks.disconnectDocker()(dockerHook)
+    .then(hook => {
+      expect(hook.data.client).beUndefined()
+    })
+  })
+  // Let enough time to proceed, pull image on first run
+  .timeout(5000)
+
+  it('untar output file', () => {
     return pluginHooks.untar({
       cwd: outputStore.path,
       file: path.join(outputStore.path, '<%= id %>.tar')
-    })(commandHook)
+    })(dockerHook)
     .then(hook => {
       expect(fs.existsSync(path.join(outputStore.path, 'krawler-icon.jpg'))).beTrue()
     })

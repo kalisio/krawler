@@ -18,9 +18,7 @@ module.exports = {
         },
         generateId: {},
         create: {
-          hook: 'createContainer',
-          host: 'localhost',
-          port: process.env.DOCKER_PORT || 2375,
+          hook: 'createDockerContainer',
           Image: 'kalisio/leaflet-print',
           Entrypoint: 'ash',
           AttachStdout: true,
@@ -30,7 +28,7 @@ module.exports = {
             'BASE_LAYER=<%= baseLayer %>', 'OVERLAY_LAYER=<%= overlayLayer %>', 'GEOJSON_FILE=<%= id %>.json' ]
         },
         start: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'start'
         }
       },
@@ -42,12 +40,12 @@ module.exports = {
           files: [ '<%= id %>.json' ]
         },
         copyGeoJson: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'putArchive',
           arguments: [ path.join(outputPath, '<%= id %>.tar'), { path: '/tmp' } ]
         },
         print: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'exec',
           arguments: {
             Cmd: [ '/opt/testcafe/docker/testcafe-docker.sh', '\'chromium --no-sandbox\'', '/opt/testcafe/src/index.js' ],
@@ -57,12 +55,12 @@ module.exports = {
           }
         },
         copyImage: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'getArchive',
           arguments: { path: '/home/user/Downloads/.' }
         },
         destroy: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'remove',
           arguments: { force: true }
         },
@@ -79,6 +77,9 @@ module.exports = {
           hook: 'copyToStore',
           input: { key: '<%= id %>.png', store: 'fs' },
           output: { key: '<%= id %>.png', store: 's3', params: { ACL: 'public-read' } }
+        },
+        transformJson: {
+          omit: ['client']
         }
       }
     },
@@ -104,11 +105,18 @@ module.exports = {
             },
             bucket: process.env.S3_BUCKET
           }
-        }]
+        }],
+        connectDocker: {
+          host: 'localhost',
+          port: process.env.DOCKER_PORT || 2375,
+          // Required so that client is forwarded from job to tasks
+          clientPath: 'taskTemplate.client'
+        }
       },
       after: {
         clearOutputs: {},
         clearData: {},
+        disconnectDocker: { clientPath: 'taskTemplate.client' },
         template: {
           link: 'https://s3.eu-central-1.amazonaws.com/<%= env.S3_BUCKET %>/<%= id %>.png'
         }/*, If used as a web service stores need to persist across requests
@@ -117,12 +125,13 @@ module.exports = {
       error: {
         // In case of error clear everything
         destroy: {
-          hook: 'runContainerCommand',
+          hook: 'runDockerContainerCommand',
           command: 'remove',
           arguments: { force: true }
         },
         clearOutputs: {},
-        clearData: {}
+        clearData: {},
+        disconnectDocker: { clientPath: 'taskTemplate.client' }
       }
     }
   }
