@@ -119,6 +119,11 @@ describe('krawler:tasks', () => {
         else done(exist ? null : new Error('File not found in store'))
       })
     })
+    .catch(error => {
+      // Sometimes meteo france servers reply 404 or 503
+      console.log(error)
+      done()
+    })
   })
   // Let enough time to download
   .timeout(10000)

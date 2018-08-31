@@ -1,5 +1,7 @@
 import _ from 'lodash'
+import zlib from 'zlib'
 import makeDebug from 'debug'
+import { addOutput, getStoreFromHook, writeStreamToStore, callOnHookItems, templateObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:store')
 
@@ -27,6 +29,7 @@ export function createStores (options = {}) {
       try {
         // Check if store does not already exist
         store = await hook.service.storesService.get(storeOptions.id)
+        if (storeOptions.storePath) _.set(hook.data, storeOptions.storePath, store)
         debug('Found existing store ' + storeOptions.id)
       } catch (error) {
         debug('Creating store for ' + hook.data.id + ' with options ', storeOptions)
@@ -51,15 +54,15 @@ export function createStores (options = {}) {
 // Remove an existing (set of) store(s)
 export function removeStores (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'removeStore' hook should only be used as a 'after' hook.`)
+    if ((hook.type !== 'after') && (hook.type !== 'error')) {
+      throw new Error(`The 'removeStore' hook should only be used as a 'after/error' hook.`)
     }
 
     // Transform to array
     let stores = []
     if (!Array.isArray(options)) {
       if (options.stores) options = options.stores
-      else options = [options]
+      else stores = [options]
     } else {
       stores = options
     }
@@ -74,4 +77,49 @@ export function removeStores (options = {}) {
 
     return hook
   }
+}
+
+export function copyToStore (options = {}) {
+  async function copy (item, hook) {
+    // Output store config given in options
+    const outputOptions = templateObject(item, options.output, ['key'])
+    let outStore = await hook.service.storesService.get(outputOptions.store)
+    const inputOptions = templateObject(item, options.input, ['key'])
+    let inStore = await getStoreFromHook(hook, 'copyToStore', inputOptions)
+    debug('Copying to store', inputOptions, outputOptions)
+    await writeStreamToStore(inStore.createReadStream(inputOptions), outStore, outputOptions)
+    addOutput(item, outputOptions.key, outputOptions.outputType)
+  }
+
+  return callOnHookItems(copy)
+}
+
+export function gzipToStore (options = {}) {
+  async function gzip (item, hook) {
+    // Output store config given in options
+    const outputOptions = templateObject(item, options.output, ['key'])
+    let outStore = await hook.service.storesService.get(outputOptions.store)
+    const inputOptions = templateObject(item, options.input, ['key'])
+    let inStore = await getStoreFromHook(hook, 'gzipToStore', inputOptions)
+    debug('Gzipping to store', inputOptions, outputOptions)
+    await writeStreamToStore(inStore.createReadStream(inputOptions).pipe(zlib.createGzip(options)), outStore, outputOptions)
+    addOutput(item, outputOptions.key, outputOptions.outputType)
+  }
+
+  return callOnHookItems(gzip)
+}
+
+export function gunzipFromStore (options = {}) {
+  async function gunzip (item, hook) {
+    // Output store config given in options
+    const outputOptions = templateObject(item, options.output, ['key'])
+    let outStore = await hook.service.storesService.get(outputOptions.store)
+    const inputOptions = templateObject(item, options.input, ['key'])
+    let inStore = await getStoreFromHook(hook, 'gunzipFromStore', inputOptions)
+    debug('Gunzipping from store', inputOptions, outputOptions)
+    await writeStreamToStore(inStore.createReadStream(inputOptions).pipe(zlib.createGunzip(options)), outStore, outputOptions)
+    addOutput(item, outputOptions.key, outputOptions.outputType)
+  }
+
+  return callOnHookItems(gunzip)
 }

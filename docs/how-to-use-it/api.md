@@ -1,8 +1,16 @@
+---
+sidebar: auto
+---
+
+The problem with hooks is that they are configured at application setup time and usually fixed during the whole application lifecycle. It means you would have a to create an application instance for each pipeline you’d like to have, not so simple. This is the reason why krawler is mainly used as a command-line utility (CLI), where each execution setup a new application with a hooks pipeline according to the job to be done.
+
+However, using the CLI, you can also launch it as standard wep application/API. You can then POST job or task requests to the exposed services, e.g. on `localhost:3030/api/jobs`.
+
 # Command-Line Interface
 
 ## Internal API
 
-The problem with hooks is that they are configured at application setup time and usually fixed during the whole application lifecycle. It means you would have a to create an application instance for each pipeline you’d like to have, not so simple. This is the reason why krawler can also be used as a command-line utility, where each execution setup the hooks pipeline according to the job to be done. The underlying implementation is managed by the global **run(jobfile, options)** function:
+ The underlying implementation is managed by the global **run(jobfile, options)** function:
 * **jobfile**: a path to a local job file or a jobfile JSON object
 * **options**:
   * **cron**: a [CRON pattern](https://github.com/kelektiv/node-cron) to schedule the job at regular intervals, e.g. `*/5 * * * * *` will run it every 5 seconds, if not provided it will be run only once
@@ -11,17 +19,23 @@ The problem with hooks is that they are configured at application setup time and
   * **user**: user name to be used for proxy
   * **password**: user password to be used for proxy
   * **debug**: output debug messages
+  * **sync**: activate [sync module](https://github.com/feathersjs-ecosystem/feathers-sync) with given connection URI so that internal events can be listened externally
+  * **port**: port to be used by the krawler (defaults to 3030)
+  * **api**: launch the krawler as a web service/API
+  * **api-prefix**: api prefix to be used when launching the krawler as a web service/API (defaults to `/api`)
 
 This function is responsible of parsing the job definition including all the required parameters to call the underlying services with the relevant hooks configured (see below).
 
 ## External API
 
 The jobfile is the sole mandatory argument of the CLI and options are read from the CLI arguments with the same names as in the internal API or using shortcuts like this:
-```
+
+```bash
 krawler --user user_name -p password -P proxy_url --cron "*/5 * * * * *" path_to_jobfile.json
 ```
 
 A jobfile could be a JSON or JS file (it will be `require()`) and its structure is the following:
+
 ```js
 let job = {
   // Options for job executor
@@ -76,40 +90,7 @@ let job = {
 }
 ```
 
-By default hook names are used as JSON object keys so you cannot have the same hook appearing twice in your pipeline using this notation. However, you can also use the *named hook syntax* if you want to use the same hook multiple times in your pipeline. In this case the key used in the configuration file can be whatever you want but the associated object value must have a `hook` property containing the name of the hook to be run like this:
-```js
-tasks: {
-  after: {
-    readXML: {
-    },
-    writeTemplateYaml: {
-      hook: 'writeTemplate',
-      templateFile: 'mapproxy-template.yaml'
-    },
-    writeTemplateHtml: {
-      hook: 'writeTemplate',
-      templateFile: 'leaflet-template.html'
-    }
-  }
-}
-```
+::: tip
+When running the krawler as a web API note that only the hooks pipeline is mandatory in the job file. Indeed, job and task objects will be then sent by requesting the exposed web services.
+:::
 
-By default all hooks are run in sequence, if at given step of your pipeline you want a parallel execution of some you can use the reserved hook name `parallel` and give the hooks to be run in parallel as an array of items each containing the hook name as a `hook` property and its options as other properties:
-```js
-tasks: {
-  after: {
-    readXML: {
-    },
-    parallel: [
-      {
-        hook: 'writeTemplate',
-        templateFile: 'mapproxy-template.yaml'
-      },
-      {
-        hook: 'writeTemplate',
-        templateFile: 'leaflet-template.html'
-      }
-    ]
-  }
-}
-```

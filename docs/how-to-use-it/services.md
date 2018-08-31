@@ -1,6 +1,10 @@
-## Services
+---
+sidebar: auto
+---
 
-### Stores
+# Services
+
+## Stores
 
 The `stores` [service](https://docs.feathersjs.com/api/services.html) allow to manage in-memory data stores with the following operations:
 * **create(data)**: create a store based on provided data object properties
@@ -15,7 +19,7 @@ The returned store objects comply the [abstract-blob-store](https://github.com/m
 * [`s3`](https://github.com/jb55/s3-blob-store) for AWS S3
 * [`memory`](https://github.com/retrohacker/memory-blob-store) for in-memory data buffers
 
-### Tasks
+## Tasks
 
 The `tasks` [service](https://docs.feathersjs.com/api/services.html) allow to manage individual task execution with the following operations:
 * **create(data)**: create a task based on provided data object properties
@@ -26,7 +30,7 @@ The `tasks` [service](https://docs.feathersjs.com/api/services.html) allow to ma
     * **outputType**: the type of output produced by this task, defaults to `intermediate`
 * **remove(id)**: remove the task with given ID, this will actually remove the produced output from the store given as a (query) parameters
 
-The returned task objects will contain an additional property for each output types holding an array of produced output files. This is used by the [clearOutputs](./HOOKS.MD#clearoutputsoptions) hook to perform cleanup.
+The returned task objects will contain an additional property for each output types holding an array of produced output files. This is used by the [clearOutputs](./hooks.md#clearoutputsoptions) hook to perform cleanup.
 
 By default a task implementation return a [stream](https://nodejs.org/api/stream.html) to extract data from that is piped to the target store. Available task types are the following:
 * [`http`](https://github.com/request/request) for HTTP requests, available options
@@ -37,7 +41,7 @@ By default a task implementation return a [stream](https://nodejs.org/api/stream
 
 If the task type is written `type-stream` then the stream is not piped directly to the store but returned in a `stream` property for further usage by hooks.
 
-### Jobs
+## Jobs
 
 The `jobs` [service](https://docs.feathersjs.com/api/services.html) allow to manage job execution with the following operations:
 * **create(data)**: create a job based on provided data object properties
@@ -57,7 +61,7 @@ Available job types are the following:
 * `kue` to run tasks by the [Kue job sequencer](https://github.com/Automattic/kue), available specific options are
   * **attemptsLimit**: the maximum number of attempts for a task before being declared as failed by Kue
 
-#### Task templates
+## Task templates
 
 When creating a job if a `taskTemplate` object is provided it will be automatically merged in all job tasks so that you can use it to store options common to all your tasks. It also provides task ID [templating](https://lodash.com/docs/4.17.4#template) based on `jobId` and `taskId` injected variables. So if you provide the following task template:
 ```
@@ -95,7 +99,7 @@ The final task to be executed will be:
 }
 ```
 
-### Complete Example
+## Complete Example
 
 Here's an example of a Feathers server that uses the complete set of krawler services: 
 

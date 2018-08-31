@@ -1,10 +1,14 @@
-# Extending krawler
+---
+sidebar: auto
+---
+
+# Extending 
 
 In the future we might consider others options to extend krawler like a plugin architecture but for now you can use the following ways to do so.
 
 ## Extend services
 
-In order to keep krawler generic [all services](./SERVICES.MD) are not tied to specific implementations. As a consequence, each time a create operation is run on a service it expects as input a `type` and `options` parameters used to delegate the actual instanciation to a user-registered construction function. The [base service](https://github.com/kalisio/krawler/blob/master/src/services/service.js) class is used to implement this behaviour on all our services, to register a new constructor:
+In order to keep krawler generic [all services](./services.md) are not tied to specific implementations. As a consequence, each time a create operation is run on a service it expects as input a `type` and `options` parameters used to delegate the actual instanciation to a user-registered construction function. The [base service](https://github.com/kalisio/krawler/blob/master/src/services/service.js) class is used to implement this behaviour on all our services, to register a new constructor:
 ```js
 app.service(serviceName)
 .registerGenerator(typeName, (options) => {
@@ -45,7 +49,7 @@ let hook = (options = {}) => {
 hooks.registerHook('custom', hook)
 ```
 
-After that you can use your custom hook like the built-in ones with the [CLI](./API.MD#command-line-interface).
+After that you can use your custom hook like the built-in ones with the [CLI](./api.md#command-line-interface).
 
 ## Complete example
 

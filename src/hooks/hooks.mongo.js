@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { MongoClient, MongoError } from 'mongodb'
 import makeDebug from 'debug'
+import { template, templateQueryObject, transformJsonObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:mongo')
 
@@ -11,8 +12,13 @@ export function connectMongo (options = {}) {
       throw new Error(`The 'connectMongo' hook should only be used as a 'before' hook.`)
     }
 
+    let client = _.get(hook.data, options.clientPath || 'client')
+    if (client) {
+      debug('Already connected to MongoDB for ' + hook.data.id)
+      return hook
+    }
     debug('Connecting to MongoDB for ' + hook.data.id)
-    let client = await MongoClient.connect(options.url, _.omit(options, ['url', 'dbName']))
+    client = await MongoClient.connect(options.url, _.omit(options, ['url', 'dbName', 'clientPath']))
     client.db = client.db(options.dbName || options.url.substring(options.url.lastIndexOf('/') + 1))
     _.set(hook.data, options.clientPath || 'client', client)
     debug('Connected to MongoDB for ' + hook.data.id)
@@ -23,8 +29,8 @@ export function connectMongo (options = {}) {
 // Disconnect from the database
 export function disconnectMongo (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'disconnectMongo' hook should only be used as a 'after' hook.`)
+    if ((hook.type !== 'after') && (hook.type !== 'error')) {
+      throw new Error(`The 'disconnectMongo' hook should only be used as a 'after/error' hook.`)
     }
     let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
@@ -32,7 +38,7 @@ export function disconnectMongo (options = {}) {
     }
 
     debug('Disconnecting from MongoDB for ' + hook.data.id)
-    await client.logout()
+    await client.close()
     _.unset(hook, options.clientPath || 'data.client')
     debug('Disconnected from MongoDB for ' + hook.data.id)
     return hook
@@ -48,7 +54,7 @@ export function dropMongoCollection (options = {}) {
     }
 
     // Drop the collection
-    let collection = _.get(options, 'collection', _.snakeCase(hook.result.id))
+    let collection = template(hook.data, _.get(options, 'collection', _.snakeCase(hook.data.id)))
     debug('Droping the ' + collection + ' collection')
     try {
       await client.db.dropCollection(collection)
@@ -75,18 +81,46 @@ export function createMongoCollection (options = {}) {
     }
 
     // Create the collection
-    let collection = _.get(options, 'collection', _.snakeCase(hook.result.id))
+    let collection = template(hook.data, _.get(options, 'collection', _.snakeCase(hook.data.id)))
     debug('Creating the ' + collection + ' collection')
     collection = await client.db.createCollection(collection)
     // Add index if required
     if (options.index) {
-      collection.ensureIndex(options.index)
+      // As arguments or single object ?
+      if (Array.isArray(options.index)) collection.ensureIndex(...options.index)
+      else collection.ensureIndex(options.index)
     }
     return hook
   }
 }
 
-// Insert a JSON
+// Retrieve JSON from a collection
+export function readMongoCollection (options = {}) {
+  return async function (hook) {
+    let client = _.get(hook.data, options.clientPath || 'client')
+    if (_.isNil(client)) {
+      throw new Error(`You must be connected to MongoDB before using the 'readMongoCollection' hook`)
+    }
+
+    let collectionName = template(hook.data, _.get(options, 'collection', _.snakeCase(hook.data.id)))
+    let collection = client.db.collection(collectionName)
+    const templatedQuery = templateQueryObject(hook.data, options.query || {})
+    let query = collection.find(templatedQuery)
+    if (options.project) query.project(options.project)
+    if (options.sort) query.sort(options.sort)
+    if (options.limit) query.limit(options.limit)
+    if (options.skip) query.skip(options.skip)
+    debug(`Querying collection ${collectionName} with`, templatedQuery)
+    let json = await query.toArray()
+    // Allow transform after read
+    if (options.transform) json = transformJsonObject(json, options.transform)
+
+    _.set(hook, options.dataPath || 'result.data', json)
+    return hook
+  }
+}
+
+// Insert a JSON in a collection
 export function writeMongoCollection (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
@@ -97,20 +131,27 @@ export function writeMongoCollection (options = {}) {
       throw new Error(`You must be connected to MongoDB before using the 'writeMongoCollection' hook`)
     }
 
+    let collectionName = template(hook.result, _.get(options, 'collection', _.snakeCase(hook.result.id)))
+    let collection = client.db.collection(collectionName)
     // Defines the chunks
-    let geojson = _.get(hook, options.dataPath || 'result.data', {})
+    let json = _.get(hook, options.dataPath || 'result.data', {})
+    // Allow transform before write
+    if (options.transform) json = transformJsonObject(json, options.transform)
     let chunks = []
-    if (geojson.type === 'FeatureCollection') {
-      chunks = _.chunk(geojson.features, _.get(options, 'chunkSize', 10))
-    } else if (geojson.type === 'Feature') {
-      chunks.push([geojson])
+    // Handle specific case of GeoJson
+    if (json.type === 'FeatureCollection') {
+      chunks = _.chunk(json.features, _.get(options, 'chunkSize', 10))
+    } else if (json.type === 'Feature') {
+      chunks.push([json])
+    } else if (Array.isArray(json)) {
+      chunks = _.chunk(json, _.get(options, 'chunkSize', 10))
+    } else {
+      chunks.push([json])
     }
-    
+
     // Write the chunks
-    let collection = _.get(options, 'collection', _.snakeCase(hook.result.id))
-    debug('Inserting GeoJSON in the ' + collection + ' collection')
-    collection = client.db.collection(collection)
     for (let i = 0; i < chunks.length; ++i) {
+      debug(`Inserting ${chunks.length} JSON document in the ${collectionName} collection `)
       await collection.bulkWrite(chunks[i].map(chunk => {
         return { insertOne: { document: chunk } }
       }))

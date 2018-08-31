@@ -1,0 +1,23 @@
+graph TB
+    subgraph Task pipeline 
+    PRINT_TASK[PRINT TASK] --> createContainer(create print container)
+    createContainer --> writeGeoJson(write GeoJson to FS)
+    writeGeoJson --> copyGeoJson(copy GeoJson to container)
+    copyGeoJson --> print(exec print simulation in container)
+    print --> copyImage(copy printed image from container)
+    copyImage --> removeContainer(remove print container)
+    end
+    subgraph Job pipeline
+    PRINT_JOB[PRINT JOB] --> applyRequestTemplate(apply request template)
+    applyRequestTemplate --> createStores(create required stores)
+    createStores --> PRINT_TASKS[EXECUTE PRINT TASKS]
+    PRINT_TASKS --> clearOutputs(clear intermediate outputs)
+    clearOutputs --> applyResponseTemplate(apply response template)
+    applyResponseTemplate --> removeStores(remove existing stores)
+    end
+
+    linkStyle default stroke-width:2px,fill:none,stroke:black
+    classDef hookClass fill:#f96,stroke:#333,stroke-width:2px
+    class createContainer,removeContainer,writeGeoJson,copyGeoJson,createStores,removeStores,print,copyImage,applyRequestTemplate,clearOutputs,applyResponseTemplate hookClass
+    classDef operationClass fill:#9c6,stroke:#333,stroke-width:2px
+    class PRINT_TASK,PRINT_JOB,PRINT_TASKS operationClass

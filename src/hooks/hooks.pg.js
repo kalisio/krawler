@@ -2,6 +2,7 @@ import util from 'util'
 import _ from 'lodash'
 import pg from 'pg'
 import makeDebug from 'debug'
+import { template } from '../utils'
 
 const debug = makeDebug('krawler:hooks:pg')
 
@@ -24,8 +25,8 @@ export function connectPG (options = {}) {
 // Disconnect from the database
 export function disconnectPG (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'disconnectPG' hook should only be used as a 'after' hook.`)
+    if ((hook.type !== 'after') && (hook.type !== 'error')) {
+      throw new Error(`The 'disconnectPG' hook should only be used as a 'after/error' hook.`)
     }
     let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
@@ -49,7 +50,7 @@ export function dropPGTable (options = {}) {
     }
 
     // Drop the table
-    let table = _.get(options, 'table', _.snakeCase(hook.result.id))
+    let table = template(hook.data, _.get(options, 'table', _.snakeCase(hook.data.id)))
     debug('Droping the ' + table + ' table')
     await client.query('DROP TABLE IF EXISTS ' + table)
     return hook
@@ -65,7 +66,7 @@ export function createPGTable (options = {}) {
     }
 
     // Create the table
-    let table = _.get(options, 'table', _.snakeCase(hook.result.id))
+    let table = template(hook.data, _.get(options, 'table', _.snakeCase(hook.data.id)))
     debug('Creating the ' + table + ' table')
     await client.query('CREATE TABLE ' + table + ' (id SERIAL PRIMARY KEY, geom GEOMETRY(POINTZ, 4326), properties JSON)')
     return hook
@@ -94,7 +95,7 @@ export function writePGTable (options = {}) {
 
     // Write the chunks
     // The insert query must have the following form ($1, $2), ($3, $4) .... ($i, $i+1) [param1, param2 ....... parami, param i+1]
-    let table = _.get(options, 'table', _.snakeCase(hook.result.id))
+    let table = template(hook.result, _.get(options, 'table', _.snakeCase(hook.result.id)))
     debug('Inserting GeoJSON in the ' + table + ' table')
     for (let i = 0; i < chunks.length; ++i) {
       let values = ''

@@ -43,7 +43,8 @@ module.exports = {
           unitMapping: {
             altitude: { from: 'feet', to: 'm' }
           },
-          pick: ['latitude', 'longitude', 'altitude', 'callsign', 'icao', 'speed']
+          pick: ['latitude', 'longitude', 'altitude', 'callsign', 'icao', 'speed'],
+          merge: { source: 'adsb-exchange' }
         },
         transformJsonOpenSkyNetwork: {
           hook: 'transformJson',
@@ -55,7 +56,8 @@ module.exports = {
           unitMapping: {
             speed: { from: 'm/s', to: 'kts' }
           },
-          pick: ['latitude', 'longitude', 'altitude', 'callsign', 'icao', 'speed']
+          pick: ['latitude', 'longitude', 'altitude', 'callsign', 'icao', 'speed'],
+          merge: { source: 'opensky-network' }
         }
         /* To debug individual files
         writeJsonFS: {

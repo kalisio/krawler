@@ -1,16 +1,42 @@
 import _ from 'lodash'
-import { getItems, replaceItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
 import util from 'util'
+import Tar from 'tar'
+import { addOutput, callOnHookItems, template, templateObject } from '../utils'
 
 const exec = util.promisify(require('child_process').exec)
 const debug = makeDebug('krawler:hooks:system')
 
+export function tar (options = {}) {
+  if (_.isNil(options.files)) {
+    throw new Error(`You must provide a list of files to tar for the 'tar' hook`)
+  }
+  async function tarc (item) {
+    const templatedOptions = templateObject(item, options, ['file', 'cwd', 'files'])
+    debug(`Tar ${item.id} with options`, templatedOptions)
+    return Tar.c(templatedOptions, templatedOptions.files)
+    .then(() => {
+      addOutput(item, templatedOptions.file, options.outputType)
+    })
+  }
+  return callOnHookItems(tarc)
+}
+
+export function untar (options = {}) {
+  if (_.isNil(options.file)) {
+    throw new Error(`You must provide a tar file for the 'untar' hook`)
+  }
+  async function tarx (item) {
+    const templatedOptions = templateObject(item, options, ['file', 'cwd', 'files'])
+    debug(`Untar ${item.id} with options`, templatedOptions)
+    return Tar.x(templatedOptions, templatedOptions.files)
+  }
+  return callOnHookItems(tarx)
+}
+
 export function runCommand (options = {}) {
-  async function run(item) {
-    let compiler = _.template(options.command)
-    const context = Object.assign(item, process)
-    let command = compiler(context)
+  async function run (item) {
+    let command = template(item, options.command)
     debug('Running command', command)
     const { stdout, stderr } = await exec(command)
     if (options.stdout) {
@@ -22,19 +48,5 @@ export function runCommand (options = {}) {
       console.log(stderr)
     }
   }
-  return async function (hook) {
-    // Retrieve the items from the hook
-    let items = getItems(hook)
-    const isArray = Array.isArray(items)
-    if (isArray) {
-      for (let i = 0; i < items.length; i++) {
-        await run(items[i])
-      }
-    } else {
-      await run(items)
-    }
-    // Replace the items within the hook
-    replaceItems(hook, items)
-    return hook
-  }
+  return callOnHookItems(run)
 }

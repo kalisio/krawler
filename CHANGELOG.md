@@ -1,5 +1,51 @@
 # Changelog
 
+## [v0.7.0](https://github.com/kalisio/krawler/tree/v0.7.0) (2018-07-17)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.6.0...v0.7.0)
+
+**Implemented enhancements:**
+
+- Make krawler able to communicate with external systems [\#24](https://github.com/kalisio/krawler/issues/24)
+
+**Fixed bugs:**
+
+- MongoDB job never completes [\#26](https://github.com/kalisio/krawler/issues/26)
+
+## [v0.6.0](https://github.com/kalisio/krawler/tree/v0.6.0) (2018-07-10)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.5.2...v0.6.0)
+
+**Implemented enhancements:**
+
+- Added numerical weather prediction models management [\#22](https://github.com/kalisio/krawler/issues/22)
+
+## [v0.5.2](https://github.com/kalisio/krawler/tree/v0.5.2) (2018-06-28)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.5.1...v0.5.2)
+
+**Fixed bugs:**
+
+- krawler command not available [\#21](https://github.com/kalisio/krawler/issues/21)
+
+## [v0.5.1](https://github.com/kalisio/krawler/tree/v0.5.1) (2018-06-27)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.5.0...v0.5.1)
+
+**Fixed bugs:**
+
+- CLI mode broken since v0.5 [\#20](https://github.com/kalisio/krawler/issues/20)
+
+## [v0.5.0](https://github.com/kalisio/krawler/tree/v0.5.0) (2018-06-27)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.4.0...v0.5.0)
+
+**Implemented enhancements:**
+
+- Tag which hooks to be run in case of errors [\#19](https://github.com/kalisio/krawler/issues/19)
+- Generate web app from job description [\#18](https://github.com/kalisio/krawler/issues/18)
+- Support MongoDB like PG [\#16](https://github.com/kalisio/krawler/issues/16)
+
 ## [v0.4.0](https://github.com/kalisio/krawler/tree/v0.4.0) (2018-06-04)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.3.1...v0.4.0)

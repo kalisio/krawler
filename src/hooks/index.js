@@ -1,20 +1,27 @@
 import _ from 'lodash'
 import sift from 'sift'
-import { when } from 'feathers-hooks-common'
+import { getItems, when } from 'feathers-hooks-common'
 import makeDebug from 'debug'
+import { templateQueryObject } from '../utils'
+
+// Feathers hooks
+export * from 'feathers-hooks-common'
 // Built-in hooks
 export * from './hooks.auth'
 export * from './hooks.clear'
 export * from './hooks.csv'
+export * from './hooks.docker'
 export * from './hooks.grid'
 export * from './hooks.json'
 export * from './hooks.geojson'
 export * from './hooks.mongo'
+export * from './hooks.nwp'
 export * from './hooks.ogc'
 export * from './hooks.pg'
 export * from './hooks.raster'
 export * from './hooks.store'
 export * from './hooks.system'
+export * from './hooks.utils'
 export * from './hooks.xml'
 export * from './hooks.yaml'
 
@@ -58,10 +65,13 @@ export function getHookFunction (hookName) {
 // that will skip the associated hook depending on configured properties
 export function match (hookName, filter) {
   return function (hook) {
-    // Check if the hook has to be executed or not depending on its propeties
-    const execute = !_.isEmpty(sift(filter, [hook.data]))
-    if (execute) debug('Skipping hook ' + hookName + ' due to filter', filter)
-    else debug('Executing hook ' + hookName + ' not filtered by', filter)
+    // Retrieve the item from the hook
+    let item = getItems(hook)
+    const templatedFilter = templateQueryObject(item, filter)
+    // Check if the hook has to be executed or not depending on its properties
+    const execute = !_.isEmpty(sift(templatedFilter, [item]))
+    if (!execute) debug('Skipping hook ' + hookName + ' due to filter', templatedFilter)
+    else debug('Executing hook ' + hookName + ' not filtered by', templatedFilter)
     return execute
   }
 }
@@ -84,11 +94,16 @@ function addHook (hookName, hookOptions, pipeline) {
     debug('Adding fault-tolerant hook for ' + hookName)
     hook = getFaultTolerantHook(hook)
   }
-  const filter = hookOptions.match
-  if (filter) debug('Adding hook ' + hookName + ' to hook chain with filter', filter)
-  else debug('Adding hook ' + hookName + ' to hook chain')
-  // Check if this hook has filtering options
-  hook = (filter ? when(match(hookName, filter), hook(hookOptions)) : hook(hookOptions))
+  // We have a default filter to skip hooks at some point in the chain
+  let filter = { skip: { $exists: false } }
+  // Take care that sometimes options is simply a string object and a match function do exist in this case
+  const hookFilter = (typeof hookOptions === 'string' ? undefined : hookOptions.match)
+  if (hookFilter) {
+    debug('Adding hook ' + hookName + ' to hook chain with filter', filter)
+    Object.assign(filter, hookFilter)
+  } else debug('Adding hook ' + hookName + ' to hook chain')
+  // Add filtering options to hook
+  hook = when(match(hookName, filter), hook(hookOptions))
   pipeline.push(hook)
 }
 

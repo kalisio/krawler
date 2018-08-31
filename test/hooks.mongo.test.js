@@ -1,10 +1,9 @@
 import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
 import path from 'path'
-import mongodb from 'mongodb'
 import { hooks as pluginHooks } from '../src'
 
-describe('krawler:mongo', () => {
+describe('krawler:hooks:mongo', () => {
   const geojson = require(path.join(__dirname, 'data', 'geojson'))
 
   before(() => {
@@ -41,11 +40,30 @@ describe('krawler:mongo', () => {
     await pluginHooks.writeMongoCollection({ collection: 'geojson' })(mongoHook)
     let collection = mongoHook.data.client.db.collection('geojson')
     let results = await collection.find({
-      geometry: { $near: { $geometry: { type: "Point",  coordinates: [ 102, 0.5 ] }, $maxDistance: 5000 } }
+      geometry: { $near: { $geometry: { type: 'Point', coordinates: [ 102, 0.5 ] }, $maxDistance: 5000 } }
     }).toArray()
-    expect(results.length > 0).beTrue()
+    expect(results.length).to.equal(1)
     expect(results[0].properties).toExist()
     expect(results[0].properties.prop0).to.equal('value0')
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('reads MongoDB collection', async () => {
+    await pluginHooks.readMongoCollection({ collection: 'geojson',
+      query: {
+        geometry: { $near: { $geometry: { type: 'Point', coordinates: [ 102, 0.5 ] }, $maxDistance: 500000 } }
+      },
+      project: { properties: 1 },
+      skip: 1,
+      limit: 2,
+      dataPath: 'result.data' })(mongoHook)
+    let results = mongoHook.result.data
+    expect(results.length).to.equal(2)
+    expect(results[0].geometry).beUndefined()
+    expect(results[0].properties).toExist()
+    expect(results[0].properties.prop0).to.equal('value0')
+    expect(results[0].properties.prop1).toExist()
   })
   // Let enough time to proceed
   .timeout(5000)

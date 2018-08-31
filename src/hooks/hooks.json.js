@@ -1,15 +1,11 @@
 import path from 'path'
 import _ from 'lodash'
 import fs from 'fs-extra'
-import sift from 'sift'
-import moment from 'moment'
-import math from 'mathjs'
+import { getItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
-import { getStoreFromHook, addOutput, writeBufferToStore } from '../utils'
+import { getStoreFromHook, addOutput, writeBufferToStore, template, transformJsonObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:json')
-// Add knot unit not defined by default
-math.createUnit('knot', { definition: '0.514444 m/s', aliases: ['knots', 'kt', 'kts'] })
 
 // Generate a JSON from specific hook result values
 export function writeJson (options = {}) {
@@ -22,12 +18,14 @@ export function writeJson (options = {}) {
 
     debug('Creating JSON for ' + hook.data.id)
     let json = _.get(hook, options.dataPath || 'result.data', {})
-    let jsonName = hook.data.id + '.json'
+    // Allow transform before write
+    if (options.transform) json = transformJsonObject(json, options.transform)
+    let jsonName = template(hook.data, options.key || (hook.data.id + '.json'))
     await writeBufferToStore(
       Buffer.from(JSON.stringify(json), 'utf8'),
       store, {
         key: jsonName,
-        params: Object.assign({}, options.storageOptions) // See https://github.com/kalisio/krawler/issues/7
+        params: options.storageOptions
       }
     )
     addOutput(hook.result, jsonName, options.outputType)
@@ -45,98 +43,7 @@ export function transformJson (options = {}) {
     debug('Transforming JSON for ' + hook.result.id)
 
     let json = _.get(hook, options.dataPath || 'result.data', {})
-    let rootJson = json
-    if (options.transformPath) {
-      json = _.get(json, options.transformPath)
-    }
-    if (options.toArray) {
-      json = _.toArray(json)
-    }
-    if (options.toObjects) {
-      json = json.map(array => array.reduce((object, value, index) => {
-        // Set the value at index on object using key provided in input list
-        const propertyName = options.toObjects[index]
-        object[propertyName] = value
-        return object
-      }, {}))
-    }
-    // Safety check
-    let isArray = Array.isArray(json)
-    if (!isArray) {
-      json = [json]
-    }
-    if (options.filter) {
-      json = sift(options.filter, json)
-    }
-    // Iterate over path mapping
-    _.forOwn(options.mapping, (output, inputPath) => {
-      let outputPath = output
-      if (typeof output === 'object') {
-        outputPath = outputPath.path
-      }
-      // Then iterate over JSON objects
-      _.forEach(json, object => {
-        let value = _.get(object, inputPath)
-        // Perform value mapping (if any)
-        if (typeof output === 'object' && output.values) {
-          value = output.values[value]
-        }
-        // Perform key mapping
-        _.set(object, outputPath, value)
-      })
-      _.forEach(json, object => {
-        _.unset(object, inputPath)
-      })
-    })
-    // Iterate over unit mapping
-    _.forOwn(options.unitMapping, (units, path) => {
-      // Then iterate over JSON objects
-      _.forEach(json, object => {
-        // Perform conversion
-        const value = _.get(object, path)
-        if (value) {
-          // Handle dates
-          if (units.asDate) {
-            let date
-            // Handle UTC or local dates using input format if provided
-            if (units.asDate === 'utc') {
-              date = (units.from ? moment.utc(value, units.from) : moment.utc(value))
-            } else {
-              date = (units.from ? moment(value, units.from) : moment(value))
-            }
-            // In this case we'd like to reformat as a string
-            // otherwise the moment object is converted to standard JS Date
-            if (units.to) {
-              date = date.format(units.to)
-            } else {
-              date = date.toDate()
-            }
-            _.set(object, path, date)
-          } else { // Handle numbers
-            _.set(object, path, math.unit(value, units.from).toNumber(units.to))
-          }
-        }
-      })
-    })
-    // Then iterate over JSON objects to pick/omit properties in place
-    for (let i = 0; i < json.length; i++) {
-      let object = json[i]
-      if (options.pick) {
-        object = _.pick(object, options.pick)
-      }
-      if (options.omit) {
-        object = _.omit(object, options.omit)
-      }
-      if (options.merge) {
-        object = _.merge(object, options.merge)
-      }
-      json[i] = object
-    }
-    // Then update JSON in place in memory
-    if (options.transformPath) {
-      _.set(rootJson, options.transformPath, json)
-      json = rootJson
-    }
+    json = transformJsonObject(json, options)
     _.set(hook, options.dataPath || 'result.data', json)
   }
 }
@@ -151,6 +58,11 @@ export function convertToGeoJson (options = {}) {
     debug('Converting to GeoJSON for ' + hook.result.id)
 
     let json = _.get(hook, options.dataPath || 'result.data', {})
+    // Safety check
+    let isArray = Array.isArray(json)
+    if (!isArray) {
+      json = [json]
+    }
 
     // Declare the output GeoJson collection
     let collection = {
@@ -236,9 +148,7 @@ export function mergeJson (options = {}) {
 // Read a JSON from an input stream/store
 export function readJson (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'readJson' hook should only be used as a 'after' hook.`)
-    }
+    let item = getItems(hook)
 
     let store = await getStoreFromHook(hook, 'readJson', options)
     if (!store.path && !store.buffers) {
@@ -246,7 +156,8 @@ export function readJson (options = {}) {
     }
 
     let json = {}
-    const jsonName = hook.result.id
+    const jsonName = template(item, options.key || item.id)
+
     if (store.path) {
       const filePath = path.join(store.path, jsonName)
       debug('Reading JSON file ' + filePath)
@@ -266,9 +177,10 @@ export function readJson (options = {}) {
         debug('Impossible to parse json', data, error)
       }
     }
-    if (options.objectPath) {
-      json = _.get(json, options.objectPath)
-    }
+    if (options.objectPath) json = _.get(json, options.objectPath)
+    // Allow transform after read
+    if (options.transform) json = transformJsonObject(json, options.transform)
+
     _.set(hook, options.dataPath || 'result.data', json)
     return hook
   }

@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
 import Service from './service'
-import { getStore } from '../utils'
+import { getStore, templateObject } from '../utils'
 import defaultJobGenerators from '../jobs'
 
 const debug = makeDebug('krawler:jobs')
@@ -14,6 +14,7 @@ class JobsService extends Service {
   }
 
   setup (app, path) {
+    super.setup(app, path)
     this.tasksService = app.service(this.tasksService)
     this.storesService = app.service(this.storesService)
   }
@@ -30,25 +31,34 @@ class JobsService extends Service {
     }
 
     // The task template ID is used as a template string for the task ID
-    let compiler
-    if (taskTemplate) {
-      compiler = _.template(taskTemplate.id)
-      debug('Launching job with following template', taskTemplate)
+    let idCompiler
+    // Ensure a default empty that could be used to store shared information for tasks, e.g. DB client
+    if (!taskTemplate) {
+      taskTemplate = data.taskTemplate = {}
     }
+    if (taskTemplate.id) {
+      idCompiler = _.template(taskTemplate.id)
+    }
+    debug('Launching job with following template', taskTemplate)
+
     tasks = tasks.map(task => {
+      // ID is templated on his own to have access to the job ID as well
+      let taskTemplateWithoutId = _.omit(taskTemplate, ['id'])
+      // Perform templating of task options
+      taskTemplateWithoutId.options = templateObject(task, taskTemplateWithoutId.options || {})
+      // ID is templated on his own to have access to the job ID as well
+      let taskWithoutId = _.omit(task, ['id'])
       let newTask = {}
-      if (taskTemplate) {
-        // Create a new task with compiled ID
-        newTask.id = compiler({ jobId: data.id, taskId: task.id })
-        // When there is nothing to interpolate the returned ID is empty
-        if (!newTask.id) newTask.id = task.id
-        // Then affect template and object
-        _.merge(newTask, _.omit(taskTemplate, ['id']))
-        _.merge(newTask, _.omit(task, ['id']))
-      } else {
-        // Simply copy input object when no template is given
-        Object.assign(newTask, task)
+      // Create a new task with compiled ID
+      if (idCompiler) {
+        newTask.id = idCompiler(Object.assign({ jobId: data.id, taskId: task.id }, taskWithoutId))
       }
+      // When there is nothing to interpolate the returned ID is empty
+      if (!newTask.id) newTask.id = task.id
+      // Then affect template and object
+      _.merge(newTask, taskTemplateWithoutId)
+      _.merge(newTask, taskWithoutId)
+
       return newTask
     })
     // Always default to async if no type given

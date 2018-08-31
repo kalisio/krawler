@@ -1,8 +1,14 @@
 import _ from 'lodash'
 import path from 'path'
+import compress from 'compression'
+import cors from 'cors'
+import helmet from 'helmet'
+import bodyParser from 'body-parser'
 import feathers from 'feathers'
 import feathersHooks from 'feathers-hooks'
+import rest from 'feathers-rest'
 import socketio from 'feathers-socketio'
+import sync from 'feathers-sync'
 import program from 'commander'
 import { CronJob } from 'cron'
 import makeDebug from 'debug'
@@ -24,28 +30,52 @@ _.forOwn(hooks, (hook, name) => hooks.registerHook(name, hook))
 
 export async function createApp (job, options = {}) {
   if (options.proxy) process.env.HTTP_PROXY = options.proxy
-  if (options['proxy-https']) process.env.HTTPS_PROXY = options['proxy-https']
+  if (options.proxyHttps) process.env.HTTPS_PROXY = options.proxyHttps
   if (options.debug) process.env.DEBUG = 'krawler*'
   if (options.user) process.env.USER_NAME = options.user
   if (options.password) process.env.USER_PASSWORD = options.password
 
   debug('Initializing krawler application')
   app = feathers()
+  // Enable CORS, security, compression, and body parsing
+  app.use(cors())
+  app.use(helmet())
+  app.use(compress())
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }))
+
+  const apiPrefix = (options.api ? options.apiPrefix : '')
+  debug('API prefix ' + apiPrefix)
   app.configure(feathersHooks())
+  app.configure(rest())
   app.configure(socketio({
+    path: apiPrefix + 'ws',
     transports: ['websocket']
   }))
+  if (options.sync) {
+    const protocol = options.sync.split('://')[0]
+    // AMQP
+    if (protocol === 'amqp') app.configure(sync({ uri: options.sync }))
+    // Mongo/Redis
+    else app.configure(sync({ db: options.sync }))
+  }
   app.configure(plugin())
-  app.use('stores', StoresService)
-  app.use('tasks', TasksService)
-  app.use('jobs', JobsService)
+  // Setup default services used by CLI
+  TasksService.storesService = apiPrefix + '/stores'
+  JobsService.storesService = apiPrefix + '/stores'
+  JobsService.tasksService = apiPrefix + '/tasks'
+  app.use(apiPrefix + '/stores', StoresService)
+  app.use(apiPrefix + '/tasks', TasksService)
+  app.use(apiPrefix + '/jobs', JobsService)
   // Process hooks
   _.forOwn(job.hooks, (value, key) => {
-    let service = app.service(key)
+    let service = app.service(apiPrefix + '/' + key)
     hooks.activateHooks(value, service)
   })
   // Run the app, this is required to correctly setup Feathers
-  server = await app.listen(3030)
+  const port = options.port || 3030
+  if (options.api) console.log('Server listening to ' + port)
+  server = await app.listen(port)
   return server
 }
 
@@ -120,11 +150,15 @@ export function processOptions () {
     .version(require('../package.json').version)
     .usage('<jobfile> [options]')
     .option('-d, --debug', 'Verbose output for debugging')
+    .option('-a, --api', 'Setup as web app by exposing an API')
+    .option('-ap, --api-prefix [prefix]', 'When exposed as an API change the prefix (defaults to /api)', '/api')
+    .option('-po, --port [port]', 'Change the port to be used (defaults to 3030)', 3030)
     .option('-c, --cron [pattern]', 'Schedule job using a cron pattern')
     .option('-P, --proxy [proxy]', 'Proxy to be used for HTTP (and HTTPS)')
     .option('-PS, --proxy-https [proxy-https]', 'Proxy to be used for HTTPS')
     .option('-u, --user [user]', 'User name to be used for authentication')
     .option('-p, --password [password]', 'User password to be used for authentication')
+    .option('-s, --sync [uri]', 'Activate sync module with given connection URI')
     .parse(process.argv)
 
   let jobfile = program.args[0]
@@ -134,6 +168,10 @@ export function processOptions () {
   let job = require(jobfile)
   program.jobfile = jobfile
   program.job = job
+  if (program.api) {
+    program.mode = 'setup'
+  }
+
   return program
 }
 

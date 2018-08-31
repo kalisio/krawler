@@ -1,8 +1,221 @@
 import _ from 'lodash'
+import sift from 'sift'
+import moment from 'moment'
+import math from 'mathjs'
+import { getItems, replaceItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
 import { Duplex } from 'stream'
 
 const debug = makeDebug('krawler:utils')
+// Add knot unit not defined by default
+math.createUnit('knot', { definition: '0.514444 m/s', aliases: ['knots', 'kt', 'kts'] })
+// This ensure moment objects are correctly serialized in MongoDB
+Object.getPrototypeOf(moment()).toBSON = function () {
+  return this.toDate()
+}
+
+export function transformJsonObject (json, options) {
+  let rootJson = json
+  if (options.transformPath) {
+    json = _.get(json, options.transformPath)
+  }
+  if (options.toArray) {
+    json = _.toArray(json)
+  }
+  if (options.toObjects) {
+    json = json.map(array => array.reduce((object, value, index) => {
+      // Set the value at index on object using key provided in input list
+      const propertyName = options.toObjects[index]
+      object[propertyName] = value
+      return object
+    }, {}))
+  }
+  // Safety check
+  let isArray = Array.isArray(json)
+  if (!isArray) {
+    json = [json]
+  }
+  if (options.filter) {
+    json = sift(options.filter, json)
+  }
+  // Iterate over path mapping
+  _.forOwn(options.mapping, (output, inputPath) => {
+    const isMappingObject = (typeof output === 'object')
+    const outputPath = (isMappingObject ? output.path : output)
+    const deleteInputPath = (isMappingObject ? _.get(output, 'delete', true) : true)
+    // Then iterate over JSON objects
+    _.forEach(json, object => {
+      let value = _.get(object, inputPath)
+      // Perform value mapping (if any)
+      if (isMappingObject && output.values) {
+        value = output.values[value]
+      }
+      // Perform key mapping
+      _.set(object, outputPath, value)
+    })
+    if (deleteInputPath) {
+      _.forEach(json, object => {
+        _.unset(object, inputPath)
+      })
+    }
+  })
+  // Iterate over unit mapping
+  _.forOwn(options.unitMapping, (units, path) => {
+    // Then iterate over JSON objects
+    _.forEach(json, object => {
+      // Perform conversion
+      const value = _.get(object, path)
+      if (value) {
+        // Handle dates
+        if (units.asDate) {
+          let date
+          // Handle UTC or local dates using input format if provided
+          if (units.asDate === 'utc') {
+            date = (units.from ? moment.utc(value, units.from) : moment.utc(value))
+          } else {
+            date = (units.from ? moment(value, units.from) : moment(value))
+          }
+          // In this case we'd like to reformat as a string
+          // otherwise the moment object is converted to standard JS Date
+          if (units.to) {
+            date = date.format(units.to)
+          } else {
+            date = date.toDate()
+          }
+          _.set(object, path, date)
+        } else { // Handle numbers
+          _.set(object, path, math.unit(value, units.from).toNumber(units.to))
+        }
+      }
+    })
+  })
+  // Then iterate over JSON objects to pick/omit properties in place
+  for (let i = 0; i < json.length; i++) {
+    let object = json[i]
+    if (options.pick) {
+      object = _.pick(object, options.pick)
+    }
+    if (options.omit) {
+      object = _.omit(object, options.omit)
+    }
+    if (options.merge) {
+      object = _.merge(object, options.merge)
+    }
+    json[i] = object
+  }
+  // Transform back to object when required
+  if (!isArray) {
+    if (!options.asArray) json = (json.length > 0 ? json[0] : {})
+  } else {
+    if (options.asObject) json = (json.length > 0 ? json[0] : {})
+  }
+  // Then update JSON in place in memory
+  if (options.transformPath) {
+    _.set(rootJson, options.transformPath, json)
+    json = rootJson
+  }
+
+  return json
+}
+
+// Call a given function on each hook item
+export function callOnHookItems (f) {
+  return async function (hook) {
+    let hookObject = hook
+    // Handle error hooks as usual
+    if (hook.type === 'error') hookObject = hook.original
+    // Retrieve the items from the hook
+    let items = getItems(hookObject)
+    const isArray = Array.isArray(items)
+    if (isArray) {
+      for (let i = 0; i < items.length; i++) {
+        // Handle error hooks as usual
+        if (hook.type === 'error') items[i].error = _.omit(hook.error, ['hook']) // Avoid circular reference
+        await f(items[i], hookObject)
+      }
+    } else {
+      // Handle error hooks as usual
+      if (hook.type === 'error') items.error = _.omit(hook.error, ['hook']) // Avoid circular reference
+      await f(items, hookObject)
+    }
+    // Replace the items within the hook
+    replaceItems(hookObject, items)
+    return hookObject
+  }
+}
+
+// Utility function used to convert from string to Dates a fixed set of properties on a given object (recursive)
+export function convertDates (object, properties) {
+  // Restrict to some properties only ?
+  let keys = (properties || _.keys(object))
+  return _.mapValues(object, (value, key) => {
+    if (keys.includes(key)) {
+      // Recurse on sub objects
+      if (typeof value === 'object') {
+        return convertDates(value)
+      } else {
+        // We use moment to validate the date
+        let date = moment.utc(value, moment.ISO_8601)
+        return (date.isValid() ? date.toDate() : value)
+      }
+    } else {
+      return value
+    }
+  })
+}
+
+export function convertComparisonOperators (queryObject) {
+  _.forOwn(queryObject, (value, key) => {
+    // Process current attributes or  recurse
+    if (typeof value === 'object') {
+      convertComparisonOperators(value)
+    } else if ((key === '$eq') || (key === '$lt') || (key === '$lte') || (key === '$gt') || (key === '$gte')) {
+      let number = _.toNumber(value)
+      // Update from query string to number if required
+      if (!Number.isNaN(number)) {
+        queryObject[key] = number
+      }
+    }
+  })
+  return queryObject
+}
+
+// Template a string or array of strings property according to a given item
+export function template (item, property) {
+  const isArray = Array.isArray(property)
+  // Recurse
+  if (!isArray && (typeof property === 'object')) return templateObject(item, property)
+  let values = (isArray ? property : [property])
+  values = values.map(value => {
+    if (typeof value === 'string') {
+      let compiler = _.template(value)
+      // Add env into templating context
+      const context = Object.assign({}, item, process)
+      return compiler(context)
+    } else {
+      return value
+    }
+  })
+
+  const result = (isArray ? values : values[0])
+  return result
+}
+
+// Utility function used to template strings from a fixed set of properties on a given object (recursive)
+export function templateObject (item, object, properties) {
+  // Restrict to some properties only ?
+  let keys = (properties || _.keys(object))
+  // First key requiring templating
+  let result = _.mapKeys(object, (value, key) => (keys.includes(key) && key.includes('<%') && key.includes('%>')) ? template(item, key) : key)
+  // Then values
+  return _.mapValues(result, (value, key) => (keys.includes(key) ? template(item, value) : value))
+}
+
+// Utility function used to template strings from a fixed set of properties on a given query object (recursive)
+// Will then transform back to right types dates and numbers for comparison operators
+export function templateQueryObject (item, object, properties) {
+  return convertDates(convertComparisonOperators(templateObject(item, object, properties)))
+}
 
 // Add to the 'outputs' property of the given abject a new entry
 export function addOutput (object, output, type) {
@@ -61,12 +274,13 @@ export function bufferToStream (buffer) {
   return stream
 }
 
-// Convert a data buffer to a stream piped to a target store
-export function writeBufferToStore (buffer, store, options) {
+// Pipe a stream to a target store
+export function writeStreamToStore (stream, store, options) {
   return new Promise((resolve, reject) => {
-    bufferToStream(buffer)
+    stream
     .on('error', reject)
-    .pipe(store.createWriteStream(options, error => {
+    // See https://github.com/kalisio/krawler/issues/7
+    .pipe(store.createWriteStream(_.cloneDeep(options), error => {
       if (error) reject(error)
     }))
     .on('finish', () => {
@@ -74,4 +288,9 @@ export function writeBufferToStore (buffer, store, options) {
     })
     .on('error', reject)
   })
+}
+
+// Convert a data buffer to a stream piped to a target store
+export function writeBufferToStore (buffer, store, options) {
+  return writeStreamToStore(bufferToStream(buffer), store, options)
 }

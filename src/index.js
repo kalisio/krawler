@@ -1,9 +1,12 @@
+#!/usr/bin/env node
+
 // import cluster from 'cluster'
 import { processOptions, cli } from './cli'
 import plugin from './plugin'
 
 export * as hooks from './hooks'
 export * as utils from './utils'
+export * from './grid'
 export * as services from './services'
 export * as stores from './stores'
 export * as jobs from './jobs'

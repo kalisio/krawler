@@ -1,0 +1,315 @@
+# -------------------------------
+# MapProxy example configuration.
+# -------------------------------
+#
+# This is a minimal MapProxy configuration.
+# See full_example.yaml and the documentation for more options.
+#
+
+# Starts the following services:
+# Demo:
+#     http://localhost:8080/demo
+# WMS:
+#     capabilities: http://localhost:8080/service?REQUEST=GetCapabilities
+# WMTS:
+#     capabilities: http://localhost:8080/wmts/1.0.0/WMTSCapabilities.xml
+#     first tile: http://localhost:8080/wmts/osm/webmercator/0/0/0.png
+# Tile service (compatible with OSM/etc.)
+#     first tile: http://localhost:8080/tiles/osm/webmercator/0/0/0.png
+# TMS:
+#     note: TMS is not compatible with OSM/Google Maps/etc.
+#     fist tile: http://localhost:8080/tms/1.0.0/osm/webmercator/0/0/0.png
+# KML:
+#     initial doc: http://localhost:8080/kml/osm/webmercator
+
+services:
+  demo:
+  wms:
+  tms:
+  wmts:
+
+layers:
+  - name: osm-bright
+    title: OpenStreetMap (bright rendering)
+    sources: [osm-bright_cache]
+
+  - name: osm-dark
+    title: OpenStreetMap (dark rendering)
+    sources: [osm-dark_cache]
+
+  - name: osm-terrain
+    title: OpenStreetMap & Terrain data
+    sources: [osm-terrain_cache]
+     
+  - name: s2
+    title: ESA S2
+    sources: [s2_cache]
+
+  - name: bdortho-5m
+    title: IGN BDORTHO (5m)
+    sources: [bdortho-5m_cache]
+
+  - name: mosaik
+    title: Kalisio mosaic 
+    sources: [mosaik_cache]
+
+  - name: ARPEGE_05_VERTICAL_VELOCITY_PRESSURE__ISOBARIC_SURFACE
+    title: Vitesse verticale sur des surfaces isobares.
+    sources: [ARPEGE_05_VERTICAL_VELOCITY_PRESSURE__ISOBARIC_SURFACE_source]
+
+  - name: ARPEGE_05_DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE
+    title: Température du point de rosée sur des surfaces isobares.
+    sources: [ARPEGE_05_DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE_source]
+
+  - name: ARPEGE_05_TEMPERATURE__ISOBARIC_SURFACE
+    title: Température de l'air sur des surfaces isobares.
+    sources: [ARPEGE_05_TEMPERATURE__ISOBARIC_SURFACE_source]
+
+  - name: ARPEGE_05_TOTAL_WATER_PRECIPITATION__GROUND_OR_WATER_SURFACE
+    title: Quantité de précipitations sous forme liquide.
+    sources: [ARPEGE_05_TOTAL_WATER_PRECIPITATION__GROUND_OR_WATER_SURFACE_source]
+
+  - name: ARPEGE_05_SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE
+    title: Glace nuageuse sur des surfaces isobares.
+    sources: [ARPEGE_05_SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE_source]
+
+  - name: ARPEGE_05_WIND_SPEED__ISOBARIC_SURFACE
+    title: Force du vent sur des surfaces isobares.
+    sources: [ARPEGE_05_WIND_SPEED__ISOBARIC_SURFACE_source]
+
+  - name: ARPEGE_05_WIND_SPEED_GUST__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND
+    title: Rafale de vent en niveaux hauteur.
+    sources: [ARPEGE_05_WIND_SPEED_GUST__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND_source]
+
+  - name: ARPEGE_05_WIND__ISOBARIC_SURFACE
+    title: Direction et force du vent sur des surfaces isobares.
+    sources: [ARPEGE_05_WIND__ISOBARIC_SURFACE_source]
+
+  - name: ARPEGE_05_TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE
+    title: Energie cinétique turbulente sur des surfaces isobares.
+    sources: [ARPEGE_05_TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE_source]
+
+caches:
+  osm-bright_cache:
+    grids: [GLOBAL_WEBMERCATOR]
+    sources: [osm-bright_source]
+    cache:
+      type: s3
+      bucket_name: kargo
+      directory: cache/osm-bright
+
+  osm-dark_cache:
+    grids: [GLOBAL_WEBMERCATOR]
+    sources: [osm-dark_source]
+    cache:
+      type: s3
+      bucket_name: kargo
+      directory: cache/osm-dark
+
+  osm-terrain_cache:
+    grids: [GLOBAL_WEBMERCATOR]
+    sources: [osm-terrain_source]
+    cache:
+      type: s3
+      bucket_name: kargo
+      directory: cache/osm-terrain
+
+  bdortho-5m_cache:
+    grids: [GLOBAL_WEBMERCATOR]
+    sources: [bdortho-5m_source]
+    cache:
+      type: s3
+      bucket_name: kargo
+      directory: cache/bdortho-5m
+
+  s2_cache:
+    grids: [GLOBAL_WEBMERCATOR]
+    sources: [s2_source]
+    format: image/jpeg
+    cache:
+      type: s3
+      bucket_name: kargo
+      directory: cache/s2
+
+  mosaik_cache:
+    grids: [GLOBAL_WEBMERCATOR]
+    sources: [s2_source, bdortho-5m_source, osm-overlay_source]
+    format: image/jpeg
+    cache:
+      type: s3
+      bucket_name: kargo
+      directory: cache/mosaik
+
+sources:
+  osm-bright_source:
+    type: tile
+    grid: GLOBAL_WEBMERCATOR
+    url: http://tileservergl/styles/osm-bright/%(z)s/%(x)s/%(y)s.png
+ 
+  osm-dark_source:
+    type: tile
+    grid: GLOBAL_WEBMERCATOR
+    url: http://tileservergl/styles/osm-dark/%(z)s/%(x)s/%(y)s.png
+
+  osm-terrain_source:
+    type: tile
+    grid: GLOBAL_WEBMERCATOR
+    url: http://tileservergl/styles/osm-terrain/%(z)s/%(x)s/%(y)s.png
+
+  osm-overlay_source:
+    type: tile
+    grid: GLOBAL_WEBMERCATOR
+    url: http://tileservergl/styles/osm-overlay/%(z)s/%(x)s/%(y)s.png
+    transparent: true
+
+  s2_source:
+    type: tile
+    grid: GLOBAL_WEBMERCATOR
+    url: https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/g/%(z)s/%(y)s/%(x)s.jpg
+
+  bdortho-5m_source:
+    type: tile
+    grid: GLOBAL_WEBMERCATOR
+    url: http://tileservergl/styles/bdortho-5m/%(z)s/%(x)s/%(y)s.png
+    transparent: true
+    coverage:
+      bbox: [-5, 41, 10, 51]
+      srs: 'EPSG:4326'
+
+  ARPEGE_05_VERTICAL_VELOCITY_PRESSURE__ISOBARIC_SURFACE_source:
+    type: wms
+    supported_srs: ['EPSG:4326']
+    wms_opts:
+      version: 1.3.0
+      legendgraphic: true
+      legendurl: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&version=1.3.0&sld_version=1.1.0&request=GetLegendGraphic&layer=VERTICAL_VELOCITY_PRESSURE__ISOBARIC_SURFACE&style=VV__ISOBARIC__NO_SHADING&format=image/png
+    req:
+      url: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?
+      layers: VERTICAL_VELOCITY_PRESSURE__ISOBARIC_SURFACE
+      styles: VV__ISOBARIC__NO_SHADING
+      transparent: true
+      format: image/png
+    forward_req_params: ['time', 'elevation']
+
+  ARPEGE_05_DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE_source:
+    type: wms
+    supported_srs: ['EPSG:4326']
+    wms_opts:
+      version: 1.3.0
+      legendgraphic: true
+      legendurl: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&version=1.3.0&sld_version=1.1.0&request=GetLegendGraphic&layer=DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE&style=TD__ISOBARIC__NO_SHADING&format=image/png
+    req:
+      url: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?
+      layers: DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE
+      styles: TD__ISOBARIC__NO_SHADING
+      transparent: true
+      format: image/png
+    forward_req_params: ['time', 'elevation']
+
+  ARPEGE_05_TEMPERATURE__ISOBARIC_SURFACE_source:
+    type: wms
+    supported_srs: ['EPSG:4326']
+    wms_opts:
+      version: 1.3.0
+      legendgraphic: true
+      legendurl: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&version=1.3.0&sld_version=1.1.0&request=GetLegendGraphic&layer=TEMPERATURE__ISOBARIC_SURFACE&style=T__ISOBARIC__NO_SHADING&format=image/png
+    req:
+      url: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?
+      layers: TEMPERATURE__ISOBARIC_SURFACE
+      styles: T__ISOBARIC__NO_SHADING
+      transparent: true
+      format: image/png
+    forward_req_params: ['time', 'elevation']
+
+  ARPEGE_05_TOTAL_WATER_PRECIPITATION__GROUND_OR_WATER_SURFACE_source:
+    type: wms
+    supported_srs: ['EPSG:4326']
+    wms_opts:
+      version: 1.3.0
+      legendgraphic: true
+      legendurl: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&version=1.3.0&sld_version=1.1.0&request=GetLegendGraphic&layer=TOTAL_WATER_PRECIPITATION__GROUND_OR_WATER_SURFACE&style=EAU__GROUND__NO_SHADING&format=image/png
+    req:
+      url: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?
+      layers: TOTAL_WATER_PRECIPITATION__GROUND_OR_WATER_SURFACE
+      styles: EAU__GROUND__NO_SHADING
+      transparent: true
+      format: image/png
+    forward_req_params: ['time', 'elevation']
+
+  ARPEGE_05_SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE_source:
+    type: wms
+    supported_srs: ['EPSG:4326']
+    wms_opts:
+      version: 1.3.0
+      legendgraphic: true
+      legendurl: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&version=1.3.0&sld_version=1.1.0&request=GetLegendGraphic&layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE&style=CIWC__ISOBARIC__NO_SHADING&format=image/png
+    req:
+      url: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?
+      layers: SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE
+      styles: CIWC__ISOBARIC__NO_SHADING
+      transparent: true
+      format: image/png
+    forward_req_params: ['time', 'elevation']
+
+  ARPEGE_05_WIND_SPEED__ISOBARIC_SURFACE_source:
+    type: wms
+    supported_srs: ['EPSG:4326']
+    wms_opts:
+      version: 1.3.0
+      legendgraphic: true
+      legendurl: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&version=1.3.0&sld_version=1.1.0&request=GetLegendGraphic&layer=WIND_SPEED__ISOBARIC_SURFACE&style=FF__ISOBARIC__NO_SHADING&format=image/png
+    req:
+      url: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?
+      layers: WIND_SPEED__ISOBARIC_SURFACE
+      styles: FF__ISOBARIC__NO_SHADING
+      transparent: true
+      format: image/png
+    forward_req_params: ['time', 'elevation']
+
+  ARPEGE_05_WIND_SPEED_GUST__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND_source:
+    type: wms
+    supported_srs: ['EPSG:4326']
+    wms_opts:
+      version: 1.3.0
+      legendgraphic: true
+      legendurl: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&version=1.3.0&sld_version=1.1.0&request=GetLegendGraphic&layer=WIND_SPEED_GUST__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&style=FF_RAF__HEIGHT__NO_SHADING&format=image/png
+    req:
+      url: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?
+      layers: WIND_SPEED_GUST__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND
+      styles: FF_RAF__HEIGHT__NO_SHADING
+      transparent: true
+      format: image/png
+    forward_req_params: ['time', 'elevation']
+
+  ARPEGE_05_WIND__ISOBARIC_SURFACE_source:
+    type: wms
+    supported_srs: ['EPSG:4326']
+    wms_opts:
+      version: 1.3.0
+      legendgraphic: true
+      legendurl: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&version=1.3.0&sld_version=1.1.0&request=GetLegendGraphic&layer=WIND__ISOBARIC_SURFACE&style=UV__ISOBARIC__BEAUF_NO_SHADING&format=image/png
+    req:
+      url: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?
+      layers: WIND__ISOBARIC_SURFACE
+      styles: UV__ISOBARIC__BEAUF_NO_SHADING
+      transparent: true
+      format: image/png
+    forward_req_params: ['time', 'elevation']
+
+  ARPEGE_05_TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE_source:
+    type: wms
+    supported_srs: ['EPSG:4326']
+    wms_opts:
+      version: 1.3.0
+      legendgraphic: true
+      legendurl: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&version=1.3.0&sld_version=1.1.0&request=GetLegendGraphic&layer=TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE&style=TKE__ISOBARIC__NO_SHADING&format=image/png
+    req:
+      url: http://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?
+      layers: TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE
+      styles: TKE__ISOBARIC__NO_SHADING
+      transparent: true
+      format: image/png
+    forward_req_params: ['time', 'elevation']
+
+
+

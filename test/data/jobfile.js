@@ -51,6 +51,11 @@ module.exports = {
             }
           ],
           outputType: 'product'
+        },
+        emitEvent: {
+          type: 'task-done',
+          asObject: true,
+          pick: ['id']
         }
       }
     },
@@ -72,7 +77,11 @@ module.exports = {
         clearOutputs: {
           type: 'intermediate'
         },
-        removeStores: ['job-store', 'task-store']
+        removeStores: ['job-store', 'task-store'],
+        emitEvent: {
+          type: 'job-done',
+          pick: ['id']
+        }
       }
     }
   }
