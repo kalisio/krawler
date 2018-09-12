@@ -86,8 +86,8 @@ export function computeStatistics (options = {}) {
       })
     }
 
-    if (options.max) _.set(hook, (options.statisticsPath || 'result') + '.max', maxValue)
-    if (options.min) _.set(hook, (options.statisticsPath || 'result') + '.min', minValue)
+    if (options.max) _.set(hook, (options.statisticsPath || 'result') + '.' + (typeof options.max === 'string' ? options.max : 'max'), maxValue)
+    if (options.min) _.set(hook, (options.statisticsPath || 'result') + '.' + (typeof options.min === 'string' ? options.min : 'max'), minValue)
     return hook
   }
 }
