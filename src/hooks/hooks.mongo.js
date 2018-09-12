@@ -91,7 +91,7 @@ export function createMongoCollection (options = {}) {
     // Create the collection if required
     if (!collection) {
       debug('Creating the ' + collection + ' collection')
-      collection = await client.db.createCollection(collection)
+      collection = await client.db.createCollection(collectionName)
     }
     // Add index if required
     if (options.index) {
