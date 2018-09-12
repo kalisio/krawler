@@ -46,30 +46,49 @@ export function computeStatistics (options = {}) {
       throw new Error(`The 'computeStatistics' hook should only be used as a 'after' hook.`)
     }
 
-    let geotiff = await getStream(hook, 'computeStatistics')
+    let maxValue = Number.NEGATIVE_INFINITY
+    let minValue = Number.POSITIVE_INFINITY
 
-    return new Promise((resolve, reject) => {
-      let { filePath, stream, band } = geotiff
-      debug('Computing statistics for ' + filePath)
-      let maxValue = Number.NEGATIVE_INFINITY
-      let minValue = Number.POSITIVE_INFINITY
-      stream.on('data', (data) => {
-        let blockLen = data.blockSize.x * data.blockSize.y
-        for (let i = 0; i < blockLen; i++) {
-          let value = data.buffer[i]
-          if (value !== band.noDataValue) {
-            if (value < minValue) minValue = value
-            if (value > maxValue) maxValue = value
-          }
+    // Data already in memory
+    if (options.dataPath) {
+      const data = _.get(hook, options.dataPath)
+      debug('Computing statistics for ' + hook.result.id)
+      for (let i = 0; i < data.length; i++) {
+        let value = data[i]
+        // Check for a value property on objects
+        if (typeof value === 'object') value = _.get(value, options.valuePath || 'value')
+        if (_.isFinite(value)) {
+          if (value < minValue) minValue = value
+          if (value > maxValue) maxValue = value
         }
-      })
+      }
+    } else {
+      // Otherwise we read a GIF raster
+      let geotiff = await getStream(hook, 'computeStatistics')
 
-      stream.on('end', () => {
-        if (options.max) _.set(hook, (options.statisticsPath || 'result') + '.max', maxValue)
-        if (options.min) _.set(hook, (options.statisticsPath || 'result') + '.min', minValue)
-        resolve(hook)
+      await new Promise((resolve, reject) => {
+        let { filePath, stream, band } = geotiff
+        debug('Computing statistics for ' + filePath)
+        stream.on('data', (data) => {
+          let blockLen = data.blockSize.x * data.blockSize.y
+          for (let i = 0; i < blockLen; i++) {
+            let value = data.buffer[i]
+            if (value !== band.noDataValue) {
+              if (value < minValue) minValue = value
+              if (value > maxValue) maxValue = value
+            }
+          }
+        })
+
+        stream.on('end', () => {
+          resolve()
+        })
       })
-    })
+    }
+
+    if (options.max) _.set(hook, (options.statisticsPath || 'result') + '.max', maxValue)
+    if (options.min) _.set(hook, (options.statisticsPath || 'result') + '.min', minValue)
+    return hook
   }
 }
 

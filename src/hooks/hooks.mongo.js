@@ -80,10 +80,19 @@ export function createMongoCollection (options = {}) {
       throw new Error(`You must be connected to MongoDB before using the 'createMongoCollection' hook`)
     }
 
-    // Create the collection
-    let collection = template(hook.data, _.get(options, 'collection', _.snakeCase(hook.data.id)))
-    debug('Creating the ' + collection + ' collection')
-    collection = await client.db.createCollection(collection)
+    let collectionName = template(hook.data, _.get(options, 'collection', _.snakeCase(hook.data.id)))
+    // Check if already exist
+    let collection
+    try {
+      collection = await client.db.collection(collectionName, { strict: true })
+    } catch (error) {
+      // If it does not exist we will create it
+    }
+    // Create the collection if required
+    if (!collection) {
+      debug('Creating the ' + collection + ' collection')
+      collection = await client.db.createCollection(collection)
+    }
     // Add index if required
     if (options.index) {
       // As arguments or single object ?

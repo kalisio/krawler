@@ -106,6 +106,24 @@ describe('krawler:hooks:main', () => {
   // Let enough time to proceed
   .timeout(5000)
 
+  it('computes statistics on JSON', () => {
+    return pluginHooks.computeStatistics({
+      min: true, max: true, dataPath: 'result.data'
+    })(geotiffHook)
+    .then(hook => {
+      // We know we have a max value at 73.44 in this file
+      expect(hook.result.min).toExist()
+      expect(hook.result.max).toExist()
+      expect(hook.result.min.toFixed(2)).to.equal('-32.00')
+      expect(hook.result.max.toFixed(2)).to.equal('73.44')
+      // Cleanup for next test
+      delete hook.result.min
+      delete hook.result.max
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
   it('computes statistics on GeoTiff', () => {
     return pluginHooks.computeStatistics({
       min: true, max: true
