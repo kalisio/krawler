@@ -41,8 +41,6 @@
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
     "test": "npm run compile && npm run lint && npm run coverage",
     "start": "npm run compile && node example/app",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
   },
@@ -99,7 +97,6 @@
     "request": "^2.83.0",
     "s3-blob-store": "^2.1.0",
     "sift": "^5.1.0",
-    "snyk": "^1.83.0",
     "tar": "^4.4.4",
     "uuid": "^3.2.1",
     "xml2js": "^0.4.19"
@@ -121,6 +118,5 @@
     "standard": "^10.0.3",
     "vuepress": "^0.10.1",
     "vuepress-theme-kalisio": "https://github.com/kalisio/vuepress-theme-kalisio"
-  },
-  "snyk": true
+  }
 }
