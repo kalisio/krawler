@@ -61,12 +61,14 @@ describe('krawler:cli', () => {
         expect(runCount).to.be.at.least(2) // 2 runs
         expect(eventCount).to.be.at.least(4) // 4 events
         collection = client.db.collection('events')
-        collection.find({ 'message.type': { $exists: true } }).toArray()
+        collection.find({ message: { $regex: new RegExp('"event":"krawler"', 'i') } }).toArray()
         .then(results => {
           expect(results.length).to.be.at.least(4)
           results.forEach(result => {
-            expect(result.event).to.satisfy(event => event === 'tasks krawler' || event === 'jobs krawler')
-            expect(result.message.type).to.satisfy(type => type === 'task-done' || type === 'job-done')
+            const message = JSON.parse(result.message)
+            expect(message.event).to.equal('krawler')
+            expect(message.path).to.satisfy(path => path === 'tasks' || path === 'jobs')
+            expect(message.data.type).to.satisfy(type => type === 'task-done' || type === 'job-done')
           })
           server.close()
           done()
@@ -78,7 +80,8 @@ describe('krawler:cli', () => {
   .timeout(30000)
 
   // Cleanup
-  after(() => {
-    collection.drop()
+  after(async () => {
+    await collection.drop()
+    await client.close()
   })
 })

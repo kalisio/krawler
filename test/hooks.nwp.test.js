@@ -1,8 +1,8 @@
 import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
 import path from 'path'
-import feathers from 'feathers'
-import hooks from 'feathers-hooks'
+import feathers from '@feathersjs/feathers'
+import express from '@feathersjs/express'
 import fsStore from 'fs-blob-store'
 import fs from 'fs'
 import plugin, { hooks as pluginHooks } from '../src'
@@ -13,8 +13,7 @@ describe('krawler:hooks:nwp', () => {
 
   before(async () => {
     chailint(chai, util)
-    app = feathers()
-    app.configure(hooks())
+    app = express(feathers())
     app.configure(plugin())
     server = app.listen(3030)
   })

@@ -57,9 +57,13 @@
     ]
   },
   "directories": {
-    "lib": "lib"
+    "lib": "src"
   },
   "dependencies": {
+    "@feathersjs/errors": "^3.3.2",
+    "@feathersjs/express": "^1.2.5",
+    "@feathersjs/feathers": "^3.2.1",
+    "@feathersjs/socketio": "^3.2.4",
     "@mapbox/sphericalmercator": "^1.0.5",
     "aws-sdk": "^2.158.0",
     "body-parser": "^1.17.1",
@@ -70,13 +74,8 @@
     "debug": "^3.1.0",
     "dockerode": "^2.5.5",
     "fast-csv": "^2.4.1",
-    "feathers": "^2.2.3",
-    "feathers-errors": "^2.9.2",
-    "feathers-hooks": "^2.1.2",
     "feathers-hooks-common": "^3.0.0",
-    "feathers-rest": "^1.7.1",
-    "feathers-socketio": "^2.0.0",
-    "feathers-sync": "^0.1.4",
+    "feathers-sync": "^1.0.3",
     "fs-blob-store": "^5.2.1",
     "fs-extra": "^4.0.2",
     "gdal": "^0.9.6",

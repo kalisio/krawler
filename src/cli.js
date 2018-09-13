@@ -4,10 +4,10 @@ import compress from 'compression'
 import cors from 'cors'
 import helmet from 'helmet'
 import bodyParser from 'body-parser'
-import feathers from 'feathers'
-import feathersHooks from 'feathers-hooks'
-import rest from 'feathers-rest'
-import socketio from 'feathers-socketio'
+import feathers from '@feathersjs/feathers'
+import express from '@feathersjs/express'
+import rest from '@feathersjs/express/rest'
+import socketio from '@feathersjs/socketio'
 import sync from 'feathers-sync'
 import program from 'commander'
 import { CronJob } from 'cron'
@@ -36,7 +36,7 @@ export async function createApp (job, options = {}) {
   if (options.password) process.env.USER_PASSWORD = options.password
 
   debug('Initializing krawler application')
-  app = feathers()
+  app = express(feathers())
   // Enable CORS, security, compression, and body parsing
   app.use(cors())
   app.use(helmet())
@@ -46,18 +46,13 @@ export async function createApp (job, options = {}) {
 
   const apiPrefix = (options.api ? options.apiPrefix : '')
   debug('API prefix ' + apiPrefix)
-  app.configure(feathersHooks())
   app.configure(rest())
   app.configure(socketio({
     path: apiPrefix + 'ws',
     transports: ['websocket']
   }))
   if (options.sync) {
-    const protocol = options.sync.split('://')[0]
-    // AMQP
-    if (protocol === 'amqp') app.configure(sync({ uri: options.sync }))
-    // Mongo/Redis
-    else app.configure(sync({ db: options.sync }))
+    app.configure(sync({ uri: options.sync }))
   }
   app.configure(plugin())
   // Setup default services used by CLI
@@ -75,7 +70,11 @@ export async function createApp (job, options = {}) {
   // Run the app, this is required to correctly setup Feathers
   const port = options.port || 3030
   if (options.api) console.log('Server listening to ' + port)
-  server = await app.listen(port)
+  server = app.listen(port)
+  await new Promise((resolve, reject) => {
+    server.on('listening', resolve)
+    server.on('error', reject)
+  })
   return server
 }
 

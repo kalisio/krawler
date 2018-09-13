@@ -1,6 +1,6 @@
 import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
-import feathers from 'feathers'
+import feathers from '@feathersjs/feathers'
 import plugin from '../src'
 
 describe('krawler', () => {

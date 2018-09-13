@@ -1,7 +1,7 @@
 import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
-import feathers from 'feathers'
-import hooks from 'feathers-hooks'
+import feathers from '@feathersjs/feathers'
+import express from '@feathersjs/express'
 import fsStore from 'fs-blob-store'
 import fs from 'fs'
 import path from 'path'
@@ -14,8 +14,7 @@ describe('krawler:hooks:grid', () => {
 
   before(() => {
     chailint(chai, util)
-    app = feathers()
-    app.configure(hooks())
+    app = express(feathers())
     app.configure(plugin())
     server = app.listen(3030)
   })

@@ -1,6 +1,7 @@
 import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
-import feathers from 'feathers'
+import feathers from '@feathersjs/feathers'
+import express from '@feathersjs/express'
 import path from 'path'
 import nock from 'nock'
 import moment from 'moment'
@@ -11,7 +12,7 @@ describe('krawler:tasks', () => {
 
   before(() => {
     chailint(chai, util)
-    app = feathers()
+    app = express(feathers())
     app.configure(plugin())
     server = app.listen(3030)
   })
