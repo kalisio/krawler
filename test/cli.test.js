@@ -58,6 +58,7 @@ describe('krawler:cli', () => {
       // As it runs every 15 seconds we know that in 20s it has ran at least once again
       cli(jobfile, { cron: '*/15 * * * * *', mode: 'runJob' })
       setTimeout(() => {
+        server.close()
         expect(runCount).to.be.at.least(2) // 2 runs
         expect(eventCount).to.be.at.least(4) // 4 events
         collection = client.db.collection('events')
@@ -70,7 +71,6 @@ describe('krawler:cli', () => {
             expect(message.path).to.satisfy(path => path === 'tasks' || path === 'jobs')
             expect(message.data.type).to.satisfy(type => type === 'task-done' || type === 'job-done')
           })
-          server.close()
           done()
         })
       }, 20000)
