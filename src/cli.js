@@ -8,7 +8,7 @@ import feathers from '@feathersjs/feathers'
 import express from '@feathersjs/express'
 import rest from '@feathersjs/express/rest'
 import socketio from '@feathersjs/socketio'
-import sync from 'feathers-sync'
+import mubsub from 'mubsub'
 import program from 'commander'
 import { CronJob } from 'cron'
 import makeDebug from 'debug'
@@ -52,7 +52,11 @@ export async function createApp (job, options = {}) {
     transports: ['websocket']
   }))
   if (options.sync) {
-    app.configure(sync({ uri: options.sync }))
+    app.sync = mubsub(options.sync)
+    let channel = app.sync.channel('krawler-events')
+    app.on('krawler', (event) => {
+      channel.publish(event.name, event.data)
+    })
   }
   app.configure(plugin())
   // Setup default services used by CLI
@@ -71,6 +75,9 @@ export async function createApp (job, options = {}) {
   const port = options.port || 3030
   if (options.api) console.log('Server listening to ' + port)
   server = app.listen(port)
+  if (options.sync) {
+    server.on('close', () => app.sync.close())
+  }
   await new Promise((resolve, reject) => {
     server.on('listening', resolve)
     server.on('error', reject)

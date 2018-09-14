@@ -53,7 +53,7 @@ module.exports = {
           outputType: 'product'
         },
         emitEvent: {
-          type: 'task-done',
+          name: 'task-done',
           asObject: true,
           pick: ['id']
         }
@@ -79,7 +79,7 @@ module.exports = {
         },
         removeStores: ['job-store', 'task-store'],
         emitEvent: {
-          type: 'job-done',
+          name: 'job-done',
           pick: ['id']
         }
       }

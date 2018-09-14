@@ -52,27 +52,21 @@ describe('krawler:cli', () => {
       // Check for event emission
       let eventCount = 0
       app.on('krawler', event => {
-        if ((event.type === 'task-done') || (event.type === 'job-done')) eventCount++
+        if ((event.name === 'task-done') || (event.name === 'job-done')) eventCount++
       })
       // Only run as we already setup the app
       // As it runs every 15 seconds we know that in 20s it has ran at least once again
       cli(jobfile, { cron: '*/15 * * * * *', mode: 'runJob' })
-      setTimeout(() => {
+      setTimeout(async () => {
         server.close()
         expect(runCount).to.be.at.least(2) // 2 runs
         expect(eventCount).to.be.at.least(4) // 4 events
-        collection = client.db.collection('events')
-        collection.find({ message: { $regex: new RegExp('"event":"krawler"', 'i') } }).toArray()
-        .then(results => {
-          expect(results.length).to.be.at.least(4)
-          results.forEach(result => {
-            const message = JSON.parse(result.message)
-            expect(message.event).to.equal('krawler')
-            expect(message.path).to.satisfy(path => path === 'tasks' || path === 'jobs')
-            expect(message.data.type).to.satisfy(type => type === 'task-done' || type === 'job-done')
-          })
-          done()
-        })
+        collection = client.db.collection('krawler-events')
+        const taskEvents = await collection.find({ event: 'task-done' }).toArray()
+        expect(taskEvents.length).to.be.at.least(2)
+        const jobEvents = await collection.find({ event: 'job-done' }).toArray()
+        expect(jobEvents.length).to.be.at.least(2)
+        done()
       }, 20000)
     })
   })
