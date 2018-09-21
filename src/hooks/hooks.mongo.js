@@ -39,7 +39,7 @@ export function disconnectMongo (options = {}) {
 
     debug('Disconnecting from MongoDB for ' + hook.data.id)
     await client.close()
-    _.unset(hook, options.clientPath || 'data.client')
+    _.unset(hook.data, options.clientPath || 'client')
     debug('Disconnected from MongoDB for ' + hook.data.id)
     return hook
   }
