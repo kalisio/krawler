@@ -36,6 +36,8 @@ jobs:
     language: node_js
     node_js:
     - '8'
+    services:
+    - docker
     script:
     - yarn install
     - npm run docs:build
