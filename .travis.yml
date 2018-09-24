@@ -39,6 +39,7 @@ jobs:
     script:
     - yarn install
     - npm run docs:build
+    - bash travis.build.sh
     deploy:
       provider: pages
       local-dir: docs/.vuepress/dist
