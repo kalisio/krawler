@@ -44,7 +44,18 @@ export function transformJson (options = {}) {
 
     let json = _.get(hook, options.dataPath || 'result.data', {})
     json = transformJsonObject(json, options)
-    _.set(hook, options.dataPath || 'result.data', json)
+    // Take care that transformation allocate new objects so that if we erase the reference to the previous result
+    // it will not be accessible anymore from the job, possibly causing a large memory consumption/leak (i.e. memory not freed until the end of the job).
+    // Indeed a reference to the initial task list is kept in job in order to resolve the create job operation with it.
+    // So in this case we simply update the properties of the result object instead of replace it.
+    if (options.dataPath === 'result') {
+      debug('Transforming root result in-place for ' + hook.result.id)
+      const keys = Object.keys(hook.result)
+      keys.forEach(key => delete hook.result[key])
+      Object.assign(hook.result, json)
+    } else {
+      _.set(hook, options.dataPath || 'result.data', json)
+    }
   }
 }
 
