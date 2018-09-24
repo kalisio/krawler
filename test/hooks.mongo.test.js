@@ -68,6 +68,15 @@ describe('krawler:hooks:mongo', () => {
   // Let enough time to proceed
   .timeout(5000)
 
+  it('deletes MongoDB collection', async () => {
+    await pluginHooks.deleteMongoCollection({ collection: 'geojson', filter: { 'geometry.type': 'Point' } })(mongoHook)
+    let collection = mongoHook.data.client.db.collection('geojson')
+    let results = await collection.find({ 'geometry.type': 'Point' }).toArray()
+    expect(results.length).to.equal(0)
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
   it('drops MongoDB collection', async () => {
     await pluginHooks.dropMongoCollection({ collection: 'geojson' })(mongoHook)
     let collections = await mongoHook.data.client.db.listCollections({ name: 'geojson' }).toArray()

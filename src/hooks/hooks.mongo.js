@@ -103,7 +103,7 @@ export function createMongoCollection (options = {}) {
   }
 }
 
-// Retrieve JSON from a collection
+// Retrieve JSON documents from a collection
 export function readMongoCollection (options = {}) {
   return async function (hook) {
     let client = _.get(hook.data, options.clientPath || 'client')
@@ -129,7 +129,7 @@ export function readMongoCollection (options = {}) {
   }
 }
 
-// Insert a JSON in a collection
+// Insert JSON document(s) in a collection
 export function writeMongoCollection (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
@@ -168,3 +168,21 @@ export function writeMongoCollection (options = {}) {
     return hook
   }
 }
+
+// Delete documents in a collection
+export function deleteMongoCollection (options = {}) {
+  return async function (hook) {
+    let client = _.get(hook.data, options.clientPath || 'client')
+    if (_.isNil(client)) {
+      throw new Error(`You must be connected to MongoDB before using the 'deleteMongoCollection' hook`)
+    }
+
+    let collectionName = template(hook.data, _.get(options, 'collection', _.snakeCase(hook.data.id)))
+    let collection = client.db.collection(collectionName)
+    const templatedQuery = templateQueryObject(hook.data, options.filter || {})
+    debug(`Deleting documents in collection ${collectionName} with`, templatedQuery)
+    await collection.deleteMany(templatedQuery)
+    return hook
+  }
+}
+
