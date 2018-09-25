@@ -45,12 +45,12 @@ export function generateNwpTasks (options) {
     // We don't care about the past, however a forecast is still potentially valid at least until we reach the next one
     let lowerTime = datetime.clone().subtract({ seconds: interval })
     let tasks = []
-    // Iterate over times/elements/levels
-    for (let timeOffset = lowerLimit; timeOffset <= upperLimit; timeOffset += interval) {
-      // Check for each forecast step if update is required
-      let forecastTime = nearestForecastTime.clone().add({ seconds: timeOffset })
-      elements.forEach(element => {
-        element.levels.forEach(level => {
+    // Iterate over elements/levels
+    elements.forEach(element => {
+      element.levels.forEach(level => {
+        // Check for each forecast step if update is required
+        for (let timeOffset = lowerLimit; timeOffset <= upperLimit; timeOffset += interval) {
+          let forecastTime = nearestForecastTime.clone().add({ seconds: timeOffset })
           let task = Object.assign({
             level,
             runTime,
@@ -58,9 +58,9 @@ export function generateNwpTasks (options) {
             timeOffset
           }, _.omit(element, ['levels']))
           if (!forecastTime.isBefore(lowerTime)) tasks.push(task)
-        })
+        }
       })
-    }
+    })
     debug(`Generated ${tasks.length} NWP tasks`, tasks)
     hook.data.tasks = tasks
   }
