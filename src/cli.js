@@ -97,7 +97,7 @@ export function runJob (job, options = {}) {
   let isRunning // Flag indicating if job is currently running
   // Function to effectively run the job
   function runJobWithOptions () {
-    console.log('Launching job ' + job.id + ', please wait...')
+    console.log(`Launching job ${job.id} at ${(new Date).toISOString()}, please wait...`)
     console.time('Running time')
     isRunning = true
     return app.service('jobs').create(job)
@@ -142,8 +142,11 @@ export function runJob (job, options = {}) {
   // Run job
   if (cronJob) {
     cronJob.start()
+    // Force run on start ?
+    if (options.run) return runJobWithOptions()
+  } else {
+    return runJobWithOptions()
   }
-  return runJobWithOptions()
 }
 
 export async function run (job, options = {}) {
@@ -160,6 +163,7 @@ export function processOptions () {
     .option('-ap, --api-prefix [prefix]', 'When exposed as an API change the prefix (defaults to /api)', '/api')
     .option('-po, --port [port]', 'Change the port to be used (defaults to 3030)', 3030)
     .option('-c, --cron [pattern]', 'Schedule job using a cron pattern')
+    .option('-r, --run', 'Force a first run on launch when scheduling job using a cron pattern')
     .option('-P, --proxy [proxy]', 'Proxy to be used for HTTP (and HTTPS)')
     .option('-PS, --proxy-https [proxy-https]', 'Proxy to be used for HTTPS')
     .option('-u, --user [user]', 'User name to be used for authentication')

@@ -55,8 +55,8 @@ describe('krawler:cli', () => {
         if ((event.name === 'task-done') || (event.name === 'job-done')) eventCount++
       })
       // Only run as we already setup the app
-      // As it runs every 15 seconds we know that in 20s it has ran at least once again
-      cli(jobfile, { cron: '*/15 * * * * *', mode: 'runJob' })
+      // As it runs every 10 seconds we know that in 20s it has ran at least once again
+      cli(jobfile, { cron: '*/10 * * * * *', mode: 'runJob' })
       setTimeout(async () => {
         server.close()
         expect(runCount).to.be.at.least(2) // 2 runs
