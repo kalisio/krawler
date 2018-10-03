@@ -97,7 +97,7 @@ export function runJob (job, options = {}) {
   let isRunning // Flag indicating if job is currently running
   // Function to effectively run the job
   function runJobWithOptions () {
-    console.log(`Launching job ${job.id} at ${(new Date).toISOString()}, please wait...`)
+    console.log(`Launching job ${job.id} at ${(new Date()).toISOString()}, please wait...`)
     console.time('Running time')
     isRunning = true
     return app.service('jobs').create(job)

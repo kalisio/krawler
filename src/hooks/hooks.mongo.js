@@ -185,4 +185,3 @@ export function deleteMongoCollection (options = {}) {
     return hook
   }
 }
-

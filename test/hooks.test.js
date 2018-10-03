@@ -345,7 +345,7 @@ describe('krawler:hooks:main', () => {
 
   it('get WMS capabilities', () => {
     return pluginHooks.getCapabilities({
-      url: 'http://geoserver.kalisio.xyz/geoserver/Kalisio/wms',
+      url: 'http://sampleserver1.arcgisonline.com/ArcGIS/services/Specialty/ESRI_StatesCitiesRivers_USA/MapServer/WMSServer',
       service: 'WMS'
     })(capabilitiesHook)
     .then(hook => {
