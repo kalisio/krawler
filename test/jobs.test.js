@@ -131,6 +131,26 @@ describe('krawler:jobs', () => {
   // Let enough time to fail
   .timeout(5000)
 
+  it('creates a job retrying to success after a failed HTTP (403) task', () => {
+    nock('https://www.google.com').get('/').reply(403)
+    nock('https://www.google.com').get('/').reply(403)
+    nock('https://www.google.fr').get('/').reply(200)
+    return jobsService.create({
+      id: 'job',
+      tasks: [
+        { id: 'job-403-fault-tolerant.html', type: 'http', store: 'test-store', options: { url: 'https://www.google.com' },
+          attemptsLimit: 3, attemptsOptions: [{}, { options: { url: 'https://www.google.fr' } }] }
+      ]
+    })
+    .then(tasks => {
+      expect(tasks).toExist()
+      expect(tasks.length).to.equal(1)
+      expect(tasks[0].options.url).to.equal('https://www.google.fr')
+    })
+  })
+  // Let enough time to fail
+  .timeout(5000)
+
   it('creates a WCS job', (done) => {
     let datetime = moment.utc()
     datetime.startOf('day')

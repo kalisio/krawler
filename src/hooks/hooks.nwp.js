@@ -47,17 +47,22 @@ export function generateNwpTasks (options) {
     let tasks = []
     // Iterate over elements/levels
     elements.forEach(element => {
+      // Check for accumulation period on accumulated elements
+      const accumulationPeriod = element.accumulationPeriod || 0
       element.levels.forEach(level => {
         // Check for each forecast step if update is required
         for (let timeOffset = lowerLimit; timeOffset <= upperLimit; timeOffset += interval) {
           let forecastTime = nearestForecastTime.clone().add({ seconds: timeOffset })
-          let task = Object.assign({
-            level,
-            runTime,
-            forecastTime,
-            timeOffset
-          }, _.omit(element, ['levels']))
-          if (!forecastTime.isBefore(lowerTime)) tasks.push(task)
+          // For accumulated elements it does not make sense to query before accumulation period
+          if (!forecastTime.isBefore(lowerTime) && (timeOffset >= accumulationPeriod)) {
+            let task = Object.assign({
+              level,
+              runTime,
+              forecastTime,
+              timeOffset
+            }, _.omit(element, ['levels']))
+            tasks.push(task)
+          }
         }
       })
     })

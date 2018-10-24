@@ -41,7 +41,7 @@ function createJob (options = {}, store = null, tasks, id) {
     */
     tasks.forEach(task => {
       let kueTask = queue.create('task-' + id, task)
-      .attempts(options.attemptsLimit || 5)
+      .attempts(task.attemptsLimit || options.attemptsLimit || 1)
       .removeOnComplete(true)
       .save()
       // When the max attempts has been tried
