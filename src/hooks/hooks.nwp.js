@@ -32,6 +32,7 @@ export function generateNwpTasks (options) {
     // Either can either come from options or input data
     const elements = hook.data.elements || options.elements || []
     const runInterval = hook.data.runInterval || options.runInterval
+    const oldestRunInterval = hook.data.oldestRunInterval || options.oldestRunInterval
     const runIndex = hook.data.runIndex || options.runIndex || 0
     const interval = hook.data.interval || options.interval
     const lowerLimit = hook.data.lowerLimit || options.lowerLimit
@@ -39,28 +40,45 @@ export function generateNwpTasks (options) {
     // Compute nearest run T0
     const datetime = moment.utc()
     let nearestRunTime = getNearestRunTime(datetime, runInterval)
-    let nearestForecastTime = getNearestForecastTime(datetime, interval)
     // We can retrieve nearest run (index 0) or previous ones (index N)
     let runTime = nearestRunTime.clone().subtract({ seconds: -runIndex * runInterval })
-    // We don't care about the past, however a forecast is still potentially valid at least until we reach the next one
-    let lowerTime = datetime.clone().subtract({ seconds: interval })
     let tasks = []
     // Iterate over elements/levels
     elements.forEach(element => {
-      // Check for accumulation period on accumulated elements
-      const accumulationPeriod = element.accumulationPeriod || 0
+      // Compute per-element update options
+      const elementInterval = element.interval || interval
+      // These ones can be 0 take care the way the test is written
+      const elementLowerLimit = (_.has(element, 'lowerLimit') ? element.lowerLimit : lowerLimit)
+      const elementUpperLimit = (_.has(element, 'upperLimit') ? element.upperLimit : upperLimit)
+      const levels = element.levels || [ undefined ] // If no level specified it is implicit so push an undefined one
+      let nearestForecastTime = getNearestForecastTime(datetime, elementInterval)
+      // We don't care about the past, however a forecast is still potentially valid at least until we reach the next one
+      let lowerTime = datetime.clone().subtract({ seconds: elementInterval })
+      
       element.levels.forEach(level => {
         // Check for each forecast step if update is required
-        for (let timeOffset = lowerLimit; timeOffset <= upperLimit; timeOffset += interval) {
+        for (let timeOffset = elementLowerLimit; timeOffset <= elementUpperLimit; timeOffset += elementInterval) {
           let forecastTime = nearestForecastTime.clone().add({ seconds: timeOffset })
-          // For accumulated elements it does not make sense to query before accumulation period
-          if (!forecastTime.isBefore(lowerTime) && (timeOffset >= accumulationPeriod)) {
+          if (!forecastTime.isBefore(lowerTime)) {
             let task = Object.assign({
               level,
               runTime,
               forecastTime,
               timeOffset
             }, _.omit(element, ['levels']))
+            // Check if we have to retry on previous runs when failing
+            if (oldestRunInterval) {
+              // Number of retries required to reach the oldest limit
+              task.attemptsLimit = 1 + (oldestRunInterval / runInterval)
+              task.attemptsOptions = []
+              let previousRunTime = runTime.clone()
+              // For each retry jump to previous run
+              for (let i = 0; i < task.attemptsLimit; i++) {
+                task.attemptsOptions.push({
+                  runTime: previousRunTime.subtract({ seconds: -runInterval })
+                })
+              }
+            }
             tasks.push(task)
           }
         }

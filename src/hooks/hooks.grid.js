@@ -2,6 +2,7 @@ import _ from 'lodash'
 import makeDebug from 'debug'
 import SphericalMercator from '@mapbox/sphericalmercator'
 import { Grid } from '../grid'
+import { transformJsonObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:grid')
 
@@ -160,5 +161,31 @@ export function resampleGrid (options = {}) {
     })
     data = grid.resample(options.output.origin, options.output.resolution, options.output.size)
     _.set(hook, options.dataPath || 'result.data', data)
+  }
+}
+
+// Tile a grid
+export function tileGrid (options = {}) {
+  return function (hook) {
+    if (hook.type !== 'after') {
+      throw new Error(`The 'tileGrid' hook should only be used as a 'after' hook.`)
+    }
+
+    debug('Tiling grid for ' + hook.result.id)
+
+    let data = _.get(hook, options.dataPath || 'result.data', {})
+    let grid = new Grid({
+      bounds: options.input.bounds,
+      origin: options.input.origin,
+      size: options.input.size,
+      resolution: options.input.resolution,
+      data
+    })
+    let tiles = grid.tileset(options.output.resolution)
+    // Add GeoJson geometry
+    tiles.forEach(tile => Object.assign(tile, Grid.toGeometry(tile.bounds)))
+    // Allow transform before write
+    if (options.transform) tiles = transformJsonObject(tiles, options.transform)
+    _.set(hook, options.dataPath || 'result.data', tiles)
   }
 }

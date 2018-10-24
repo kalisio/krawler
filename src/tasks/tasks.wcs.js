@@ -14,7 +14,7 @@ function getRequestParameters (options) {
   if (options.subsets) {
     queryParameters.subset = []
     _.forOwn(options.subsets, (value, key) => {
-      queryParameters.subset.push(key + '(' + value + ')')
+      if (!_.isNil(value)) queryParameters.subset.push(key + '(' + value + ')')
     })
   }
   // Setup request with URL & params
