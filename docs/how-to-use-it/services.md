@@ -25,6 +25,8 @@ The `tasks` [service](https://docs.feathersjs.com/api/services.html) allow to ma
 * **create(data)**: create a task based on provided data object properties
   * **id**: unique task ID
   * **type**: task type (e.g. `http`)
+  * **attemptsLimit**: if specified the task will be run again until this number of times before being declared as failed
+  * **attemptsOptions**: if specified each retried task will be run by merging the associated options for each retry given in this array
   * **faultTolerant**: will catch any error raised by the task execution so that the hook chain be stopped but the job will continue anyway
   * **options**: specific task implementation options plus
     * **outputType**: the type of output produced by this task, defaults to `intermediate`
@@ -54,6 +56,7 @@ The returned job object is a [promise](https://developer.mozilla.org/en-US/docs/
 
 Available common job options are the following:
 * **workersLimit**: the maximum number of tasks to be run in parallel by the job
+* **attemptsLimit**: if specified each task will be run again until this number of times before being declared as failed
 * **faultTolerant**: will catch erroneous tasks so that the job will continue anyway, the hook chain will be stopped on the faulty tasks however
 
 Available job types are the following:
