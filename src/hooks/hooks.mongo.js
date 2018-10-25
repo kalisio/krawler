@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { MongoClient, MongoError } from 'mongodb'
 import makeDebug from 'debug'
-import { template, templateQueryObject, transformJsonObject } from '../utils'
+import { template, templateObject, templateQueryObject, transformJsonObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:mongo')
 
@@ -122,7 +122,10 @@ export function readMongoCollection (options = {}) {
     debug(`Querying collection ${collectionName} with`, templatedQuery)
     let json = await query.toArray()
     // Allow transform after read
-    if (options.transform) json = transformJsonObject(json, options.transform)
+    if (options.transform) {
+      const templatedTransform = templateObject(hook.data, options.transform)
+      json = transformJsonObject(json, templatedTransform)
+    }
 
     _.set(hook, options.dataPath || 'result.data', json)
     return hook
@@ -145,7 +148,10 @@ export function writeMongoCollection (options = {}) {
     // Defines the chunks
     let json = _.get(hook, options.dataPath || 'result.data', {})
     // Allow transform before write
-    if (options.transform) json = transformJsonObject(json, options.transform)
+    if (options.transform) {
+      const templatedTransform = templateObject(hook.data, options.transform)
+      json = transformJsonObject(json, templatedTransform)
+    }
     let chunks = []
     // Handle specific case of GeoJson
     if (json.type === 'FeatureCollection') {

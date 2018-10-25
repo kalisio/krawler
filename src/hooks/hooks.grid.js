@@ -2,7 +2,7 @@ import _ from 'lodash'
 import makeDebug from 'debug'
 import SphericalMercator from '@mapbox/sphericalmercator'
 import { Grid } from '../grid'
-import { transformJsonObject } from '../utils'
+import { templateObject, transformJsonObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:grid')
 
@@ -185,7 +185,10 @@ export function tileGrid (options = {}) {
     // Add GeoJson geometry
     tiles.forEach(tile => Object.assign(tile, Grid.toGeometry(tile.bounds)))
     // Allow transform before write
-    if (options.transform) tiles = transformJsonObject(tiles, options.transform)
+    if (options.transform) {
+      const templatedTransform = templateObject(hook.result, options.transform)
+      tiles = transformJsonObject(tiles, templatedTransform)
+    }
     _.set(hook, options.dataPath || 'result.data', tiles)
   }
 }
