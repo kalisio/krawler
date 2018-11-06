@@ -71,11 +71,10 @@ export function generateNwpTasks (options) {
               // Number of retries required to reach the oldest limit
               task.attemptsLimit = 1 + (oldestRunInterval / runInterval)
               task.attemptsOptions = []
-              let previousRunTime = runTime.clone()
               // For each retry jump to previous run
-              for (let i = 0; i < task.attemptsLimit; i++) {
+              for (let i = 0; i < task.attemptsLimit - 1; i++) {
                 task.attemptsOptions.push({
-                  runTime: previousRunTime.subtract({ seconds: -runInterval })
+                  runTime: runTime.clone().subtract({ seconds: (i + 1) * runInterval })
                 })
               }
             }
