@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
 import Service from './service'
-import { getStore, templateObject } from '../utils'
+import { getStore } from '../utils'
 import defaultJobGenerators from '../jobs'
 
 const debug = makeDebug('krawler:jobs')
@@ -43,10 +43,6 @@ class JobsService extends Service {
 
     tasks = tasks.map(task => {
       // ID is templated on his own to have access to the job ID as well
-      let taskTemplateWithoutId = _.omit(taskTemplate, ['id'])
-      // Perform templating of task options
-      taskTemplateWithoutId.options = templateObject(task, taskTemplateWithoutId.options || {})
-      // ID is templated on his own to have access to the job ID as well
       let taskWithoutId = _.omit(task, ['id'])
       let newTask = {}
       // Create a new task with compiled ID
@@ -55,14 +51,13 @@ class JobsService extends Service {
       }
       // When there is nothing to interpolate the returned ID is empty
       if (!newTask.id) newTask.id = task.id
-      // Then affect template and object
-      _.merge(newTask, taskTemplateWithoutId)
+      // Then affect object
       _.merge(newTask, taskWithoutId)
-
       return newTask
     })
     // Always default to async if no type given
-    return this.generate(type || 'async', options, store, tasks, id)
+    // ID have already been templated here to have access to the job ID as well so remove it
+    return this.generate(type || 'async', options, store, tasks, id, _.omit(taskTemplate, ['id']))
   }
 
   async remove (id, params = {}) {

@@ -1,10 +1,11 @@
 import _ from 'lodash'
 import makeDebug from 'debug'
+import { templateObject } from '../utils'
 
 const debug = makeDebug('krawler:jobs')
 
 // Create the async job
-function createJob (options = {}, store = null, tasks, id) {
+function createJob (options = {}, store = null, tasks, id, taskTemplate) {
   debug(`Creating async job ${id} with following options`, options)
   const runTask = async (task, params) => {
     const faultTolerant = options.faultTolerant || task.faultTolerant
@@ -13,7 +14,15 @@ function createJob (options = {}, store = null, tasks, id) {
       try {
         // If different options are provided for attempts use them
         if ((i > 1) && task.attemptsOptions) _.merge(task, task.attemptsOptions[i - 2])
-        await this.tasksService.create(task, params)
+        // Create new task by merging template and object
+        let newTask = Object.assign({}, taskTemplate)
+        // Perform templating of task options only
+        // Indeed some other useful objects might have been added internally to template
+        // in order to make it available to all tasks (eg a DB client connection)
+        // and these objects should not be templated
+        newTask.options = templateObject(task, taskTemplate.options || {})
+        _.merge(newTask, task)
+        await this.tasksService.create(newTask, params)
       } catch (error) {
         // On the last retry stop
         if (i === attempts) {
