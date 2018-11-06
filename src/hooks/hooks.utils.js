@@ -33,7 +33,7 @@ export function discardIf (options = {}) {
     // Check if hooks have to be executed or not depending on item properties
     let discard = !_.isEmpty(sift(templatedFilter, [item]))
     // If yes check for a user-given predicate function as well
-    if (!discard && (typeof options.predicate === 'function')) {
+    if (discard && (typeof options.predicate === 'function')) {
       discard = options.predicate(item)
     }
     if (discard) {
