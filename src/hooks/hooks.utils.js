@@ -26,15 +26,20 @@ export function template (options = {}) {
   })
 }
 
-// Set the skip flag based on item properties
+// Set the skip flag based on predicate or item properties filter
 export function discardIf (options = {}) {
   return callOnHookItems(item => {
-    const templatedFilter = templateQueryObject(item, options)
+    const templatedFilter = templateQueryObject(item, _.omit(options, ['predicate']))
     // Check if hooks have to be executed or not depending on item properties
-    const discard = !_.isEmpty(sift(templatedFilter, [item]))
+    let discard = !_.isEmpty(sift(templatedFilter, [item]))
+    // If yes check for a user-given predicate function as well
+    if (!discard && (typeof options.predicate === 'function')) {
+      discard = options.predicate(item)
+    }
     if (discard) {
       debug('Discarding ' + item.id + ' due to filter', templatedFilter)
       item.skip = true
+      return
     }
   })
 }
@@ -47,5 +52,30 @@ export function emitEvent (options = {}) {
     event.data = transformJsonObject(item, templatedOptions)
     hook.service.emit('krawler', event)
     debug('Emitted event for item ', item.id)
+  })
+}
+
+// Apply a custom function on hook items
+export function apply (options) {
+  return callOnHookItems(item => {
+    options.function(item)
+    debug('Applied function on item', item)
+  })
+}
+
+// Apply a custom function on hook items on conditions
+export function applyIf (options) {
+  return callOnHookItems(item => {
+    const templatedFilter = templateQueryObject(item, _.omit(options, ['predicate', 'function']))
+    // Check if function has to be executed or not depending on item properties
+    let apply = !_.isEmpty(sift(templatedFilter, [item]))
+    // If yes check for a user-given predicate function as well
+    if (apply && (typeof options.predicate === 'function')) {
+      apply = options.predicate(item)
+    }
+    if (apply) {
+      options.function(item)
+      debug('Applied function on item', item)
+    }
   })
 }

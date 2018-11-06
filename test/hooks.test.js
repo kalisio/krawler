@@ -339,6 +339,55 @@ describe('krawler:hooks:main', () => {
   // Let enough time to proceed
   .timeout(5000)
 
+  let applyHook = {
+    type: 'before',
+    data: {
+      value: 6
+    }
+  }
+
+  it('apply function', () => {
+    return pluginHooks.apply({
+      function: (item) => { if (item.value === 6) item.value = 3 }
+    })(applyHook)
+    .then(hook => {
+      expect(hook.data.value).to.equal(3)
+    })
+  })
+
+  it('apply function if', () => {
+    applyHook.type = 'after'
+    applyHook.result = { value: 6 }
+    return pluginHooks.applyIf({
+      value: 6,
+      function: (item) => { item.value = 3 }
+    })(applyHook)
+    .then(hook => {
+      expect(hook.result.value).to.equal(3)
+      return pluginHooks.applyIf({
+        value: 6,
+        function: (item) => { item.value = 6 }
+      })(applyHook)
+    })
+    .then(hook => {
+      expect(hook.result.value).to.equal(3)
+      return pluginHooks.applyIf({
+        predicate: (item) => item.value === 3,
+        function: (item) => { item.value = 6 }
+      })(applyHook)
+    })
+    .then(hook => {
+      expect(hook.result.value).to.equal(6)
+      return pluginHooks.applyIf({
+        predicate: (item) => item.value === 3,
+        function: (item) => { item.value = 3 }
+      })(applyHook)
+    })
+    .then(hook => {
+      expect(hook.result.value).to.equal(6)
+    })
+  })
+
   let capabilitiesHook = {
     type: 'after'
   }

@@ -552,7 +552,19 @@ Perform [templating](https://lodash.com/docs/4.17.4#template) of the options usi
 
 ### discardIf(options)
 
-Discard all subsequent hooks and task if the input data passes the given match filter options, options are similar to the match filter described in [common options](./hooks.md#common-options)
+Discard all subsequent hooks and task if the input data passes the given match filter options, filter options are similar to the match filter described in [common options](./hooks.md#common-options), additional hook options are the following:
+* **predicate**: a predicate function taking the hook item as input and returning true if discarding should occur
+
+### apply(options)
+
+Apply a given function to the hook item(s), hook options are the following:
+* **function**: a function taking the hook item as input and updating it
+
+### applyIf(options)
+
+Conditionnally apply a given function to the hook item(s) if it passes the given match filter options, filter options are similar to the match filter described in [common options](./hooks.md#common-options), additional hook options are the following:
+* **predicate**: a predicate function taking the hook item as input and returning true if the function should be applied
+* **function**: a function taking the hook item as input and updating it
 
 ### emitEvent(options)
 
