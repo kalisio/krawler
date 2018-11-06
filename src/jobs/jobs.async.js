@@ -10,31 +10,35 @@ function createJob (options = {}, store = null, tasks, id, taskTemplate) {
   const runTask = async (task, params) => {
     const faultTolerant = options.faultTolerant || task.faultTolerant
     const attempts = task.attemptsLimit || options.attemptsLimit || 1
+    let newTask
     for (let i = 1; i <= attempts; i++) {
       try {
         // If different options are provided for attempts use them
         if ((i > 1) && task.attemptsOptions) _.merge(task, task.attemptsOptions[i - 2])
         // Create new task by merging template and object
-        let newTask = Object.assign({}, taskTemplate)
+        newTask = Object.assign({}, taskTemplate)
         // Perform templating of task options only
         // Indeed some other useful objects might have been added internally to template
         // in order to make it available to all tasks (eg a DB client connection)
         // and these objects should not be templated
         newTask.options = templateObject(task, taskTemplate.options || {})
         _.merge(newTask, task)
-        await this.tasksService.create(newTask, params)
+        newTask = await this.tasksService.create(newTask, params)
+        // If no failure return task ran
+        return newTask
       } catch (error) {
         // On the last retry stop
         if (i === attempts) {
           if (faultTolerant) {
             console.log(error)
+            // Return last attempt
+            return newTask
           } else {
             throw error
           }
         }
       }
     }
-    return task
   }
   return new Promise(async (resolve, reject) => {
     const workersLimit = options.workersLimit || 4
