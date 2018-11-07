@@ -31,6 +31,7 @@ describe('krawler:hooks:nwp', () => {
           // Test for hard-coded options
           pluginHooks.generateNwpTasks({
             runInterval: 6 * 3600,          // Produced every 6h
+            oldestRunInterval: 24 * 3600,   // Don't go back in time older than 1 day
             interval: 3 * 3600,             // Steps of 3h
             lowerLimit: 3 * 3600,           // From T0 + 3h
             upperLimit: 6 * 3600,           // Up to T0 + 6h
@@ -85,6 +86,7 @@ describe('krawler:hooks:nwp', () => {
       id: 'GFS-05-GLOBE',
       // Test for options given in job
       runInterval: 6 * 3600,          // Produced every 6h
+      oldestRunInterval: 24 * 3600,   // Don't go back in time older than 1 day
       interval: 3 * 3600,             // Steps of 3h
       lowerLimit: 3 * 3600,           // From T0 + 3h
       upperLimit: 6 * 3600,           // Up to T0 + 6h
