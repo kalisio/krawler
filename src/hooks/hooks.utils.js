@@ -39,7 +39,6 @@ export function discardIf (options = {}) {
     if (discard) {
       debug('Discarding ' + item.id + ' due to filter', templatedFilter)
       item.skip = true
-      return
     }
   })
 }
@@ -60,22 +59,5 @@ export function apply (options) {
   return callOnHookItems(item => {
     options.function(item)
     debug('Applied function on item', item)
-  })
-}
-
-// Apply a custom function on hook items on conditions
-export function applyIf (options) {
-  return callOnHookItems(item => {
-    const templatedFilter = templateQueryObject(item, _.omit(options, ['predicate', 'function']))
-    // Check if function has to be executed or not depending on item properties
-    let apply = !_.isEmpty(sift(templatedFilter, [item]))
-    // If yes check for a user-given predicate function as well
-    if (apply && (typeof options.predicate === 'function')) {
-      apply = options.predicate(item)
-    }
-    if (apply) {
-      options.function(item)
-      debug('Applied function on item', item)
-    }
   })
 }

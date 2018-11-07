@@ -73,7 +73,7 @@ export class Grid {
     }
   }
 
-  getIndices(lon, lat) {
+  getIndices (lon, lat) {
     // Take care that some models express longitude in [0,360] and not [-180,180], so unify range here
     lon = wrapLongitude(lon, this.bounds)
     // Check for points outside bbox
@@ -173,14 +173,14 @@ export class Grid {
    */
   tileset (resolution) {
     const { tilesetSize, tileSize, tileResolution } = this.getTiling(resolution)
-    
+
     let data = []
     // Iterate over tiles
     for (let j = 0; j < tilesetSize[1]; j++) {
       for (let i = 0; i < tilesetSize[0]; i++) {
         // Compute tile origin
         let tileOrigin = [ this.origin[0] + this.lonDirection * (i * resolution[0]),
-                           this.origin[1] + this.latDirection * (j * resolution[1]) ]
+          this.origin[1] + this.latDirection * (j * resolution[1]) ]
         let tileData = []
         // Then over cell in tile
         for (let tj = 0; tj < tileSize[1]; tj++) {
@@ -197,9 +197,10 @@ export class Grid {
         let maxLat = tileOrigin[1] + this.latDirection * resolution[1]
         // Need to switch bounds if descending order
         if (this.lonDirection < 0) [ minLon, maxLon ] = [ maxLon, minLon ]
-       if (this.latDirection < 0) [ minLat, maxLat ] = [ maxLat, minLat ]
-         data.push({
-          x: i, y: j,
+        if (this.latDirection < 0) [ minLat, maxLat ] = [ maxLat, minLat ]
+        data.push({
+          x: i,
+          y: j,
           bounds: [ minLon, minLat, maxLon, maxLat ],
           origin: tileOrigin,
           size: tileSize,
@@ -211,12 +212,12 @@ export class Grid {
     return data
   }
 
-  static toGeometry(bounds) {
+  static toGeometry (bounds) {
     let [ minLon, minLat, maxLon, maxLat ] = bounds
     // GeoJSON WGS84 > longitude should be in [-180, 180]
     minLon = (minLon > 180 ? minLon - 360 : minLon)
     maxLon = (maxLon > 180 ? maxLon - 360 : maxLon)
-    
+
     return {
       geometry: {
         type: 'Polygon',

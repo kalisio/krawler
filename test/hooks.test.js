@@ -355,33 +355,22 @@ describe('krawler:hooks:main', () => {
     })
   })
 
-  it('apply function if', () => {
+  it('apply function if with match filter', () => {
     applyHook.type = 'after'
+    applyHook.method = 'create' // Required to use hook pipeline
     applyHook.result = { value: 6 }
-    return pluginHooks.applyIf({
-      value: 6,
-      function: (item) => { item.value = 3 }
-    })(applyHook)
+    return pluginHooks.addHook('apply', { match: { value: 6 }, function: (item) => { item.value = 3 } })(applyHook)
     .then(hook => {
       expect(hook.result.value).to.equal(3)
-      return pluginHooks.applyIf({
-        value: 6,
-        function: (item) => { item.value = 6 }
-      })(applyHook)
+      return pluginHooks.addHook('apply', { match: { value: 6 }, function: (item) => { item.value = 6 } })(applyHook)
     })
     .then(hook => {
       expect(hook.result.value).to.equal(3)
-      return pluginHooks.applyIf({
-        predicate: (item) => item.value === 3,
-        function: (item) => { item.value = 6 }
-      })(applyHook)
+      return pluginHooks.addHook('apply', { match: { predicate: (item) => item.value === 3 }, function: (item) => { item.value = 6 } })(applyHook)
     })
     .then(hook => {
       expect(hook.result.value).to.equal(6)
-      return pluginHooks.applyIf({
-        predicate: (item) => item.value === 3,
-        function: (item) => { item.value = 3 }
-      })(applyHook)
+      return pluginHooks.addHook('apply', { match: { predicate: (item) => item.value === 3 }, function: (item) => { item.value = 3 } })(applyHook)
     })
     .then(hook => {
       expect(hook.result.value).to.equal(6)

@@ -54,7 +54,7 @@ export function generateNwpTasks (options) {
       let nearestForecastTime = getNearestForecastTime(datetime, elementInterval)
       // We don't care about the past, however a forecast is still potentially valid at least until we reach the next one
       let lowerTime = datetime.clone().subtract({ seconds: elementInterval })
-      
+
       levels.forEach(level => {
         // Check for each forecast step if update is required
         for (let timeOffset = elementLowerLimit; timeOffset <= elementUpperLimit; timeOffset += elementInterval) {

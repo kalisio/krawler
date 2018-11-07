@@ -138,8 +138,12 @@ describe('krawler:jobs', () => {
     return jobsService.create({
       id: 'job',
       tasks: [
-        { id: 'job-403-fault-tolerant.html', type: 'http', store: 'test-store', options: { url: 'https://www.google.com' },
-          attemptsLimit: 3, attemptsOptions: [{}, { options: { url: 'https://www.google.fr' } }] }
+        { id: 'job-403-fault-tolerant.html',
+          type: 'http',
+          store: 'test-store',
+          options: { url: 'https://www.google.com' },
+          attemptsLimit: 3,
+          attemptsOptions: [{}, { options: { url: 'https://www.google.fr' } }] }
       ]
     })
     .then(tasks => {

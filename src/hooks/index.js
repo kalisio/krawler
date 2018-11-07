@@ -67,9 +67,13 @@ export function match (hookName, filter) {
   return function (hook) {
     // Retrieve the item from the hook
     let item = getItems(hook)
-    const templatedFilter = templateQueryObject(item, filter)
+    const templatedFilter = templateQueryObject(item, _.omit(filter, ['predicate']))
     // Check if the hook has to be executed or not depending on its properties
-    const execute = !_.isEmpty(sift(templatedFilter, [item]))
+    let execute = !_.isEmpty(sift(templatedFilter, [item]))
+    // If yes check for a user-given predicate function as well
+    if (execute && (typeof filter.predicate === 'function')) {
+      execute = filter.predicate(item)
+    }
     if (!execute) debug('Skipping hook ' + hookName + ' due to filter', templatedFilter)
     else debug('Executing hook ' + hookName + ' not filtered by', templatedFilter)
     return execute
@@ -87,7 +91,7 @@ function getFaultTolerantHook (hookFunction) {
   }
 }
 
-function addHook (hookName, hookOptions, pipeline) {
+export function addHook (hookName, hookOptions, pipeline) {
   // Jump from name/options to the real hook function
   let hook = getHookFunction(hookName)
   if (hookOptions.faultTolerant) {
@@ -104,7 +108,8 @@ function addHook (hookName, hookOptions, pipeline) {
   } else debug('Adding hook ' + hookName + ' to hook chain')
   // Add filtering options to hook
   hook = when(match(hookName, filter), hook(hookOptions))
-  pipeline.push(hook)
+  if (pipeline) pipeline.push(hook)
+  return hook
 }
 
 export function activateHooks (serviceHooks, service) {
