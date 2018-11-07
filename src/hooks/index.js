@@ -67,6 +67,10 @@ export function match (hookName, filter) {
   return function (hook) {
     // Retrieve the item from the hook
     let item = getItems(hook)
+    if (Array.isArray(item)) {
+      debug('Executing hook ' + hookName + ' on item array as filtering does not apply')
+      return true
+    }
     const templatedFilter = templateQueryObject(item, _.omit(filter, ['predicate']))
     // Check if the hook has to be executed or not depending on its properties
     let execute = !_.isEmpty(sift(templatedFilter, [item]))
