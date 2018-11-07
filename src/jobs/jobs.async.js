@@ -27,6 +27,9 @@ function createJob (options = {}, store = null, tasks, id, taskTemplate) {
         // If no failure return task ran
         return newTask
       } catch (error) {
+        if ((i < attempts) && faultTolerant) {
+          debug('Fault-tolerant task failed', error)
+        }
         // On the last retry stop
         if (i === attempts) {
           if (faultTolerant) {
