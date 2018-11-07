@@ -10,6 +10,7 @@ sidebar: auto
 
 All hooks can have the following options:
 * **match**: a match filter to be applied on the input hook data using any option supported by [sift](https://github.com/crcn/sift.js), fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template), if the data is filtered the hook will not be applied
+  * **predicate**: an additional predicate function taking the hook item as input and returning true if matching occurs
 * **faultTolerant**: will catch any error raised in the hook so that the hook chain will continue anyway
 
 > Due to templating restricted to string output any ISO date string or comparison operator value in the match filter will be converted back to native types so that matching will work as expected in JS
@@ -552,18 +553,11 @@ Perform [templating](https://lodash.com/docs/4.17.4#template) of the options usi
 
 ### discardIf(options)
 
-Discard all subsequent hooks and task if the input data passes the given match filter options, filter options are similar to the match filter described in [common options](./hooks.md#common-options), additional hook options are the following:
-* **predicate**: a predicate function taking the hook item as input and returning true if discarding should occur
+Discard all subsequent hooks and task if the input data passes the given match filter options, filter options are similar to the match filter described in [common options](./hooks.md#common-options).
 
 ### apply(options)
 
 Apply a given function to the hook item(s), hook options are the following:
-* **function**: a function taking the hook item as input and updating it
-
-### applyIf(options)
-
-Conditionnally apply a given function to the hook item(s) if it passes the given match filter options, filter options are similar to the match filter described in [common options](./hooks.md#common-options), additional hook options are the following:
-* **predicate**: a predicate function taking the hook item as input and returning true if the function should be applied
 * **function**: a function taking the hook item as input and updating it
 
 ### emitEvent(options)
