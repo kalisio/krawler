@@ -96,8 +96,17 @@ export function createMongoCollection (options = {}) {
     // Add index if required
     if (options.index) {
       // As arguments or single object ?
-      if (Array.isArray(options.index)) collection.ensureIndex(...options.index)
-      else collection.ensureIndex(options.index)
+      if (Array.isArray(options.index)) collection.createIndex(...options.index)
+      else collection.createIndex(options.index)
+    }
+    // Or multiple indices
+    else if (options.indices) {
+      // As arguments or single object ?
+      options.indices.forEach(index => {
+        // As arguments or single object ?
+        if (Array.isArray(index)) collection.createIndex(...index)
+        else collection.createIndex(index)
+      })
     }
     return hook
   }
