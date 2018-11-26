@@ -192,6 +192,8 @@ export function template (item, property) {
       // Add env into templating context
       const context = Object.assign({}, item, process)
       return compiler(context)
+    } else if (typeof value === 'object') {
+      return templateObject(item, value)
     } else {
       return value
     }
