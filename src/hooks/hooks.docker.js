@@ -79,6 +79,23 @@ export function createDockerContainer (options = {}) {
   return callOnHookItems(create)
 }
 
+export function createDockerService (options = {}) {
+  async function create (item, hook) {
+    let client = _.get(hook.data, options.clientPath || 'client')
+    if (_.isNil(client)) {
+      throw new Error(`You must be connected to Docker before using the 'createDockerService' hook`)
+    }
+
+    debug('Creating service', item)
+
+    const templatedOptions = templateObject(item, options)
+    debug('Creating docker service', templatedOptions)
+    let service = await client.createService(templatedOptions)
+    _.set(item, options.servicePath || 'service', service)
+  }
+  return callOnHookItems(create)
+}
+
 export function runDockerContainerCommand (options = {}) {
   async function run (item, hook) {
     let container = _.get(item, options.containerPath || 'container')

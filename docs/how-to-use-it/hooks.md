@@ -519,6 +519,16 @@ Run a docker container. Hook options are the following:
 `Cmd` and `Env` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
 :::
 
+### createDockerService(options)
+
+Create a docker service on a Swarm cluster. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* any options supported by dockerode for [service creation](https://github.com/apocas/dockerode#documentation)
+  
+::: tip
+Options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+:::
+
 ### runDockerContainerCommand(options)
 
 Run a command against a docker container. Hook options are the following:
