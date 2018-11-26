@@ -162,11 +162,11 @@ export function writeMongoCollection (options = {}) {
     let chunks = []
     // Handle specific case of GeoJson
     if (json.type === 'FeatureCollection') {
-      chunks = _.chunk(json.features, _.get(options, 'chunkSize', 10))
+      chunks = _.chunk(json.features, _.get(options, 'chunkSize', 100))
     } else if (json.type === 'Feature') {
       chunks.push([json])
     } else if (Array.isArray(json)) {
-      chunks = _.chunk(json, _.get(options, 'chunkSize', 10))
+      chunks = _.chunk(json, _.get(options, 'chunkSize', 100))
     } else {
       chunks.push([json])
     }
