@@ -5,7 +5,7 @@ import { templateObject } from '../utils'
 const debug = makeDebug('krawler:jobs')
 
 // Create the async job
-function createJob (options = {}, store = null, tasks, id, taskTemplate) {
+async function createJob (options = {}, store = null, tasks, id, taskTemplate) {
   debug(`Creating async job ${id} with following options`, options)
   const runTask = async (task, params) => {
     const faultTolerant = options.faultTolerant || task.faultTolerant
@@ -43,37 +43,35 @@ function createJob (options = {}, store = null, tasks, id, taskTemplate) {
       }
     }
   }
-  return new Promise(async (resolve, reject) => {
-    const workersLimit = options.workersLimit || 4
-    let i = 0
-    // The set of workers/tasks for current step
-    // We launch the workers in sequence, one step of the sequence contains a maximum number of workersLimit workers
-    let workers = []
-    let taskResults = []
-    while (i < tasks.length) {
-      let task = tasks[i]
-      let params = {}
-      if (store) params.store = store
-      // Add a worker to current step of the sequence
-      workers.push(runTask(task, params))
-      // When we reach the worker limit wait until the step finishes and jump to next one
-      if ((workers.length >= workersLimit) ||
-          (i === tasks.length - 1)) {
-        try {
-          let results = await Promise.all(workers)
-          taskResults = taskResults.concat(results)
-          debug(results.length + ' tasks ran', results)
-        } catch (error) {
-          debug('Some tasks failed', error)
-          reject(error)
-          return
-        }
-        workers = []
+  
+  const workersLimit = options.workersLimit || 4
+  let i = 0
+  // The set of workers/tasks for current step
+  // We launch the workers in sequence, one step of the sequence contains a maximum number of workersLimit workers
+  let workers = []
+  let taskResults = []
+  while (i < tasks.length) {
+    let task = tasks[i]
+    let params = {}
+    if (store) params.store = store
+    // Add a worker to current step of the sequence
+    workers.push(runTask(task, params))
+    // When we reach the worker limit wait until the step finishes and jump to next one
+    if ((workers.length >= workersLimit) ||
+        (i === tasks.length - 1)) {
+      try {
+        let results = await Promise.all(workers)
+        taskResults = taskResults.concat(results)
+        debug(results.length + ' tasks ran', results)
+      } catch (error) {
+        debug('Some tasks failed', error)
+        throw error
       }
-      i++
+      workers = []
     }
-    resolve(taskResults)
-  })
+    i++
+  }
+  return taskResults
 }
 
 export default createJob
