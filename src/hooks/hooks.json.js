@@ -172,21 +172,13 @@ export function readJson (options = {}) {
     if (store.path) {
       const filePath = path.join(store.path, jsonName)
       debug('Reading JSON file ' + filePath)
-      try {
-        json = await fs.readJson(filePath)
-      } catch (error) {
-        debug('Impossible to read json', error)
-      }
+      json = await fs.readJson(filePath)
     } else {
       debug('Parsing JSON for ' + jsonName)
       const data = store.buffers[jsonName].toString()
-      try {
-        json = JSON.parse(data)
-        // Sometimes we get a response string containing a JSON as a string
-        if (typeof json === 'string') json = JSON.parse(json)
-      } catch (error) {
-        debug('Impossible to parse json', data, error)
-      }
+      json = JSON.parse(data)
+      // Sometimes we get a response string containing a JSON as a string
+      if (typeof json === 'string') json = JSON.parse(json)
     }
     if (options.objectPath) json = _.get(json, options.objectPath)
     // Allow transform after read
