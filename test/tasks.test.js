@@ -129,6 +129,33 @@ describe('krawler:tasks', () => {
   // Let enough time to download
   .timeout(10000)
 
+  it('creates a WFS task', (done) => {
+    tasksService.create({
+      id: 'task.xml',
+      store: 'test-store',
+      type: 'wfs',
+      options: {
+        url: 'http://services.sandre.eaufrance.fr/geo/hyd',
+        version: '1.1.0',
+        typename: 'StationHydro_FXX',
+        featureID: 'StationHydro_FXX.A282000101'
+      }
+    })
+    .then(task => {
+      storage.exists('task.xml', (error, exist) => {
+        if (error) done(error)
+        else done(exist ? null : new Error('File not found in store'))
+      })
+    })
+    .catch(error => {
+      // Sometimes sandre servers reply 404 or 503
+      console.log(error)
+      done()
+    })
+  })
+  // Let enough time to download
+  .timeout(10000)
+
   it('removes a task', (done) => {
     tasksService.remove('task.tif', { store: storage })
     .then(_ => {
