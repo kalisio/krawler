@@ -451,6 +451,13 @@ Gunzip the item(s) from an input store to an output store, hook options are the 
 * **input**: the input store options, see description in [common options](./hooks.md#common-options)
 * **output**: the output store options, see description in [common options](./hooks.md#common-options)
 
+### unzipFromStore(options)
+
+Unzip the item(s) from an input store to an output store, hook options are the following:
+* **input**: the input store options, see description in [common options](./hooks.md#common-options)
+* **output**: the output store options, see description in [common options](./hooks.md#common-options)
+  * **path**: the output path in output store
+
 ## System [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.system.js)
 
 ### tar(options)

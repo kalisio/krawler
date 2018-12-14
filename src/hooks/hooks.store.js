@@ -132,13 +132,15 @@ export function unzipFromStore (options = {}) {
     const outputOptions = templateObject(item, options.output, ['path'])
     let outStore = await hook.service.storesService.get(outputOptions.store)
     const inputOptions = templateObject(item, options.input, ['key'])
-    let inStore = await getStoreFromHook(hook, 'gunzipFromStore', inputOptions)
+    let inStore = await getStoreFromHook(hook, 'unzipFromStore', inputOptions)
     debug('Unzipping from store', inputOptions, outputOptions)
     if (!outStore.path) {
       throw new Error(`The 'unzipFromStore' hook only work with the fs blob store as output.`)
     }
-    await inStore.createReadStream(inputOptions).pipe(Extract({ path: path.join(outStore.path, outputOptions.path || '') }))
-    addOutput(item, outputOptions.key, outputOptions.outputType)
+    let outputPath = path.join(outStore.path, outputOptions.path || '')
+    await inStore.createReadStream(inputOptions).pipe(Extract({ path: outputPath }))
+    // FIXME: add zip entries as output
+    //addOutput(item, outputOptions.key, outputOptions.outputType)
   }
 
   return callOnHookItems(unzip)

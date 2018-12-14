@@ -7,7 +7,7 @@ import plugin, { hooks as pluginHooks } from '../src'
 
 describe('krawler:stores', () => {
   let app, storesService, fsStore, memoryStore, s3Store
-
+  
   before(() => {
     chailint(chai, util)
     app = feathers()
@@ -20,7 +20,20 @@ describe('krawler:stores', () => {
     expect(storesService).toExist()
   })
 
-  it('creates the fs storage', () => {
+  it('creates the fs input storage', () => {
+    return storesService.create({
+      id: 'fs-in',
+      type: 'fs',
+      options: {
+        path: path.join(__dirname, 'data')
+      }
+    })
+    .then(_ => {
+      return storesService.get('fs-in')
+    })
+  })
+
+  it('creates the fs output storage', () => {
     return storesService.create({
       id: 'fs',
       type: 'fs',
@@ -118,6 +131,15 @@ describe('krawler:stores', () => {
       const originalStat = fs.statSync(path.join(fsStore.path, storeHook.data.id))
       const deflateStat = fs.statSync(path.join(fsStore.path, storeHook.data.id + '.guz'))
       expect(originalStat.size).to.equal(deflateStat.size)
+    })
+  })
+  // Let enough time to proceed
+  .timeout(10000)
+
+  it('unzip in a store', () => {
+    return pluginHooks.unzipFromStore({ input: { store: 'fs-in', key: 'stations.zip' }, output: { store: 'fs', path: 'unzip' } })(storeHook)
+    .then(hook => {
+      expect(fs.existsSync(path.join(fsStore.path, 'unzip', 'StationHydro_FXX-geojson.dat'))).beTrue()
     })
   })
   // Let enough time to proceed
