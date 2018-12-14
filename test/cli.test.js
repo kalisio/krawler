@@ -2,6 +2,8 @@ import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
 import path from 'path'
 import _ from 'lodash'
+import request from 'request'
+import utils from 'util'
 import fs from 'fs'
 import { MongoClient } from 'mongodb'
 import { cli, getApp } from '../src'
@@ -58,6 +60,9 @@ describe('krawler:cli', () => {
       // As it runs every 10 seconds we know that in 20s it has ran at least once again
       cli(jobfile, { cron: '*/10 * * * * *', mode: 'runJob' })
       setTimeout(async () => {
+        const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
+        expect(response.statusCode).to.equal(200)
+        expect(JSON.parse(response.body).isRunning).toExist()
         server.close()
         expect(runCount).to.be.at.least(2) // 2 runs
         expect(eventCount).to.be.at.least(4) // 4 events

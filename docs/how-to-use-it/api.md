@@ -6,6 +6,10 @@ The problem with hooks is that they are configured at application setup time and
 
 However, using the CLI, you can also launch it as standard wep application/API. You can then POST job or task requests to the exposed services, e.g. on `localhost:3030/api/jobs`.
 
+::: tip
+When running the krawler as a web API or cron job note that it provides a health check endpoint e.g. on `localhost:3030/api/healthcheck`.
+:::
+
 # Command-Line Interface
 
 ## Internal API

@@ -24,6 +24,8 @@ export let TasksService = tasks()
 export let JobsService = jobs()
 export let app
 let server
+let isRunning = false // Flag indicating if job is currently running for cron jobs
+let hasError = false // Flag indicating if job had erroned for cron jobs
 
 // Register all default hooks
 _.forOwn(hooks, (hook, name) => hooks.registerHook(name, hook))
@@ -59,6 +61,15 @@ export async function createApp (job, options = {}) {
     })
   }
   app.configure(plugin())
+  // Add a healthcheck for cron jobs
+  app.get(apiPrefix + '/healthcheck', (req, res, next) => {
+    if (options.cron) {
+      if (hasError) res.status(500).json({ error: hasError.toString() })
+      else res.status(200).json({ isRunning })
+    } else {
+      res.status(200).json({ isRunning: true })
+    }
+  })
   // Setup default services used by CLI
   TasksService.storesService = apiPrefix + '/stores'
   JobsService.storesService = apiPrefix + '/stores'
@@ -94,7 +105,6 @@ export function getServer () {
 }
 
 export function runJob (job, options = {}) {
-  let isRunning // Flag indicating if job is currently running
   // Function to effectively run the job
   function runJobWithOptions () {
     console.log(`Launching job ${job.id} at ${(new Date()).toISOString()}, please wait...`)
@@ -105,6 +115,7 @@ export function runJob (job, options = {}) {
       console.log('Job terminated, ' + tasks.length + ' tasks ran')
       console.timeEnd('Running time')
       isRunning = false
+      hasError = false
       // When not running job continuously stop the server
       if (options.cron) {
         return Promise.resolve(tasks)
@@ -117,6 +128,7 @@ export function runJob (job, options = {}) {
     .catch(error => {
       console.error(error.message)
       isRunning = false
+      hasError = error
       // When not running job continuously stop the server
       if (!options.cron) {
         server.close()
