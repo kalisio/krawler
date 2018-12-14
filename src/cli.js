@@ -62,18 +62,12 @@ export async function createApp (job, options = {}) {
     })
   }
   app.configure(plugin())
-  // In API mode everything is open
-  // Otherwise only health check is
+  // In API mode everything is open, otherwise only health check is
   app.use('/', (req, res, next) => {
     if (options.api) next()
     else if (req.originalUrl.endsWith('/healthcheck')) next()
     else res.sendStatus(401)
   })
-  if (!options.api) {
-    StoresService.hooks({ before: { all: [ disallow('external') ] } })
-    JobsService.hooks({ before: { all: [ disallow('external') ] } })
-    JobsService.hooks({ before: { all: [ disallow('external') ] } })
-  }
   // Add a healthcheck for cron jobs
   app.get(apiPrefix + '/healthcheck', (req, res, next) => {
     if (options.cron) {
@@ -90,6 +84,12 @@ export async function createApp (job, options = {}) {
   app.use(apiPrefix + '/stores', StoresService)
   app.use(apiPrefix + '/tasks', TasksService)
   app.use(apiPrefix + '/jobs', JobsService)
+  // In API mode everything is open, otherwise only health check is
+  if (!options.api) {
+    StoresService.hooks({ before: { all: [ disallow('external') ] } })
+    TasksService.hooks({ before: { all: [ disallow('external') ] } })
+    JobsService.hooks({ before: { all: [ disallow('external') ] } })
+  }
   // Process hooks
   _.forOwn(job.hooks, (value, key) => {
     let service = app.service(apiPrefix + '/' + key)
