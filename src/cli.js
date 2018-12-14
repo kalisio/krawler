@@ -8,6 +8,7 @@ import feathers from '@feathersjs/feathers'
 import express from '@feathersjs/express'
 import rest from '@feathersjs/express/rest'
 import socketio from '@feathersjs/socketio'
+import { disallow } from 'feathers-hooks-common'
 import mubsub from 'mubsub'
 import program from 'commander'
 import { CronJob } from 'cron'
@@ -61,6 +62,18 @@ export async function createApp (job, options = {}) {
     })
   }
   app.configure(plugin())
+  // In API mode everything is open
+  // Otherwise only health check is
+  app.use('/', (req, res, next) => {
+    if (options.api) next()
+    else if (req.originalUrl.endsWith('/healthcheck')) next()
+    else res.sendStatus(401)
+  })
+  if (!options.api) {
+    TasksService.storesService.hooks({ before: { all: [ disallow('external') ] } })
+    JobsService.storesService.hooks({ before: { all: [ disallow('external') ] } })
+    JobsService.tasksService.hooks({ before: { all: [ disallow('external') ] } })
+  }
   // Add a healthcheck for cron jobs
   app.get(apiPrefix + '/healthcheck', (req, res, next) => {
     if (options.cron) {
