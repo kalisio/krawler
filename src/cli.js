@@ -70,9 +70,9 @@ export async function createApp (job, options = {}) {
     else res.sendStatus(401)
   })
   if (!options.api) {
-    TasksService.storesService.hooks({ before: { all: [ disallow('external') ] } })
-    JobsService.storesService.hooks({ before: { all: [ disallow('external') ] } })
-    JobsService.tasksService.hooks({ before: { all: [ disallow('external') ] } })
+    StoresService.hooks({ before: { all: [ disallow('external') ] } })
+    JobsService.hooks({ before: { all: [ disallow('external') ] } })
+    JobsService.hooks({ before: { all: [ disallow('external') ] } })
   }
   // Add a healthcheck for cron jobs
   app.get(apiPrefix + '/healthcheck', (req, res, next) => {
