@@ -43,7 +43,7 @@ async function createJob (options = {}, store = null, tasks, id, taskTemplate) {
       }
     }
   }
-  
+
   const workersLimit = options.workersLimit || 4
   let i = 0
   // The set of workers/tasks for current step

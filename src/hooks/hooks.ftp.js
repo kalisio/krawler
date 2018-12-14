@@ -1,10 +1,8 @@
-import util from 'util'
 import _ from 'lodash'
-import pg from 'pg'
+import JsFTP from 'jsftp'
 import makeDebug from 'debug'
-import { template } from '../utils'
 
-const debug = makeDebug('krawler:hooks:pg')
+const debug = makeDebug('krawler:hooks:ftp')
 
 // Connect to the postgres database
 export function connectFTP (options = {}) {
@@ -13,11 +11,10 @@ export function connectFTP (options = {}) {
       throw new Error(`The 'connectFTP' hook should only be used as a 'before' hook.`)
     }
 
-    /*debug('Connecting to FTP server for ' + hook.data.id)
-    let client = new pg.Client(options)
-    await client.connect()
+    debug('Connecting to FTP server for ' + hook.data.id)
+    const client = new JsFTP(options)
     _.set(hook.data, options.clientPath || 'client', client)
-    debug('Connected to PG for ' + hook.data.id) */
+    debug('Connected to FTP for ' + hook.data.id)
     return hook
   }
 }
@@ -33,11 +30,9 @@ export function disconnectFTP (options = {}) {
       throw new Error(`You must be connected to an FTP serrver before using the 'disconnectFTP' hook`)
     }
 
-    /*debug('Disconnecting from PG for ' + hook.data.id)
-    await client.end()
+    debug('Disconnecting from FTP for ' + hook.data.id)
     _.unset(hook.data, options.clientPath || 'client')
-    debug('Disconnected from PG for ' + hook.data.id) */
+    debug('Disconnected from FTP for ' + hook.data.id)
     return hook
   }
 }
-
