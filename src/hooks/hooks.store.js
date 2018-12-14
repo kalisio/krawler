@@ -1,5 +1,7 @@
 import _ from 'lodash'
+import path from 'path'
 import zlib from 'zlib'
+import { Extract } from 'unzip'
 import makeDebug from 'debug'
 import { addOutput, getStoreFromHook, writeStreamToStore, callOnHookItems, templateObject } from '../utils'
 
@@ -122,4 +124,22 @@ export function gunzipFromStore (options = {}) {
   }
 
   return callOnHookItems(gunzip)
+}
+
+export function unzipFromStore (options = {}) {
+  async function unzip (item, hook) {
+    // Output store config given in options
+    const outputOptions = templateObject(item, options.output, ['path'])
+    let outStore = await hook.service.storesService.get(outputOptions.store)
+    const inputOptions = templateObject(item, options.input, ['key'])
+    let inStore = await getStoreFromHook(hook, 'gunzipFromStore', inputOptions)
+    debug('Unzipping from store', inputOptions, outputOptions)
+    if (!outStore.path) {
+      throw new Error(`The 'unzipFromStore' hook only work with the fs blob store as output.`)
+    }
+    await inStore.createReadStream(inputOptions).pipe(Extract({ path: path.join(outStore.path, outputOptions.path || '') }))
+    addOutput(item, outputOptions.key, outputOptions.outputType)
+  }
+
+  return callOnHookItems(unzip)
 }
