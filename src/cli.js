@@ -86,9 +86,9 @@ export async function createApp (job, options = {}) {
   app.use(apiPrefix + '/jobs', JobsService)
   // In API mode everything is open, otherwise only health check is
   if (!options.api) {
-    StoresService.hooks({ before: { all: [ disallow('external') ] } })
-    TasksService.hooks({ before: { all: [ disallow('external') ] } })
-    JobsService.hooks({ before: { all: [ disallow('external') ] } })
+    app.service(apiPrefix + '/stores').hooks({ before: { all: [ disallow('external') ] } })
+    app.service(apiPrefix + '/tasks').hooks({ before: { all: [ disallow('external') ] } })
+    app.service(apiPrefix + '/jobs').hooks({ before: { all: [ disallow('external') ] } })
   }
   // Process hooks
   _.forOwn(job.hooks, (value, key) => {
