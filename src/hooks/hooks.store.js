@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import path from 'path'
 import zlib from 'zlib'
-import { Extract } from 'unzip'
+import { Extract } from 'unzipper'
 import makeDebug from 'debug'
 import { addOutput, getStoreFromHook, writeStreamToStore, callOnHookItems, templateObject } from '../utils'
 
@@ -138,7 +138,12 @@ export function unzipFromStore (options = {}) {
       throw new Error(`The 'unzipFromStore' hook only work with the fs blob store as output.`)
     }
     let outputPath = path.join(outStore.path, outputOptions.path || '')
-    await inStore.createReadStream(inputOptions).pipe(Extract({ path: outputPath }))
+    await new Promise((resolve, reject) => {
+      inStore.createReadStream(inputOptions)
+      .pipe(Extract({ path: outputPath }))
+      .on('close', () => resolve())
+      .on('error', (error) => reject(error))
+    })
     // FIXME: add zip entries as output
     //addOutput(item, outputOptions.key, outputOptions.outputType)
   }
