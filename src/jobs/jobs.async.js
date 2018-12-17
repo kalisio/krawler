@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { Timeout } from '@feathersjs/errors'
 import makeDebug from 'debug'
 import { templateObject } from '../utils'
 
@@ -7,6 +8,9 @@ const debug = makeDebug('krawler:jobs')
 // Create the async job
 async function createJob (options = {}, store = null, tasks, id, taskTemplate) {
   debug(`Creating async job ${id} with following options`, options)
+  let hasTimeout = false
+  // Check for timeout
+  if (options.timeout) setTimeout(() => { hasTimeout = true }, options.timeout)
   const runTask = async (task, params) => {
     const faultTolerant = options.faultTolerant || task.faultTolerant
     const attempts = task.attemptsLimit || options.attemptsLimit || 1
@@ -62,7 +66,9 @@ async function createJob (options = {}, store = null, tasks, id, taskTemplate) {
       try {
         let results = await Promise.all(workers)
         taskResults = taskResults.concat(results)
-        debug(results.length + ' tasks ran', results)
+        debug(results.length + ' tasks ran', results, hasTimeout)
+        // Check if timeout has been reached
+        if (hasTimeout) throw new Timeout('Job timeout reached')
       } catch (error) {
         debug('Some tasks failed', error)
         throw error
