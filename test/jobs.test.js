@@ -57,7 +57,7 @@ describe('krawler:jobs', () => {
   // Let enough time to download
   .timeout(5000)
 
-  it('creates a failed HTTP job (403)', (done) => {
+  it('creates a failed HTTP job (task with 403 status)', (done) => {
     nock('https://www.google.com')
     .get('/')
     .reply(403)
@@ -75,7 +75,7 @@ describe('krawler:jobs', () => {
   // Let enough time to fail
   .timeout(5000)
 
-  it('creates a failed HTTP job (timeout)', (done) => {
+  it('creates a failed HTTP job (task reaching timeout)', (done) => {
     nock('https://www.google.com')
     .get('/')
     .delay(10000)
@@ -94,7 +94,7 @@ describe('krawler:jobs', () => {
   // Let enough time to fail
   .timeout(10000)
 
-  it('creates a fault-tolerant failed HTTP job (403)', () => {
+  it('creates a fault-tolerant failed HTTP job (task with 403 status)', () => {
     nock('https://www.google.com')
     .get('/')
     .reply(403)
@@ -113,7 +113,28 @@ describe('krawler:jobs', () => {
   // Let enough time to fail
   .timeout(5000)
 
-  it('creates a fault-tolerant failed HTTP task in job (403)', () => {
+  it('creates a fault-tolerant failed HTTP job (global timeout)', (done) => {
+    nock('https://www.google.com')
+    .get('/')
+    .delay(5000)
+    .reply(403)
+    jobsService.create({
+      id: 'job',
+      options: { faultTolerant: true, timeout: 1 },
+      tasks: [
+        { id: 'job-403-fault-tolerant.html', type: 'http', store: 'test-store', options: { url: 'https://www.google.com', timeout: 3000 } }
+      ]
+    })
+    .catch(error => {
+      expect(error).toExist()
+      expect(error.name).to.equal('Timeout')
+      done()
+    })
+  })
+  // Let enough time to fail
+  .timeout(7000)
+
+  it('creates a fault-tolerant failed HTTP task in job (task with 403 status)', () => {
     nock('https://www.google.com')
     .get('/')
     .reply(403)
@@ -131,7 +152,7 @@ describe('krawler:jobs', () => {
   // Let enough time to fail
   .timeout(5000)
 
-  it('creates a job retrying to success after a failed HTTP (403) task', () => {
+  it('creates a job retrying to success after a failed HTTP 403 status task', () => {
     nock('https://www.google.com').get('/').reply(403)
     nock('https://www.google.com').get('/').reply(403)
     nock('https://www.google.fr').get('/').reply(200)

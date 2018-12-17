@@ -59,6 +59,7 @@ Available common job options are the following:
 * **workersLimit**: the maximum number of tasks to be run in parallel by the job
 * **attemptsLimit**: if specified each task will be run again until this number of times before being declared as failed
 * **faultTolerant**: will catch erroneous tasks so that the job will continue anyway, the hook chain will be stopped on the faulty tasks however
+* **timeout**: will stop the job and flag it as erroneous after the given timeout (ms), will wait until currently processed tasks are ran however
 
 Available job types are the following:
 * `async` to run tasks in parallel by batch
