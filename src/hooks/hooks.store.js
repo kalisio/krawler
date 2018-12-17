@@ -145,7 +145,7 @@ export function unzipFromStore (options = {}) {
       .on('error', (error) => reject(error))
     })
     // FIXME: add zip entries as output
-    //addOutput(item, outputOptions.key, outputOptions.outputType)
+    // addOutput(item, outputOptions.key, outputOptions.outputType)
   }
 
   return callOnHookItems(unzip)

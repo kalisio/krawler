@@ -96,6 +96,34 @@ Generate a CSV file from a set of input CSV files, hook options are the followin
 
 The input hook result is expected to be an array of tasks which output will be read back from the store.
 
+## FTP [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.ftp.js)
+
+### connectFTP(options)
+
+Connect to an FTP server. The [connection options](https://github.com/sergi/jsftp#api-and-examples) of the client are defined in the hook options plus:
+* **clientPath**: property path where to store the client object to be used by the FTP hooks, defaults to `client`
+
+### disconnectFTP(options)
+
+Disconnect from an FTP server. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
+### getFTP(options)
+
+Get a remote file from the FTP server, hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* **storePath**: see description in [common options](./hooks.md#common-options)
+* **store**: see description in [common options](./hooks.md#common-options)
+* **key**: see description in [common options](./hooks.md#common-options)
+
+### putFTP(options)
+
+Put a local file on the FTP server, hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* **storePath**: see description in [common options](./hooks.md#common-options)
+* **store**: see description in [common options](./hooks.md#common-options)
+* **key**: see description in [common options](./hooks.md#common-options)
+
 ## Geographic grid [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.grid.js)
 
 ### generateGrid(options)

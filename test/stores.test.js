@@ -7,7 +7,7 @@ import plugin, { hooks as pluginHooks } from '../src'
 
 describe('krawler:stores', () => {
   let app, storesService, fsStore, memoryStore, s3Store
-  
+
   before(() => {
     chailint(chai, util)
     app = feathers()

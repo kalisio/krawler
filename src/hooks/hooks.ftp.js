@@ -1,25 +1,79 @@
 import _ from 'lodash'
+import path from 'path'
 import JsFTP from 'jsftp'
 import makeDebug from 'debug'
+import { callOnHookItems, template, getStoreFromHook, addOutput } from '../utils'
 
 const debug = makeDebug('krawler:hooks:ftp')
 
-// Connect to the postgres database
+// Connect to an FTP server
 export function connectFTP (options = {}) {
   return async function (hook) {
     if (hook.type !== 'before') {
       throw new Error(`The 'connectFTP' hook should only be used as a 'before' hook.`)
     }
 
-    debug('Connecting to FTP server for ' + hook.data.id)
+    debug('Connecting to FTP server for ' + options)
     const client = new JsFTP(options)
     _.set(hook.data, options.clientPath || 'client', client)
-    debug('Connected to FTP for ' + hook.data.id)
+    debug('Connected to FTP for ' + options)
     return hook
   }
 }
 
-// Disconnect from the database
+// Get a file on the FTP server
+export function getFTP (options = {}) {
+  async function get (item, hook) {
+    let client = _.get(hook.data, options.clientPath || 'client')
+    if (_.isNil(client)) throw new Error(`You must be connected to an FTP server before using the 'getFTP' hook`)
+    const outputStore = await getStoreFromHook(hook, 'getFTP', options)
+    const remoteFile = template(item, options.key || (item.id))
+    const localFile = path.join(outputStore.path, path.basename(remoteFile))
+
+    debug('Getting file ' + remoteFile + ' to ' + localFile)
+    return new Promise((resolve, reject) => {
+      client.get(remoteFile, localFile, (err, res) => {
+        if (err) {
+          reject(err)
+        } else {
+          debug(remoteFile + ' copied with success')
+          addOutput(item, localFile, options.outputType)
+          resolve(hook)
+        }
+      })
+    })
+  }
+
+  return callOnHookItems(get)
+}
+
+// Get a file on the FTP server
+export function putFTP (options = {}) {
+  async function put (item, hook) {
+    let client = _.get(hook.data, options.clientPath || 'client')
+    if (_.isNil(client)) throw new Error(`You must be connected to an FTP server before using the 'putFTP' hook`)
+    const inputStore = await await getStoreFromHook(hook, 'putFTP', options)
+    const remoteFile = template(item, options.key || (item.id))
+    const localFile = path.join(inputStore.path, path.basename(remoteFile))
+
+    debug('Putting file ' + localFile + ' to ' + remoteFile)
+    return new Promise((resolve, reject) => {
+      client.put(localFile, remoteFile, (err, res) => {
+        if (err) {
+          debug(err)
+          reject(err)
+        } else {
+          debug(localFile + ' copied with success')
+          resolve(hook)
+        }
+      })
+    })
+  }
+
+  return callOnHookItems(put)
+}
+
+// Disconnect from the FTP server
 export function disconnectFTP (options = {}) {
   return async function (hook) {
     if ((hook.type !== 'after') && (hook.type !== 'error')) {
@@ -30,9 +84,9 @@ export function disconnectFTP (options = {}) {
       throw new Error(`You must be connected to an FTP serrver before using the 'disconnectFTP' hook`)
     }
 
-    debug('Disconnecting from FTP for ' + hook.data.id)
+    debug('Disconnecting from FTP for ' + options)
     _.unset(hook.data, options.clientPath || 'client')
-    debug('Disconnected from FTP for ' + hook.data.id)
+    debug('Disconnected from FTP for ' + options)
     return hook
   }
 }
