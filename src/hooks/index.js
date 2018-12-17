@@ -66,8 +66,11 @@ export function getHookFunction (hookName) {
 // that will skip the associated hook depending on configured properties
 export function match (hookName, filter) {
   return function (hook) {
+    let hookObject = hook
+    // Handle error hooks as usual
+    if (hook.type === 'error') hookObject = hook.original
     // Retrieve the item from the hook
-    let item = getItems(hook)
+    let item = getItems(hookObject)
     if (Array.isArray(item)) {
       debug('Executing hook ' + hookName + ' on item array as filtering does not apply')
       return true
