@@ -39,3 +39,6 @@ lib/
 # The test data
 test/output
 examples/output
+
+# Sandbox directory to be used to practice
+sandbox
