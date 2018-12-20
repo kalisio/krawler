@@ -2,6 +2,7 @@ import path from 'path'
 import _ from 'lodash'
 import fs from 'fs-extra'
 import yamljs from 'js-yaml'
+import { getItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
 import { getStoreFromHook, addOutput, writeBufferToStore, template } from '../utils'
 
@@ -34,9 +35,7 @@ export function writeYAML (options = {}) {
 // Generate a YAML from specific hook result values
 export function readYAML (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'readYAML' hook should only be used as a 'after' hook.`)
-    }
+    let item = getItems(hook)
 
     let store = await getStoreFromHook(hook, 'readYAML', options)
     if (!store.path && !store.buffers) {
@@ -44,7 +43,7 @@ export function readYAML (options = {}) {
     }
 
     let yaml
-    const yamlName = template(hook.result, options.key || hook.result.id)
+    const yamlName = template(item, options.key || item.id)
     if (store.path) {
       const filePath = path.join(store.path, yamlName)
       debug('Reading YAML file ' + filePath)

@@ -2,6 +2,7 @@ import _ from 'lodash'
 import path from 'path'
 import fs from 'fs-extra'
 import xml2js from 'xml2js'
+import { getItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
 import { getStoreFromHook } from '../utils'
 
@@ -10,9 +11,7 @@ const debug = makeDebug('krawler:hooks:xml')
 // Generate a YAML from specific hook result values
 export function readXML (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'readXML' hook should only be used as a 'after' hook.`)
-    }
+    let item = getItems(hook)
 
     let store = await getStoreFromHook(hook, 'readXML', options)
     if (!store.path && !store.buffers) {
@@ -20,7 +19,7 @@ export function readXML (options = {}) {
     }
 
     let xml
-    const xmlName = hook.result.id
+    const xmlName = item.id
     if (store.path) {
       const filePath = path.join(store.path, xmlName)
       debug('Reading XML file ' + filePath)

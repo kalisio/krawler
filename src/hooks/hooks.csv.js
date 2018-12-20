@@ -2,6 +2,7 @@ import json2csv from 'json2csv'
 import fastcsv from 'fast-csv'
 import merge from 'merge-stream'
 import _ from 'lodash'
+import { getItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
 import { getStoreFromHook, addOutput, writeBufferToStore, template } from '../utils'
 
@@ -65,24 +66,22 @@ export function mergeCSV (options = {}) {
 // Read a CSV from an input stream/store and convert to JSON values
 export function readCSV (options = {}) {
   return async function (hook) {
-    if (hook.type !== 'after') {
-      throw new Error(`The 'readCSV' hook should only be used as a 'after' hook.`)
-    }
+    let item = getItems(hook)
 
     let store = await getStoreFromHook(hook, 'readCSV', options)
-    const csvName = template(hook.result, options.key || hook.result.id)
+    const csvName = template(item, options.key || item.id)
 
     return new Promise((resolve, reject) => {
-      debug('Reading CSV for ' + hook.result.id)
-      let stream = hook.result.stream
-        ? hook.result.stream : store.createReadStream(csvName)
+      debug('Reading CSV for ' + item.id)
+      let stream = item.stream ? item.stream : store.createReadStream(csvName)
       // Clear previous data if any as we append
-      _.unset(hook, options.dataPath || 'result.data')
+      const jsonPath = options.dataPath || 'result.data'
+      _.unset(hook, jsonPath)
       fastcsv.fromStream(stream, options)
       .on('data', data => {
-        let json = _.get(hook, options.dataPath || 'result.data', [])
+        let json = _.get(hook, jsonPath, [])
         json.push(data)
-        _.set(hook, options.dataPath || 'result.data', json)
+        _.set(hook, jsonPath, json)
       })
       .on('end', () => resolve(hook))
       .on('error', reject)
