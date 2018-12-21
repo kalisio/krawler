@@ -15,6 +15,60 @@ export function writeGeoJson (options = {}) {
   return writeJson(options)
 }
 
+// Convenient name but similar to readJson
+export function readGeoJson (options = {}) {
+  return readJson(options)
+}
+
+// Convert a Json to a GeoJSON point collection
+export function convertToGeoJson (options = {}) {
+  return function (hook) {
+    if (hook.type !== 'after') {
+      throw new Error(`The 'convertToGeoJson' hook should only be used as a 'after' hook.`)
+    }
+
+    debug('Converting to GeoJSON for ' + hook.result.id)
+
+    let json = _.get(hook, options.dataPath || 'result.data', {})
+    // Safety check
+    let isArray = Array.isArray(json)
+    if (!isArray) {
+      json = [json]
+    }
+
+    // Declare the output GeoJson collection
+    let collection = {
+      type: 'FeatureCollection',
+      features: []
+    }
+    const longitude = options.longitude || 'longitude'
+    const latitude = options.latitude || 'latitude'
+    const altitude = options.altitude || 'altitude'
+    // Then iterate over JSON objects
+    _.forEach(json, object => {
+      let lon = Number(_.get(object, longitude, 0))
+      let lat = Number(_.get(object, latitude, 0))
+      let alt = Number(_.get(object, altitude, 0))
+      if (lat && lon) {
+        // Define the GeoJson feature corresponding to the object
+        let feature = {
+          type: 'Feature',
+          // Lat, long, alt not required anymore
+          properties: (options.keepGeometryProperties ? object : _.omit(object, [longitude, latitude, altitude])),
+          geometry: {
+            type: 'Point',
+            coordinates: [lon, lat, alt]
+          }
+        }
+        collection.features.push(feature)
+      }
+    })
+
+    // Then update JSON in place in memory
+    _.set(hook, options.dataPath || 'result.data', collection)
+  }
+}
+
 // Reproject a GeoJSON
 export function reprojectGeoJson (options = {}) {
   return function (hook) {
