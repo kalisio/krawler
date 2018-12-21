@@ -3,7 +3,7 @@ import { reproject } from 'reproject'
 import proj4 from 'proj4'
 import epsg from '../epsg'
 import makeDebug from 'debug'
-import { writeJson } from './hooks.json'
+import { writeJson, readJson } from './hooks.json'
 
 const debug = makeDebug('krawler:hooks:geojson')
 // Generate projection dictionary
