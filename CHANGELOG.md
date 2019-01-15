@@ -1,12 +1,44 @@
 # Changelog
 
-## [v0.7.0](https://github.com/kalisio/krawler/tree/v0.7.0) (2018-07-17)
+## [v0.8.0](https://github.com/kalisio/krawler/tree/v0.8.0) (2019-01-15)
 
-[Full Changelog](https://github.com/kalisio/krawler/compare/v0.6.0...v0.7.0)
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.7.0...v0.8.0)
 
 **Implemented enhancements:**
 
+- Add ability to unzip files [\#50](https://github.com/kalisio/krawler/issues/50)
+- Add a healthcheck entry point [\#49](https://github.com/kalisio/krawler/issues/49)
+- Add some capabilities to handle FTP [\#48](https://github.com/kalisio/krawler/issues/48)
+- Add a WFS task type [\#46](https://github.com/kalisio/krawler/issues/46)
+- Stop job after a given number of failed tasks [\#44](https://github.com/kalisio/krawler/issues/44)
+- Allow the template function to tackle properties of type of array of objects [\#42](https://github.com/kalisio/krawler/issues/42)
+- Allow to create swarm service  [\#41](https://github.com/kalisio/krawler/issues/41)
+- Create a apply hook to run a custom function on items [\#36](https://github.com/kalisio/krawler/issues/36)
+- Add a retry capability for tasks in async job [\#35](https://github.com/kalisio/krawler/issues/35)
+- Migrate to Feathers V3 [\#28](https://github.com/kalisio/krawler/issues/28)
+- Enhance docker hooks [\#27](https://github.com/kalisio/krawler/issues/27)
 - Make krawler able to communicate with external systems [\#24](https://github.com/kalisio/krawler/issues/24)
+- Refactor using only hooks [\#4](https://github.com/kalisio/krawler/issues/4)
+
+**Fixed bugs:**
+
+- Unzip hook returns before file has been written [\#52](https://github.com/kalisio/krawler/issues/52)
+- Unauthorize API requests in non-API mode [\#51](https://github.com/kalisio/krawler/issues/51)
+- Job hangs after mongo connection failure [\#47](https://github.com/kalisio/krawler/issues/47)
+- readJson hook fails silently on perse error [\#45](https://github.com/kalisio/krawler/issues/45)
+- Creating multiple single indices does not work [\#40](https://github.com/kalisio/krawler/issues/40)
+- Concurrent tasks skipped when a task fails [\#33](https://github.com/kalisio/krawler/issues/33)
+- CRON jobs are launched immediately [\#32](https://github.com/kalisio/krawler/issues/32)
+- Possible memory leak [\#30](https://github.com/kalisio/krawler/issues/30)
+- Mongo client not correctly cleared [\#29](https://github.com/kalisio/krawler/issues/29)
+
+**Merged pull requests:**
+
+- \[Snyk\] Fix for 1 vulnerable dependencies [\#17](https://github.com/kalisio/krawler/pull/17) ([snyk-bot](https://github.com/snyk-bot))
+
+## [v0.7.0](https://github.com/kalisio/krawler/tree/v0.7.0) (2018-07-17)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.6.0...v0.7.0)
 
 **Fixed bugs:**
 
