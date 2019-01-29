@@ -1,7 +1,3 @@
----
-sidebar: auto
----
-
 # Services
 
 ## Stores
@@ -39,6 +35,7 @@ By default a task implementation return a [stream](https://nodejs.org/api/stream
 * [`wms`](https://en.wikipedia.org/wiki/Web_Map_Service) for HTTP requests targeting WMS services
 * [`wcs`](https://en.wikipedia.org/wiki/Web_Coverage_Service) for HTTP requests targeting WCS services
 * [`wfs`](https://en.wikipedia.org/wiki/Web_Feature_Service) for HTTP requests targeting WFS services
+* [`overpass`](https://wiki.openstreetmap.org/wiki/Overpass_API) for HTTP requests to query OpenStreetMap data
 * [`store`](https://github.com/maxogden/abstract-blob-store) to read input data from a store
 * [`noop`](https://en.wikipedia.org/wiki/NOP) when you don't need to read anything, the purpose is just to launch the hooks, returns an `undefined` stream
 

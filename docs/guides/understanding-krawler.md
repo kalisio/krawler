@@ -1,8 +1,4 @@
----
-sidebar: auto
----
-
-# How does it work ?
+# Understanding Krawler
 
 **krawler** is powered by [Feathers](https://feathersjs.com/) and rely on two of its main abstractions: [services](https://docs.feathersjs.com/api/services.html) and [hooks](https://docs.feathersjs.com/api/hooks.html). 
 We assume you are familiar with this technology.

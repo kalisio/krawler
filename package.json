@@ -104,6 +104,7 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
+    "@vuepress/plugin-pwa": "^1.0.0-alpha.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
@@ -118,7 +119,7 @@
     "nock": "^9.2.6",
     "shx": "^0.2.2",
     "standard": "^10.0.3",
-    "vuepress": "^0.10.1",
-    "vuepress-theme-kalisio": "https://github.com/kalisio/vuepress-theme-kalisio"
+    "vuepress": "^0.14.8",
+    "vuepress-theme-kalisio": "http://github.com/kalisio/vuepress-theme-kalisio"
   }
 }

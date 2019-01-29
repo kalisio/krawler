@@ -6,42 +6,63 @@ module.exports = {
     ['link', { rel: 'icon', href: `https://s3.eu-central-1.amazonaws.com/kalisioscope/krawler/krawler-icon-64x64.png` }],
     ['link', { rel: 'manifest', href: '/manifest.json' }]
   ],
-  serviceWorker: false,
+
+  head: [
+    ['link', { rel: 'icon', href: `https://s3.eu-central-1.amazonaws.com/kalisioscope/kargo/kargo-icon-64x64.png` }],
+    ['link', { rel: 'manifest', href: '/manifest.json' }]
+  ],
+  // FIXME: cannot install @vuepress/pwa => it brokes the dependencies
+  //plugins: ['@vuepress/pwa'],
   theme: 'kalisio',
   themeConfig: {
     docsDir: 'docs',
-    nav: [
-      {
-        text: 'What is it ?',
-        link: '/what-is-it/',
-      },
-      {
-        text: 'How doest it work ?',
-        link: '/how-does-it-work/'
-      },
-      {
-        text: 'How to use it ?',
-        items: [
-          { text: 'Installation', link: '/how-to-use-it/installation' },
-          { text: 'API', link: '/how-to-use-it/api' },
-          { text: 'Services', link: '/how-to-use-it/services.md' },
-          { text: 'Hooks', link: '/how-to-use-it/hooks.md' },
-          { text: 'Extending', link: '/how-to-use-it/extending' },
-          { text: 'Known issues', link: '/how-to-use-it/known-issues' }
-        ]
-      },
-      {
-        text: 'Examples',
-        link: '/examples/'
-      },
-      {
-        text: 'License',
-        link: '/license/'
-      },
-      {
-        text: 'GitHub',
-        link: 'https://github.com/kalisio/krawler'
+    /* FIXME plugins: {
+      '@vuepress/pwa': {
+        serviceWorker: true,
+        updatePopup: true
       }
-    ]
+    },*/
+    nav: [
+      { text: 'About', link: '/about/' },
+      { text: 'Guides', link: '/guides/' },
+      { text: 'Reference', link: '/reference/' },
+      { text: 'Examples', link: '/examples/' },
+    ],
+    sidebar: {
+      '/about/': getAboutSidebar(),
+      '/guides/': getGuidesSidebar(),
+      '/reference/': getReferenceSidebar(),
+      '/examples/': getExamplesSidebar()
+    }
   }
+}
+
+function getAboutSidebar () {
+  return [
+    'roadmap',
+    'license',
+    'contact'
+  ] 
+}
+
+function getGuidesSidebar () {
+  return [
+    'understanding-krawler',
+    'installing-krawler',
+    'using-krawler',
+    'extending-krawler'
+  ]
+}
+
+function getReferenceSidebar () {
+  return [
+    'services',
+    'hooks',
+    'known-issues'
+  ]
+}
+
+function getExamplesSidebar () {
+  return [
+  ]
 }

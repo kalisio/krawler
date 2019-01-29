@@ -1,8 +1,4 @@
----
-sidebar: auto
----
-
-# Installation
+# Installing Krawler
 
 ## As Command-Line Interface (CLI)
 

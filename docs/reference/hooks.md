@@ -1,7 +1,3 @@
----
-sidebar: auto
----
-
 # Hooks
 
 > Altough all are not applicable, [common FeathersJS hooks](https://auk.docs.feathersjs.com/api/hooks-common.html) are exposed in addition to krawler hooks and can be used in jobs, e.g. you can add `disallow: 'external'` to avoid exposing some services when deploying as a web app. 
@@ -262,6 +258,8 @@ Generate a file from an input template and injected in-memory JSON values, hook 
 
 > Learn more about [templating](https://lodash.com/docs/4.17.4#template)
 
+## GeoJSON [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.geojson.js)
+
 ### convertToGeoJson(options)
 
 Convert in-memory JSON values to a [GeoJSON](https://fr.wikipedia.org/wiki/GeoJSON) collection. For each in-memory object, the hook generates a corresponding GeoJSON feature using specific properties to build the `geometry` property. For now, it only allows to generate features of type of `Point`. Moreover, the coordinate reference system is a geographic coordinate reference system, using the World Geodetic System 1984 (WGS 84), with longitude and latitude expressed in decimal degrees. The entire object is stored under the `properties` property of the feature.
@@ -271,7 +269,11 @@ Hook options are the following:
 * **altitude**: property path where to read the altitude value defaults to `altitude`
 * **keepGeometryProperties**: boolean indicating if longitude, latitude and altitude values are also kept as properties, defaults to `true`
 
-## GeoJSON [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.geojson.js)
+### convertOSMToGeoJson(options)
+
+Convert in-memory OSM JSON values to a [GeoJSON](https://fr.wikipedia.org/wiki/GeoJSON) collection. It relies on [osmtogeojson](https://github.com/tyrasd/osmtogeojson). Hook options are the following:
+* any option supported by the [osmtogeojson](https://github.com/tyrasd/osmtogeojson#api) API
+* **dataPath**: property path where to read the OSM object, defaults to `result.data`
 
 ### reprojectGeoJson(options)
 
