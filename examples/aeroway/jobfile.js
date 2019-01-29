@@ -48,7 +48,6 @@ let generateTasks = (options) => {
       console.log('Adding airport to queue', value)
       const airport = results[0]
       options.airports.params.types.forEach(type => tasks.push(generateTask(value, airport, type, options.airports.params.distance)))
-      console.log(tasks)
     })
     debug('Generated download tasks', tasks)
     hook.data.tasks = tasks

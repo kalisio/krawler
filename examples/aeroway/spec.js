@@ -1,8 +1,8 @@
 module.exports = {
 	airports: {
-		list: ['LFBO'],
+		list: ['LFBO', 'LFMP', 'LFBT', 'LFMI', 'LFMN', 'LFPB', 'EGLF', 'EDDB', 'WSSS', 'OMDB' ],
 		params: {
-			types: ['runway', 'taxiway'],
+			types: [ 'runway', 'taxiway', 'taxilane'],
 			distance: 5000
 		}
 	}
