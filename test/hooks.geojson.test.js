@@ -19,7 +19,7 @@ describe('krawler:hooks:geojson', () => {
   it('convert OSM to GeoJSON', async () => {
     await pluginHooks.convertOSMToGeoJson({})(geoJsonHook)
     expect(geoJsonHook.result.data.type).to.equal('FeatureCollection')
-    expect(geoJsonHook.result.data.feature.length > 0).beTrue()
+    expect(geoJsonHook.result.data.features.length > 0).beTrue()
   })
   // Let enough time to proceed
   .timeout(5000)
