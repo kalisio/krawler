@@ -156,6 +156,25 @@ describe('krawler:tasks', () => {
   // Let enough time to download
   .timeout(10000)
 
+  it('creates an OVERPASS task', (done) => {
+    tasksService.create({
+      id: 'overpass.json',
+      store: 'test-store',
+      type: 'overpass',
+      options: {
+        data: '[out:json][timeout:25][bbox:43.10,1.36,43.70,1.39];(node["aeroway"="runway"];way["aeroway"="runway"];relation["aeroway"="runway"];);out body;>;out skel qt;'
+      }
+    })
+    .then(task => {
+      storage.exists('overpass.json', (error, exist) => {
+        if (error) done(error)
+        else done(exist ? null : new Error('File not found in store'))
+      })
+    })
+  })
+  // Let enough time to download
+  .timeout(10000)
+
   it('removes a task', (done) => {
     tasksService.remove('task.tif', { store: storage })
     .then(_ => {

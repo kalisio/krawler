@@ -11,7 +11,6 @@ describe('krawler:hooks:ftp', () => {
   })
 
   let store = FsStore({ path: path.join(__dirname, 'output') })
-  console.log(store.path)
 
   let ftpOptions = {
     host: 'test.rebex.net',

@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { reproject } from 'reproject'
 import proj4 from 'proj4'
 import epsg from '../epsg'
+import osmtogeojson from 'osmtogeojson'
 import makeDebug from 'debug'
 import { writeJson, readJson } from './hooks.json'
 
@@ -66,6 +67,21 @@ export function convertToGeoJson (options = {}) {
 
     // Then update JSON in place in memory
     _.set(hook, options.dataPath || 'result.data', collection)
+  }
+}
+
+// Convert a Json to a GeoJSON point collection
+export function convertOSMToGeoJson (options = {}) {
+  return function (hook) {
+    if (hook.type !== 'after') {
+      throw new Error(`The 'convertOSMToGeoJson' hook should only be used as a 'after' hook.`)
+    }
+
+    debug('Converting OSM to GeoJSON for ' + hook.result.id)
+    let osm = _.get(hook, options.dataPath || 'result.data', {})
+
+    // Then update JSON in place in memory
+    _.set(hook, options.dataPath || 'result.data', osmtogeojson(osm, options))
   }
 }
 
