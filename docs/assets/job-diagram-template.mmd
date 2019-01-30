@@ -1,0 +1,20 @@
+graph BR
+    createJob--> beginTask
+    endTask --> afterHookJob
+    subgraph Job
+        beginJob(("begin"))-->beforeHookJob("BEFORE HOOK")
+        beforeHookJob --> createJob("CREATE")
+        createJob --> afterHookJob("AFTER HOOK")
+        afterHookJob--> endJob(("end"))
+    end
+    subgraph Task
+        beginTask(("begin")) -->beforeHookTask("BEFORE HOOK")
+        beforeHookTask --> createTask("CREATE")
+         createTask -->afterHookTask("AFTER HOOK")
+         afterHookTask--> endTask(("end"))
+    end
+
+classDef process fill:#AAA,stroke:#333,stroke-width:2px;
+classDef create fill:#DAA,stroke:#333,stroke-width:2px;
+class beginJob,endJob,beginTask,endTask process
+class createJob,createTask create
