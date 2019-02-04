@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Known issues | Krawler</title>
+    <meta name="description" content="A minimalist Geospatial ETL">
+    <link rel="icon" href="https://s3.eu-central-1.amazonaws.com/kalisioscope/kargo/kargo-icon-64x64.png">
+  <link rel="manifest" href="/krawler/manifest.json">
+    
+    <link rel="preload" href="/krawler/assets/css/0.styles.01e1596c.css" as="style"><link rel="preload" href="/krawler/assets/js/app.aa579446.js" as="script"><link rel="preload" href="/krawler/assets/js/16.ba64f905.js" as="script"><link rel="prefetch" href="/krawler/assets/js/10.f6643126.js"><link rel="prefetch" href="/krawler/assets/js/11.d44829b5.js"><link rel="prefetch" href="/krawler/assets/js/12.a829f24d.js"><link rel="prefetch" href="/krawler/assets/js/13.bbff7333.js"><link rel="prefetch" href="/krawler/assets/js/14.3639495b.js"><link rel="prefetch" href="/krawler/assets/js/15.dccc0946.js"><link rel="prefetch" href="/krawler/assets/js/17.17eeaf2c.js"><link rel="prefetch" href="/krawler/assets/js/18.1308fb1e.js"><link rel="prefetch" href="/krawler/assets/js/2.99182b93.js"><link rel="prefetch" href="/krawler/assets/js/3.ec56b302.js"><link rel="prefetch" href="/krawler/assets/js/4.6ff31a7e.js"><link rel="prefetch" href="/krawler/assets/js/5.82d6ee80.js"><link rel="prefetch" href="/krawler/assets/js/6.15c8e3d5.js"><link rel="prefetch" href="/krawler/assets/js/7.61942e35.js"><link rel="prefetch" href="/krawler/assets/js/8.ca811798.js"><link rel="prefetch" href="/krawler/assets/js/9.ea7a6f0e.js">
+    <link rel="stylesheet" href="/krawler/assets/css/0.styles.01e1596c.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/krawler/" class="home-link router-link-active"><!----> <span class="site-name">Krawler</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/krawler/about/" class="nav-link">About</a></div><div class="nav-item"><a href="/krawler/guides/" class="nav-link">Guides</a></div><div class="nav-item"><a href="/krawler/reference/" class="nav-link router-link-active">Reference</a></div><div class="nav-item"><a href="/krawler/examples/" class="nav-link">Examples</a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/krawler/about/" class="nav-link">About</a></div><div class="nav-item"><a href="/krawler/guides/" class="nav-link">Guides</a></div><div class="nav-item"><a href="/krawler/reference/" class="nav-link router-link-active">Reference</a></div><div class="nav-item"><a href="/krawler/examples/" class="nav-link">Examples</a></div> <!----></nav> <p align="center"><a href="https://kalisio.com"><img src="https://s3.eu-central-1.amazonaws.com/kalisioscope/kalisio/kalisio-logo-black-256x84.png"></a> <br> <i><small>Unleashing the potential of spatial information</small></i></p> <ul class="sidebar-links"><li><a href="/krawler/reference/services.html" class="sidebar-link">Services</a></li><li><a href="/krawler/reference/hooks.html" class="sidebar-link">Hooks</a></li><li><a href="/krawler/reference/known-issues.html" class="active sidebar-link">Known issues</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/krawler/reference/known-issues.html#use-the-same-hook-multiple-times" class="sidebar-link">Use the same hook multiple times</a></li><li class="sidebar-sub-header"><a href="/krawler/reference/known-issues.html#use-parallelism" class="sidebar-link">Use parallelism</a></li><li class="sidebar-sub-header"><a href="/krawler/reference/known-issues.html#handling-error" class="sidebar-link">Handling error</a></li></ul></li></ul> </div> <div class="page"> <div class="content"><h1 id="known-issues"><a href="#known-issues" aria-hidden="true" class="header-anchor">#</a> Known issues</h1> <h2 id="use-the-same-hook-multiple-times"><a href="#use-the-same-hook-multiple-times" aria-hidden="true" class="header-anchor">#</a> Use the same hook multiple times</h2> <p>By default hook names are used as JSON object keys so you cannot have the same hook appearing twice in your pipeline using this notation. However, you can also use the <em>named hook syntax</em> if you want to use the same hook multiple times in your pipeline. In this case the key used in the configuration file can be whatever you want but the associated object value must have a <code>hook</code> property containing the name of the hook to be run like this:</p> <div class="language-js extra-class"><pre class="language-js"><code>tasks<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  after<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    readXML<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    writeTemplateYaml<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      hook<span class="token punctuation">:</span> <span class="token string">'writeTemplate'</span><span class="token punctuation">,</span>
+      templateFile<span class="token punctuation">:</span> <span class="token string">'mapproxy-template.yaml'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    writeTemplateHtml<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      hook<span class="token punctuation">:</span> <span class="token string">'writeTemplate'</span><span class="token punctuation">,</span>
+      templateFile<span class="token punctuation">:</span> <span class="token string">'leaflet-template.html'</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="use-parallelism"><a href="#use-parallelism" aria-hidden="true" class="header-anchor">#</a> Use parallelism</h2> <p>By default all hooks are run in sequence, if at given step of your pipeline you want a parallel execution of some you can use the reserved hook name <code>parallel</code> and give the hooks to be run in parallel as an array of items each containing the hook name as a <code>hook</code> property and its options as other properties:</p> <div class="language-js extra-class"><pre class="language-js"><code>tasks<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  after<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    readXML<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    parallel<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        hook<span class="token punctuation">:</span> <span class="token string">'writeTemplate'</span><span class="token punctuation">,</span>
+        templateFile<span class="token punctuation">:</span> <span class="token string">'mapproxy-template.yaml'</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span>
+        hook<span class="token punctuation">:</span> <span class="token string">'writeTemplate'</span><span class="token punctuation">,</span>
+        templateFile<span class="token punctuation">:</span> <span class="token string">'leaflet-template.html'</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="handling-error"><a href="#handling-error" aria-hidden="true" class="header-anchor">#</a> Handling error</h2> <p>You can use the <strong>faultTolerant</strong> option to catch any error raised in a hook so that the hook chain will continue anyway. However, it is sometimes hard to ensure the pipeline will run fine until the end once an error occurred In this case, you'd better let the chain stop (the default behavior) and register specific hooks to be run whenever an error occurs, such as one used to clear intermediate outputs:</p> <div class="language-js extra-class"><pre class="language-js"><code>tasks<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  after<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token operator">...</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  error<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    clearOutputs<span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/krawler/reference/hooks.html" class="prev">
+          Hooks
+        </a></span> <!----></p></div> </div> <!----></div></div>
+    <script src="/krawler/assets/js/app.aa579446.js" defer></script><script src="/krawler/assets/js/16.ba64f905.js" defer></script>
+  </body>
+</html>
