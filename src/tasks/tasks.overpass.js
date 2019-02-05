@@ -8,7 +8,7 @@ const defaultUrl = 'https://www.overpass-api.de/api/interpreter'
 
 // Build the request parameters to download data from input data source
 function getRequestParameters (options) {
-  let queryParameters = _.merge({}, _.omit(options, ['url', 'headers', 'timeout']))
+  let queryParameters = _.merge({}, _.omit(options, ['url', 'headers', 'timeout', 'auth']))
   // Setup request with URL & params
   debug('Requesting ' + options.url || defaultUrl + ' with following parameters', queryParameters)
   return {
