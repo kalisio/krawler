@@ -4,7 +4,7 @@ import makeDebug from 'debug'
 
 const debug = makeDebug('krawler:tasks')
 
-const defaultUrl = 'https://www.overpass-api.de/api/interpreter'
+const defaultUrl = 'https://lz4.overpass-api.de/api/interpreter'
 
 // Build the request parameters to download data from input data source
 function getRequestParameters (options) {
