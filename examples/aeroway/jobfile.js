@@ -61,17 +61,28 @@ module.exports = {
   store: 'output-store',
   taskTemplate: {
     store: 'output-store',
-    type: 'overpass'
+    type: 'overpass',
+    options: {
+      auth: {
+        user: process.env.USER,
+        password: process.env.PASSWORD
+      }
+    }
   },
   options: {
     workersLimit: 4
   },
   hooks: {
     tasks: {
+      before: {
+        basicAuth: { type: 'Proxy-Authorization' }
+      },
       after: {
         readJson: {},
         convertOSMToGeoJson: {},
-        writeJson: {}
+        writeJson: {
+          outputType: 'geojson'
+        }
       }
     },
     jobs: {
@@ -87,6 +98,7 @@ module.exports = {
         }
       },
       after: {
+        clearOutputs: {},
         removeStores: ['output-store']
       }
     }
