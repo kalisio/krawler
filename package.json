@@ -116,6 +116,7 @@
     "chai": "^3.5.0",
     "chai-lint": "^0.1.1",
     "istanbul": "^1.1.0-alpha.1",
+    "loader-runner": "^3.0.0",
     "mocha": "^3.5.3",
     "nock": "^9.2.6",
     "shx": "^0.2.2",
