@@ -14,14 +14,15 @@ module.exports = {
   // FIXME: cannot install @vuepress/pwa => it brokes the dependencies
   //plugins: ['@vuepress/pwa'],
   theme: 'kalisio',
+  plugins: [
+    ['@vuepress/back-to-top', true],
+    ['@vuepress/pwa', {
+      serviceWorker: true,
+      updatePopup: true
+    }]
+  ],
   themeConfig: {
     docsDir: 'docs',
-    /* FIXME plugins: {
-      '@vuepress/pwa': {
-        serviceWorker: true,
-        updatePopup: true
-      }
-    },*/
     nav: [
       { text: 'About', link: '/about/' },
       { text: 'Guides', link: '/guides/' },

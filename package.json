@@ -104,6 +104,7 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.0.0-alpha.0",
     "@vuepress/plugin-pwa": "^1.0.0-alpha.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
