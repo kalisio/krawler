@@ -38,7 +38,7 @@ export function runCommand (options = {}) {
   async function run (item) {
     let command = template(item, options.command)
     debug('Running command', command)
-    const { stdout, stderr } = await exec(command)
+    const { stdout, stderr } = await exec(command, options.options)
     if (options.stdout) {
       item.stdout = stdout
       console.log(stdout)

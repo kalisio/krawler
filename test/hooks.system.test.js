@@ -34,6 +34,21 @@ describe('krawler:hooks:system', () => {
   // Let enough time to proceed
   .timeout(5000)
 
+  it('raise error on command timeout', (done) => {
+    pluginHooks.runCommand({
+      command: 'pause',
+      options: {
+        timeout: 3000
+      }
+    })(commandHook)
+    .catch(error => {
+      expect(error).toExist()
+      done()
+    })
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
   it('tar a file', () => {
     commandHook.data.id = 'krawler-icon'
     return pluginHooks.tar({
