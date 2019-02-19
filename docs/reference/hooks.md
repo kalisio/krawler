@@ -206,6 +206,7 @@ Restructure in-memory JSON values, hook options are the following:
   * **from**: the unit or date format to convert from, e.g. `feet` or `YYYY-MM-DD HH:mm:ss.SSS`
   * **to**: the unit or date format to convert to, e.g. `m` or `MM-DD-YYYY HH:mm:ss.SSS`, if given for a date the date object will be converted back to string
   * **asDate**: mandatory to indicate if the value is a date, could be `utc` or `local` to interpret it as UTC or Local Time
+  * **asString**: mandatory to convert numbers to strings, indicates the [radix](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toString#Syntax) to be used 
 * **pick**: an array of properties to be picked using [Lodash](https://lodash.com/docs#pick)
 * **omit**: an array of properties to be omitted using [Lodash](https://lodash.com/docs#omit)
 * **merge**: an object to be merged with each JSON objects using [Lodash](https://lodash.com/docs#merge)

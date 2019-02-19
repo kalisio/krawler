@@ -83,6 +83,8 @@ export function transformJsonObject (json, options) {
             date = date.toDate()
           }
           _.set(object, path, date)
+        } else if (units.asString) { // Handle string conversion
+          _.set(object, path, value.toString(units.asString))
         } else { // Handle numbers
           _.set(object, path, math.unit(value, units.from).toNumber(units.to))
         }
