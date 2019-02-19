@@ -1,5 +1,20 @@
 # Changelog
 
+## [v0.8.1](https://github.com/kalisio/krawler/tree/v0.8.1) (2019-02-19)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.8.0...v0.8.1)
+
+**Implemented enhancements:**
+
+- Allow to convert numbers to string on JSON transformation [\#59](https://github.com/kalisio/krawler/issues/59)
+- Add a hook that could transform OSM data to GeoJSON [\#56](https://github.com/kalisio/krawler/issues/56)
+- Add a task which can handle an Overpass API query [\#55](https://github.com/kalisio/krawler/issues/55)
+
+**Fixed bugs:**
+
+- The default url to perform overpass task seems to be deprecated [\#58](https://github.com/kalisio/krawler/issues/58)
+- runCommand hook might prevent job to finish [\#38](https://github.com/kalisio/krawler/issues/38)
+
 ## [v0.8.0](https://github.com/kalisio/krawler/tree/v0.8.0) (2019-01-15)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.7.0...v0.8.0)
