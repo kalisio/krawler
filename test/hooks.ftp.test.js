@@ -16,18 +16,27 @@ describe('krawler:hooks:ftp', () => {
     host: 'test.rebex.net',
     port: 21,
     user: 'demo',
-    pass: 'password'
+    pass: 'password',
+    remoteDir: 'pub/example',
+    remoteFile: 'pub/example/ConsoleClient.png'
   }
 
   let ftpHook = {
     type: 'before',
-    data: { id: 'pub/example/ConsoleClient.png' },
+    data: { id: 'ftp' },
     params: { store: store }
   }
 
   it('connect to FTP', async () => {
     await pluginHooks.connectFTP(ftpOptions)(ftpHook)
     expect(ftpHook.data.client).toExist()
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('list from FTP', async () => {
+    await pluginHooks.listFTP(ftpOptions)(ftpHook)
+    expect(ftpHook.result.data).toExist()
   })
   // Let enough time to proceed
   .timeout(5000)

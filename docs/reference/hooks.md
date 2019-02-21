@@ -104,10 +104,19 @@ Connect to an FTP server. The [connection options](https://github.com/sergi/jsft
 Disconnect from an FTP server. Hook options are the following:
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 
+### listFTP(options)
+
+List the files from a remote directory on the FTP server, hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* **remoteDir**: the remote directory to list
+* **key**: see description in [common options](./hooks.md#common-options)
+* 
 ### getFTP(options)
 
 Get a remote file from the FTP server, hook options are the following:
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
+* **remoteFile**: the file to be copied on the FTP server
+* **localFile**: the destination file on the local host
 * **storePath**: see description in [common options](./hooks.md#common-options)
 * **store**: see description in [common options](./hooks.md#common-options)
 * **key**: see description in [common options](./hooks.md#common-options)

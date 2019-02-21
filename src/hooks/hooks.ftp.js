@@ -22,13 +22,37 @@ export function connectFTP (options = {}) {
 }
 
 // Get a file on the FTP server
+export function listFTP (options = {}) {
+  async function get (item, hook) {
+    let client = _.get(hook.data, options.clientPath || 'client')
+    if (_.isNil(client)) throw new Error(`You must be connected to an FTP server before using the 'listFTP' hook`)
+    const remoteDir = template(item, options.remoteDir || options.key || (item.id))
+
+    debug('Listing dir ' + remoteDir)
+    return new Promise((resolve, reject) => {
+      client.list(remoteDir, (err, res) => {
+        if (err) {
+          reject(err)
+        } else {
+          debug('listing succeeded')
+          _.set(hook, options.dataPath || 'result.data', res)
+          resolve(hook)
+        }
+      })
+    })
+  }
+
+  return callOnHookItems(get)
+}
+
+// Get a file on the FTP server
 export function getFTP (options = {}) {
   async function get (item, hook) {
     let client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) throw new Error(`You must be connected to an FTP server before using the 'getFTP' hook`)
     const outputStore = await getStoreFromHook(hook, 'getFTP', options)
-    const remoteFile = template(item, options.key || (item.id))
-    const localFile = path.join(outputStore.path, path.basename(remoteFile))
+    const remoteFile = template(item, options.remoteFile || options.key || (item.id))
+    const localFile = template(item, options.locaFile || path.join(outputStore.path, path.basename(remoteFile)))
 
     debug('Getting file ' + remoteFile + ' to ' + localFile)
     return new Promise((resolve, reject) => {
@@ -85,6 +109,11 @@ export function disconnectFTP (options = {}) {
     }
 
     debug('Disconnecting from FTP for ' + options)
+    client.raw('quit', (err, data) => {
+      if (err) {
+        throw new Error(`'disconnectFTP' hook errored: ` + err)
+      }
+    })
     _.unset(hook.data, options.clientPath || 'client')
     debug('Disconnected from FTP for ' + options)
     return hook
