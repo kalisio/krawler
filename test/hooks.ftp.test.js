@@ -17,8 +17,9 @@ describe('krawler:hooks:ftp', () => {
     port: 21,
     user: 'demo',
     pass: 'password',
-    remoteDir: 'pub/example',
-    remoteFile: 'pub/example/ConsoleClient.png'
+    remoteDir: '/pub/example',
+    remoteFile: '/pub/example/ConsoleClient.png',
+    localFile: path.join(__dirname, 'output', 'ConsoleClient.png')
   }
 
   let ftpHook = {

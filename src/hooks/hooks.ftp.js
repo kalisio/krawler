@@ -78,7 +78,7 @@ export function putFTP (options = {}) {
     if (_.isNil(client)) throw new Error(`You must be connected to an FTP server before using the 'putFTP' hook`)
     const inputStore = await await getStoreFromHook(hook, 'putFTP', options)
     const remoteFile = template(item, options.key || (item.id))
-    const localFile = path.join(inputStore.path, path.basename(remoteFile))
+    const localFile = template(item, options.localFile || path.join(inputStore.path, path.basename(remoteFile)))
 
     debug('Putting file ' + localFile + ' to ' + remoteFile)
     return new Promise((resolve, reject) => {
