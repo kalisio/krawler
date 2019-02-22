@@ -52,7 +52,7 @@ export function getFTP (options = {}) {
     if (_.isNil(client)) throw new Error(`You must be connected to an FTP server before using the 'getFTP' hook`)
     const outputStore = await getStoreFromHook(hook, 'getFTP', options)
     const remoteFile = template(item, options.remoteFile || options.key || (item.id))
-    const localFile = template(item, options.locaFile || path.join(outputStore.path, path.basename(remoteFile)))
+    const localFile = template(item, options.localFile || path.join(outputStore.path, path.basename(remoteFile)))
 
     debug('Getting file ' + remoteFile + ' to ' + localFile)
     return new Promise((resolve, reject) => {
