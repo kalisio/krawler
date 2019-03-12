@@ -16,7 +16,7 @@ describe('krawler:cli', () => {
 
   before(async () => {
     chailint(chai, util)
-    client = await MongoClient.connect('mongodb://127.0.0.1:27017/krawler-test')
+    client = await MongoClient.connect('mongodb://127.0.0.1:27017/krawler-test', { useNewUrlParser: true })
     client.db = client.db('krawler-test')
   })
 

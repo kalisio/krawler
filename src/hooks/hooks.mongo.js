@@ -18,8 +18,16 @@ export function connectMongo (options = {}) {
       return hook
     }
     debug('Connecting to MongoDB for ' + hook.data.id)
-    client = await MongoClient.connect(options.url, _.omit(options, ['url', 'dbName', 'clientPath']))
-    client.db = client.db(options.dbName || options.url.substring(options.url.lastIndexOf('/') + 1))
+    client = await MongoClient.connect(options.url, _.merge(_.omit(options, ['url', 'dbName', 'clientPath']), { useNewUrlParser: true }))
+    let dbName = options.dbName
+    if (!dbName) {
+      // Extract database name.  Need to remove the connections options if any
+      let indexOfDBName = options.url.lastIndexOf('/') + 1
+      let indexOfOptions = options.url.indexOf('?')
+      if (indexOfOptions === -1) dbName = options.url.substring(indexOfDBName)
+      else dbName = options.url.substring(indexOfDBName, indexOfOptions)
+    }
+    client.db = client.db(dbName)
     _.set(hook.data, options.clientPath || 'client', client)
     debug('Connected to MongoDB for ' + hook.data.id)
     return hook
