@@ -97,10 +97,12 @@ describe('krawler:hooks:mongo', () => {
 
   it('writes MongoDB bucket', async () => {
     mongoHook.result.store = inputStore
-    await pluginHooks.writeMongoBucket({ bucket: 'data', key: 'geojson.json' })(mongoHook)
+    await pluginHooks.writeMongoBucket({ bucket: 'data', metadata: { x: 'y' }, key: 'geojson.json' })(mongoHook)
     let collection = mongoHook.data.client.db.collection('data.files')
     let results = await collection.find({ filename: 'geojson.json' }).toArray()
     expect(results.length).to.equal(1)
+    expect(results[0].metadata).toExist()
+    expect(results[0].metadata.x).to.equal('y')
   })
   // Let enough time to proceed
   .timeout(5000)
