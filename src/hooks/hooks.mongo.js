@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { MongoClient, MongoError, GridFSBucket } from 'mongodb'
 import makeDebug from 'debug'
 import { getItems } from 'feathers-hooks-common'
-import { template, templateObject, templateQueryObject, transformJsonObject, getStoreFromHook, writeStreamToStore } from '../utils'
+import { template, templateObject, templateQueryObject, transformJsonObject, getStoreFromHook } from '../utils'
 
 const debug = makeDebug('krawler:hooks:mongo')
 
@@ -251,7 +251,7 @@ export function readMongoBucket (options = {}) {
     return new Promise((resolve, reject) => {
       bucket.openDownloadStreamByName(filePath)
       .pipe(store.createWriteStream(filePath))
-      .on('error', error => reject)
+      .on('error', reject)
       .on('finish', _ => resolve(hook))
     })
   }
@@ -274,7 +274,7 @@ export function writeMongoBucket (options = {}) {
     return new Promise((resolve, reject) => {
       store.createReadStream(filePath)
       .pipe(bucket.openUploadStream(filePath))
-      .on('error', error => reject)
+      .on('error', reject)
       .on('finish', _ => resolve(hook))
     })
   }
