@@ -1,10 +1,14 @@
 import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
 import path from 'path'
+import fs from 'fs-extra'
+import fsStore from 'fs-blob-store'
 import { hooks as pluginHooks } from '../src'
 
 describe('krawler:hooks:mongo', () => {
-  const geojson = require(path.join(__dirname, 'data', 'geojson'))
+  let inputStore = fsStore({ path: path.join(__dirname, 'data') })
+  let outputStore = fsStore({ path: path.join(__dirname, 'output') })
+  const geojson = require(path.join(inputStore.path, 'geojson'))
 
   before(() => {
     chailint(chai, util)
@@ -13,7 +17,6 @@ describe('krawler:hooks:mongo', () => {
   let mongoHook = {
     type: 'before',
     data: {},
-    result: { data: geojson },
     params: {}
   }
 
@@ -29,14 +32,15 @@ describe('krawler:hooks:mongo', () => {
   it('creates MongoDB collection', async () => {
     await pluginHooks.createMongoCollection({ collection: 'geojson', index: { geometry: '2dsphere' } })(mongoHook)
     let collections = await mongoHook.data.client.db.listCollections({ name: 'geojson' }).toArray()
-    expect(collections.length > 0).beTrue()
-    expect(collections[0].name).to.equal('geojson')
+    expect(collections.length === 1).beTrue()
   })
   // Let enough time to proceed
   .timeout(5000)
 
   it('writes MongoDB collection', async () => {
     mongoHook.type = 'after'
+    mongoHook.result = mongoHook.data
+    mongoHook.result.data = geojson
     await pluginHooks.writeMongoCollection({ collection: 'geojson' })(mongoHook)
     let collection = mongoHook.data.client.db.collection('geojson')
     let results = await collection.find({
@@ -85,7 +89,52 @@ describe('krawler:hooks:mongo', () => {
   // Let enough time to proceed
   .timeout(5000)
 
+  it('creates MongoDB bucket', async () => {
+    await pluginHooks.createMongoBucket({ bucket: 'data' })(mongoHook)
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('writes MongoDB bucket', async () => {
+    mongoHook.result.store = inputStore
+    await pluginHooks.writeMongoBucket({ bucket: 'data', key: 'geojson.json' })(mongoHook)
+    let collection = mongoHook.data.client.db.collection('data.files')
+    let results = await collection.find({ filename: 'geojson.json' }).toArray()
+    expect(results.length).to.equal(1)
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('reads MongoDB bucket', async () => {
+    mongoHook.result.store = outputStore
+    await pluginHooks.readMongoBucket({ bucket: 'data', key: 'geojson.json' })(mongoHook)
+    expect(fs.existsSync(path.join(outputStore.path, 'geojson.json'))).beTrue()
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('deletes MongoDB bucket', async () => {
+    await pluginHooks.deleteMongoBucket({ bucket: 'data', key: 'geojson.json' })(mongoHook)
+    let collection = mongoHook.data.client.db.collection('data.files')
+    let results = await collection.find({ filename: 'geojson.json' }).toArray()
+    expect(results.length).to.equal(0)
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
+  it('drops MongoDB bucket', async () => {
+    await pluginHooks.dropMongoBucket({ bucket: 'data' })(mongoHook)
+    let collections = await mongoHook.data.client.db.listCollections({ name: 'data.files' }).toArray()
+    expect(collections.length === 0).beTrue()
+    collections = await mongoHook.data.client.db.listCollections({ name: 'data.chuncks' }).toArray()
+    expect(collections.length === 0).beTrue()
+  })
+  // Let enough time to proceed
+  .timeout(5000)
+
   it('disconnect from MongoDB', async () => {
+    // Cleanup
+    await mongoHook.data.client.db.dropDatabase()
     await pluginHooks.disconnectMongo()(mongoHook)
     expect(mongoHook.data.client).beUndefined()
   })

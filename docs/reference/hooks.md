@@ -342,6 +342,7 @@ Create a collection in a MongoDB database. Hook options are the following:
 ### readMongoCollection(options)
 
 Read JSON documents from an existing collection. Hook options are the following:
+* **collection**: the name of the collection to be read, defaults to the hook object ID
 * **dataPath**: property path where to write the output JSON objects on the hook object, defaults to `data.result`
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **transform**: perform transformation using these options after read, see description in [transformJson](./hooks.md#transformjson-options)
@@ -358,6 +359,7 @@ Due to templating restricted to string output any ISO date string or comparison 
 ### writeMongoCollection(options)
 
 Inserts JSON into an existing collection. Hook options are the following:
+* **collection**: the name of the collection to be written, defaults to the hook object ID
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `data.result`
 * **chunkSize**: number of GeoJson features for the [batch insert](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/)
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
@@ -366,6 +368,36 @@ Inserts JSON into an existing collection. Hook options are the following:
 ::: tip
 If the input data is a GeoJSON collection the array of features will be pushed into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections.
 ::: tip
+
+### dropMongoBucket(options)
+
+Drop if exists a bucket in a MongoDB database. Hook options are the following:
+* **bucket**: the name of the bucket to be removed, defaults to the hook object ID
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
+### createMongoBucket(options)
+
+Create a bucket in a MongoDB database. Hook options are the following:
+* **bucket**: the name of the bucket to be created, defaults to the hook object ID
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
+### readMongoBucket(options)
+
+Read file from an existing bucket. Hook options are the following:
+* **bucket**: the name of the bucket to be read, defaults to the hook object ID
+* **storePath**: see description in [common options](./hooks.md#common-options), specify store to write file to
+* **store**: see description in [common options](./hooks.md#common-options), specify store to write file to
+* **key**: see description in [common options](./hooks.md#common-options), defaults to the hook object ID
+
+### writeMongoBucket(options)
+
+Insert file into an existing bucket. Hook options are the following:
+* **bucket**: the name of the bucket to be written, defaults to the hook object ID
+* **storePath**: see description in [common options](./hooks.md#common-options), specify store to read file from
+* **store**: see description in [common options](./hooks.md#common-options), specify store to read file from
+* **key**: see description in [common options](./hooks.md#common-options), defaults to the hook object ID
+
+> If the input data is a GeoJSON collection the array of features will be pushed into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections
 
 ## Numerical Weather Prediction [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.nwp.js)
 
