@@ -160,7 +160,6 @@ export class Grid {
   getTiling (resolution) {
     const lonExtent = (this.bounds[2] < this.bounds[0] ? (360 + this.bounds[2] - this.bounds[0]) : (this.bounds[2] - this.bounds[0]))
     const latExtent = (this.bounds[3] < this.bounds[1] ? (360 + this.bounds[3] - this.bounds[1]) : (this.bounds[3] - this.bounds[1]))
-    const ratio = [ resolution[0] / this.resolution[0], resolution[1] / this.resolution[1] ]
     // Number of tiles is bound / tile resolution
     const tilesetSize = [ Math.floor(lonExtent / resolution[0]), Math.floor(latExtent / resolution[1]) ]
     // Size of tiles is tile bound / resolution
