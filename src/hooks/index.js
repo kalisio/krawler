@@ -127,14 +127,20 @@ export function activateHooks (serviceHooks, service) {
     // Iterate over hooks to create the hook pipeline
     let pipeline = []
     _.forOwn(hooksDefinition, (hookOptions, hookName) => {
+      // If hook name is given as 'hook' option property use it
+      // otherwise us key as hook name
+      hookName = _.get(hookOptions, 'hook', hookName)
       // Check for parallel execution hook
       if (hookName === 'parallel') {
         try {
           debug('Adding parallel hook to hook chain with following hooks')
           // In this case we have an array of hooks to be run in parallel
+          // Directly given if written as parallel: [...] or as an option
+          // if written as { hook: 'parallel', hooks: [...] }
+          const items = (Array.isArray(hookOptions) ? hookOptions : hookOptions.hooks)
           // Each item contains the hook name as a 'hook' property and hook options
           let hooks = []
-          hookOptions.map(item => addHook(item.hook, item, hooks))
+          items.forEach(item => addHook(item.hook, item, hooks))
           pipeline.push(parallel(hooks))
         } catch (error) {
           console.error(error.message)
@@ -142,9 +148,6 @@ export function activateHooks (serviceHooks, service) {
       } else {
         // Jump from name/options to the real hook function
         try {
-          // If hook name is given as 'hook' option property use it
-          // otherwise us key as hook name
-          hookName = _.get(hookOptions, 'hook', hookName)
           addHook(hookName, hookOptions, pipeline)
         } catch (error) {
           console.error(error.message)
