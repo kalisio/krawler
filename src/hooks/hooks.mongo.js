@@ -9,7 +9,7 @@ const debug = makeDebug('krawler:hooks:mongo')
 // Connect to the mongo database
 export function connectMongo (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    let item = hook.data // getItems(hook)
     let client = _.get(item, options.clientPath || 'client')
     if (client) {
       debug('Already connected to MongoDB for ' + item.id)
@@ -35,8 +35,8 @@ export function connectMongo (options = {}) {
 // Disconnect from the database
 export function disconnectMongo (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
-    let client = _.get(item, options.clientPath || 'client', _.get(hook.data, options.clientPath || 'client'))
+    let item = hook.data // getItems(hook)
+    let client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to MongoDB before using the 'disconnectMongo' hook`)
     }
@@ -52,7 +52,7 @@ export function disconnectMongo (options = {}) {
 // Drop a collection
 export function dropMongoCollection (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    let item = hook.data // hook.data // getItems(hook)
     let client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to MongoDB before using the 'dropMongoCollection' hook`)
@@ -80,7 +80,7 @@ export function dropMongoCollection (options = {}) {
 // Create a collection
 export function createMongoCollection (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    let item = hook.data // getItems(hook)
     let client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to MongoDB before using the 'createMongoCollection' hook`)
@@ -119,7 +119,7 @@ export function createMongoCollection (options = {}) {
 // Retrieve JSON documents from a collection
 export function readMongoCollection (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    let item = hook.data // getItems(hook)
     let client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to MongoDB before using the 'readMongoCollection' hook`)
@@ -149,7 +149,7 @@ export function readMongoCollection (options = {}) {
 // Insert JSON document(s) in a collection
 export function writeMongoCollection (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    let item = hook.data // getItems(hook)
     let client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to MongoDB before using the 'writeMongoCollection' hook`)
@@ -190,7 +190,7 @@ export function writeMongoCollection (options = {}) {
 // Delete documents in a collection
 export function deleteMongoCollection (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    let item = hook.data // getItems(hook)
     let client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to MongoDB before using the 'deleteMongoCollection' hook`)
@@ -208,7 +208,7 @@ export function deleteMongoCollection (options = {}) {
 // Create a GridFS bucket
 export function createMongoBucket (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    let item = hook.data // getItems(hook)
     let client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to MongoDB before using the 'createMongoCollection' hook`)
@@ -237,7 +237,7 @@ export function createMongoBucket (options = {}) {
 // Read file from a bucket
 export function readMongoBucket (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    let item = hook.data // getItems(hook)
     let client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to MongoDB before using the 'readMongoBucket' hook`)
@@ -260,7 +260,7 @@ export function readMongoBucket (options = {}) {
 // Insert file in a bucket
 export function writeMongoBucket (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    let item = hook.data // getItems(hook)
     let client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to MongoDB before using the 'writeMongoBucket' hook`)
@@ -284,7 +284,7 @@ export function writeMongoBucket (options = {}) {
 // Delete file in a bucket
 export function deleteMongoBucket (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    let item = hook.data // getItems(hook)
     let client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to MongoDB before using the 'deleteMongoBucket' hook`)
@@ -306,7 +306,7 @@ export function deleteMongoBucket (options = {}) {
 // Drop a bucket
 export function dropMongoBucket (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    let item = hook.data // getItems(hook)
     let client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error(`You must be connected to MongoDB before using the 'readMongoBucket' hook`)
