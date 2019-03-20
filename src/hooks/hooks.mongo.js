@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { MongoClient, MongoError, GridFSBucket } from 'mongodb'
 import makeDebug from 'debug'
-import { getItems } from 'feathers-hooks-common'
+//import { getItems } from 'feathers-hooks-common'
 import { template, templateObject, templateQueryObject, transformJsonObject, getStoreFromHook } from '../utils'
 
 const debug = makeDebug('krawler:hooks:mongo')
