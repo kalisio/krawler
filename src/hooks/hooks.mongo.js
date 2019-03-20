@@ -268,7 +268,7 @@ export function writeMongoBucket (options = {}) {
 
     const bucketName = template(item, _.get(options, 'bucket', _.snakeCase(item.id)))
     let bucket = _.get(client, `buckets.${bucketName}`)
-    const templatedMetadata = templateObject(item, options.metadata)
+    const templatedMetadata = templateQueryObject(item, options.metadata)
     const filePath = template(item, options.key || item.id)
     const store = await getStoreFromHook(hook, 'writeMongoBucket', options)
     debug(`Inserting ${filePath} in the ${bucketName} bucket `)
