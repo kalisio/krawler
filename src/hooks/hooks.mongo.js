@@ -36,7 +36,7 @@ export function connectMongo (options = {}) {
 export function disconnectMongo (options = {}) {
   return async function (hook) {
     let item = getItems(hook)
-    let client = _.get(item, options.clientPath || 'client')
+    let client = _.get(item, options.clientPath || 'client', _.get(hook.data, options.clientPath || 'client'))
     if (_.isNil(client)) {
       throw new Error(`You must be connected to MongoDB before using the 'disconnectMongo' hook`)
     }
