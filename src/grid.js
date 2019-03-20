@@ -158,11 +158,17 @@ export class Grid {
    * @returns {Object} tileset size, tile size, tile resolution
    */
   getTiling (resolution) {
-    const ratio = [ (resolution[0] / this.resolution[0]), (resolution[1] / this.resolution[1]) ]
-    // Number of tile is grid size x resolution ratio
-    const tilesetSize = [ Math.floor(this.size[0] / ratio[0]), Math.floor(this.size[1] / ratio[1]) ]
-    const tileSize = [ Math.floor(this.size[0] / tilesetSize[0]), Math.floor(this.size[1] / tilesetSize[1]) ]
-    const tileResolution = [ resolution[0] / tileSize[0], resolution[1] / tileSize[1] ]
+    const lonExtent = (this.bounds[2] < this.bounds[0] ? (360 + this.bounds[2] - this.bounds[0]) : (this.bounds[2] - this.bounds[0]))
+    const latExtent = (this.bounds[3] < this.bounds[1] ? (360 + this.bounds[3] - this.bounds[1]) : (this.bounds[3] - this.bounds[1]))
+    const ratio = [ resolution[0] / this.resolution[0], resolution[1] / this.resolution[1] ]
+    // Number of tiles is bound / tile resolution
+    const tilesetSize = [ Math.floor(lonExtent / resolution[0]), Math.floor(latExtent / resolution[1]) ]
+    // Size of tiles is tile bound / resolution
+    const tileSize = [
+      Math.max(2, Math.floor(resolution[0] / this.resolution[0])),
+      Math.max(2, Math.floor(resolution[1] / this.resolution[1]))
+    ]
+    const tileResolution = [ this.resolution[0], this.resolution[1] ]
     return { tilesetSize, tileSize, tileResolution }
   }
 

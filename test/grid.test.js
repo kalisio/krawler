@@ -60,7 +60,9 @@ describe('krawler:grid', () => {
   })
 
   it('tiles grid values', () => {
-    let tileset = grid.tileset([180, 90])
-    expect(tileset.map(tile => tile.data)).to.deep.equal([ [ 0, 1 ], [ 1, 0 ], [ 1, 2 ], [ 2, 1 ], [ 0, 1 ], [ 1, 0 ] ])
+    let tileset = grid.tileset([90, 90])
+    expect(tileset.map(tile => tile.data)).to.deep.equal([
+      [ 0, 1, 1, 2 ], [ 1, 1, 2, 2 ], [ 1, 0, 2, 1 ], [ 0, 0, 1, 1 ], [ 1, 2, 0, 1 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 0 ], [ 1, 1, 0, 0 ]
+    ])
   })
 })
