@@ -5,9 +5,10 @@ The problem with hooks is that they are configured at application setup time and
 However, using the CLI, you can also launch it as standard wep application/API. You can then POST job or task requests to the exposed services, e.g. on `localhost:3030/api/jobs`.
 
 When running the krawler as a web API or cron job note that it provides a healthcheck endpoint e.g. on `localhost:3030/api/healthcheck`. The following JSON structure is returned:
-* isRunning: boolean indicating if the cron job is currently running
-* nbSkippedJobs: number of times the scheduled job has been skipped due to an on-going one
-* error: error object whenever the cron job has erroned
+* `isRunning`: boolean indicating if the cron job is currently running
+* `nbSkippedJobs`: number of times the scheduled job has been skipped due to an on-going one
+* `error`: error object whenever the cron job has erroned
+
 The returned HTTP code is `500` whenever an error has occured in the last run, `200` otherwise.
 
 ::: tip
