@@ -20,7 +20,7 @@ describe('krawler:cli', () => {
     client.db = client.db('krawler-test')
   })
 
-  it('runs once using CLI', (done) => {
+  it('runs once using CLI', async () => {
     let tasks = await cli(jobfile)
     // All other features should have been tested independently
     // so we just test here the CLI run correctly
