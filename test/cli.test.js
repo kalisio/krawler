@@ -21,23 +21,24 @@ describe('krawler:cli', () => {
   })
 
   it('runs once using CLI', (done) => {
-    cli(jobfile)
-    .then(tasks => {
-      // All other features should have been tested independently
-      // so we just test here the CLI run correctly
-      expect(tasks.length).to.equal(1)
-      // Check intermediate products have been erased and final product are here
-      expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif'))).beFalse()
-      expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif.csv'))).beTrue()
-      done()
-    })
+    let tasks = await cli(jobfile)
+    // All other features should have been tested independently
+    // so we just test here the CLI run correctly
+    expect(tasks.length).to.equal(1)
+    // Check intermediate products have been erased and final product are here
+    expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif'))).beFalse()
+    expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif.csv'))).beTrue()
   })
   // Let enough time to process
   .timeout(10000)
 
   it('runs as CRON using CLI', (done) => {
     // Setup the app
-    cli(jobfile, { mode: 'setup', sync: 'mongodb://127.0.0.1:27017/krawler-test' })
+    cli(jobfile, {
+      mode: 'setup',
+      sync: 'mongodb://127.0.0.1:27017/krawler-test',
+      cron: '*/10 * * * * *'
+    })
     .then(server => {
       let app = getApp()
       // Add hook to know how many times the job will run
@@ -58,11 +59,16 @@ describe('krawler:cli', () => {
       })
       // Only run as we already setup the app
       // As it runs every 10 seconds we know that in 20s it has ran at least once again
-      cli(jobfile, { cron: '*/10 * * * * *', mode: 'runJob' })
+      cli(jobfile, { mode: 'runJob', cron: '*/10 * * * * *' })
       setTimeout(async () => {
         const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
         expect(response.statusCode).to.equal(200)
-        expect(JSON.parse(response.body).isRunning).toExist()
+        const healthcheck = JSON.parse(response.body)
+        console.log(healthcheck)
+        expect(healthcheck.isRunning).toExist()
+        expect(healthcheck.nbSkippedJobs).toExist()
+        expect(healthcheck.error).beUndefined()
+        expect(healthcheck.state).toExist()
         server.close()
         expect(runCount).to.be.at.least(2) // 2 runs
         expect(eventCount).to.be.at.least(4) // 4 events

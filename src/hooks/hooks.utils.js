@@ -1,8 +1,9 @@
 import uuid from 'uuid/v1'
 import sift from 'sift'
 import _ from 'lodash'
+import { getItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
-import { callOnHookItems, templateObject, templateQueryObject, transformJsonObject } from '../utils'
+import { Healthcheck, callOnHookItems, templateObject, templateQueryObject, transformJsonObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:utils')
 
@@ -60,4 +61,16 @@ export function apply (options) {
     options.function(item)
     debug('Applied function on item', item)
   })
+}
+
+// Apply a custom function on healthcheck state
+export function healthcheck (options) {
+  return async function (hook) {
+    let hookObject = hook
+    // Handle error hooks as usual
+    if (hook.type === 'error') hookObject = hook.original
+    // Retrieve the items from the hook and send it to healthcheck function
+    options.function(getItems(hookObject), Healthcheck)
+    debug('Applied function on Healthcheck', Healthcheck)
+  }
 }

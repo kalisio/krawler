@@ -6,6 +6,13 @@ import { getItems, replaceItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
 import { Duplex } from 'stream'
 
+// Global structure used to manage healthcheck state for cron jobs
+export let Healthcheck = {
+  isRunning: false, // Flag indicating if job is currently running for cron jobs
+  nbSkippedJobs: 0, // Number of times the scheduled job has been skipped due to on-going one
+  error: null // Indicating error if job has erroned for cron jobs
+}
+
 const debug = makeDebug('krawler:utils')
 // Add knot unit not defined by default
 math.createUnit('knot', { definition: '0.514444 m/s', aliases: ['knots', 'kt', 'kts'] })

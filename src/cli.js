@@ -15,6 +15,7 @@ import { CronJob } from 'cron'
 import makeDebug from 'debug'
 import * as hooks from './hooks'
 import { stores, tasks, jobs } from './services'
+import { Healthcheck } from './utils'
 import plugin from './plugin'
 
 const debug = makeDebug('krawler:cli')
@@ -25,8 +26,6 @@ export let TasksService = tasks()
 export let JobsService = jobs()
 export let app
 let server
-let isRunning = false // Flag indicating if job is currently running for cron jobs
-let hasError = false // Flag indicating if job had erroned for cron jobs
 
 // Register all default hooks
 _.forOwn(hooks, (hook, name) => hooks.registerHook(name, hook))
@@ -71,8 +70,8 @@ export async function createApp (job, options = {}) {
   // Add a healthcheck for cron jobs
   app.get(apiPrefix + '/healthcheck', (req, res, next) => {
     if (options.cron) {
-      if (hasError) res.status(500).json({ error: hasError.toString() })
-      else res.status(200).json({ isRunning })
+      if (Healthcheck.error) res.status(500).json(_.pick(Healthcheck, ['error']))
+      else res.status(200).json(_.omit(Healthcheck, ['error']))
     } else {
       res.status(200).json({ isRunning: true })
     }
@@ -122,13 +121,13 @@ export function runJob (job, options = {}) {
   function runJobWithOptions () {
     console.log(`Launching job ${job.id} at ${(new Date()).toISOString()}, please wait...`)
     console.time('Running time')
-    isRunning = true
+    Healthcheck.isRunning = true
     return app.service('jobs').create(job)
     .then(tasks => {
       console.log('Job terminated, ' + tasks.length + ' tasks ran')
       console.timeEnd('Running time')
-      isRunning = false
-      hasError = false
+      Healthcheck.isRunning = false
+      Healthcheck.error = null
       // When not running job continuously stop the server
       if (options.cron) {
         return Promise.resolve(tasks)
@@ -140,8 +139,8 @@ export function runJob (job, options = {}) {
     })
     .catch(error => {
       console.error(error.message)
-      isRunning = false
-      hasError = error
+      Healthcheck.isRunning = false
+      Healthcheck.error = error
       // When not running job continuously stop the server
       if (!options.cron) {
         server.close()
@@ -155,8 +154,14 @@ export function runJob (job, options = {}) {
     console.log('Scheduling job with cron pattern ' + options.cron)
     cronJob = new CronJob(options.cron, () => {
       // If last job has not yet finished skip this call as we are late
-      if (!isRunning) runJobWithOptions()
-      else console.log('Skipping scheduled job as previous one is not yet finished')
+      if (!Healthcheck.isRunning) {
+        Healthcheck.nbSkippedJobs = 0
+        runJobWithOptions()
+      }
+      else {
+        console.log('Skipping scheduled job as previous one is not yet finished')
+        Healthcheck.nbSkippedJobs++
+      }
     })
     // In case the server is forced to exit stop the job as well
     server.on('close', () => {

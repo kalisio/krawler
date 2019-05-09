@@ -675,7 +675,12 @@ Discard all subsequent hooks and task if the input data passes the given match f
 ### apply(options)
 
 Apply a given function to the hook item(s), hook options are the following:
-* **function**: a function taking the hook item as input and updating it
+* **function**: a function taking the hook item(s) as input and updating it
+
+### healthcheck(options)
+
+Apply a given function to the hook item(s) and healthcheck structure, hook options are the following:
+* **function**: a function taking the hook item(s) and healthcheck structure as input and updating it
 
 ### emitEvent(options)
 

@@ -71,7 +71,10 @@ module.exports = {
           id: 'task-store',
           type: 'fs',
           options: { path: __dirname }
-        }]
+        }],
+        healthcheck: {
+          function: (item, healthcheck) => healthcheck.state = 'running'
+        }
       },
       after: {
         clearOutputs: {
@@ -81,6 +84,9 @@ module.exports = {
         emitEvent: {
           name: 'job-done',
           pick: ['id']
+        },
+        healthcheck: {
+          function: (item, healthcheck) => healthcheck.state = 'finished'
         }
       }
     }
