@@ -11,7 +11,7 @@ When running the krawler as a web API or cron job note that it provides a health
 The returned HTTP code is `500` whenever an error has occured in the last run, `200` otherwise.
 
 ::: tip
-You can add your custom data in the healthcheck structure using the `healthcheck` hook.
+You can add your custom data in the healthcheck structure using the [`healthcheck`](../reference/hooks.md#healthcheck-options) hook.
 :::
 
 # Command-Line Interface

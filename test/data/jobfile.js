@@ -73,7 +73,7 @@ module.exports = {
           options: { path: __dirname }
         }],
         healthcheck: {
-          function: (item, healthcheck) => healthcheck.state = 'running'
+          function: (item, healthcheck) => { healthcheck.state = 'running' }
         }
       },
       after: {
@@ -86,7 +86,7 @@ module.exports = {
           pick: ['id']
         },
         healthcheck: {
-          function: (item, healthcheck) => healthcheck.state = 'finished'
+          function: (item, healthcheck) => { healthcheck.state = 'finished' }
         }
       }
     }
