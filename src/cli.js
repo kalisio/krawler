@@ -128,6 +128,14 @@ export function runJob (job, options = {}) {
       console.timeEnd('Running time')
       Healthcheck.isRunning = false
       Healthcheck.error = null
+      // Compute the error ratio for fault-tolerant jobs
+      Healthcheck.nbFailedTasks = 0
+      Healthcheck.nbSuccessfulTasks = 0
+      tasks.forEach(task => {
+        if (tasks.error) Healthcheck.nbFailedTasks++
+        else Healthcheck.nbSuccessfulTasks++
+      })
+      Healthcheck.successRate = Healthcheck.nbSuccessfulTasks / (Healthcheck.nbSuccessfulTasks + Healthcheck.nbFailedTasks)
       // When not running job continuously stop the server
       if (options.cron) {
         return Promise.resolve(tasks)

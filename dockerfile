@@ -12,4 +12,6 @@ WORKDIR /opt/krawler
 COPY . /opt/krawler
 RUN yarn install
 
+HEALTHCHECK --interval=30s --timeout=30s --start-period=30s CMD node ./healthcheck.js
+
 CMD node . $ARGS

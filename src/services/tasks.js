@@ -48,7 +48,9 @@ class TasksService extends Service {
       taskStream
       .on('timeout', reject)
       .on('response', (response) => {
-        if (response.statusCode !== 200) reject(new Error('Request rejected with HTTP code ' + response.statusCode))
+        let error = new Error('Request rejected with HTTP code ' + response.statusCode)
+        error.statusCode = response.statusCode
+        if (response.statusCode !== 200) reject(error)
       })
       writeStreamToStore(taskStream, store, {
         key: id,

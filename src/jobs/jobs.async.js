@@ -38,6 +38,7 @@ async function createJob (options = {}, store = null, tasks, id, taskTemplate) {
         if (i === attempts) {
           if (faultTolerant) {
             console.log(error)
+            newTask.error = error
             // Return last attempt
             return newTask
           } else {

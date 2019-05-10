@@ -64,10 +64,12 @@ describe('krawler:cli', () => {
         const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
         expect(response.statusCode).to.equal(200)
         const healthcheck = JSON.parse(response.body)
-        console.log(healthcheck)
         expect(healthcheck.isRunning).toExist()
         expect(healthcheck.nbSkippedJobs).toExist()
         expect(healthcheck.error).beUndefined()
+        expect(healthcheck.nbFailedTasks).to.equal(0)
+        expect(healthcheck.nbSuccessfulTasks).to.equal(1)
+        expect(healthcheck.successRate).to.equal(1)
         expect(healthcheck.state).toExist()
         server.close()
         expect(runCount).to.be.at.least(2) // 2 runs
