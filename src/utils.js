@@ -11,9 +11,11 @@ export let Healthcheck = {
   isRunning: false, // Flag indicating if job is currently running for cron jobs
   nbSkippedJobs: 0, // Number of times the scheduled job has been skipped due to on-going one
   error: null, // Indicating error if job has erroned for cron jobs
+  /* Undefined by default
   nbFailedTasks: 0, // Number of failed/success tasks of last run for fault-tolerant jobs
   nbSuccessfulTasks: 0,
   successRate: 0 // Ratio of previous values
+  */
 }
 
 const debug = makeDebug('krawler:utils')

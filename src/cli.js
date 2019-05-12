@@ -121,6 +121,7 @@ export function runJob (job, options = {}) {
   function runJobWithOptions () {
     console.log(`Launching job ${job.id} at ${(new Date()).toISOString()}, please wait...`)
     console.time('Running time')
+    Healthcheck.jobId = job.id
     Healthcheck.isRunning = true
     return app.service('jobs').create(job)
     .then(tasks => {
