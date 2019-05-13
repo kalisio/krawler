@@ -94,6 +94,8 @@ When running the krawler as a web API note that only the hooks pipeline is manda
 
 # Healthcheck
 
+## Healthcheck endpoint
+
 When running the krawler as a cron job note that it provides a healthcheck endpoint e.g. on `localhost:3030/api/healthcheck`. The following JSON structure is returned:
 * `isRunning`: boolean indicating if the cron job is currently running
 * `nbSkippedJobs`: number of times the scheduled job has been skipped due to an on-going one
@@ -107,6 +109,8 @@ The returned HTTP code is `500` whenever an error has occured in the last run, `
 ::: tip
 You can add your custom data in the healthcheck structure using the [`healthcheck`](../reference/hooks.md#healthcheck-options) hook.
 :::
+
+## Healthcheck command
 
 For convenience the krawler also includes a built-in healthcheck script that could be used e.g. by [Docker](https://docs.docker.com/engine/reference/commandline/service_create/). This script uses similar options than the CLI plus some specific options:
 * **debug**: output debug messages
