@@ -133,7 +133,7 @@ export function runJob (job, options = {}) {
       Healthcheck.nbFailedTasks = 0
       Healthcheck.nbSuccessfulTasks = 0
       tasks.forEach(task => {
-        if (tasks.error) Healthcheck.nbFailedTasks++
+        if (task.error) Healthcheck.nbFailedTasks++
         else Healthcheck.nbSuccessfulTasks++
       })
       Healthcheck.successRate = Healthcheck.nbSuccessfulTasks / (Healthcheck.nbSuccessfulTasks + Healthcheck.nbFailedTasks)

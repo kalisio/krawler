@@ -4,17 +4,6 @@ The problem with hooks is that they are configured at application setup time and
 
 However, using the CLI, you can also launch it as standard wep application/API. You can then POST job or task requests to the exposed services, e.g. on `localhost:3030/api/jobs`.
 
-When running the krawler as a web API or cron job note that it provides a healthcheck endpoint e.g. on `localhost:3030/api/healthcheck`. The following JSON structure is returned:
-* `isRunning`: boolean indicating if the cron job is currently running
-* `nbSkippedJobs`: number of times the scheduled job has been skipped due to an on-going one
-* `error`: error object whenever the cron job has erroned
-
-The returned HTTP code is `500` whenever an error has occured in the last run, `200` otherwise.
-
-::: tip
-You can add your custom data in the healthcheck structure using the [`healthcheck`](../reference/hooks.md#healthcheck-options) hook.
-:::
-
 # Command-Line Interface
 
 ## Internal API
@@ -29,7 +18,7 @@ You can add your custom data in the healthcheck structure using the [`healthchec
   * **password**: user password to be used for proxy
   * **debug**: output debug messages
   * **sync**: activate [sync module](https://github.com/feathersjs-ecosystem/feathers-sync) with given connection URI so that internal events can be listened externally
-  * **port**: port to be used by the krawler (defaults to 3030)
+  * **port**: port to be used by the krawler (defaults to `3030`)
   * **api**: launch the krawler as a web service/API
   * **api-prefix**: api prefix to be used when launching the krawler as a web service/API (defaults to `/api`)
 
@@ -103,3 +92,33 @@ let job = {
 When running the krawler as a web API note that only the hooks pipeline is mandatory in the job file. Indeed, job and task objects will be then sent by requesting the exposed web services.
 :::
 
+# Healthcheck
+
+When running the krawler as a cron job note that it provides a healthcheck endpoint e.g. on `localhost:3030/api/healthcheck`. The following JSON structure is returned:
+* `isRunning`: boolean indicating if the cron job is currently running
+* `nbSkippedJobs`: number of times the scheduled job has been skipped due to an on-going one
+* `error`: returned error object whenever the cron job has erroned
+* `nbFailedTasks`: number of failed tasks for last run for fault-tolerant jobs
+* `nbSuccessfulTasks`: number of successful tasks for last run for fault-tolerant jobs
+* `successRate`: Ratio of successful tasks / failed tasks
+
+The returned HTTP code is `500` whenever an error has occured in the last run, `200` otherwise.
+
+::: tip
+You can add your custom data in the healthcheck structure using the [`healthcheck`](../reference/hooks.md#healthcheck-options) hook.
+:::
+
+For convenience the krawler also includes a built-in healthcheck script that could be used e.g. by [Docker](https://docs.docker.com/engine/reference/commandline/service_create/). This script uses similar options than the CLI plus some specific options:
+* **debug**: output debug messages
+* **port**: port used by the krawler (defaults to `3030`)
+* **api**: indicates if the krawler has been launched as a web service/API
+* **api-prefix**: api prefix used when launching the krawler as a web service/API (defaults to `/api`)
+* **success-rate**: the success rate for fault-tolerant jobs to be considered as successful (defaults to 1)
+* **nb-skipped-jobs**: the number of skipped runs for fault-tolerant jobs to be considered as failed (defaults to 3)
+* **slack-webhook**: [Slack webhook URL](https://api.slack.com/incoming-webhooks) to post messages on failure (defaults to process.env.SLACK_WEBHOOK_URL)
+* **message-template**: Message template used on failure for console and Slack output (defaults to `Job <%= jobId %>: <%= error.message %>`)
+* **link-template**: Link template used on failure for Slack output (defaults to `<%= DOMAIN %>`)
+
+::: tip
+Templates are generated with healthcheck structure and environment variables as context, learn more about [templating](https://lodash.com/docs/4.17.4#template).
+:::
