@@ -36,5 +36,5 @@ When using krawler as a Docker container the arguments to the CLI have to be pro
 
 ```bash
 docker pull kalisio/krawler
-docker run --name krawler --rm -v /mnt/data:/opt/krawler/data -e "ARGS=/opt/krawler/data/jobfile.js" -e S3_BUCKET=krawler
+docker run --name krawler --rm -v /mnt/data:/opt/krawler/data -e "ARGS=/opt/krawler/data/jobfile.js" -e S3_BUCKET=krawler kalisio/krawler
 ```
