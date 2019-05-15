@@ -1,5 +1,23 @@
 # Changelog
 
+## [v0.9.0](https://github.com/kalisio/krawler/tree/v0.9.0) (2019-05-15)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.8.1...v0.9.0)
+
+**Implemented enhancements:**
+
+- Add healthcheck script [\#70](https://github.com/kalisio/krawler/issues/70)
+- Improve healthcheck and error management for fault-tolerant jobs [\#69](https://github.com/kalisio/krawler/issues/69)
+- Update MongoDB driver version to enable connection to MongoDB Atlas [\#66](https://github.com/kalisio/krawler/issues/66)
+- The krawler container should ship GDAL [\#63](https://github.com/kalisio/krawler/issues/63)
+- Allow to list an FTP remoteDir [\#61](https://github.com/kalisio/krawler/issues/61)
+- Enhance MongoDB vocabulary [\#31](https://github.com/kalisio/krawler/issues/31)
+
+**Fixed bugs:**
+
+- Incorrect value of MongoDb database name [\#65](https://github.com/kalisio/krawler/issues/65)
+- disconnectFTP hook should execute the quit command [\#60](https://github.com/kalisio/krawler/issues/60)
+
 ## [v0.8.1](https://github.com/kalisio/krawler/tree/v0.8.1) (2019-02-19)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.8.0...v0.8.1)
