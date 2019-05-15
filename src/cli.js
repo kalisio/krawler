@@ -166,8 +166,7 @@ export function runJob (job, options = {}) {
       if (!Healthcheck.isRunning) {
         Healthcheck.nbSkippedJobs = 0
         runJobWithOptions()
-      }
-      else {
+      } else {
         console.log('Skipping scheduled job as previous one is not yet finished')
         Healthcheck.nbSkippedJobs++
       }
