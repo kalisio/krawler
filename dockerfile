@@ -1,4 +1,4 @@
-FROM  node:8
+FROM  node:8-stretch
 
 LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 

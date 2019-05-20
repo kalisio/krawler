@@ -55,7 +55,7 @@ async function healthcheck () {
 		if (response.statusCode == 200) {
 			// Fault-tolerant jobs always return 200, we use more criteria to check for health status
 			if (_.has(data, 'successRate') && (data.successRate < program.successRate)) {
-				data.error = new Error(`Insufficient success rate (${data.successRate})`)
+				data.error = new Error(`Insufficient success rate (${data.successRate.toFixed(2)})`)
 			}
 			if (data.nbSkippedJobs >= program.nbSkippedJobs) {
 				data.error = new Error(`Too much skipped jobs (${data.nbSkippedJobs})`)
