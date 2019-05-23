@@ -32,7 +32,7 @@ function readFromLog () {
   }
 }
 
-function publishToLog (data) {
+function writeToLog (data) {
   try {
     fs.writeJsonSync(logFile, data)
   } catch (error) {
@@ -98,16 +98,16 @@ async function healthcheck () {
     if (response.statusCode === 200) {
       // Fault-tolerant jobs always return 200, we use more criteria to check for health status
       if (_.has(data, 'successRate') && (data.successRate < program.successRate)) {
-        data.error = new Error(`Insufficient success rate (${data.successRate.toFixed(2)})`)
+        data.error = { message: `Insufficient success rate (${data.successRate.toFixed(2)})` }
       }
       if (data.nbSkippedJobs >= program.nbSkippedJobs) {
-        data.error = new Error(`Too much skipped jobs (${data.nbSkippedJobs})`)
+        data.error = { message: `Too much skipped jobs (${data.nbSkippedJobs})` }
       }
       if ((program.maxDuration > 0) && (data.duration > program.maxDuration)) {
-        data.error = new Error(`Too much slow execution (${data.duration}s)`)
+        data.error = { message: `Too much slow execution (${data.duration}s)` }
       }
     }
-    publishToLog(data)
+    writeToLog(data)
     // Add env available for templates
     Object.assign(data, process.env)
     if (data.error) {
@@ -128,8 +128,8 @@ async function healthcheck () {
     }
   } catch (error) {
     // Set jobId variable available in context so that templates will not fail
-    let data = { jobId: '', error }
-    publishToLog(data)
+    let data = Object.assign({ jobId: '' }, _.pick(error, ['error.code', 'error.message']))
+    writeToLog(data)
     // Add env available for templates
     Object.assign(data, process.env)
     // Only notify on new errors
