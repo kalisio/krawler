@@ -122,11 +122,14 @@ export function runJob (job, options = {}) {
     console.time('Running time')
     Healthcheck.jobId = job.id
     Healthcheck.isRunning = true
+    const hrstart = process.hrtime()
     return app.service('jobs').create(job)
     .then(tasks => {
       console.log('Job terminated, ' + tasks.length + ' tasks ran')
+      const hrend = process.hrtime(hrstart)
       console.timeEnd('Running time')
       Healthcheck.isRunning = false
+      Healthcheck.duration = hrend[0] // Only seconds
       Healthcheck.error = null
       // Compute the error ratio for fault-tolerant jobs
       Healthcheck.nbFailedTasks = 0
