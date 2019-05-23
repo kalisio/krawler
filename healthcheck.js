@@ -42,8 +42,13 @@ function publishToLog (data) {
 }
 
 function publishToConsole (data, compilers, pretext, stream = 'error') {
-  if (stream === 'error') console.error(pretext, compilers.message(data))
-  else console.log(pretext, compilers.message(data))
+  try {
+    if (stream === 'error') console.error(pretext, compilers.message(data))
+    else console.log(pretext, compilers.message(data))
+  } catch (error) {
+    // Allowed to fail to make healthcheck robust
+    console.error(error)
+  }
 }
 
 async function publishToSlack (data, compilers, pretext, color = 'danger') {
@@ -96,7 +101,7 @@ async function healthcheck () {
         data.error = new Error(`Too much skipped jobs (${data.nbSkippedJobs})`)
       }
       if ((program.maxDuration > 0) && (data.duration > program.maxDuration)) {
-        data.error = new Error(`Too much slow execution (${data.duration})s`)
+        data.error = new Error(`Too much slow execution (${data.duration}s)`)
       }
     }
     publishToLog(data)
@@ -112,6 +117,7 @@ async function healthcheck () {
     } else {
       // Only notify on closing errors
       if (previousError) {
+        data.error = previousError
         publishToConsole(data, compilers, '[CLOSED ALERT]', 'log')
         await publishToSlack(data, compilers, '[CLOSED ALERT]', 'green')
       }
