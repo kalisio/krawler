@@ -91,7 +91,10 @@ async function healthcheck () {
     previousError = previousHealthcheck.error
     const response = await utils.promisify(request.get)(endpoint)
     let data = JSON.parse(response.body)
-    if (program.debug) console.log('Healthcheck output', data)
+    if (program.debug) {
+      console.log('Current healthcheck output read from service', data)
+      console.log('Previous healthcheck output read from log', previousHealthcheck)
+    }
     if (response.statusCode === 200) {
       // Fault-tolerant jobs always return 200, we use more criteria to check for health status
       if (_.has(data, 'successRate') && (data.successRate < program.successRate)) {
