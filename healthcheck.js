@@ -23,7 +23,7 @@ const logFile = path.join(__dirname, 'healthcheck.log')
 
 function readFromLog () {
   try {
-    if (fs.ensureFileSync(logFile)) return fs.readJsonSync(logFile)
+    if (fs.pathExistsSync(logFile)) return fs.readJsonSync(logFile)
     else return {} // First launch
   } catch (error) {
     // Allowed to fail to make healthcheck robust
