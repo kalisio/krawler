@@ -76,6 +76,12 @@ async function publishToSlack (data, compilers, pretext, color = 'danger') {
   }
 }
 
+function isSameError (previousError, error) {
+  return (_.has(previousError, 'code') && _.has(error, 'code') ?
+    _.isEqual(_.get(previousError, 'code'), _.get(error, 'code')) :
+    _.isEqual(_.get(previousError, 'message'), _.get(error, 'message')))
+}
+
 async function healthcheck () {
   const endpoint = `http://localhost:${program.port}${program.api ? program.apiPrefix : ''}/healthcheck`
   const compilers = {
@@ -95,13 +101,13 @@ async function healthcheck () {
     if (response.statusCode === 200) {
       // Fault-tolerant jobs always return 200, we use more criteria to check for health status
       if (_.has(data, 'successRate') && (data.successRate < program.successRate)) {
-        data.error = { message: `Insufficient success rate (${data.successRate.toFixed(2)})` }
+        data.error = { code: 'HEALTHCHECK_SUCCESS_RATE', message: `Insufficient success rate (${data.successRate.toFixed(2)})` }
       }
       if (data.nbSkippedJobs >= program.nbSkippedJobs) {
-        data.error = { message: `Too much skipped jobs (${data.nbSkippedJobs})` }
+        data.error = { code: 'HEALTHCHECK_SKIPPED_JOBS', message: `Too much skipped jobs (${data.nbSkippedJobs})` }
       }
       if ((program.maxDuration > 0) && (data.duration > program.maxDuration)) {
-        data.error = { message: `Too much slow execution (${data.duration}s)` }
+        data.error = { code: 'HEALTHCHECK_DURATION', message: `Too much slow execution (${data.duration}s)` }
       }
     }
     writeToLog(data)
@@ -109,7 +115,7 @@ async function healthcheck () {
     Object.assign(data, process.env)
     if (data.error) {
       // Only notify on new errors
-      if (!previousError || !_.isEqual(_.get(previousError, 'message'), _.get(data, 'error.message'))) {
+      if (!previousError || !_.isSameError(previousError, data.error)) {
         publishToConsole(data, compilers, '[NEW ALERT]', 'error')
         await publishToSlack(data, compilers, '[NEW ALERT]', 'danger')
       }
@@ -130,7 +136,7 @@ async function healthcheck () {
     // Add env available for templates
     Object.assign(data, process.env)
     // Only notify on new errors
-    if (!previousError || !_.isEqual(_.get(previousError, 'message'), _.get(data, 'error.message'))) {
+    if (!previousError || !_.isSameError(previousError, data.error)) {
       publishToConsole(data, compilers, '[NEW ALERT]', 'error')
       await publishToSlack(data, compilers, '[NEW ALERT]', 'danger')
     }
