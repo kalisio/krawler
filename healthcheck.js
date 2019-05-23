@@ -115,7 +115,7 @@ async function healthcheck () {
     Object.assign(data, process.env)
     if (data.error) {
       // Only notify on new errors
-      if (!previousError || !_.isSameError(previousError, data.error)) {
+      if (!previousError || !isSameError(previousError, data.error)) {
         publishToConsole(data, compilers, '[NEW ALERT]', 'error')
         await publishToSlack(data, compilers, '[NEW ALERT]', 'danger')
       }
@@ -136,7 +136,7 @@ async function healthcheck () {
     // Add env available for templates
     Object.assign(data, process.env)
     // Only notify on new errors
-    if (!previousError || !_.isSameError(previousError, data.error)) {
+    if (!previousError || !isSameError(previousError, data.error)) {
       publishToConsole(data, compilers, '[NEW ALERT]', 'error')
       await publishToSlack(data, compilers, '[NEW ALERT]', 'danger')
     }
