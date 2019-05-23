@@ -98,6 +98,7 @@ When running the krawler as a web API note that only the hooks pipeline is manda
 
 When running the krawler as a cron job note that it provides a healthcheck endpoint e.g. on `localhost:3030/api/healthcheck`. The following JSON structure is returned:
 * `isRunning`: boolean indicating if the cron job is currently running
+* `duration`: last run duration in seconds
 * `nbSkippedJobs`: number of times the scheduled job has been skipped due to an on-going one
 * `error`: returned error object whenever the cron job has erroned
 * `nbFailedTasks`: number of failed tasks for last run for fault-tolerant jobs
@@ -118,6 +119,7 @@ For convenience the krawler also includes a built-in healthcheck script that cou
 * **api**: indicates if the krawler has been launched as a web service/API
 * **api-prefix**: api prefix used when launching the krawler as a web service/API (defaults to `/api`)
 * **success-rate**: the success rate for fault-tolerant jobs to be considered as successful (defaults to 1)
+* **max-duration**: the maximum run duration in seconds for fault-tolerant jobs to be considered as failed (defaults to unset)
 * **nb-skipped-jobs**: the number of skipped runs for fault-tolerant jobs to be considered as failed (defaults to 3)
 * **slack-webhook**: [Slack webhook URL](https://api.slack.com/incoming-webhooks) to post messages on failure (defaults to process.env.SLACK_WEBHOOK_URL)
 * **message-template**: Message template used on failure for console and Slack output (defaults to `Job <%= jobId %>: <%= error.message %>`)
