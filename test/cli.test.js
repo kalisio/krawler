@@ -4,9 +4,18 @@ import path from 'path'
 import _ from 'lodash'
 import request from 'request'
 import utils from 'util'
-import fs from 'fs'
+import fs from 'fs-extra'
 import { MongoClient } from 'mongodb'
 import { cli, getApp } from '../src'
+// Can't use promisify here otherwise on error cases we cannot access stdout/stderr
+const exec = require('child_process').exec
+async function runCommand (command) {
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      resolve({ error, stdout, stderr })
+    })
+  })
+}
 
 describe('krawler:cli', () => {
   const jobfilePath = path.join(__dirname, 'data', 'jobfile.js')
@@ -32,7 +41,7 @@ describe('krawler:cli', () => {
   // Let enough time to process
   .timeout(10000)
 
-  it('runs as CRON using CLI', (done) => {
+  it('runs as CRON using CLI with healthcheck', (done) => {
     // Setup the app
     cli(jobfile, {
       mode: 'setup',
@@ -40,6 +49,8 @@ describe('krawler:cli', () => {
       cron: '*/10 * * * * *'
     })
     .then(server => {
+      // Clean any previous healthcheck log
+      fs.removeSync(path.join(__dirname, '..', 'healthcheck.log'))
       let app = getApp()
       // Add hook to know how many times the job will run
       let jobService = app.service('jobs')
@@ -60,13 +71,19 @@ describe('krawler:cli', () => {
         if ((event.name === 'task-done') || (event.name === 'job-done')) eventCount++
       })
       // Only run as we already setup the app
-      // As it runs every 15 seconds we know that in 30s it has ran at least once again
-      cli(jobfile, { mode: 'runJob', cron: '*/10 * * * * *', run: true })
+      // As it runs every 10 seconds we know that in 20s it has ran at least once again
+      cli(jobfile, { mode: 'runJob', cron: '*/10 * * * * *' })
       setTimeout(async () => {
         expect(runCount).to.equal(1) // First run
         const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
         expect(response.statusCode).to.equal(200)
+        const { error, stdout, stderr } = await runCommand('node ' + path.join(__dirname, '..', 'healthcheck.js'))
+        expect(error).to.equal(null)
+        expect(stdout).to.equal('')
+        expect(stderr).to.equal('')
+        const healthcheckLog = fs.readJsonSync(path.join(__dirname, '..', 'healthcheck.log'))
         const healthcheck = JSON.parse(response.body)
+        expect(healthcheck).to.deep.equal(healthcheckLog)
         expect(healthcheck.isRunning).toExist()
         expect(healthcheck.nbSkippedJobs).toExist()
         expect(healthcheck.error).beUndefined()
@@ -80,12 +97,18 @@ describe('krawler:cli', () => {
         expect(taskEvents.length).to.equal(1)
         const jobEvents = await collection.find({ event: 'job-done' }).toArray()
         expect(jobEvents.length).to.equal(1)
-      }, 5000)
+      }, 10000)
       setTimeout(async () => {
         expect(runCount).to.equal(2) // 2 runs
         const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
         expect(response.statusCode).to.equal(500)
+        const { error, stdout, stderr } = await runCommand('node ' + path.join(__dirname, '..', 'healthcheck.js'))
+        expect(error).toExist()
+        expect(stdout).to.equal('')
+        expect(stderr.includes('[NEW ALERT]')).beTrue()
+        const healthcheckLog = fs.readJsonSync(path.join(__dirname, '..', 'healthcheck.log'))
         const healthcheck = JSON.parse(response.body)
+        expect(healthcheck).to.deep.equal(healthcheckLog)
         expect(healthcheck.error).toExist()
         expect(healthcheck.error.message).toExist()
         expect(healthcheck.error.message).to.equal('Error')
@@ -97,14 +120,15 @@ describe('krawler:cli', () => {
         expect(jobEvents.length).to.equal(2)
         server.close()
         done()
-      }, 15000)
+      }, 20000)
     })
   })
   // Let enough time to process
-  .timeout(20000)
+  .timeout(25000)
 
   // Cleanup
   after(async () => {
+    fs.removeSync(path.join(__dirname, '..', 'healthcheck.log'))
     await collection.drop()
     await client.close()
   })

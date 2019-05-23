@@ -36,7 +36,7 @@
     "changelog": "github_changelog_generator -u kalisio -p krawler && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "compile": "shx rm -rf lib/ && babel -d lib/ --copy-files src/",
     "watch": "babel --watch -d lib/ --copy-files src/",
-    "lint": "standard src/**/*.js test/**/*.js --fix",
+    "lint": "standard src/**/*.js test/**/*.js healthcheck.js --fix",
     "mocha": "mocha --opts mocha.opts",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
     "test": "npm run compile && npm run lint && npm run coverage",
