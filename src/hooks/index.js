@@ -93,7 +93,7 @@ function getFaultTolerantHook (hookFunction) {
     try {
       return hookFunction(hook)
     } catch (error) {
-      console.log(error)
+      console.error(error)
       return hook
     }
   }

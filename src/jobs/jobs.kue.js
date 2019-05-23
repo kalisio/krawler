@@ -56,7 +56,7 @@ function createJob (options = {}, store = null, tasks, id) {
         result = await this.tasksService.create(task.data, params)
       } catch (error) {
         if (faultTolerant) {
-          console.log(error)
+          console.error(error)
           result = task.data
         } else {
           done(error)

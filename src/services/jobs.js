@@ -69,7 +69,7 @@ class JobsService extends Service {
       store.remove(id, error => {
         // Continue cleanup on error
         if (error) {
-          console.log(error)
+          console.error(error)
           // reject(error)
           // return
         }

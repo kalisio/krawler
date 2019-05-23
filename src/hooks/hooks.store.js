@@ -41,7 +41,7 @@ export function createStores (options = {}) {
         } catch (error) {
           if (faultTolerant) {
             debug('Could not create store for ' + hook.data.id)
-            console.log(error)
+            console.error(error)
           } else {
             throw error
           }

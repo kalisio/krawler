@@ -45,7 +45,7 @@ export function runCommand (options = {}) {
     }
     if (options.stderr) {
       item.stderr = stderr
-      console.log(stderr)
+      console.error(stderr)
     }
   }
   return callOnHookItems(run)

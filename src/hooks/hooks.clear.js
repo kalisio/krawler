@@ -15,7 +15,7 @@ function clearObjectOutputs (object, store, type) {
         debug('Cannot remove output data ' + output + ' for ' + object.id + ' from store')
         // Continue cleanup on error, does not stop
         // reject(error)
-        console.log(error)
+        console.error(error)
         resolve()
       } else {
         debug('Removing output data ' + output + ' for ' + object.id + ' from store')
