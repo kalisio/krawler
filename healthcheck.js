@@ -69,7 +69,7 @@ async function publishToSlack (data, compilers, pretext, color = 'danger') {
     await utils.promisify(request.post)({
       url: program.slackWebhook,
       body: JSON.stringify({
-        text: 'Healthcheck failed',
+        text: 'Healthcheck',
         attachments: [attachment]
       })
     })
@@ -112,7 +112,7 @@ async function healthcheck () {
     Object.assign(data, process.env)
     if (data.error) {
       // Only notify on new errors
-      if (!previousError || !_.isEqual(previousError, data.error)) {
+      if (!previousError || !_.isEqual(_.get(previousError, 'message'), _.get(data, 'error.message'))) {
         publishToConsole(data, compilers, '[NEW ALERT]', 'error')
         await publishToSlack(data, compilers, '[NEW ALERT]', 'danger')
       }
@@ -122,7 +122,7 @@ async function healthcheck () {
       if (previousError) {
         data.error = previousError
         publishToConsole(data, compilers, '[CLOSED ALERT]', 'log')
-        await publishToSlack(data, compilers, '[CLOSED ALERT]', 'green')
+        await publishToSlack(data, compilers, '[CLOSED ALERT]', 'good')
       }
       process.exit(0)
     }
@@ -133,7 +133,7 @@ async function healthcheck () {
     // Add env available for templates
     Object.assign(data, process.env)
     // Only notify on new errors
-    if (!previousError || !_.isEqual(previousError, data.error)) {
+    if (!previousError || !_.isEqual(_.get(previousError, 'message'), _.get(data, 'error.message'))) {
       publishToConsole(data, compilers, '[NEW ALERT]', 'error')
       await publishToSlack(data, compilers, '[NEW ALERT]', 'danger')
     }
