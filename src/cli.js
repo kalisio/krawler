@@ -69,11 +69,10 @@ export async function createApp (job, options = {}) {
   })
   // Add a healthcheck for cron jobs
   app.get(apiPrefix + '/healthcheck', (req, res, next) => {
-    if (options.cron) {
-      if (Healthcheck.error) res.status(500).json(_.pick(Healthcheck, ['error']))
-      else res.status(200).json(_.omit(Healthcheck, ['error']))
+    if (Healthcheck.error) {
+      res.status(500).json(_.pick(Healthcheck, ['error.code', 'error.message']))
     } else {
-      res.status(200).json({ isRunning: true })
+      res.status(200).json(_.omit(Healthcheck, ['error']))
     }
   })
   // Setup default services used by CLI

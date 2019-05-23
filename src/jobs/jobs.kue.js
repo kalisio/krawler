@@ -58,6 +58,7 @@ function createJob (options = {}, store = null, tasks, id) {
         if (faultTolerant) {
           console.error(error)
           result = task.data
+          result.error = error
         } else {
           done(error)
           return

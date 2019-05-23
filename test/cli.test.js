@@ -48,7 +48,9 @@ describe('krawler:cli', () => {
         after: {
           create: (hook) => {
             runCount++
-            return hook
+            // First run is fine, second one raises an error
+            if (runCount === 1) return hook
+            else throw new Error('Error')
           }
         }
       })
@@ -58,9 +60,10 @@ describe('krawler:cli', () => {
         if ((event.name === 'task-done') || (event.name === 'job-done')) eventCount++
       })
       // Only run as we already setup the app
-      // As it runs every 10 seconds we know that in 20s it has ran at least once again
-      cli(jobfile, { mode: 'runJob', cron: '*/10 * * * * *' })
+      // As it runs every 15 seconds we know that in 30s it has ran at least once again
+      cli(jobfile, { mode: 'runJob', cron: '*/10 * * * * *', run: true })
       setTimeout(async () => {
+        expect(runCount).to.equal(1) // First run
         const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
         expect(response.statusCode).to.equal(200)
         const healthcheck = JSON.parse(response.body)
@@ -71,20 +74,34 @@ describe('krawler:cli', () => {
         expect(healthcheck.nbSuccessfulTasks).to.equal(1)
         expect(healthcheck.successRate).to.equal(1)
         expect(healthcheck.state).toExist()
-        server.close()
-        expect(runCount).to.be.at.least(2) // 2 runs
-        expect(eventCount).to.be.at.least(4) // 4 events
+        expect(eventCount).to.equal(2) // 2 events
         collection = client.db.collection('krawler-events')
         const taskEvents = await collection.find({ event: 'task-done' }).toArray()
-        expect(taskEvents.length).to.be.at.least(2)
+        expect(taskEvents.length).to.equal(1)
         const jobEvents = await collection.find({ event: 'job-done' }).toArray()
-        expect(jobEvents.length).to.be.at.least(2)
+        expect(jobEvents.length).to.equal(1)
+      }, 5000)
+      setTimeout(async () => {
+        expect(runCount).to.equal(2) // 2 runs
+        const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
+        expect(response.statusCode).to.equal(500)
+        const healthcheck = JSON.parse(response.body)
+        expect(healthcheck.error).toExist()
+        expect(healthcheck.error.message).toExist()
+        expect(healthcheck.error.message).to.equal('Error')
+        expect(eventCount).to.equal(4) // 4 events
+        collection = client.db.collection('krawler-events')
+        const taskEvents = await collection.find({ event: 'task-done' }).toArray()
+        expect(taskEvents.length).to.equal(2)
+        const jobEvents = await collection.find({ event: 'job-done' }).toArray()
+        expect(jobEvents.length).to.equal(2)
+        server.close()
         done()
-      }, 20000)
+      }, 15000)
     })
   })
   // Let enough time to process
-  .timeout(30000)
+  .timeout(20000)
 
   // Cleanup
   after(async () => {
