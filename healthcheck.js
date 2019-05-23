@@ -63,13 +63,10 @@ async function publishToSlack (data, compilers, pretext, color = 'danger') {
     if (link) {
       attachment.title_link = link
     }
-    if (pretext) {
-      attachment.pretext = pretext
-    }
     await utils.promisify(request.post)({
       url: program.slackWebhook,
       body: JSON.stringify({
-        text: 'Healthcheck',
+        text: `*${pretext} krawler healthcheck*`,
         attachments: [attachment]
       })
     })
