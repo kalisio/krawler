@@ -85,12 +85,16 @@ export function writePGTable (options = {}) {
     }
 
     // Defines the chunks
-    let geojson = _.get(hook, options.dataPath || 'result.data', {})
+    let json = _.get(hook, options.dataPath || 'result.data', {})
     let chunks = []
-    if (geojson.type === 'FeatureCollection') {
-      chunks = _.chunk(geojson.features, _.get(options, 'chunkSize', 10))
-    } else if (geojson.type === 'Feature') {
-      chunks.push([geojson])
+    if (_.get(json, 'type') === 'FeatureCollection') {
+      chunks = _.chunk(json.features, _.get(options, 'chunkSize', 100))
+    } else if (_.get(json, 'type') === 'Feature') {
+      chunks.push([json])
+    } else if (Array.isArray(json)) {
+      chunks = _.chunk(json, _.get(options, 'chunkSize', 100))
+    } else {
+      chunks.push([json])
     }
 
     // Write the chunks
