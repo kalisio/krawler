@@ -116,8 +116,8 @@ async function healthcheck () {
     if (data.error) {
       // Only notify on new errors
       if (!previousError || !isSameError(previousError, data.error)) {
-        publishToConsole(data, compilers, '[NEW ALERT]', 'error')
-        await publishToSlack(data, compilers, '[NEW ALERT]', 'danger')
+        publishToConsole(data, compilers, '[ALERT]', 'error')
+        await publishToSlack(data, compilers, '[ALERT]', 'danger')
       }
       process.exit(1)
     } else {
@@ -137,8 +137,8 @@ async function healthcheck () {
     Object.assign(data, process.env)
     // Only notify on new errors
     if (!previousError || !isSameError(previousError, data.error)) {
-      publishToConsole(data, compilers, '[NEW ALERT]', 'error')
-      await publishToSlack(data, compilers, '[NEW ALERT]', 'danger')
+      publishToConsole(data, compilers, '[ALERT]', 'error')
+      await publishToSlack(data, compilers, '[ALERT]', 'danger')
     }
     process.exit(1)
   }
