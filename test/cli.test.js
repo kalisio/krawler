@@ -105,7 +105,7 @@ describe('krawler:cli', () => {
         const { error, stdout, stderr } = await runCommand('node ' + path.join(__dirname, '..', 'healthcheck.js'))
         expect(error).toExist()
         expect(stdout).to.equal('')
-        expect(stderr.includes('[NEW ALERT]')).beTrue()
+        expect(stderr.includes('[ALERT]')).beTrue()
         const healthcheckLog = fs.readJsonSync(path.join(__dirname, '..', 'healthcheck.log'))
         const healthcheck = JSON.parse(response.body)
         expect(healthcheck).to.deep.equal(healthcheckLog)
