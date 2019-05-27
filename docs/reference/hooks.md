@@ -367,7 +367,7 @@ Inserts JSON into an existing collection. Hook options are the following:
 
 ::: tip
 If the input data is a GeoJSON collection the array of features will be pushed into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections.
-::: tip
+:::
 
 ### dropMongoBucket(options)
 
