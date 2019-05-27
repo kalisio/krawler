@@ -17,7 +17,7 @@ export function writeJson (options = {}) {
     let store = await getStoreFromHook(hook, 'writeJson', options)
 
     debug('Creating JSON for ' + hook.data.id)
-    let json = _.get(hook, options.dataPath || 'result.data', {})
+    let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
     // Allow transform before write
     if (options.transform) json = transformJsonObject(json, options.transform)
     let jsonName = template(hook.data, options.key || (hook.data.id + '.json'))
@@ -42,7 +42,7 @@ export function transformJson (options = {}) {
 
     debug('Transforming JSON for ' + hook.result.id)
 
-    let json = _.get(hook, options.dataPath || 'result.data', {})
+    let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
     json = transformJsonObject(json, options)
     // Take care that transformation allocate new objects so that if we erase the reference to the previous result
     // it will not be accessible anymore from the job, possibly causing a large memory consumption/leak (i.e. memory not freed until the end of the job).
@@ -85,7 +85,7 @@ export function writeTemplate (options = {}) {
     let template = await fs.readFile(templateFilePath)
     let compiler = _.template(template.toString())
     const filePath = path.join(store.path, hook.data.id + ext)
-    await fs.outputFile(filePath, compiler(_.get(hook, options.dataPath || 'result.data', {})))
+    await fs.outputFile(filePath, compiler(_.get(hook, options.dataPath || 'result.data', {}) || {}))
     addOutput(hook.result, hook.data.id + ext, options.outputType)
     return hook
   }
@@ -100,7 +100,7 @@ export function mergeJson (options = {}) {
 
     debug('Merging JSON for ' + hook.data.id)
     // Only in-memory for now
-    let objects = hook.result.map(result => _.get(result, options.dataPath || 'data', {}))
+    let objects = hook.result.map(result => _.get(result, options.dataPath || 'data', {}) || {})
     let json = _.unionBy(...objects, options.by)
     _.set(hook, options.dataPath || 'result.data', json)
     return hook

@@ -30,7 +30,7 @@ export function convertToGeoJson (options = {}) {
 
     debug('Converting to GeoJSON for ' + hook.result.id)
 
-    let json = _.get(hook, options.dataPath || 'result.data', {})
+    let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
     // Safety check
     let isArray = Array.isArray(json)
     if (!isArray) {
@@ -78,7 +78,7 @@ export function convertOSMToGeoJson (options = {}) {
     }
 
     debug('Converting OSM to GeoJSON for ' + hook.result.id)
-    let osm = _.get(hook, options.dataPath || 'result.data', {})
+    let osm = _.get(hook, options.dataPath || 'result.data', {}) || {}
 
     // Then update JSON in place in memory
     _.set(hook, options.dataPath || 'result.data', osmtogeojson(osm, options))
@@ -94,7 +94,7 @@ export function reprojectGeoJson (options = {}) {
 
     debug('Reproject GeoJSON for ' + hook.result.id)
 
-    let geojson = _.get(hook, options.dataPath || 'result.data', {})
+    let geojson = _.get(hook, options.dataPath || 'result.data', {}) || {}
     // Reproject
     geojson = reproject(geojson, options.from || 'EPSG:4326', options.to || 'EPSG:4326', crss)
     // Then update JSON in place in memory

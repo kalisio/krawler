@@ -85,7 +85,7 @@ export function writePGTable (options = {}) {
     }
 
     // Defines the chunks
-    let json = _.get(hook, options.dataPath || 'result.data', {})
+    let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
     let chunks = []
     if (_.get(json, 'type') === 'FeatureCollection') {
       chunks = _.chunk(json.features, _.get(options, 'chunkSize', 100))

@@ -85,7 +85,6 @@ describe('krawler:cli', () => {
         const healthcheck = JSON.parse(response.body)
         expect(healthcheck).to.deep.equal(healthcheckLog)
         expect(healthcheck.isRunning).toExist()
-        console.log(healthcheck.duration)
         expect(healthcheck.nbSkippedJobs).toExist()
         expect(healthcheck.error).beUndefined()
         expect(healthcheck.nbFailedTasks).to.equal(0)

@@ -151,7 +151,7 @@ export function resampleGrid (options = {}) {
 
     debug('Resampling grid for ' + hook.result.id)
 
-    let data = _.get(hook, options.dataPath || 'result.data', {})
+    let data = _.get(hook, options.dataPath || 'result.data', []) || []
     let grid = new Grid({
       bounds: options.input.bounds,
       origin: options.input.origin,
@@ -173,7 +173,7 @@ export function tileGrid (options = {}) {
 
     debug('Tiling grid for ' + hook.result.id)
 
-    let data = _.get(hook, options.dataPath || 'result.data', {})
+    let data = _.get(hook, options.dataPath || 'result.data', []) || []
     let grid = new Grid({
       bounds: options.input.bounds,
       origin: options.input.origin,

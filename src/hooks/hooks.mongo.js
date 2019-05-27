@@ -158,7 +158,7 @@ export function writeMongoCollection (options = {}) {
     const collectionName = template(item, _.get(options, 'collection', _.snakeCase(item.id)))
     let collection = client.db.collection(collectionName)
     // Defines the chunks
-    let json = _.get(hook, options.dataPath || 'result.data', {})
+    let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
     // Allow transform before write
     if (options.transform) {
       const templatedTransform = templateObject(item, options.transform)
