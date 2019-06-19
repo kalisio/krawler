@@ -104,7 +104,7 @@ describe('krawler:hooks:nwp', () => {
         type: 'http',
         options: {
           url: 'http://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p50.pl',
-          dir: '/gfs.<%= runTime.format(\'YYYYMMDDHH\') %>',
+          dir: '/gfs.<%= runTime.format(\'YYYYMMDD/HH\') %>',
           file: 'gfs.t<%= runTime.format(\'HH\') %>z.pgrb2full.0p50.f<%= (timeOffset / 3600).toString().padStart(3, \'0\') %>',
           subregion: true,
           leftlon: 8,
