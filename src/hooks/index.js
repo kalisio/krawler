@@ -89,9 +89,10 @@ export function match (hookName, filter) {
 }
 
 function getFaultTolerantHook (hookFunction) {
-  return function (hook) {
+  return async function (hook) {
     try {
-      return hookFunction(hook)
+      const result = await hookFunction(hook)
+      return result
     } catch (error) {
       console.error(error)
       return hook
@@ -102,10 +103,6 @@ function getFaultTolerantHook (hookFunction) {
 export function addHook (hookName, hookOptions, pipeline) {
   // Jump from name/options to the real hook function
   let hook = getHookFunction(hookName)
-  if (hookOptions.faultTolerant) {
-    debug('Adding fault-tolerant hook for ' + hookName)
-    hook = getFaultTolerantHook(hook)
-  }
   // We have a default filter to skip hooks at some point in the chain
   let filter = { skip: { $exists: false } }
   // Take care that sometimes options is simply a string object and a match function do exist in this case
@@ -113,9 +110,17 @@ export function addHook (hookName, hookOptions, pipeline) {
   if (hookFilter) {
     debug('Adding hook ' + hookName + ' to hook chain with filter', filter)
     Object.assign(filter, hookFilter)
-  } else debug('Adding hook ' + hookName + ' to hook chain')
+  } else {
+    debug('Adding hook ' + hookName + ' to hook chain')
+  }
+  if (hookOptions.faultTolerant) {
+    debug('Adding fault-tolerant support for hook ' + hookName)
+    hook = getFaultTolerantHook(hook(hookOptions))
+  } else {
+    hook = hook(hookOptions)
+  }
   // Add filtering options to hook
-  hook = when(match(hookName, filter), hook(hookOptions))
+  hook = when(match(hookName, filter), hook)
   if (pipeline) pipeline.push(hook)
   return hook
 }
