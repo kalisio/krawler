@@ -1,5 +1,24 @@
 # Changelog
 
+## [v0.9.1](https://github.com/kalisio/krawler/tree/v0.9.1) (2019-06-19)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.9.0...v0.9.1)
+
+**Implemented enhancements:**
+
+- Improve healthcheck with job run time [\#76](https://github.com/kalisio/krawler/issues/76)
+
+**Fixed bugs:**
+
+- NWP tests fail on GFS [\#79](https://github.com/kalisio/krawler/issues/79)
+- Fault-tolerant hooks does not catch errors [\#78](https://github.com/kalisio/krawler/issues/78)
+- Unexpected error  "Cannot read property 'type' of undefined" [\#77](https://github.com/kalisio/krawler/issues/77)
+- Error messages should be redirected to stderr [\#75](https://github.com/kalisio/krawler/issues/75)
+- Healthcheck script fails if an error is raised by a hook [\#74](https://github.com/kalisio/krawler/issues/74)
+- Healthcheck script should manage alert opening/closing [\#73](https://github.com/kalisio/krawler/issues/73)
+- Healthcheck script slack notification does not have hyperlink [\#72](https://github.com/kalisio/krawler/issues/72)
+- Healthcheck script failure in unknown circumstances [\#71](https://github.com/kalisio/krawler/issues/71)
+
 ## [v0.9.0](https://github.com/kalisio/krawler/tree/v0.9.0) (2019-05-15)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.8.1...v0.9.0)
