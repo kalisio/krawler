@@ -77,9 +77,9 @@ async function publishToSlack (data, compilers, pretext, color = 'danger') {
 }
 
 function isSameError (previousError, error) {
-  return (_.has(previousError, 'code') && _.has(error, 'code') ?
-    _.isEqual(_.get(previousError, 'code'), _.get(error, 'code')) :
-    _.isEqual(_.get(previousError, 'message'), _.get(error, 'message')))
+  return (_.has(previousError, 'code') && _.has(error, 'code')
+    ? _.isEqual(_.get(previousError, 'code'), _.get(error, 'code'))
+    : _.isEqual(_.get(previousError, 'message'), _.get(error, 'message')))
 }
 
 async function healthcheck () {
