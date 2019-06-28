@@ -118,10 +118,12 @@ export function generateGridTasks (options = {}) {
               task.options.subsets[latitudeLabel] = bbox[1] + ',' + bbox[3]
               // Resample to target grid resolution ?
               if (options.resample) {
+                const resampleLongitudeLabel = _.get(hook.data, 'taskTemplate.options.resampleLongitudeLabel', longitudeLabel)
+                const resampleLatitudeLabel = _.get(hook.data, 'taskTemplate.options.resampleLatitudeLabel', latitudeLabel)
                 if (blockSize) {
-                  task.options.scalesize = 'i(' + blockSize[0] + ')' + ',' + 'j(' + blockSize[1] + ')'
+                  task.options.scalesize = resampleLongitudeLabel + '(' + blockSize[0] + ')' + ',' + resampleLatitudeLabel + '(' + blockSize[1] + ')'
                 } else {
-                  task.options.scalesize = 'i(' + 1 + ')' + ',' + 'j(' + 1 + ')'
+                  task.options.scalesize = resampleLongitudeLabel + '(' + 1 + ')' + ',' + resampleLatitudeLabel + '(' + 1 + ')'
                 }
               }
             } else {
