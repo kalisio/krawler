@@ -36,7 +36,7 @@ describe('krawler:hooks:docker', () => {
 
   it('connect to docker', () => {
     return pluginHooks.connectDocker({
-      host: 'localhost',
+      host: process.env.DOCKER_HOST || 'localhost',
       port: process.env.DOCKER_PORT || 2375
     })(dockerHook)
     .then(hook => {
