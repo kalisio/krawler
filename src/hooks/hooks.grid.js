@@ -22,7 +22,8 @@ export function generateGrid (options = {}) {
       // Convert resolution/width from meters to degrees and
       // compute corresponding delta latitude/longitude at given latitude
       const earthRadius = 6356752.31424518
-      const convergenceFactor = Math.cos(hook.data.latitude * Math.PI / 180)
+      // This will ensure that at any latitude the width/height are the same in meters (but not in degrees)
+      const convergenceFactor = 1.0 / Math.cos(hook.data.latitude * Math.PI / 180)
       const dLatitude = 360 * resolution / (2 * Math.PI * earthRadius)
       const dLongitude = dLatitude * convergenceFactor
       const halfWidthLatitude = 360 * hook.data.halfWidth / (2 * Math.PI * earthRadius)
