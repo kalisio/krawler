@@ -3,6 +3,7 @@ import chailint from 'chai-lint'
 import path from 'path'
 import fsStore from 'fs-blob-store'
 import fs from 'fs'
+import os from 'os'
 import { hooks as pluginHooks } from '../src'
 
 describe('krawler:hooks:docker', () => {
@@ -36,8 +37,11 @@ describe('krawler:hooks:docker', () => {
 
   it('connect to docker', () => {
     return pluginHooks.connectDocker({
-      host: process.env.DOCKER_HOST || 'localhost',
-      port: process.env.DOCKER_PORT || 2375
+      // Windows socket path: //./pipe/docker_engine ( Windows 10 )
+      // Linux & Darwin socket path: /var/run/docker.sock
+      socketPath: (os.type() === 'Windows_NT' ? '//./pipe/docker_engine' : '/var/run/docker.sock'),
+      //host: 'localhost',
+      //port: 2375
     })(dockerHook)
     .then(hook => {
       expect(hook.data.client).toExist()
