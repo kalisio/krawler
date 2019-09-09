@@ -21,7 +21,7 @@ describe('krawler:cli', () => {
   const jobfilePath = path.join(__dirname, 'data', 'jobfile.js')
   const jobfile = require(jobfilePath)
   const outputPath = _.get(jobfile, 'hooks.jobs.before.createStores[0].options.path')
-  let client, collection
+  let client, collection, appServer
 
   before(async () => {
     chailint(chai, util)
@@ -49,6 +49,7 @@ describe('krawler:cli', () => {
       cron: '*/10 * * * * *'
     })
     .then(server => {
+      appServer = server
       // Clean any previous healthcheck log
       fs.removeSync(path.join(__dirname, '..', 'healthcheck.log'))
       let app = getApp()
@@ -125,6 +126,7 @@ describe('krawler:cli', () => {
         const jobEvents = await collection.find({ event: 'job-done' }).toArray()
         expect(jobEvents.length).to.equal(2)
         server.close()
+        appServer = null
         done()
       }, 20000)
     })
@@ -135,7 +137,8 @@ describe('krawler:cli', () => {
   // Cleanup
   after(async () => {
     fs.removeSync(path.join(__dirname, '..', 'healthcheck.log'))
-    await collection.drop()
-    await client.close()
+    if (collection) await collection.drop()
+    if (client) await client.close()
+    if (appServer) await appServer.close()
   })
 })
