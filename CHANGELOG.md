@@ -1,5 +1,20 @@
 # Changelog
 
+## [v0.9.2](https://github.com/kalisio/krawler/tree/v0.9.2) (2019-09-22)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.9.1...v0.9.2)
+
+**Implemented enhancements:**
+
+- Update dependencies [\#81](https://github.com/kalisio/krawler/issues/81)
+
+**Fixed bugs:**
+
+- User/Password not defined in authentication hook when stored as environment variable in jobfile [\#86](https://github.com/kalisio/krawler/issues/86)
+- Docker tests do not work anymore on Travis [\#85](https://github.com/kalisio/krawler/issues/85)
+- Generated grid is not a square depending on latitude [\#84](https://github.com/kalisio/krawler/issues/84)
+- WCS query with resample options is invalid with MapServer [\#80](https://github.com/kalisio/krawler/issues/80)
+
 ## [v0.9.1](https://github.com/kalisio/krawler/tree/v0.9.1) (2019-06-19)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.9.0...v0.9.1)
@@ -11,7 +26,7 @@
 **Fixed bugs:**
 
 - NWP tests fail on GFS [\#79](https://github.com/kalisio/krawler/issues/79)
-- Fault-tolerant hooks does not catch errors [\#78](https://github.com/kalisio/krawler/issues/78)
+- Fault-tolerant hooks do not catch errors [\#78](https://github.com/kalisio/krawler/issues/78)
 - Unexpected error  "Cannot read property 'type' of undefined" [\#77](https://github.com/kalisio/krawler/issues/77)
 - Error messages should be redirected to stderr [\#75](https://github.com/kalisio/krawler/issues/75)
 - Healthcheck script fails if an error is raised by a hook [\#74](https://github.com/kalisio/krawler/issues/74)
