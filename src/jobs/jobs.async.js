@@ -56,8 +56,8 @@ async function createJob (options = {}, store = null, tasks, id, taskTemplate) {
   let workers = []
   let taskResults = []
   while (i < tasks.length) {
-    let task = tasks[i]
-    let params = {}
+    const task = tasks[i]
+    const params = {}
     if (store) params.store = store
     // Add a worker to current step of the sequence
     workers.push(runTask(task, params))
@@ -65,7 +65,7 @@ async function createJob (options = {}, store = null, tasks, id, taskTemplate) {
     if ((workers.length >= workersLimit) ||
         (i === tasks.length - 1)) {
       try {
-        let results = await Promise.all(workers)
+        const results = await Promise.all(workers)
         taskResults = taskResults.concat(results)
         debug(results.length + ' tasks ran', results, hasTimeout)
         // Check if timeout has been reached

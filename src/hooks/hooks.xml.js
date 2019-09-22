@@ -11,11 +11,11 @@ const debug = makeDebug('krawler:hooks:xml')
 // Generate a YAML from specific hook result values
 export function readXML (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    const item = getItems(hook)
 
-    let store = await getStoreFromHook(hook, 'readXML', options)
+    const store = await getStoreFromHook(hook, 'readXML', options)
     if (!store.path && !store.buffers) {
-      throw new Error(`The 'readXML' hook only work with the fs or memory blob store.`)
+      throw new Error('The \'readXML\' hook only work with the fs or memory blob store.')
     }
 
     let xml
@@ -28,7 +28,7 @@ export function readXML (options = {}) {
       debug('Parsing XML for ' + xmlName)
       xml = store.buffers[xmlName]
     }
-    let parser = new xml2js.Parser({explicitArray: false})
+    const parser = new xml2js.Parser({ explicitArray: false })
     return new Promise((resolve, reject) => {
       parser.parseString(xml.toString(), (err, result) => {
         if (err) {

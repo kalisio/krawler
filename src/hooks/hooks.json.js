@@ -11,16 +11,16 @@ const debug = makeDebug('krawler:hooks:json')
 export function writeJson (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'writeJson' hook should only be used as a 'after' hook.`)
+      throw new Error('The \'writeJson\' hook should only be used as a \'after\' hook.')
     }
 
-    let store = await getStoreFromHook(hook, 'writeJson', options)
+    const store = await getStoreFromHook(hook, 'writeJson', options)
 
     debug('Creating JSON for ' + hook.data.id)
     let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
     // Allow transform before write
     if (options.transform) json = transformJsonObject(json, options.transform)
-    let jsonName = template(hook.data, options.key || (hook.data.id + '.json'))
+    const jsonName = template(hook.data, options.key || (hook.data.id + '.json'))
     await writeBufferToStore(
       Buffer.from(JSON.stringify(json), 'utf8'),
       store, {
@@ -37,7 +37,7 @@ export function writeJson (options = {}) {
 export function transformJson (options = {}) {
   return function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'transformJson' hook should only be used as a 'after' hook.`)
+      throw new Error('The \'transformJson\' hook should only be used as a \'after\' hook.')
     }
 
     debug('Transforming JSON for ' + hook.result.id)
@@ -63,27 +63,27 @@ export function transformJson (options = {}) {
 export function writeTemplate (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'writeTemplate' hook should only be used as a 'after' hook.`)
+      throw new Error('The \'writeTemplate\' hook should only be used as a \'after\' hook.')
     }
 
-    let store = await getStoreFromHook(hook, 'writeTemplate', options)
+    const store = await getStoreFromHook(hook, 'writeTemplate', options)
     if (!store.path) {
-      throw new Error(`The 'writeTemplate' hook only work with the fs blob store.`)
+      throw new Error('The \'writeTemplate\' hook only work with the fs blob store.')
     }
 
-    let templateStore = await getStoreFromHook(hook, 'writeTemplate', {
+    const templateStore = await getStoreFromHook(hook, 'writeTemplate', {
       store: options.templateStore,
       storePath: options.templateStorePath || 'templateStore'
     })
     if (!templateStore.path) {
-      throw new Error(`The 'writeTemplate' hook only work with the fs blob store.`)
+      throw new Error('The \'writeTemplate\' hook only work with the fs blob store.')
     }
 
     const ext = path.extname(options.templateFile)
     debug('Creating file from template ' + options.templateFile + ' for ' + hook.data.id)
     const templateFilePath = path.join(templateStore.path, options.templateFile)
-    let template = await fs.readFile(templateFilePath)
-    let compiler = _.template(template.toString())
+    const template = await fs.readFile(templateFilePath)
+    const compiler = _.template(template.toString())
     const filePath = path.join(store.path, hook.data.id + ext)
     await fs.outputFile(filePath, compiler(_.get(hook, options.dataPath || 'result.data', {}) || {}))
     addOutput(hook.result, hook.data.id + ext, options.outputType)
@@ -95,13 +95,13 @@ export function writeTemplate (options = {}) {
 export function mergeJson (options = {}) {
   return function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'mergeJson' hook should only be used as a 'after' hook.`)
+      throw new Error('The \'mergeJson\' hook should only be used as a \'after\' hook.')
     }
 
     debug('Merging JSON for ' + hook.data.id)
     // Only in-memory for now
-    let objects = hook.result.map(result => _.get(result, options.dataPath || 'data', {}) || {})
-    let json = _.unionBy(...objects, options.by)
+    const objects = hook.result.map(result => _.get(result, options.dataPath || 'data', {}) || {})
+    const json = _.unionBy(...objects, options.by)
     _.set(hook, options.dataPath || 'result.data', json)
     return hook
   }
@@ -110,11 +110,11 @@ export function mergeJson (options = {}) {
 // Read a JSON from an input stream/store
 export function readJson (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    const item = getItems(hook)
 
-    let store = await getStoreFromHook(hook, 'readJson', options)
+    const store = await getStoreFromHook(hook, 'readJson', options)
     if (!store.path && !store.buffers) {
-      throw new Error(`The 'readJson' hook only work with the fs or memory blob store.`)
+      throw new Error('The \'readJson\' hook only work with the fs or memory blob store.')
     }
 
     let json = {}

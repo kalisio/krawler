@@ -7,7 +7,7 @@ import makeDebug from 'debug'
 import { Duplex } from 'stream'
 
 // Global structure used to manage healthcheck state for cron jobs
-export let Healthcheck = {
+export const Healthcheck = {
   isRunning: false, // Flag indicating if job is currently running for cron jobs
   nbSkippedJobs: 0, // Number of times the scheduled job has been skipped due to on-going one
   error: null // Indicating error if job has erroned for cron jobs
@@ -27,7 +27,7 @@ Object.getPrototypeOf(moment()).toBSON = function () {
 }
 
 export function transformJsonObject (json, options) {
-  let rootJson = json
+  const rootJson = json
   if (options.transformPath) {
     json = _.get(json, options.transformPath)
   }
@@ -43,7 +43,7 @@ export function transformJsonObject (json, options) {
     }, {}))
   }
   // Safety check
-  let isArray = Array.isArray(json)
+  const isArray = Array.isArray(json)
   if (!isArray) {
     json = [json]
   }
@@ -139,7 +139,7 @@ export function callOnHookItems (f) {
     // Handle error hooks as usual
     if (hook.type === 'error') hookObject = hook.original
     // Retrieve the items from the hook
-    let items = getItems(hookObject)
+    const items = getItems(hookObject)
     const isArray = Array.isArray(items)
     if (isArray) {
       for (let i = 0; i < items.length; i++) {
@@ -161,7 +161,7 @@ export function callOnHookItems (f) {
 // Utility function used to convert from string to Dates a fixed set of properties on a given object (recursive)
 export function convertDates (object, properties) {
   // Restrict to some properties only ?
-  let keys = (properties || _.keys(object))
+  const keys = (properties || _.keys(object))
   return _.mapValues(object, (value, key) => {
     if (keys.includes(key)) {
       // Recurse on sub objects
@@ -169,7 +169,7 @@ export function convertDates (object, properties) {
         return convertDates(value)
       } else {
         // We use moment to validate the date
-        let date = moment.utc(value, moment.ISO_8601)
+        const date = moment.utc(value, moment.ISO_8601)
         return (date.isValid() ? date.toDate() : value)
       }
     } else {
@@ -184,7 +184,7 @@ export function convertComparisonOperators (queryObject) {
     if (typeof value === 'object') {
       convertComparisonOperators(value)
     } else if ((key === '$eq') || (key === '$lt') || (key === '$lte') || (key === '$gt') || (key === '$gte')) {
-      let number = _.toNumber(value)
+      const number = _.toNumber(value)
       // Update from query string to number if required
       if (!Number.isNaN(number)) {
         queryObject[key] = number
@@ -202,7 +202,7 @@ export function template (item, property) {
   let values = (isArray ? property : [property])
   values = values.map(value => {
     if (typeof value === 'string') {
-      let compiler = _.template(value)
+      const compiler = _.template(value)
       // Add env into templating context
       const context = Object.assign({}, item, process)
       return compiler(context)
@@ -220,9 +220,9 @@ export function template (item, property) {
 // Utility function used to template strings from a fixed set of properties on a given object (recursive)
 export function templateObject (item, object, properties) {
   // Restrict to some properties only ?
-  let keys = (properties || _.keys(object))
+  const keys = (properties || _.keys(object))
   // First key requiring templating
-  let result = _.mapKeys(object, (value, key) => (keys.includes(key) && key.includes('<%') && key.includes('%>')) ? template(item, key) : key)
+  const result = _.mapKeys(object, (value, key) => (keys.includes(key) && key.includes('<%') && key.includes('%>')) ? template(item, key) : key)
   // Then values
   return _.mapValues(result, (value, key) => (keys.includes(key) ? template(item, value) : value))
 }
@@ -236,8 +236,8 @@ export function templateQueryObject (item, object, properties) {
 // Add to the 'outputs' property of the given abject a new entry
 export function addOutput (object, output, type) {
   // Default value
-  let outputType = (type || 'intermediate')
-  let outputs = _.get(object, outputType, [])
+  const outputType = (type || 'intermediate')
+  const outputs = _.get(object, outputType, [])
   outputs.push(output)
   _.set(object, outputType, outputs)
 }
@@ -245,7 +245,7 @@ export function addOutput (object, output, type) {
 // Get the actual store object from its definition in input data based on the given name or property path,
 // or if definition not found retrieve it directly from params
 export async function getStore (storesService, params, data, storePathOrName) {
-  let path = storePathOrName || 'store'
+  const path = storePathOrName || 'store'
   debug('Seeking for store in service, data or params with path/name ' + path)
   // First try store as specified in input data
   let store = _.get(data, path)
@@ -284,7 +284,7 @@ export async function getStoreFromHook (hook, hookName, options = {}) {
 
 // Convert a data buffer to a stream
 export function bufferToStream (buffer) {
-  let stream = new Duplex()
+  const stream = new Duplex()
   stream.push(buffer)
   stream.push(null)
   return stream
@@ -294,15 +294,15 @@ export function bufferToStream (buffer) {
 export function writeStreamToStore (stream, store, options) {
   return new Promise((resolve, reject) => {
     stream
-    .on('error', reject)
+      .on('error', reject)
     // See https://github.com/kalisio/krawler/issues/7
-    .pipe(store.createWriteStream(_.cloneDeep(options), error => {
-      if (error) reject(error)
-    }))
-    .on('finish', () => {
-      resolve()
-    })
-    .on('error', reject)
+      .pipe(store.createWriteStream(_.cloneDeep(options), error => {
+        if (error) reject(error)
+      }))
+      .on('finish', () => {
+        resolve()
+      })
+      .on('error', reject)
   })
 }
 

@@ -48,7 +48,7 @@ export function discardIf (options = {}) {
 export function emitEvent (options = {}) {
   return callOnHookItems((item, hook) => {
     const templatedOptions = templateObject(item, options)
-    let event = { name: templatedOptions.name }
+    const event = { name: templatedOptions.name }
     event.data = transformJsonObject(item, templatedOptions)
     hook.service.emit('krawler', event)
     debug('Emitted event for item ', item.id)

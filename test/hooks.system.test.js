@@ -6,14 +6,14 @@ import fs from 'fs'
 import { hooks as pluginHooks } from '../src'
 
 describe('krawler:hooks:system', () => {
-  let inputStore = fsStore({ path: path.join(__dirname, 'data') })
-  let outputStore = fsStore({ path: path.join(__dirname, 'output') })
+  const inputStore = fsStore({ path: path.join(__dirname, 'data') })
+  const outputStore = fsStore({ path: path.join(__dirname, 'output') })
 
   before(async () => {
     chailint(chai, util)
   })
 
-  let commandHook = {
+  const commandHook = {
     type: 'before',
     data: {
       id: 'command'
@@ -26,13 +26,13 @@ describe('krawler:hooks:system', () => {
       command: 'echo <%= id %>',
       stdout: true
     })(commandHook)
-    .then(hook => {
-      expect(hook.data.stdout).toExist()
-      expect(hook.data.stdout).to.include('command')
-    })
+      .then(hook => {
+        expect(hook.data.stdout).toExist()
+        expect(hook.data.stdout).to.include('command')
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('raise error on command timeout', (done) => {
     pluginHooks.runCommand({
@@ -41,27 +41,27 @@ describe('krawler:hooks:system', () => {
         timeout: 3000
       }
     })(commandHook)
-    .catch(error => {
-      expect(error).toExist()
-      done()
-    })
+      .catch(error => {
+        expect(error).toExist()
+        done()
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('tar a file', () => {
     commandHook.data.id = 'krawler-icon'
     return pluginHooks.tar({
       cwd: inputStore.path,
       file: path.join(outputStore.path, '<%= id %>.tar'),
-      files: [ '<%= id %>.png' ]
+      files: ['<%= id %>.png']
     })(commandHook)
-    .then(hook => {
-      expect(fs.existsSync(path.join(outputStore.path, 'krawler-icon.tar'))).beTrue()
-    })
+      .then(hook => {
+        expect(fs.existsSync(path.join(outputStore.path, 'krawler-icon.tar'))).beTrue()
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('untar a file', () => {
     try {
@@ -73,10 +73,10 @@ describe('krawler:hooks:system', () => {
       cwd: path.join(outputStore.path, 'untar'),
       file: path.join(outputStore.path, '<%= id %>.tar')
     })(commandHook)
-    .then(hook => {
-      expect(fs.existsSync(path.join(outputStore.path, 'untar', 'krawler-icon.png'))).beTrue()
-    })
+      .then(hook => {
+        expect(fs.existsSync(path.join(outputStore.path, 'untar', 'krawler-icon.png'))).beTrue()
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 })

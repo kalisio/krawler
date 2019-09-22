@@ -8,17 +8,17 @@ import _ from 'lodash'
 import { hooks as pluginHooks } from '../src'
 
 describe('krawler:hooks:main', () => {
-  let inputStore = fsStore({ path: path.join(__dirname, 'data') })
-  let outputStore = fsStore({ path: path.join(__dirname, 'output') })
+  const inputStore = fsStore({ path: path.join(__dirname, 'data') })
+  const outputStore = fsStore({ path: path.join(__dirname, 'output') })
 
   before(async () => {
     chailint(chai, util)
   })
 
   it('registers custom hook', async () => {
-    let testHook = { type: 'before', method: 'create', data: {}, result: {} }
+    const testHook = { type: 'before', method: 'create', data: {}, result: {} }
     pluginHooks.registerHook('custom', (options) => (hook) => {
-      let item = (hook.type === 'before' ? hook.data : hook.result)
+      const item = (hook.type === 'before' ? hook.data : hook.result)
       item.n = options.parameter
       return hook
     })
@@ -44,7 +44,7 @@ describe('krawler:hooks:main', () => {
   })
 
   it('manages auth on requests', () => {
-    let authHook = {
+    const authHook = {
       type: 'before',
       data: {
         options: {
@@ -84,7 +84,7 @@ describe('krawler:hooks:main', () => {
     expect(maxIndex % 300).to.equal(96)
   }
 
-  let geotiffHook = {
+  const geotiffHook = {
     type: 'after',
     data: {
       id: 'RJTT-30-18000-2-1.tif'
@@ -99,56 +99,56 @@ describe('krawler:hooks:main', () => {
     return pluginHooks.readGeoTiff({
       fields: ['bbox', 'value']
     })(geotiffHook)
-    .then(hook => {
-      checkJson(hook)
-    })
+      .then(hook => {
+        checkJson(hook)
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('computes statistics on JSON', () => {
     return pluginHooks.computeStatistics({
       min: true, max: true, dataPath: 'result.data'
     })(geotiffHook)
-    .then(hook => {
+      .then(hook => {
       // We know we have a max value at 73.44 in this file
-      expect(hook.result.min).toExist()
-      expect(hook.result.max).toExist()
-      expect(hook.result.min.toFixed(2)).to.equal('-32.00')
-      expect(hook.result.max.toFixed(2)).to.equal('73.44')
-      // Cleanup for next test
-      delete hook.result.min
-      delete hook.result.max
-    })
+        expect(hook.result.min).toExist()
+        expect(hook.result.max).toExist()
+        expect(hook.result.min.toFixed(2)).to.equal('-32.00')
+        expect(hook.result.max.toFixed(2)).to.equal('73.44')
+        // Cleanup for next test
+        delete hook.result.min
+        delete hook.result.max
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('computes statistics on GeoTiff', () => {
     return pluginHooks.computeStatistics({
       min: true, max: true
     })(geotiffHook)
-    .then(hook => {
+      .then(hook => {
       // We know we have a max value at 73.44 in this file
-      expect(hook.result.min).toExist()
-      expect(hook.result.max).toExist()
-      expect(hook.result.min.toFixed(2)).to.equal('-32.00')
-      expect(hook.result.max.toFixed(2)).to.equal('73.44')
-    })
+        expect(hook.result.min).toExist()
+        expect(hook.result.max).toExist()
+        expect(hook.result.min.toFixed(2)).to.equal('-32.00')
+        expect(hook.result.max.toFixed(2)).to.equal('73.44')
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('write JSON', () => {
     // Switch to output store
     geotiffHook.params.store = outputStore
     return pluginHooks.writeJson()(geotiffHook)
-    .then(hook => {
-      expect(fs.existsSync(path.join(outputStore.path, geotiffHook.result.id + '.json'))).beTrue()
-    })
+      .then(hook => {
+        expect(fs.existsSync(path.join(outputStore.path, geotiffHook.result.id + '.json'))).beTrue()
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('clear JSON data', () => {
     pluginHooks.clearData()(geotiffHook)
@@ -159,19 +159,19 @@ describe('krawler:hooks:main', () => {
     // Update input file name to converted json
     geotiffHook.result.id += '.json'
     return pluginHooks.readJson()(geotiffHook)
-    .then(hook => {
-      checkJson(hook)
-    })
+      .then(hook => {
+        checkJson(hook)
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('clear JSON output', () => {
     pluginHooks.clearOutputs()(geotiffHook)
     expect(fs.existsSync(path.join(outputStore.path, geotiffHook.result.id + '.json'))).beFalse()
   })
 
-  let jsonHook = {
+  const jsonHook = {
     type: 'after',
     result: {
       id: 'json',
@@ -225,7 +225,7 @@ describe('krawler:hooks:main', () => {
     expect(data.time.getTime()).to.equal(new Date('2018-05-31T13:25:13.431Z').getTime())
   })
 
-  let geoJsonHook = {
+  const geoJsonHook = {
     type: 'after',
     result: {
       id: 'gejson',
@@ -245,7 +245,7 @@ describe('krawler:hooks:main', () => {
     expect(Math.abs(data.coordinates[1] - 6404230)).to.be.below(1)
   })
 
-  let csvHook = {
+  const csvHook = {
     type: 'after',
     data: {
       id: 'RJTT-30-18000-2-1.csv'
@@ -258,37 +258,37 @@ describe('krawler:hooks:main', () => {
 
   it('converts CSV to JSON', () => {
     return pluginHooks.readCSV({ headers: true })(csvHook)
-    .then(hook => {
-      pluginHooks.transformJson({
-        mapping: {
-          Lonmin: 'bbox[0]',
-          Latmin: 'bbox[1]',
-          Lonmax: 'bbox[2]',
-          Latmax: 'bbox[3]',
-          Elev: 'value'
-        }
-      })(hook)
-      checkJson(hook)
-    })
+      .then(hook => {
+        pluginHooks.transformJson({
+          mapping: {
+            Lonmin: 'bbox[0]',
+            Latmin: 'bbox[1]',
+            Lonmax: 'bbox[2]',
+            Latmax: 'bbox[3]',
+            Elev: 'value'
+          }
+        })(hook)
+        checkJson(hook)
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('converts JSON to CSV', () => {
     return pluginHooks.readCSV({ headers: true })(csvHook)
-    .then(hook => {
+      .then(hook => {
       // Switch to output store
-      csvHook.params.store = outputStore
-      return pluginHooks.writeCSV({ fields: ['Latmin', 'Lonmin', 'Latmax', 'Lonmax', 'Elev'] })(csvHook)
-    })
-    .then(hook => {
-      expect(fs.existsSync(path.join(outputStore.path, csvHook.result.id + '.csv'))).beTrue()
-    })
+        csvHook.params.store = outputStore
+        return pluginHooks.writeCSV({ fields: ['Latmin', 'Lonmin', 'Latmax', 'Lonmax', 'Elev'] })(csvHook)
+      })
+      .then(hook => {
+        expect(fs.existsSync(path.join(outputStore.path, csvHook.result.id + '.csv'))).beTrue()
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
-  let xmlHook = {
+  const xmlHook = {
     type: 'after',
     data: {
       id: 'wms.xml'
@@ -301,14 +301,14 @@ describe('krawler:hooks:main', () => {
 
   it('converts XML to JSON', () => {
     return pluginHooks.readXML()(xmlHook)
-    .then(hook => {
-      expect(hook.result.data).toExist()
-    })
+      .then(hook => {
+        expect(hook.result.data).toExist()
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
-  let yamlHook = {
+  const yamlHook = {
     type: 'after',
     data: {
       id: 'mapproxy.yaml'
@@ -321,25 +321,25 @@ describe('krawler:hooks:main', () => {
 
   it('converts YAML to JSON', () => {
     return pluginHooks.readYAML()(yamlHook)
-    .then(hook => {
-      expect(hook.result.data).toExist()
-    })
+      .then(hook => {
+        expect(hook.result.data).toExist()
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('converts JSON to YAML', () => {
     // Switch to output store
     yamlHook.params.store = outputStore
     return pluginHooks.writeYAML()(yamlHook)
-    .then(hook => {
-      expect(fs.existsSync(path.join(outputStore.path, yamlHook.result.id + '.yaml'))).beTrue()
-    })
+      .then(hook => {
+        expect(fs.existsSync(path.join(outputStore.path, yamlHook.result.id + '.yaml'))).beTrue()
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
-  let applyHook = {
+  const applyHook = {
     type: 'before',
     data: {
       value: 6
@@ -350,9 +350,9 @@ describe('krawler:hooks:main', () => {
     return pluginHooks.apply({
       function: (item) => { if (item.value === 6) item.value = 3 }
     })(applyHook)
-    .then(hook => {
-      expect(hook.data.value).to.equal(3)
-    })
+      .then(hook => {
+        expect(hook.data.value).to.equal(3)
+      })
   })
 
   it('apply function if with match filter', () => {
@@ -360,24 +360,24 @@ describe('krawler:hooks:main', () => {
     applyHook.method = 'create' // Required to use hook pipeline
     applyHook.result = { value: 6 }
     return pluginHooks.addHook('apply', { match: { value: 6 }, function: (item) => { item.value = 3 } })(applyHook)
-    .then(hook => {
-      expect(hook.result.value).to.equal(3)
-      return pluginHooks.addHook('apply', { match: { value: 6 }, function: (item) => { item.value = 6 } })(applyHook)
-    })
-    .then(hook => {
-      expect(hook.result.value).to.equal(3)
-      return pluginHooks.addHook('apply', { match: { predicate: (item) => item.value === 3 }, function: (item) => { item.value = 6 } })(applyHook)
-    })
-    .then(hook => {
-      expect(hook.result.value).to.equal(6)
-      return pluginHooks.addHook('apply', { match: { predicate: (item) => item.value === 3 }, function: (item) => { item.value = 3 } })(applyHook)
-    })
-    .then(hook => {
-      expect(hook.result.value).to.equal(6)
-    })
+      .then(hook => {
+        expect(hook.result.value).to.equal(3)
+        return pluginHooks.addHook('apply', { match: { value: 6 }, function: (item) => { item.value = 6 } })(applyHook)
+      })
+      .then(hook => {
+        expect(hook.result.value).to.equal(3)
+        return pluginHooks.addHook('apply', { match: { predicate: (item) => item.value === 3 }, function: (item) => { item.value = 6 } })(applyHook)
+      })
+      .then(hook => {
+        expect(hook.result.value).to.equal(6)
+        return pluginHooks.addHook('apply', { match: { predicate: (item) => item.value === 3 }, function: (item) => { item.value = 3 } })(applyHook)
+      })
+      .then(hook => {
+        expect(hook.result.value).to.equal(6)
+      })
   })
 
-  let capabilitiesHook = {
+  const capabilitiesHook = {
     type: 'after'
   }
 
@@ -386,14 +386,14 @@ describe('krawler:hooks:main', () => {
       url: 'http://sampleserver1.arcgisonline.com/ArcGIS/services/Specialty/ESRI_StatesCitiesRivers_USA/MapServer/WMSServer',
       service: 'WMS'
     })(capabilitiesHook)
-    .then(hook => {
-      expect(hook.result.data).toExist()
-    })
+      .then(hook => {
+        expect(hook.result.data).toExist()
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
-  let templateHook = {
+  const templateHook = {
     type: 'after',
     data: {
       id: 'mapproxy-templated'
@@ -410,17 +410,17 @@ describe('krawler:hooks:main', () => {
 
   it('write template from JSON', () => {
     return pluginHooks.writeTemplate({ templateFile: 'mapproxy-template.yaml' })(templateHook)
-    .then(hook => {
-      let templated = fs.readFileSync(path.join(outputStore.path, 'mapproxy-templated.yaml'), 'utf8')
-      templated = yaml.safeLoad(templated)
-      let times = _.get(templated, 'layers[0].dimensions.time.values')
-      expect(times).toExist()
-      expect(times.map(time => new Date(time))).to.deep.equal(hook.result.data.times)
-      let elevations = _.get(templated, 'layers[0].dimensions.elevation.values')
-      expect(elevations).toExist()
-      expect(elevations).to.deep.equal(hook.result.data.elevations)
-    })
+      .then(hook => {
+        let templated = fs.readFileSync(path.join(outputStore.path, 'mapproxy-templated.yaml'), 'utf8')
+        templated = yaml.safeLoad(templated)
+        const times = _.get(templated, 'layers[0].dimensions.time.values')
+        expect(times).toExist()
+        expect(times.map(time => new Date(time))).to.deep.equal(hook.result.data.times)
+        const elevations = _.get(templated, 'layers[0].dimensions.elevation.values')
+        expect(elevations).toExist()
+        expect(elevations).to.deep.equal(hook.result.data.elevations)
+      })
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 })

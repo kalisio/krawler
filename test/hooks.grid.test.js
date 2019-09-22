@@ -10,7 +10,7 @@ import plugin, { hooks as pluginHooks } from '../src'
 
 describe('krawler:hooks:grid', () => {
   let app, server, tasksService, jobsService
-  let outputStore = fsStore({ path: path.join(__dirname, 'output') })
+  const outputStore = fsStore({ path: path.join(__dirname, 'output') })
 
   before(() => {
     chailint(chai, util)
@@ -44,7 +44,7 @@ describe('krawler:hooks:grid', () => {
     const convergenceFactor = 1.0 / Math.cos(latitude * Math.PI / 180)
     const earthRadius = 6356752.31424518
     const resolution = 2 * Math.PI * earthRadius / 360
-    let hook = {
+    const hook = {
       type: 'before',
       data: {
         longitude,
@@ -60,7 +60,7 @@ describe('krawler:hooks:grid', () => {
   })
 
   it('creates a WMS gridded job', (done) => {
-    let datetime = moment.utc()
+    const datetime = moment.utc()
     datetime.startOf('day')
     jobsService.create({
       id: 'wms-grid',
@@ -85,21 +85,21 @@ describe('krawler:hooks:grid', () => {
       resolution: [0.5, 0.5],
       size: [2, 2]
     }, { store: outputStore })
-    .then(tasks => {
-      expect(tasks.length).to.equal(4)
-      tasks.forEach(task => {
-        expect(fs.existsSync(path.join(outputStore.path, task.id))).beTrue()
+      .then(tasks => {
+        expect(tasks.length).to.equal(4)
+        tasks.forEach(task => {
+          expect(fs.existsSync(path.join(outputStore.path, task.id))).beTrue()
+        })
+        done()
       })
-      done()
-    })
-    .catch(error => {
+      .catch(error => {
       // Sometimes meteo france servers reply 404 or 503
-      console.log(error)
-      done()
-    })
+        console.log(error)
+        done()
+      })
   })
   // Let enough time to download
-  .timeout(30000)
+    .timeout(30000)
 
   it('creates a WCS gridded job with resampling', (done) => {
     // These hooke only work with Geotiff
@@ -144,7 +144,7 @@ describe('krawler:hooks:grid', () => {
       }
     })
 
-    let datetime = moment.utc()
+    const datetime = moment.utc()
     datetime.startOf('day')
     jobsService.create({
       id: 'wcs-grid',
@@ -174,24 +174,24 @@ describe('krawler:hooks:grid', () => {
       resolution: [0.5, 0.5],
       size: [2, 2]
     }, { store: outputStore })
-    .then(tasks => {
-      expect(tasks.length).to.equal(4)
-      tasks.forEach(task => {
-        expect(task.data).toExist()
-        expect(task.data.length).to.equal(1) // Downsampling 4 => 1
-        expect(fs.existsSync(path.join(outputStore.path, task.id))).beTrue()
-        expect(fs.existsSync(path.join(outputStore.path, task.id + '.json'))).beTrue()
+      .then(tasks => {
+        expect(tasks.length).to.equal(4)
+        tasks.forEach(task => {
+          expect(task.data).toExist()
+          expect(task.data.length).to.equal(1) // Downsampling 4 => 1
+          expect(fs.existsSync(path.join(outputStore.path, task.id))).beTrue()
+          expect(fs.existsSync(path.join(outputStore.path, task.id + '.json'))).beTrue()
+        })
+        done()
       })
-      done()
-    })
-    .catch(error => {
+      .catch(error => {
       // Sometimes meteo france servers reply 404 or 503
-      console.log(error)
-      done()
-    })
+        console.log(error)
+        done()
+      })
   })
   // Let enough time to download
-  .timeout(30000)
+    .timeout(30000)
 
   // Cleanup
   after(() => {

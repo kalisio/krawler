@@ -22,7 +22,7 @@ class Service {
   }
 
   async generate (type, ...options) {
-    let generator = this.generators[type]
+    const generator = this.generators[type]
     if (!generator) return null
     else return generator.apply(this, options)
   }

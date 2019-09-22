@@ -6,18 +6,18 @@ const fs = require('fs-extra')
 const _ = require('lodash')
 
 program
-    .usage('[options]')
-    .option('-a, --api', 'Setup as web app by exposing an API')
-    .option('-ap, --api-prefix [prefix]', 'When exposed as an API change the prefix (defaults to /api)', '/api')
-    .option('-po, --port [port]', 'Change the port to be used (defaults to 3030)', 3030)
-    .option('-sr, --success-rate [rate]', 'Change the success rate for fault-tolerant jobs to be considered as successful (defaults to 1)', 1)
-    .option('-md, --max-duration [duration]', 'Change the maximum run duration in seconds for fault-tolerant jobs to be considered as failed (defaults to unset)', -1)
-    .option('-nsj, --nb-skipped-jobs [nb]', 'Change the number of skipped runs for fault-tolerant jobs to be considered as failed (defaults to 3)', 3)
-    .option('-sw, --slack-webhook [url]', 'Slack webhook URL to post messages on failure', process.env.SLACK_WEBHOOK_URL)
-    .option('-mt, --message-template [template]', 'Message template used on failure', 'Job <%= jobId %>: <%= error.message %>')
-    .option('-lt, --link-template [template]', 'Link template used on failure', '')
-    .option('-d, --debug', 'Verbose output for debugging')
-    .parse(process.argv)
+  .usage('[options]')
+  .option('-a, --api', 'Setup as web app by exposing an API')
+  .option('-ap, --api-prefix [prefix]', 'When exposed as an API change the prefix (defaults to /api)', '/api')
+  .option('-po, --port [port]', 'Change the port to be used (defaults to 3030)', 3030)
+  .option('-sr, --success-rate [rate]', 'Change the success rate for fault-tolerant jobs to be considered as successful (defaults to 1)', 1)
+  .option('-md, --max-duration [duration]', 'Change the maximum run duration in seconds for fault-tolerant jobs to be considered as failed (defaults to unset)', -1)
+  .option('-nsj, --nb-skipped-jobs [nb]', 'Change the number of skipped runs for fault-tolerant jobs to be considered as failed (defaults to 3)', 3)
+  .option('-sw, --slack-webhook [url]', 'Slack webhook URL to post messages on failure', process.env.SLACK_WEBHOOK_URL)
+  .option('-mt, --message-template [template]', 'Message template used on failure', 'Job <%= jobId %>: <%= error.message %>')
+  .option('-lt, --link-template [template]', 'Link template used on failure', '')
+  .option('-d, --debug', 'Verbose output for debugging')
+  .parse(process.argv)
 
 const logFile = path.join(__dirname, 'healthcheck.log')
 
@@ -56,7 +56,7 @@ async function publishToSlack (data, compilers, pretext, color = 'danger') {
   try {
     const message = compilers.message(data)
     const link = compilers.link(data)
-    let attachment = {
+    const attachment = {
       title: message,
       color: color
     }
@@ -93,7 +93,7 @@ async function healthcheck () {
     const previousHealthcheck = readFromLog()
     previousError = previousHealthcheck.error
     const response = await utils.promisify(request.get)(endpoint)
-    let data = JSON.parse(response.body)
+    const data = JSON.parse(response.body)
     if (program.debug) {
       console.log('Current healthcheck output read from service', data)
       console.log('Previous healthcheck output read from log', previousHealthcheck)
@@ -131,7 +131,7 @@ async function healthcheck () {
     }
   } catch (error) {
     // Set jobId variable available in context so that templates will not fail
-    let data = Object.assign({ jobId: '' }, _.pick(error, ['error.code', 'error.message']))
+    const data = Object.assign({ jobId: '' }, _.pick(error, ['error.code', 'error.message']))
     writeToLog(data)
     // Add env available for templates
     Object.assign(data, process.env)

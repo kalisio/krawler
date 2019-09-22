@@ -10,7 +10,7 @@ describe('krawler:hooks:geojson', () => {
     chailint(chai, util)
   })
 
-  let geoJsonHook = {
+  const geoJsonHook = {
     type: 'after',
     result: { data: osm },
     params: {}
@@ -22,5 +22,5 @@ describe('krawler:hooks:geojson', () => {
     expect(geoJsonHook.result.data.features.length > 0).beTrue()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 })

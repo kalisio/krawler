@@ -14,7 +14,7 @@ const sphericalMercator = new SphericalMercator({
 export function generateGrid (options = {}) {
   return function (hook) {
     if (hook.type !== 'before') {
-      throw new Error(`The 'generateGrid' hook should only be used as a 'before' hook.`)
+      throw new Error('The \'generateGrid\' hook should only be used as a \'before\' hook.')
     }
 
     if (_.isNumber(hook.data.resolution) && _.isNumber(hook.data.halfWidth) && _.isNumber(hook.data.longitude) && _.isNumber(hook.data.latitude)) {
@@ -29,17 +29,17 @@ export function generateGrid (options = {}) {
       const halfWidthLatitude = 360 * hook.data.halfWidth / (2 * Math.PI * earthRadius)
       const halfWidthLongitude = halfWidthLatitude * convergenceFactor
       // Then setup grid spec
-      hook.data.resolution = [ dLongitude, dLatitude ]
-      hook.data.origin = [ hook.data.longitude - halfWidthLongitude, hook.data.latitude - halfWidthLatitude ]
-      hook.data.size = [ Math.floor(2 * halfWidthLongitude / dLongitude), Math.floor(2 * halfWidthLatitude / dLatitude) ]
+      hook.data.resolution = [dLongitude, dLatitude]
+      hook.data.origin = [hook.data.longitude - halfWidthLongitude, hook.data.latitude - halfWidthLatitude]
+      hook.data.size = [Math.floor(2 * halfWidthLongitude / dLongitude), Math.floor(2 * halfWidthLatitude / dLatitude)]
       // Take into account a block resolution
       const blockResolution = hook.data.blockResolution
       if (blockResolution) {
         const dBlockLatitude = 360 * blockResolution / (2 * Math.PI * earthRadius)
         const dBlockLongitude = dBlockLatitude * convergenceFactor
-        hook.data.blockResolution = [ dBlockLongitude, dBlockLatitude ]
-        hook.data.nbBlocks = [ Math.floor(2 * halfWidthLongitude / dBlockLongitude), Math.floor(2 * halfWidthLatitude / dBlockLatitude) ]
-        hook.data.blockSize = [ hook.data.size[0] / hook.data.nbBlocks[0], hook.data.size[1] / hook.data.nbBlocks[1] ]
+        hook.data.blockResolution = [dBlockLongitude, dBlockLatitude]
+        hook.data.nbBlocks = [Math.floor(2 * halfWidthLongitude / dBlockLongitude), Math.floor(2 * halfWidthLatitude / dBlockLatitude)]
+        hook.data.blockSize = [hook.data.size[0] / hook.data.nbBlocks[0], hook.data.size[1] / hook.data.nbBlocks[1]]
       }
       debug('Generated grid specification for ', hook.data)
     }
@@ -52,13 +52,13 @@ export function generateGrid (options = {}) {
 export function generateGridTasks (options = {}) {
   return function (hook) {
     if (hook.type !== 'before') {
-      throw new Error(`The 'generateGridTasks' hook should only be used as a 'before' hook.`)
+      throw new Error('The \'generateGridTasks\' hook should only be used as a \'before\' hook.')
     }
 
     if (hook.data.origin && hook.data.origin.length > 1 &&
         hook.data.size && hook.data.size.length > 1 &&
         hook.data.resolution && hook.data.resolution.length > 1) {
-      let origin = hook.data.origin
+      const origin = hook.data.origin
       // One task can target a block of the grid or the final grid resolution
       const blockSize = hook.data.blockSize
       const size = hook.data.nbBlocks || hook.data.size
@@ -76,20 +76,20 @@ export function generateGridTasks (options = {}) {
       _.unset(hook.data, 'taskTemplate.options.longitudeLabel')
       _.unset(hook.data, 'taskTemplate.options.latitudeLabel')
 
-      let tasks = []
+      const tasks = []
       for (let i = 0; i < size[0]; i++) {
         for (let j = 0; j < size[1]; j++) {
-          let minLon = origin[0] + (i * resolution[0])
-          let minLat = origin[1] + (j * resolution[1])
-          let bbox = [ minLon, minLat, minLon + resolution[0], minLat + resolution[1] ]
+          const minLon = origin[0] + (i * resolution[0])
+          const minLat = origin[1] + (j * resolution[1])
+          let bbox = [minLon, minLat, minLon + resolution[0], minLat + resolution[1]]
 
           // Check if we need to convert to spherical mercator
           // FIXME: manage more CRS
-          let crs = (version >= 113 ? _.get(hook.data, 'taskTemplate.options.crs') : _.get(hook.data, 'taskTemplate.options.srs'))
+          const crs = (version >= 113 ? _.get(hook.data, 'taskTemplate.options.crs') : _.get(hook.data, 'taskTemplate.options.srs'))
           if (crs === 'EPSG:900913' || crs === 'EPSG:3857') {
             bbox = sphericalMercator.convert(bbox, '900913')
           }
-          let task = {
+          const task = {
             id: j.toFixed() + '-' + i.toFixed(),
             bbox,
             options: {}
@@ -99,7 +99,7 @@ export function generateGridTasks (options = {}) {
             if (version >= 113) {
               // Before WMS v 1.1.3 order was always lon,lat but with WMS v 1.1.3 order si the same than the SRS used so usually lat,lon
               // FIXME: check with CRS
-              bbox = [ bbox[1], bbox[0], bbox[3], bbox[2] ]
+              bbox = [bbox[1], bbox[0], bbox[3], bbox[2]]
             }
             // Resample to target grid resolution ?
             if (options.resample) {
@@ -130,7 +130,7 @@ export function generateGridTasks (options = {}) {
             } else {
               // WCS 1.1 follows EPSG defined axis/tuple ordering for geographic coordinate systems.
               // This means that coordinates reported are actually handled as lat/long not long/lat.
-              bbox = [ bbox[1], bbox[0], bbox[3], bbox[2] ]
+              bbox = [bbox[1], bbox[0], bbox[3], bbox[2]]
               task.options.boundingbox = bbox[0] + ',' + bbox[1] + ',' + bbox[2] + ',' + bbox[3] + ',' + 'urn:ogc:def:crs:EPSG::4326'
             }
           }
@@ -149,13 +149,13 @@ export function generateGridTasks (options = {}) {
 export function resampleGrid (options = {}) {
   return function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'resampleGrid' hook should only be used as a 'after' hook.`)
+      throw new Error('The \'resampleGrid\' hook should only be used as a \'after\' hook.')
     }
 
     debug('Resampling grid for ' + hook.result.id)
 
     let data = _.get(hook, options.dataPath || 'result.data', []) || []
-    let grid = new Grid({
+    const grid = new Grid({
       bounds: options.input.bounds,
       origin: options.input.origin,
       size: options.input.size,
@@ -171,13 +171,13 @@ export function resampleGrid (options = {}) {
 export function tileGrid (options = {}) {
   return function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'tileGrid' hook should only be used as a 'after' hook.`)
+      throw new Error('The \'tileGrid\' hook should only be used as a \'after\' hook.')
     }
 
     debug('Tiling grid for ' + hook.result.id)
 
-    let data = _.get(hook, options.dataPath || 'result.data', []) || []
-    let grid = new Grid({
+    const data = _.get(hook, options.dataPath || 'result.data', []) || []
+    const grid = new Grid({
       bounds: options.input.bounds,
       origin: options.input.origin,
       size: options.input.size,

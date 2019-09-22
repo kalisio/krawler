@@ -28,7 +28,7 @@ function createJob (options = {}, store = null, tasks, id) {
   return new Promise((resolve, reject) => {
     const workersLimit = options.workersLimit || 4
     let i = 0
-    let taskResults = []
+    const taskResults = []
     /* WIP: cluster mode
     tasks.forEach(task => {
       let kueTask = queue.create('task', task)
@@ -40,16 +40,16 @@ function createJob (options = {}, store = null, tasks, id) {
     })
     */
     tasks.forEach(task => {
-      let kueTask = queue.create('task-' + id, task)
-      .attempts(task.attemptsLimit || options.attemptsLimit || 1)
-      .removeOnComplete(true)
-      .save()
+      const kueTask = queue.create('task-' + id, task)
+        .attempts(task.attemptsLimit || options.attemptsLimit || 1)
+        .removeOnComplete(true)
+        .save()
       // When the max attempts has been tried
       kueTask.on('failed', (error) => queue.shutdown(err => reject(err || error)))
     })
     queue.process('task-' + id, workersLimit, async (task, done) => {
       let result
-      let params = {}
+      const params = {}
       const faultTolerant = options.faultTolerant || task.data.faultTolerant
       if (store) params.store = store
       try {

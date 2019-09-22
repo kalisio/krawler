@@ -10,7 +10,7 @@ const debug = makeDebug('krawler:hooks:ftp')
 export function connectFTP (options = {}) {
   return async function (hook) {
     if (hook.type !== 'before') {
-      throw new Error(`The 'connectFTP' hook should only be used as a 'before' hook.`)
+      throw new Error('The \'connectFTP\' hook should only be used as a \'before\' hook.')
     }
 
     debug('Connecting to FTP server for ' + options)
@@ -24,8 +24,8 @@ export function connectFTP (options = {}) {
 // Get a file on the FTP server
 export function listFTP (options = {}) {
   async function get (item, hook) {
-    let client = _.get(hook.data, options.clientPath || 'client')
-    if (_.isNil(client)) throw new Error(`You must be connected to an FTP server before using the 'listFTP' hook`)
+    const client = _.get(hook.data, options.clientPath || 'client')
+    if (_.isNil(client)) throw new Error('You must be connected to an FTP server before using the \'listFTP\' hook')
     const remoteDir = template(item, options.remoteDir || options.key || (item.id))
 
     debug('Listing dir ' + remoteDir)
@@ -48,8 +48,8 @@ export function listFTP (options = {}) {
 // Get a file on the FTP server
 export function getFTP (options = {}) {
   async function get (item, hook) {
-    let client = _.get(hook.data, options.clientPath || 'client')
-    if (_.isNil(client)) throw new Error(`You must be connected to an FTP server before using the 'getFTP' hook`)
+    const client = _.get(hook.data, options.clientPath || 'client')
+    if (_.isNil(client)) throw new Error('You must be connected to an FTP server before using the \'getFTP\' hook')
     const outputStore = await getStoreFromHook(hook, 'getFTP', options)
     const remoteFile = template(item, options.remoteFile || options.key || (item.id))
     const localFile = template(item, options.localFile || path.join(outputStore.path, path.basename(remoteFile)))
@@ -74,8 +74,8 @@ export function getFTP (options = {}) {
 // Get a file on the FTP server
 export function putFTP (options = {}) {
   async function put (item, hook) {
-    let client = _.get(hook.data, options.clientPath || 'client')
-    if (_.isNil(client)) throw new Error(`You must be connected to an FTP server before using the 'putFTP' hook`)
+    const client = _.get(hook.data, options.clientPath || 'client')
+    if (_.isNil(client)) throw new Error('You must be connected to an FTP server before using the \'putFTP\' hook')
     const inputStore = await await getStoreFromHook(hook, 'putFTP', options)
     const remoteFile = template(item, options.key || (item.id))
     const localFile = template(item, options.localFile || path.join(inputStore.path, path.basename(remoteFile)))
@@ -101,17 +101,17 @@ export function putFTP (options = {}) {
 export function disconnectFTP (options = {}) {
   return async function (hook) {
     if ((hook.type !== 'after') && (hook.type !== 'error')) {
-      throw new Error(`The 'disconnectPG' hook should only be used as a 'after/error' hook.`)
+      throw new Error('The \'disconnectPG\' hook should only be used as a \'after/error\' hook.')
     }
-    let client = _.get(hook.data, options.clientPath || 'client')
+    const client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to an FTP serrver before using the 'disconnectFTP' hook`)
+      throw new Error('You must be connected to an FTP serrver before using the \'disconnectFTP\' hook')
     }
 
     debug('Disconnecting from FTP for ' + options)
     client.raw('quit', (err, data) => {
       if (err) {
-        throw new Error(`'disconnectFTP' hook errored: ` + err)
+        throw new Error('\'disconnectFTP\' hook errored: ' + err)
       }
     })
     _.unset(hook.data, options.clientPath || 'client')

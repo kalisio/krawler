@@ -21,9 +21,9 @@ describe('krawler:tasks', () => {
     app.use('stores', plugin.stores())
     storesService = app.service('stores')
     return storesService.create({ id: 'test-store', type: 'fs', options: { path: path.join(__dirname, 'output') } })
-    .then(store => {
-      storage = store
-    })
+      .then(store => {
+        storage = store
+      })
   })
 
   it('creates the tasks service', () => {
@@ -34,8 +34,8 @@ describe('krawler:tasks', () => {
 
   it('creates a HTTP task', (done) => {
     nock('https://www.google.com')
-    .get('/')
-    .reply(200, '<html></html>')
+      .get('/')
+      .reply(200, '<html></html>')
     tasksService.create({
       id: 'task.html',
       store: 'test-store',
@@ -44,20 +44,20 @@ describe('krawler:tasks', () => {
         url: 'https://www.google.com'
       }
     })
-    .then(task => {
-      storage.exists('task.html', (error, exist) => {
-        if (error) done(error)
-        else done(exist ? null : new Error('File not found in store'))
+      .then(task => {
+        storage.exists('task.html', (error, exist) => {
+          if (error) done(error)
+          else done(exist ? null : new Error('File not found in store'))
+        })
       })
-    })
   })
   // Let enough time to download
-  .timeout(10000)
+    .timeout(10000)
 
   it('creates a failed HTTP task (403)', (done) => {
     nock('https://www.google.com')
-    .get('/')
-    .reply(403)
+      .get('/')
+      .reply(403)
     tasksService.create({
       id: 'task-403.html',
       store: 'test-store',
@@ -66,19 +66,19 @@ describe('krawler:tasks', () => {
         url: 'https://www.google.com'
       }
     })
-    .catch(error => {
-      expect(error).toExist()
-      done()
-    })
+      .catch(error => {
+        expect(error).toExist()
+        done()
+      })
   })
   // Let enough time to fail
-  .timeout(5000)
+    .timeout(5000)
 
   it('creates a failed HTTP task (timeout)', (done) => {
     nock('https://www.google.com')
-    .get('/')
-    .delay(10000)
-    .reply(200, '<html></html>')
+      .get('/')
+      .delay(10000)
+      .reply(200, '<html></html>')
     tasksService.create({
       id: 'task-timeout.html',
       store: 'test-store',
@@ -88,16 +88,16 @@ describe('krawler:tasks', () => {
         timeout: 5000
       }
     })
-    .catch(error => {
-      expect(error).toExist()
-      done()
-    })
+      .catch(error => {
+        expect(error).toExist()
+        done()
+      })
   })
   // Let enough time to fail
-  .timeout(10000)
+    .timeout(10000)
 
   it('creates a WCS task', (done) => {
-    let datetime = moment.utc()
+    const datetime = moment.utc()
     datetime.startOf('day')
     tasksService.create({
       id: 'task.tif',
@@ -114,20 +114,20 @@ describe('krawler:tasks', () => {
         }
       }
     })
-    .then(task => {
-      storage.exists('task.tif', (error, exist) => {
-        if (error) done(error)
-        else done(exist ? null : new Error('File not found in store'))
+      .then(task => {
+        storage.exists('task.tif', (error, exist) => {
+          if (error) done(error)
+          else done(exist ? null : new Error('File not found in store'))
+        })
       })
-    })
-    .catch(error => {
+      .catch(error => {
       // Sometimes meteo france servers reply 404 or 503
-      console.log(error)
-      done()
-    })
+        console.log(error)
+        done()
+      })
   })
   // Let enough time to download
-  .timeout(10000)
+    .timeout(10000)
 
   it('creates a WFS task', (done) => {
     tasksService.create({
@@ -141,20 +141,20 @@ describe('krawler:tasks', () => {
         featureID: 'StationHydro_FXX.A282000101'
       }
     })
-    .then(task => {
-      storage.exists('task.xml', (error, exist) => {
-        if (error) done(error)
-        else done(exist ? null : new Error('File not found in store'))
+      .then(task => {
+        storage.exists('task.xml', (error, exist) => {
+          if (error) done(error)
+          else done(exist ? null : new Error('File not found in store'))
+        })
       })
-    })
-    .catch(error => {
+      .catch(error => {
       // Sometimes sandre servers reply 404 or 503
-      console.log(error)
-      done()
-    })
+        console.log(error)
+        done()
+      })
   })
   // Let enough time to download
-  .timeout(10000)
+    .timeout(10000)
 
   it('creates an OVERPASS task', (done) => {
     tasksService.create({
@@ -165,24 +165,24 @@ describe('krawler:tasks', () => {
         data: '[out:json][timeout:25][bbox:43.10,1.36,43.70,1.39];(node["aeroway"="runway"];way["aeroway"="runway"];relation["aeroway"="runway"];);out body;>;out skel qt;'
       }
     })
-    .then(task => {
-      storage.exists('overpass.json', (error, exist) => {
-        if (error) done(error)
-        else done(exist ? null : new Error('File not found in store'))
+      .then(task => {
+        storage.exists('overpass.json', (error, exist) => {
+          if (error) done(error)
+          else done(exist ? null : new Error('File not found in store'))
+        })
       })
-    })
   })
   // Let enough time to download
-  .timeout(10000)
+    .timeout(10000)
 
   it('removes a task', (done) => {
     tasksService.remove('task.tif', { store: storage })
-    .then(_ => {
-      storage.exists('task.tif', (error, exist) => {
-        if (error) done(error)
-        else done(!exist ? null : new Error('File found in store'))
+      .then(_ => {
+        storage.exists('task.tif', (error, exist) => {
+          if (error) done(error)
+          else done(!exist ? null : new Error('File found in store'))
+        })
       })
-    })
   })
 
   // Cleanup

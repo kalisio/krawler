@@ -6,15 +6,15 @@ import fsStore from 'fs-blob-store'
 import { hooks as pluginHooks } from '../src'
 
 describe('krawler:hooks:mongo', () => {
-  let inputStore = fsStore({ path: path.join(__dirname, 'data') })
-  let outputStore = fsStore({ path: path.join(__dirname, 'output') })
+  const inputStore = fsStore({ path: path.join(__dirname, 'data') })
+  const outputStore = fsStore({ path: path.join(__dirname, 'output') })
   const geojson = require(path.join(inputStore.path, 'geojson'))
 
   before(() => {
     chailint(chai, util)
   })
 
-  let mongoHook = {
+  const mongoHook = {
     type: 'before',
     data: {},
     params: {}
@@ -27,42 +27,44 @@ describe('krawler:hooks:mongo', () => {
     expect(mongoHook.data.client.isConnected()).beTrue()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('creates MongoDB collection', async () => {
     await pluginHooks.createMongoCollection({ collection: 'geojson', index: { geometry: '2dsphere' } })(mongoHook)
-    let collections = await mongoHook.data.client.db.listCollections({ name: 'geojson' }).toArray()
+    const collections = await mongoHook.data.client.db.listCollections({ name: 'geojson' }).toArray()
     expect(collections.length === 1).beTrue()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('writes MongoDB collection', async () => {
     mongoHook.type = 'after'
     mongoHook.result = mongoHook.data
     mongoHook.result.data = geojson
     await pluginHooks.writeMongoCollection({ collection: 'geojson' })(mongoHook)
-    let collection = mongoHook.data.client.db.collection('geojson')
-    let results = await collection.find({
-      geometry: { $near: { $geometry: { type: 'Point', coordinates: [ 102, 0.5 ] }, $maxDistance: 5000 } }
+    const collection = mongoHook.data.client.db.collection('geojson')
+    const results = await collection.find({
+      geometry: { $near: { $geometry: { type: 'Point', coordinates: [102, 0.5] }, $maxDistance: 5000 } }
     }).toArray()
     expect(results.length).to.equal(1)
     expect(results[0].properties).toExist()
     expect(results[0].properties.prop0).to.equal('value0')
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('reads MongoDB collection', async () => {
-    await pluginHooks.readMongoCollection({ collection: 'geojson',
+    await pluginHooks.readMongoCollection({
+      collection: 'geojson',
       query: {
-        geometry: { $near: { $geometry: { type: 'Point', coordinates: [ 102, 0.5 ] }, $maxDistance: 500000 } }
+        geometry: { $near: { $geometry: { type: 'Point', coordinates: [102, 0.5] }, $maxDistance: 500000 } }
       },
       project: { properties: 1 },
       skip: 1,
       limit: 2,
-      dataPath: 'result.data' })(mongoHook)
-    let results = mongoHook.result.data
+      dataPath: 'result.data'
+    })(mongoHook)
+    const results = mongoHook.result.data
     expect(results.length).to.equal(2)
     expect(results[0].geometry).beUndefined()
     expect(results[0].properties).toExist()
@@ -70,42 +72,42 @@ describe('krawler:hooks:mongo', () => {
     expect(results[0].properties.prop1).toExist()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('deletes MongoDB collection', async () => {
     await pluginHooks.deleteMongoCollection({ collection: 'geojson', filter: { 'geometry.type': 'Point' } })(mongoHook)
-    let collection = mongoHook.data.client.db.collection('geojson')
-    let results = await collection.find({ 'geometry.type': 'Point' }).toArray()
+    const collection = mongoHook.data.client.db.collection('geojson')
+    const results = await collection.find({ 'geometry.type': 'Point' }).toArray()
     expect(results.length).to.equal(0)
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('drops MongoDB collection', async () => {
     await pluginHooks.dropMongoCollection({ collection: 'geojson' })(mongoHook)
-    let collections = await mongoHook.data.client.db.listCollections({ name: 'geojson' }).toArray()
+    const collections = await mongoHook.data.client.db.listCollections({ name: 'geojson' }).toArray()
     expect(collections.length === 0).beTrue()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('creates MongoDB bucket', async () => {
     await pluginHooks.createMongoBucket({ bucket: 'data' })(mongoHook)
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('writes MongoDB bucket', async () => {
     mongoHook.result.store = inputStore
     await pluginHooks.writeMongoBucket({ bucket: 'data', metadata: { x: 'y' }, key: 'geojson.json' })(mongoHook)
-    let collection = mongoHook.data.client.db.collection('data.files')
-    let results = await collection.find({ filename: 'geojson.json' }).toArray()
+    const collection = mongoHook.data.client.db.collection('data.files')
+    const results = await collection.find({ filename: 'geojson.json' }).toArray()
     expect(results.length).to.equal(1)
     expect(results[0].metadata).toExist()
     expect(results[0].metadata.x).to.equal('y')
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('reads MongoDB bucket', async () => {
     mongoHook.result.store = outputStore
@@ -113,16 +115,16 @@ describe('krawler:hooks:mongo', () => {
     expect(fs.existsSync(path.join(outputStore.path, 'geojson.json'))).beTrue()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('deletes MongoDB bucket', async () => {
     await pluginHooks.deleteMongoBucket({ bucket: 'data', key: 'geojson.json' })(mongoHook)
-    let collection = mongoHook.data.client.db.collection('data.files')
-    let results = await collection.find({ filename: 'geojson.json' }).toArray()
+    const collection = mongoHook.data.client.db.collection('data.files')
+    const results = await collection.find({ filename: 'geojson.json' }).toArray()
     expect(results.length).to.equal(0)
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('drops MongoDB bucket', async () => {
     await pluginHooks.dropMongoBucket({ bucket: 'data' })(mongoHook)
@@ -132,7 +134,7 @@ describe('krawler:hooks:mongo', () => {
     expect(collections.length === 0).beTrue()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('disconnect from MongoDB', async () => {
     // Cleanup
@@ -141,5 +143,5 @@ describe('krawler:hooks:mongo', () => {
     expect(mongoHook.data.client).beUndefined()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 })

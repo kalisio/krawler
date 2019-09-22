@@ -10,9 +10,9 @@ describe('krawler:hooks:ftp', () => {
     chailint(chai, util)
   })
 
-  let store = FsStore({ path: path.join(__dirname, 'output') })
+  const store = FsStore({ path: path.join(__dirname, 'output') })
 
-  let ftpOptions = {
+  const ftpOptions = {
     host: 'test.rebex.net',
     port: 21,
     user: 'demo',
@@ -22,7 +22,7 @@ describe('krawler:hooks:ftp', () => {
     localFile: path.join(__dirname, 'output', 'ConsoleClient.png')
   }
 
-  let ftpHook = {
+  const ftpHook = {
     type: 'before',
     data: { id: 'ftp' },
     params: { store: store }
@@ -33,7 +33,7 @@ describe('krawler:hooks:ftp', () => {
     expect(ftpHook.data.client).toExist()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   /* FIXME: Seems that TRAVIS-CI does not support passive FTP mode
   https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
@@ -55,7 +55,7 @@ describe('krawler:hooks:ftp', () => {
     expect(fs.existsSync(path.join(store.path, 'ConsoleClient.png'))).beTrue()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('put to FTP', async () => {
     try {
@@ -65,7 +65,7 @@ describe('krawler:hooks:ftp', () => {
     }
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
   it('disconnect from FTP', async () => {
     ftpHook.type = 'after'
@@ -73,5 +73,5 @@ describe('krawler:hooks:ftp', () => {
     expect(ftpHook.data.client).beUndefined()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 })

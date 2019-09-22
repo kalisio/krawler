@@ -25,20 +25,20 @@ export function readGeoJson (options = {}) {
 export function convertToGeoJson (options = {}) {
   return function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'convertToGeoJson' hook should only be used as a 'after' hook.`)
+      throw new Error('The \'convertToGeoJson\' hook should only be used as a \'after\' hook.')
     }
 
     debug('Converting to GeoJSON for ' + hook.result.id)
 
     let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
     // Safety check
-    let isArray = Array.isArray(json)
+    const isArray = Array.isArray(json)
     if (!isArray) {
       json = [json]
     }
 
     // Declare the output GeoJson collection
-    let collection = {
+    const collection = {
       type: 'FeatureCollection',
       features: []
     }
@@ -47,12 +47,12 @@ export function convertToGeoJson (options = {}) {
     const altitude = options.altitude || 'altitude'
     // Then iterate over JSON objects
     _.forEach(json, object => {
-      let lon = Number(_.get(object, longitude, 0))
-      let lat = Number(_.get(object, latitude, 0))
-      let alt = Number(_.get(object, altitude, 0))
+      const lon = Number(_.get(object, longitude, 0))
+      const lat = Number(_.get(object, latitude, 0))
+      const alt = Number(_.get(object, altitude, 0))
       if (lat && lon) {
         // Define the GeoJson feature corresponding to the object
-        let feature = {
+        const feature = {
           type: 'Feature',
           // Lat, long, alt not required anymore
           properties: (options.keepGeometryProperties ? object : _.omit(object, [longitude, latitude, altitude])),
@@ -74,11 +74,11 @@ export function convertToGeoJson (options = {}) {
 export function convertOSMToGeoJson (options = {}) {
   return function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'convertOSMToGeoJson' hook should only be used as a 'after' hook.`)
+      throw new Error('The \'convertOSMToGeoJson\' hook should only be used as a \'after\' hook.')
     }
 
     debug('Converting OSM to GeoJSON for ' + hook.result.id)
-    let osm = _.get(hook, options.dataPath || 'result.data', {}) || {}
+    const osm = _.get(hook, options.dataPath || 'result.data', {}) || {}
 
     // Then update JSON in place in memory
     _.set(hook, options.dataPath || 'result.data', osmtogeojson(osm, options))
@@ -89,7 +89,7 @@ export function convertOSMToGeoJson (options = {}) {
 export function reprojectGeoJson (options = {}) {
   return function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'reprojectGeoJson' hook should only be used as a 'after' hook.`)
+      throw new Error('The \'reprojectGeoJson\' hook should only be used as a \'after\' hook.')
     }
 
     debug('Reproject GeoJSON for ' + hook.result.id)

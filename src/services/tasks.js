@@ -29,13 +29,13 @@ class TasksService extends Service {
     // Providing 'type-stream' as input type means we don't want to directly write the read stream
     // to the store but simply open it and return it for hooks to process
     const streamed = type.endsWith('-stream')
-    let taskStream = await this.generate(streamed ? type.replace('-stream', '') : type, options, id)
+    const taskStream = await this.generate(streamed ? type.replace('-stream', '') : type, options, id)
     // TO BE FIXED: just a trivial test for handling noop tasks
     if (_.isUndefined(taskStream)) {
       return data
     }
     if (!taskStream) {
-      let message = 'Can\'t find task generator for task type ' + type
+      const message = 'Can\'t find task generator for task type ' + type
       debug(message)
       throw new Error(message)
     }
@@ -43,29 +43,29 @@ class TasksService extends Service {
       return Object.assign({ stream: taskStream }, data)
     }
     // Otherwise we target a store
-    let store = await getStore(this.storesService, params, data)
+    const store = await getStore(this.storesService, params, data)
     return new Promise((resolve, reject) => {
       taskStream
-      .on('timeout', reject)
-      .on('response', (response) => {
-        let error = new Error('Request rejected with HTTP code ' + response.statusCode)
-        error.statusCode = response.statusCode
-        if (response.statusCode !== 200) reject(error)
-      })
+        .on('timeout', reject)
+        .on('response', (response) => {
+          const error = new Error('Request rejected with HTTP code ' + response.statusCode)
+          error.statusCode = response.statusCode
+          if (response.statusCode !== 200) reject(error)
+        })
       writeStreamToStore(taskStream, store, {
         key: id,
         params: storageOptions
       })
-      .then(() => {
-        addOutput(data, id, options.outputType)
-        resolve(data)
-      })
-      .catch(reject)
+        .then(() => {
+          addOutput(data, id, options.outputType)
+          resolve(data)
+        })
+        .catch(reject)
     })
   }
 
   async remove (id, params = {}) {
-    let store = await getStore(this.storesService, params, params.query || {})
+    const store = await getStore(this.storesService, params, params.query || {})
 
     return new Promise((resolve, reject) => {
       // Remove output data

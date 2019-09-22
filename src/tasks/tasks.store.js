@@ -7,7 +7,7 @@ async function createStoreStream (options, id) {
   debug('Reading ' + id + ' from store with following parameters', options)
 
   // Input store config given in task options
-  let store = await this.storesService.get(options.store)
+  const store = await this.storesService.get(options.store)
   return store.createReadStream(Object.assign({ key: id }, options))
 }
 

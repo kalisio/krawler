@@ -43,8 +43,8 @@ class JobsService extends Service {
 
     tasks = tasks.map(task => {
       // ID is templated on his own to have access to the job ID as well
-      let taskWithoutId = _.omit(task, ['id'])
-      let newTask = {}
+      const taskWithoutId = _.omit(task, ['id'])
+      const newTask = {}
       // Create a new task with compiled ID
       if (idCompiler) {
         newTask.id = idCompiler(Object.assign({ jobId: data.id, taskId: task.id }, taskWithoutId))
@@ -61,7 +61,7 @@ class JobsService extends Service {
   }
 
   async remove (id, params = {}) {
-    let store = await getStore(this.storesService, params, params.query || {})
+    const store = await getStore(this.storesService, params, params.query || {})
 
     return new Promise((resolve, reject) => {
       // Remove output data

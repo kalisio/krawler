@@ -11,7 +11,7 @@ const debug = makeDebug('krawler:hooks:store')
 export function createStores (options = {}) {
   return async function (hook) {
     if (hook.type !== 'before') {
-      throw new Error(`The 'createStore' hook should only be used as a 'before' hook.`)
+      throw new Error('The \'createStore\' hook should only be used as a \'before\' hook.')
     }
 
     // Transform to array
@@ -57,7 +57,7 @@ export function createStores (options = {}) {
 export function removeStores (options = {}) {
   return async function (hook) {
     if ((hook.type !== 'after') && (hook.type !== 'error')) {
-      throw new Error(`The 'removeStore' hook should only be used as a 'after/error' hook.`)
+      throw new Error('The \'removeStore\' hook should only be used as a \'after/error\' hook.')
     }
 
     // Transform to array
@@ -85,9 +85,9 @@ export function copyToStore (options = {}) {
   async function copy (item, hook) {
     // Output store config given in options
     const outputOptions = templateObject(item, options.output, ['key'])
-    let outStore = await hook.service.storesService.get(outputOptions.store)
+    const outStore = await hook.service.storesService.get(outputOptions.store)
     const inputOptions = templateObject(item, options.input, ['key'])
-    let inStore = await getStoreFromHook(hook, 'copyToStore', inputOptions)
+    const inStore = await getStoreFromHook(hook, 'copyToStore', inputOptions)
     debug('Copying to store', inputOptions, outputOptions)
     await writeStreamToStore(inStore.createReadStream(inputOptions), outStore, outputOptions)
     addOutput(item, outputOptions.key, outputOptions.outputType)
@@ -100,9 +100,9 @@ export function gzipToStore (options = {}) {
   async function gzip (item, hook) {
     // Output store config given in options
     const outputOptions = templateObject(item, options.output, ['key'])
-    let outStore = await hook.service.storesService.get(outputOptions.store)
+    const outStore = await hook.service.storesService.get(outputOptions.store)
     const inputOptions = templateObject(item, options.input, ['key'])
-    let inStore = await getStoreFromHook(hook, 'gzipToStore', inputOptions)
+    const inStore = await getStoreFromHook(hook, 'gzipToStore', inputOptions)
     debug('Gzipping to store', inputOptions, outputOptions)
     await writeStreamToStore(inStore.createReadStream(inputOptions).pipe(zlib.createGzip(options)), outStore, outputOptions)
     addOutput(item, outputOptions.key, outputOptions.outputType)
@@ -115,9 +115,9 @@ export function gunzipFromStore (options = {}) {
   async function gunzip (item, hook) {
     // Output store config given in options
     const outputOptions = templateObject(item, options.output, ['key'])
-    let outStore = await hook.service.storesService.get(outputOptions.store)
+    const outStore = await hook.service.storesService.get(outputOptions.store)
     const inputOptions = templateObject(item, options.input, ['key'])
-    let inStore = await getStoreFromHook(hook, 'gunzipFromStore', inputOptions)
+    const inStore = await getStoreFromHook(hook, 'gunzipFromStore', inputOptions)
     debug('Gunzipping from store', inputOptions, outputOptions)
     await writeStreamToStore(inStore.createReadStream(inputOptions).pipe(zlib.createGunzip(options)), outStore, outputOptions)
     addOutput(item, outputOptions.key, outputOptions.outputType)
@@ -130,19 +130,19 @@ export function unzipFromStore (options = {}) {
   async function unzip (item, hook) {
     // Output store config given in options
     const outputOptions = templateObject(item, options.output, ['path'])
-    let outStore = await hook.service.storesService.get(outputOptions.store)
+    const outStore = await hook.service.storesService.get(outputOptions.store)
     const inputOptions = templateObject(item, options.input, ['key'])
-    let inStore = await getStoreFromHook(hook, 'unzipFromStore', inputOptions)
+    const inStore = await getStoreFromHook(hook, 'unzipFromStore', inputOptions)
     debug('Unzipping from store', inputOptions, outputOptions)
     if (!outStore.path) {
-      throw new Error(`The 'unzipFromStore' hook only work with the fs blob store as output.`)
+      throw new Error('The \'unzipFromStore\' hook only work with the fs blob store as output.')
     }
-    let outputPath = path.join(outStore.path, outputOptions.path || '')
+    const outputPath = path.join(outStore.path, outputOptions.path || '')
     await new Promise((resolve, reject) => {
       inStore.createReadStream(inputOptions)
-      .pipe(Extract({ path: outputPath }))
-      .on('close', () => resolve())
-      .on('error', (error) => reject(error))
+        .pipe(Extract({ path: outputPath }))
+        .on('close', () => resolve())
+        .on('error', (error) => reject(error))
     })
     // FIXME: add zip entries as output
     // addOutput(item, outputOptions.key, outputOptions.outputType)

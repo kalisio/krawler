@@ -12,14 +12,14 @@ const debug = makeDebug('krawler:hooks:yaml')
 export function writeYAML (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'writeYAML' hook should only be used as a 'after' hook.`)
+      throw new Error('The \'writeYAML\' hook should only be used as a \'after\' hook.')
     }
 
-    let store = await getStoreFromHook(hook, 'writeYAML', options)
+    const store = await getStoreFromHook(hook, 'writeYAML', options)
 
     debug('Creating YAML for ' + hook.data.id)
-    let yaml = yamljs.safeDump(_.get(hook, options.dataPath || 'result.data'), options)
-    let ymlName = template(hook.data, options.key || (hook.data.id + '.yaml'))
+    const yaml = yamljs.safeDump(_.get(hook, options.dataPath || 'result.data'), options)
+    const ymlName = template(hook.data, options.key || (hook.data.id + '.yaml'))
     await writeBufferToStore(
       Buffer.from(yaml, 'utf8'),
       store, {
@@ -35,11 +35,11 @@ export function writeYAML (options = {}) {
 // Generate a YAML from specific hook result values
 export function readYAML (options = {}) {
   return async function (hook) {
-    let item = getItems(hook)
+    const item = getItems(hook)
 
-    let store = await getStoreFromHook(hook, 'readYAML', options)
+    const store = await getStoreFromHook(hook, 'readYAML', options)
     if (!store.path && !store.buffers) {
-      throw new Error(`The 'readYAML' hook only work with the fs or memory blob store.`)
+      throw new Error('The \'readYAML\' hook only work with the fs or memory blob store.')
     }
 
     let yaml

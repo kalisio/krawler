@@ -8,8 +8,8 @@ import { getStoreFromHook } from '../utils'
 const debug = makeDebug('krawler:hooks:raster')
 
 async function getStream (hook, hookName) {
-  let store = await getStoreFromHook(hook, hookName)
-  let fileName = hook.result.id
+  const store = await getStoreFromHook(hook, hookName)
+  const fileName = hook.result.id
   if (!store.path) {
     throw new Error(`The ${hookName} hook only work with the fs blob store.`)
   }
@@ -28,7 +28,7 @@ async function getStream (hook, hookName) {
     throw new Error(`Nothing to read from file ${filePath}.`)
   }
 
-  let stream = readers[0]
+  const stream = readers[0]
   stream.on('end', () => {
     // Force closing underlying GDAL dataset immediately (not waiting for GC) as it might be large
     stream._src.close()
@@ -43,7 +43,7 @@ async function getStream (hook, hookName) {
 export function computeStatistics (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'computeStatistics' hook should only be used as a 'after' hook.`)
+      throw new Error('The \'computeStatistics\' hook should only be used as a \'after\' hook.')
     }
 
     let maxValue = Number.NEGATIVE_INFINITY
@@ -64,15 +64,15 @@ export function computeStatistics (options = {}) {
       }
     } else {
       // Otherwise we read a GIF raster
-      let geotiff = await getStream(hook, 'computeStatistics')
+      const geotiff = await getStream(hook, 'computeStatistics')
 
       await new Promise((resolve, reject) => {
-        let { filePath, stream, band } = geotiff
+        const { filePath, stream, band } = geotiff
         debug('Computing statistics for ' + filePath)
         stream.on('data', (data) => {
-          let blockLen = data.blockSize.x * data.blockSize.y
+          const blockLen = data.blockSize.x * data.blockSize.y
           for (let i = 0; i < blockLen; i++) {
-            let value = data.buffer[i]
+            const value = data.buffer[i]
             if (value !== band.noDataValue) {
               if (value < minValue) minValue = value
               if (value > maxValue) maxValue = value
@@ -96,30 +96,30 @@ export function computeStatistics (options = {}) {
 export function readGeoTiff (options = {}) {
   return async function (hook) {
     if (hook.type !== 'after') {
-      throw new Error(`The 'readGeotiff' hook should only be used as a 'after' hook.`)
+      throw new Error('The \'readGeotiff\' hook should only be used as a \'after\' hook.')
     }
 
-    let geotiff = await getStream(hook, 'readGeotiff')
+    const geotiff = await getStream(hook, 'readGeotiff')
 
     return new Promise((resolve, reject) => {
-      let { filePath, stream, dataset, band } = geotiff
+      const { filePath, stream, dataset, band } = geotiff
       const wgs84 = gdal.SpatialReference.fromEPSG(4326)
       const geotransform = dataset.geoTransform
       const coordinateTransform = new gdal.CoordinateTransformation(dataset.srs, wgs84)
 
-      let json = new Array(stream.metadata.width * stream.metadata.height)
+      const json = new Array(stream.metadata.width * stream.metadata.height)
       json.fill(band.noDataValue || 0)
       debug('Converting ' + json.length + ' values of ' + filePath + ' to JSON')
       stream.on('data', (data) => {
-        let xOffset = data.offset.x * data.blockSize.x
-        let yOffset = data.offset.y * data.blockSize.y
+        const xOffset = data.offset.x * data.blockSize.x
+        const yOffset = data.offset.y * data.blockSize.y
         for (let i = 0; i < data.blockSize.x; i++) {
           for (let j = 0; j < data.blockSize.y; j++) {
             const x = xOffset + i
             const y = yOffset + j
             // Take care that blocks do not exactly fit image size
             if ((x < stream.metadata.width) && (y < stream.metadata.height)) {
-              let value = data.buffer[i + j * data.blockSize.x]
+              const value = data.buffer[i + j * data.blockSize.x]
               // If no fields given simply export the value matrix
               if (!options.fields) {
                 json[x + y * stream.metadata.width] = value

@@ -28,7 +28,7 @@ export * from './hooks.yaml'
 
 const debug = makeDebug('krawler:hooks')
 // Custom hooks
-let hooks = {}
+const hooks = {}
 
 export function registerHook (hookName, hookFunction) {
   hooks[hookName] = hookFunction
@@ -55,7 +55,7 @@ export function getHookFunction (hookName) {
   // Then custom ones
   if (!hook) hook = getHook(hookName)
   if (typeof hook !== 'function') {
-    let message = 'Unknown hook ' + hookName
+    const message = 'Unknown hook ' + hookName
     debug(message)
     throw new Error(message)
   }
@@ -70,7 +70,7 @@ export function match (hookName, filter) {
     // Handle error hooks as usual
     if (hook.type === 'error') hookObject = hook.original
     // Retrieve the item from the hook
-    let item = getItems(hookObject)
+    const item = getItems(hookObject)
     if (Array.isArray(item)) {
       debug('Executing hook ' + hookName + ' on item array as filtering does not apply')
       return true
@@ -104,7 +104,7 @@ export function addHook (hookName, hookOptions, pipeline) {
   // Jump from name/options to the real hook function
   let hook = getHookFunction(hookName)
   // We have a default filter to skip hooks at some point in the chain
-  let filter = { skip: { $exists: false } }
+  const filter = { skip: { $exists: false } }
   // Take care that sometimes options is simply a string object and a match function do exist in this case
   const hookFilter = (typeof hookOptions === 'string' ? undefined : hookOptions.match)
   if (hookFilter) {
@@ -126,11 +126,11 @@ export function addHook (hookName, hookOptions, pipeline) {
 }
 
 export function activateHooks (serviceHooks, service) {
-  let feathersHooks = {}
+  const feathersHooks = {}
   // Iterate over hook types (before, after)
   _.forOwn(serviceHooks, (hooksDefinition, stage) => {
     // Iterate over hooks to create the hook pipeline
-    let pipeline = []
+    const pipeline = []
     _.forOwn(hooksDefinition, (hookOptions, hookName) => {
       // If hook name is given as 'hook' option property use it
       // otherwise us key as hook name
@@ -144,7 +144,7 @@ export function activateHooks (serviceHooks, service) {
           // if written as { hook: 'parallel', hooks: [...] }
           const items = (Array.isArray(hookOptions) ? hookOptions : hookOptions.hooks)
           // Each item contains the hook name as a 'hook' property and hook options
-          let hooks = []
+          const hooks = []
           items.forEach(item => addHook(item.hook, item, hooks))
           pipeline.push(parallel(hooks))
         } catch (error) {

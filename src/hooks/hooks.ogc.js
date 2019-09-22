@@ -8,8 +8,8 @@ const debug = makeDebug('krawler:hooks:ogc')
 // Generate a YAML from specific hook result values
 export function getCapabilities (options = {}) {
   return async function (hook) {
-    let queryParameters = _.merge({ request: 'GetCapabilities' }, _.omit(options, ['url', 'headers']))
-    let requestParameters = {
+    const queryParameters = _.merge({ request: 'GetCapabilities' }, _.omit(options, ['url', 'headers']))
+    const requestParameters = {
       method: 'GET',
       url: options.url,
       headers: options.headers,
@@ -24,7 +24,7 @@ export function getCapabilities (options = {}) {
         if (error) reject(error)
         if (response.statusCode !== 200) reject(new Error('Request rejected with HTTP code ' + response.statusCode))
         // parse the body
-        let parser = new xml2js.Parser({ explicitArray: false })
+        const parser = new xml2js.Parser({ explicitArray: false })
         parser.parseString(body, (err, result) => {
           if (err) {
             reject(err)

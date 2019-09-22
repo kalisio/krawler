@@ -3,7 +3,7 @@ import chailint from 'chai-lint'
 import { Grid } from '../src'
 
 describe('krawler:grid', () => {
-  let grid = new Grid({
+  const grid = new Grid({
     bounds: [-180, -90, 180, 90],
     origin: [-180, 90],
     size: [4, 3],
@@ -52,17 +52,17 @@ describe('krawler:grid', () => {
   })
 
   it('resamples grid values', () => {
-    let resampled = grid.resample([-135, 45], [90, 90], [3, 2])
+    const resampled = grid.resample([-135, 45], [90, 90], [3, 2])
     // Interpolated grid at grid quad centers should be the following
     // [ 1 1.5 1
     //   1 1.5 1 ]
-    expect(resampled).to.deep.equal([ 1, 1.5, 1, 1, 1.5, 1 ])
+    expect(resampled).to.deep.equal([1, 1.5, 1, 1, 1.5, 1])
   })
 
   it('tiles grid values', () => {
-    let tileset = grid.tileset([90, 90])
+    const tileset = grid.tileset([90, 90])
     expect(tileset.map(tile => tile.data)).to.deep.equal([
-      [ 0, 1, 1, 2 ], [ 1, 1, 2, 2 ], [ 1, 0, 2, 1 ], [ 0, 0, 1, 1 ], [ 1, 2, 0, 1 ], [ 2, 2, 1, 1 ], [ 2, 1, 1, 0 ], [ 1, 1, 0, 0 ]
+      [0, 1, 1, 2], [1, 1, 2, 2], [1, 0, 2, 1], [0, 0, 1, 1], [1, 2, 0, 1], [2, 2, 1, 1], [2, 1, 1, 0], [1, 1, 0, 0]
     ])
   })
 })

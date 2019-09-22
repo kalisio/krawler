@@ -7,7 +7,7 @@ const debug = makeDebug('krawler:hooks:auth')
 export function basicAuth (options = {}) {
   return function (hook) {
     if (hook.type !== 'before') {
-      throw new Error(`The 'basicAuth' hook should only be used as a 'before' hook.`)
+      throw new Error('The \'basicAuth\' hook should only be used as a \'before\' hook.')
     }
     const path = options.optionsPath || 'options'
     const requestOptions = _.get(hook.data, path)

@@ -9,22 +9,22 @@ const debug = makeDebug('krawler:hooks:system')
 
 export function tar (options = {}) {
   if (_.isNil(options.files)) {
-    throw new Error(`You must provide a list of files to tar for the 'tar' hook`)
+    throw new Error('You must provide a list of files to tar for the \'tar\' hook')
   }
   async function tarc (item) {
     const templatedOptions = templateObject(item, options, ['file', 'cwd', 'files'])
     debug(`Tar ${item.id} with options`, templatedOptions)
     return Tar.c(templatedOptions, templatedOptions.files)
-    .then(() => {
-      addOutput(item, templatedOptions.file, options.outputType)
-    })
+      .then(() => {
+        addOutput(item, templatedOptions.file, options.outputType)
+      })
   }
   return callOnHookItems(tarc)
 }
 
 export function untar (options = {}) {
   if (_.isNil(options.file)) {
-    throw new Error(`You must provide a tar file for the 'untar' hook`)
+    throw new Error('You must provide a tar file for the \'untar\' hook')
   }
   async function tarx (item) {
     const templatedOptions = templateObject(item, options, ['file', 'cwd', 'files'])
@@ -36,7 +36,7 @@ export function untar (options = {}) {
 
 export function runCommand (options = {}) {
   async function run (item) {
-    let command = template(item, options.command)
+    const command = template(item, options.command)
     debug('Running command', command)
     const { stdout, stderr } = await exec(command, options.options)
     if (options.stdout) {

@@ -19,7 +19,7 @@ function getNearestRunTime (datetime, interval) {
 
 function getNearestForecastTime (datetime, interval) {
   // Compute nearest forecast T0
-  let offsetDateTime = datetime.clone().add({ seconds: 0.5 * interval })
+  const offsetDateTime = datetime.clone().add({ seconds: 0.5 * interval })
   return datetime.clone().hours(roundHours(offsetDateTime.hours(), interval / 3600)).minutes(0).seconds(0).milliseconds(0)
 }
 
@@ -27,7 +27,7 @@ function getNearestForecastTime (datetime, interval) {
 export function generateNwpTasks (options) {
   return function (hook) {
     if (hook.type !== 'before') {
-      throw new Error(`The 'generateNwpDownloadTasks' hook should only be used as a 'before' hook.`)
+      throw new Error('The \'generateNwpDownloadTasks\' hook should only be used as a \'before\' hook.')
     }
     // Either can either come from options or input data
     const elements = hook.data.elements || options.elements || []
@@ -39,10 +39,10 @@ export function generateNwpTasks (options) {
     const upperLimit = hook.data.upperLimit || options.upperLimit
     // Compute nearest run T0
     const datetime = moment.utc()
-    let nearestRunTime = getNearestRunTime(datetime, runInterval)
+    const nearestRunTime = getNearestRunTime(datetime, runInterval)
     // We can retrieve nearest run (index 0) or previous ones (index N)
-    let runTime = nearestRunTime.clone().subtract({ seconds: -runIndex * runInterval })
-    let tasks = []
+    const runTime = nearestRunTime.clone().subtract({ seconds: -runIndex * runInterval })
+    const tasks = []
     // Iterate over elements/levels
     elements.forEach(element => {
       // Compute per-element update options
@@ -50,17 +50,17 @@ export function generateNwpTasks (options) {
       // These ones can be 0 take care the way the test is written
       const elementLowerLimit = (_.has(element, 'lowerLimit') ? element.lowerLimit : lowerLimit)
       const elementUpperLimit = (_.has(element, 'upperLimit') ? element.upperLimit : upperLimit)
-      const levels = element.levels || [ undefined ] // If no level specified it is implicit so push an undefined one
-      let nearestForecastTime = getNearestForecastTime(datetime, elementInterval)
+      const levels = element.levels || [undefined] // If no level specified it is implicit so push an undefined one
+      const nearestForecastTime = getNearestForecastTime(datetime, elementInterval)
       // We don't care about the past, however a forecast is still potentially valid at least until we reach the next one
-      let lowerTime = datetime.clone().subtract({ seconds: elementInterval })
+      const lowerTime = datetime.clone().subtract({ seconds: elementInterval })
 
       levels.forEach(level => {
         // Check for each forecast step if update is required
         for (let timeOffset = elementLowerLimit; timeOffset <= elementUpperLimit; timeOffset += elementInterval) {
-          let forecastTime = nearestForecastTime.clone().add({ seconds: timeOffset })
+          const forecastTime = nearestForecastTime.clone().add({ seconds: timeOffset })
           if (!forecastTime.isBefore(lowerTime)) {
-            let task = Object.assign({
+            const task = Object.assign({
               level,
               runTime,
               forecastTime,

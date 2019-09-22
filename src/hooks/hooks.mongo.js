@@ -9,7 +9,7 @@ const debug = makeDebug('krawler:hooks:mongo')
 // Connect to the mongo database
 export function connectMongo (options = {}) {
   return async function (hook) {
-    let item = hook.data // getItems(hook)
+    const item = hook.data // getItems(hook)
     let client = _.get(item, options.clientPath || 'client')
     if (client) {
       debug('Already connected to MongoDB for ' + item.id)
@@ -20,8 +20,8 @@ export function connectMongo (options = {}) {
     let dbName = options.dbName
     if (!dbName) {
       // Extract database name.  Need to remove the connections options if any
-      let indexOfDBName = options.url.lastIndexOf('/') + 1
-      let indexOfOptions = options.url.indexOf('?')
+      const indexOfDBName = options.url.lastIndexOf('/') + 1
+      const indexOfOptions = options.url.indexOf('?')
       if (indexOfOptions === -1) dbName = options.url.substring(indexOfDBName)
       else dbName = options.url.substring(indexOfDBName, indexOfOptions)
     }
@@ -35,10 +35,10 @@ export function connectMongo (options = {}) {
 // Disconnect from the database
 export function disconnectMongo (options = {}) {
   return async function (hook) {
-    let item = hook.data // getItems(hook)
-    let client = _.get(item, options.clientPath || 'client')
+    const item = hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to MongoDB before using the 'disconnectMongo' hook`)
+      throw new Error('You must be connected to MongoDB before using the \'disconnectMongo\' hook')
     }
 
     debug('Disconnecting from MongoDB for ' + item.id)
@@ -52,14 +52,14 @@ export function disconnectMongo (options = {}) {
 // Drop a collection
 export function dropMongoCollection (options = {}) {
   return async function (hook) {
-    let item = hook.data // hook.data // getItems(hook)
-    let client = _.get(item, options.clientPath || 'client')
+    const item = hook.data // hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to MongoDB before using the 'dropMongoCollection' hook`)
+      throw new Error('You must be connected to MongoDB before using the \'dropMongoCollection\' hook')
     }
 
     // Drop the collection
-    let collection = template(item, _.get(options, 'collection', _.snakeCase(item.id)))
+    const collection = template(item, _.get(options, 'collection', _.snakeCase(item.id)))
     debug('Droping the ' + collection + ' collection')
     try {
       await client.db.dropCollection(collection)
@@ -80,10 +80,10 @@ export function dropMongoCollection (options = {}) {
 // Create a collection
 export function createMongoCollection (options = {}) {
   return async function (hook) {
-    let item = hook.data // getItems(hook)
-    let client = _.get(item, options.clientPath || 'client')
+    const item = hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to MongoDB before using the 'createMongoCollection' hook`)
+      throw new Error('You must be connected to MongoDB before using the \'createMongoCollection\' hook')
     }
 
     const collectionName = template(item, _.get(options, 'collection', _.snakeCase(item.id)))
@@ -119,16 +119,16 @@ export function createMongoCollection (options = {}) {
 // Retrieve JSON documents from a collection
 export function readMongoCollection (options = {}) {
   return async function (hook) {
-    let item = hook.data // getItems(hook)
-    let client = _.get(item, options.clientPath || 'client')
+    const item = hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to MongoDB before using the 'readMongoCollection' hook`)
+      throw new Error('You must be connected to MongoDB before using the \'readMongoCollection\' hook')
     }
 
     const collectionName = template(item, _.get(options, 'collection', _.snakeCase(item.id)))
-    let collection = client.db.collection(collectionName)
+    const collection = client.db.collection(collectionName)
     const templatedQuery = templateQueryObject(item, options.query || {})
-    let query = collection.find(templatedQuery)
+    const query = collection.find(templatedQuery)
     if (options.project) query.project(options.project)
     if (options.sort) query.sort(options.sort)
     if (options.limit) query.limit(options.limit)
@@ -149,14 +149,14 @@ export function readMongoCollection (options = {}) {
 // Insert JSON document(s) in a collection
 export function writeMongoCollection (options = {}) {
   return async function (hook) {
-    let item = hook.data // getItems(hook)
-    let client = _.get(item, options.clientPath || 'client')
+    const item = hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to MongoDB before using the 'writeMongoCollection' hook`)
+      throw new Error('You must be connected to MongoDB before using the \'writeMongoCollection\' hook')
     }
 
     const collectionName = template(item, _.get(options, 'collection', _.snakeCase(item.id)))
-    let collection = client.db.collection(collectionName)
+    const collection = client.db.collection(collectionName)
     // Defines the chunks
     let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
     // Allow transform before write
@@ -190,14 +190,14 @@ export function writeMongoCollection (options = {}) {
 // Delete documents in a collection
 export function deleteMongoCollection (options = {}) {
   return async function (hook) {
-    let item = hook.data // getItems(hook)
-    let client = _.get(item, options.clientPath || 'client')
+    const item = hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to MongoDB before using the 'deleteMongoCollection' hook`)
+      throw new Error('You must be connected to MongoDB before using the \'deleteMongoCollection\' hook')
     }
 
     const collectionName = template(item, _.get(options, 'collection', _.snakeCase(item.id)))
-    let collection = client.db.collection(collectionName)
+    const collection = client.db.collection(collectionName)
     const templatedQuery = templateQueryObject(item, options.filter || {})
     debug(`Deleting documents in collection ${collectionName} with`, templatedQuery)
     await collection.deleteMany(templatedQuery)
@@ -208,10 +208,10 @@ export function deleteMongoCollection (options = {}) {
 // Create a GridFS bucket
 export function createMongoBucket (options = {}) {
   return async function (hook) {
-    let item = hook.data // getItems(hook)
-    let client = _.get(item, options.clientPath || 'client')
+    const item = hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to MongoDB before using the 'createMongoCollection' hook`)
+      throw new Error('You must be connected to MongoDB before using the \'createMongoCollection\' hook')
     }
 
     const bucketName = template(item, _.get(options, 'bucket', _.snakeCase(item.id)))
@@ -237,22 +237,22 @@ export function createMongoBucket (options = {}) {
 // Read file from a bucket
 export function readMongoBucket (options = {}) {
   return async function (hook) {
-    let item = hook.data // getItems(hook)
-    let client = _.get(item, options.clientPath || 'client')
+    const item = hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to MongoDB before using the 'readMongoBucket' hook`)
+      throw new Error('You must be connected to MongoDB before using the \'readMongoBucket\' hook')
     }
 
     const bucketName = template(item, _.get(options, 'bucket', _.snakeCase(item.id)))
-    let bucket = _.get(client, `buckets.${bucketName}`)
+    const bucket = _.get(client, `buckets.${bucketName}`)
     const filePath = template(item, options.key || item.id)
     const store = await getStoreFromHook(hook, 'writeMongoBucket', options)
     debug(`Extracting ${filePath} from the ${bucketName} bucket `)
     return new Promise((resolve, reject) => {
       bucket.openDownloadStreamByName(filePath)
-      .pipe(store.createWriteStream(filePath))
-      .on('error', reject)
-      .on('finish', _ => resolve(hook))
+        .pipe(store.createWriteStream(filePath))
+        .on('error', reject)
+        .on('finish', _ => resolve(hook))
     })
   }
 }
@@ -260,23 +260,23 @@ export function readMongoBucket (options = {}) {
 // Insert file in a bucket
 export function writeMongoBucket (options = {}) {
   return async function (hook) {
-    let item = hook.data // getItems(hook)
-    let client = _.get(item, options.clientPath || 'client')
+    const item = hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to MongoDB before using the 'writeMongoBucket' hook`)
+      throw new Error('You must be connected to MongoDB before using the \'writeMongoBucket\' hook')
     }
 
     const bucketName = template(item, _.get(options, 'bucket', _.snakeCase(item.id)))
-    let bucket = _.get(client, `buckets.${bucketName}`)
+    const bucket = _.get(client, `buckets.${bucketName}`)
     const templatedMetadata = templateQueryObject(item, options.metadata)
     const filePath = template(item, options.key || item.id)
     const store = await getStoreFromHook(hook, 'writeMongoBucket', options)
     debug(`Inserting ${filePath} in the ${bucketName} bucket `)
     return new Promise((resolve, reject) => {
       store.createReadStream(filePath)
-      .pipe(bucket.openUploadStream(filePath, { metadata: templatedMetadata }))
-      .on('error', reject)
-      .on('finish', _ => resolve(hook))
+        .pipe(bucket.openUploadStream(filePath, { metadata: templatedMetadata }))
+        .on('error', reject)
+        .on('finish', _ => resolve(hook))
     })
   }
 }
@@ -284,17 +284,17 @@ export function writeMongoBucket (options = {}) {
 // Delete file in a bucket
 export function deleteMongoBucket (options = {}) {
   return async function (hook) {
-    let item = hook.data // getItems(hook)
-    let client = _.get(item, options.clientPath || 'client')
+    const item = hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to MongoDB before using the 'deleteMongoBucket' hook`)
+      throw new Error('You must be connected to MongoDB before using the \'deleteMongoBucket\' hook')
     }
 
     const bucketName = template(item, _.get(options, 'bucket', _.snakeCase(item.id)))
-    let bucket = _.get(client, `buckets.${bucketName}`)
+    const bucket = _.get(client, `buckets.${bucketName}`)
     const filePath = template(item, options.key || item.id)
 
-    let results = await bucket.find({ filename: filePath }).toArray()
+    const results = await bucket.find({ filename: filePath }).toArray()
     if (results.length > 0) {
       debug(`Deleting ${filePath} in the ${bucketName} bucket `)
       await bucket.delete(results[0]._id)
@@ -306,14 +306,14 @@ export function deleteMongoBucket (options = {}) {
 // Drop a bucket
 export function dropMongoBucket (options = {}) {
   return async function (hook) {
-    let item = hook.data // getItems(hook)
-    let client = _.get(item, options.clientPath || 'client')
+    const item = hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to MongoDB before using the 'readMongoBucket' hook`)
+      throw new Error('You must be connected to MongoDB before using the \'readMongoBucket\' hook')
     }
 
     const bucketName = template(item, _.get(options, 'bucket', _.snakeCase(item.id)))
-    let bucket = _.get(client, `buckets.${bucketName}`)
+    const bucket = _.get(client, `buckets.${bucketName}`)
     await bucket.drop()
     debug(`Dropping the ${bucketName} bucket `)
     return hook

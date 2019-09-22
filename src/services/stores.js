@@ -15,7 +15,7 @@ class StoresService extends Service {
   }
 
   async create (data, params = {}) {
-    let { id, type, options } = data
+    const { id, type, options } = data
 
     let store = this.stores[id]
     if (store) {
@@ -35,7 +35,7 @@ class StoresService extends Service {
   }
 
   async get (id, params) {
-    let store = this.stores[id]
+    const store = this.stores[id]
     if (!store) {
       const message = 'Can\'t find store with ID ' + id
       debug(message)
@@ -46,7 +46,7 @@ class StoresService extends Service {
   }
 
   async remove (id, params) {
-    let store = this.stores[id]
+    const store = this.stores[id]
     if (!store) {
       const message = 'Can\'t find store for removal with ID ' + id
       debug(message)

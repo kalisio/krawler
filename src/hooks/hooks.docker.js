@@ -8,11 +8,11 @@ const debug = makeDebug('krawler:hooks:docker')
 export function connectDocker (options = {}) {
   return async function (hook) {
     if (hook.type !== 'before') {
-      throw new Error(`The 'connectDocker' hook should only be used as a 'before' hook.`)
+      throw new Error('The \'connectDocker\' hook should only be used as a \'before\' hook.')
     }
 
     debug('Connecting to Docker for ' + hook.data.id)
-    let client = new Docker(options)
+    const client = new Docker(options)
     _.set(hook.data, options.clientPath || 'client', client)
     debug('Connected to Docker for ' + hook.data.id)
     return hook
@@ -23,11 +23,11 @@ export function connectDocker (options = {}) {
 export function disconnectDocker (options = {}) {
   return async function (hook) {
     if ((hook.type !== 'after') && (hook.type !== 'error')) {
-      throw new Error(`The 'disconnectDocker' hook should only be used as a 'after/error' hook.`)
+      throw new Error('The \'disconnectDocker\' hook should only be used as a \'after/error\' hook.')
     }
-    let client = _.get(hook.data, options.clientPath || 'client')
+    const client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to Docker before using the 'disconnectDocker' hook`)
+      throw new Error('You must be connected to Docker before using the \'disconnectDocker\' hook')
     }
 
     debug('Disconnecting from Docker for ' + hook.data.id)
@@ -39,12 +39,12 @@ export function disconnectDocker (options = {}) {
 
 export function pullDockerImage (options = {}) {
   async function pull (item, hook) {
-    let client = _.get(hook.data, options.clientPath || 'client')
+    const client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to Docker before using the 'pullImage' hook`)
+      throw new Error('You must be connected to Docker before using the \'pullImage\' hook')
     }
     if (_.isNil(options.image)) {
-      throw new Error(`You must provide an image name for the 'pullDockerImage' hook`)
+      throw new Error('You must provide an image name for the \'pullDockerImage\' hook')
     }
 
     debug('Pulling docker image', item)
@@ -64,16 +64,16 @@ export function pullDockerImage (options = {}) {
 
 export function createDockerContainer (options = {}) {
   async function create (item, hook) {
-    let client = _.get(hook.data, options.clientPath || 'client')
+    const client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to Docker before using the 'createDockerContainer' hook`)
+      throw new Error('You must be connected to Docker before using the \'createDockerContainer\' hook')
     }
 
     debug('Creating container', item)
 
     const templatedOptions = templateObject(item, options, ['Cmd', 'Env'])
     debug('Creating docker container', templatedOptions)
-    let container = await client.createContainer(templatedOptions)
+    const container = await client.createContainer(templatedOptions)
     _.set(item, options.containerPath || 'container', container)
   }
   return callOnHookItems(create)
@@ -81,16 +81,16 @@ export function createDockerContainer (options = {}) {
 
 export function createDockerService (options = {}) {
   async function create (item, hook) {
-    let client = _.get(hook.data, options.clientPath || 'client')
+    const client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error(`You must be connected to Docker before using the 'createDockerService' hook`)
+      throw new Error('You must be connected to Docker before using the \'createDockerService\' hook')
     }
 
     debug('Creating service', item)
 
     const templatedOptions = templateObject(item, options)
     debug('Creating docker service', templatedOptions)
-    let service = await client.createService(templatedOptions)
+    const service = await client.createService(templatedOptions)
     _.set(item, options.servicePath || 'service', service)
   }
   return callOnHookItems(create)
@@ -98,9 +98,9 @@ export function createDockerService (options = {}) {
 
 export function runDockerContainerCommand (options = {}) {
   async function run (item, hook) {
-    let container = _.get(item, options.containerPath || 'container')
+    const container = _.get(item, options.containerPath || 'container')
     if (_.isNil(container)) {
-      throw new Error(`You must run a docker container before using the 'runDockerContainerCommand' hook`)
+      throw new Error('You must run a docker container before using the \'runDockerContainerCommand\' hook')
     }
 
     debug('Running container command', item)
@@ -124,15 +124,15 @@ export function runDockerContainerCommand (options = {}) {
       // Need to wait for output stream end to be sure the command has been executed
       await new Promise((resolve, reject) => {
         result.output
-        .on('end', () => resolve())
-        .on('error', (error) => reject(error))
+          .on('end', () => resolve())
+          .on('error', (error) => reject(error))
       })
       await result.inspect()
     } else if (options.command === 'remove') {
       _.unset(item, options.containerPath || 'container')
     } else if (options.command === 'getArchive') {
-      let store = await getStoreFromHook(hook, 'runContainerCommand', options)
-      let tarName = template(item, options.key || (item.id + '.tar'))
+      const store = await getStoreFromHook(hook, 'runContainerCommand', options)
+      const tarName = template(item, options.key || (item.id + '.tar'))
       await writeStreamToStore(result, store, {
         key: tarName,
         params: options.storageOptions

@@ -27,7 +27,7 @@ function clamp (x, min, max) {
  * so it is possible for example that a box's bottomLeft.lng=170 while topRight.lng=-170(=190) and by that including a range of 20 degrees
  */
 function isInside (lon, lat, bounds) {
-  let isLonInRange = (bounds[2] < bounds[0]
+  const isLonInRange = (bounds[2] < bounds[0]
     ? lon >= bounds[0] || lon <= bounds[2]
     : lon >= bounds[0] && lon <= bounds[2])
 
@@ -65,7 +65,7 @@ export class Grid {
   getValue (i, j) {
     if (!this.data) return 0
 
-    let index = i + j * this.size[0]
+    const index = i + j * this.size[0]
     if (index < this.data.length) {
       return this.data[index]
     } else {
@@ -79,22 +79,22 @@ export class Grid {
     // Check for points outside bbox
     if (!isInside(lon, lat, this.bounds)) return undefined
 
-    let i = this.lonDirection * floorMod(lon - this.origin[0], 360) / this.resolution[0]     // calculate longitude index in wrapped range [0, 360)
-    let fi = Math.floor(i)
-    let j = this.latDirection * (lat - this.origin[1]) / this.resolution[1]                  // calculate latitude index in direction +90 to -90
-    let fj = Math.floor(j)
+    const i = this.lonDirection * floorMod(lon - this.origin[0], 360) / this.resolution[0] // calculate longitude index in wrapped range [0, 360)
+    const fi = Math.floor(i)
+    const j = this.latDirection * (lat - this.origin[1]) / this.resolution[1] // calculate latitude index in direction +90 to -90
+    const fj = Math.floor(j)
 
     return [i, fi, j, fj]
   }
 
   // bilinear interpolation
   bilinearInterpolate (x, y, g00, g10, g01, g11) {
-    let rx = (1 - x)
-    let ry = (1 - y)
-    let a = rx * ry
-    let b = x * ry
-    let c = rx * y
-    let d = x * y
+    const rx = (1 - x)
+    const ry = (1 - y)
+    const a = rx * ry
+    const b = x * ry
+    const c = rx * y
+    const d = x * y
     return g00 * a + g10 * b + g01 * c + g11 * d
   }
 
@@ -109,7 +109,7 @@ export class Grid {
     const indices = this.getIndices(lon, lat)
     // Check for points outside bbox
     if (indices === undefined) return undefined
-    const [ i, fi, j, fj ] = indices
+    const [i, fi, j, fj] = indices
 
     let ci = fi + 1
     // In this case virtually duplicate first column as last column to simplify interpolation logic
@@ -117,12 +117,12 @@ export class Grid {
       ci = 0
     }
     ci = clamp(ci, 0, this.size[0] - 1)
-    let cj = clamp(fj + 1, 0, this.size[1] - 1)
+    const cj = clamp(fj + 1, 0, this.size[1] - 1)
 
-    let g00 = this.getValue(fi, fj)
-    let g10 = this.getValue(ci, fj)
-    let g01 = this.getValue(fi, cj)
-    let g11 = this.getValue(ci, cj)
+    const g00 = this.getValue(fi, fj)
+    const g10 = this.getValue(ci, fj)
+    const g01 = this.getValue(fi, cj)
+    const g11 = this.getValue(ci, cj)
 
     // All four points found, so interpolate the value
     if (isValue(g00) && isValue(g10) && isValue(g01) && isValue(g11)) {
@@ -140,12 +140,12 @@ export class Grid {
    * @returns {Array}
    */
   resample (origin, resolution, size) {
-    let data = []
+    const data = []
     for (let j = 0; j < size[1]; j++) {
       for (let i = 0; i < size[0]; i++) {
-        let lon = origin[0] + this.lonDirection * (i * resolution[0])
-        let lat = origin[1] + this.latDirection * (j * resolution[1])
-        let value = this.interpolate(lon, lat)
+        const lon = origin[0] + this.lonDirection * (i * resolution[0])
+        const lat = origin[1] + this.latDirection * (j * resolution[1])
+        const value = this.interpolate(lon, lat)
         data.push(value)
       }
     }
@@ -161,13 +161,13 @@ export class Grid {
     const lonExtent = (this.bounds[2] < this.bounds[0] ? (360 + this.bounds[2] - this.bounds[0]) : (this.bounds[2] - this.bounds[0]))
     const latExtent = (this.bounds[3] < this.bounds[1] ? (360 + this.bounds[3] - this.bounds[1]) : (this.bounds[3] - this.bounds[1]))
     // Number of tiles is bound / tile resolution
-    const tilesetSize = [ Math.floor(lonExtent / resolution[0]), Math.floor(latExtent / resolution[1]) ]
+    const tilesetSize = [Math.floor(lonExtent / resolution[0]), Math.floor(latExtent / resolution[1])]
     // Size of tiles is tile bound / resolution
     const tileSize = [
       Math.max(2, Math.floor(resolution[0] / this.resolution[0])),
       Math.max(2, Math.floor(resolution[1] / this.resolution[1]))
     ]
-    const tileResolution = [ this.resolution[0], this.resolution[1] ]
+    const tileResolution = [this.resolution[0], this.resolution[1]]
     return { tilesetSize, tileSize, tileResolution }
   }
 
@@ -179,20 +179,20 @@ export class Grid {
   tileset (resolution) {
     const { tilesetSize, tileSize, tileResolution } = this.getTiling(resolution)
 
-    let data = []
+    const data = []
     // Iterate over tiles
     for (let j = 0; j < tilesetSize[1]; j++) {
       for (let i = 0; i < tilesetSize[0]; i++) {
         // Compute tile origin
-        let tileOrigin = [ this.origin[0] + this.lonDirection * (i * resolution[0]),
-          this.origin[1] + this.latDirection * (j * resolution[1]) ]
-        let tileData = []
+        const tileOrigin = [this.origin[0] + this.lonDirection * (i * resolution[0]),
+          this.origin[1] + this.latDirection * (j * resolution[1])]
+        const tileData = []
         // Then over cell in tile
         for (let tj = 0; tj < tileSize[1]; tj++) {
           for (let ti = 0; ti < tileSize[0]; ti++) {
-            let lon = tileOrigin[0] + this.lonDirection * (ti * tileResolution[0])
-            let lat = tileOrigin[1] + this.latDirection * (tj * tileResolution[1])
-            let value = this.interpolate(lon, lat)
+            const lon = tileOrigin[0] + this.lonDirection * (ti * tileResolution[0])
+            const lat = tileOrigin[1] + this.latDirection * (tj * tileResolution[1])
+            const value = this.interpolate(lon, lat)
             tileData.push(value)
           }
         }
@@ -201,12 +201,12 @@ export class Grid {
         let maxLon = tileOrigin[0] + this.lonDirection * resolution[0]
         let maxLat = tileOrigin[1] + this.latDirection * resolution[1]
         // Need to switch bounds if descending order
-        if (this.lonDirection < 0) [ minLon, maxLon ] = [ maxLon, minLon ]
-        if (this.latDirection < 0) [ minLat, maxLat ] = [ maxLat, minLat ]
+        if (this.lonDirection < 0) [minLon, maxLon] = [maxLon, minLon]
+        if (this.latDirection < 0) [minLat, maxLat] = [maxLat, minLat]
         data.push({
           x: i,
           y: j,
-          bounds: [ minLon, minLat, maxLon, maxLat ],
+          bounds: [minLon, minLat, maxLon, maxLat],
           origin: tileOrigin,
           size: tileSize,
           resolution: tileResolution,
@@ -218,7 +218,7 @@ export class Grid {
   }
 
   static toGeometry (bounds) {
-    let [ minLon, minLat, maxLon, maxLat ] = bounds
+    let [minLon, minLat, maxLon, maxLat] = bounds
     // GeoJSON WGS84 > longitude should be in [-180, 180]
     minLon = (minLon > 180 ? minLon - 360 : minLon)
     maxLon = (maxLon > 180 ? maxLon - 360 : maxLon)
@@ -228,8 +228,8 @@ export class Grid {
         type: 'Polygon',
         coordinates: [
           // Exterior ring
-          [ [ minLon, minLat ], [ maxLon, minLat ],
-            [ maxLon, maxLat ], [ minLon, maxLat ], [ minLon, minLat ] ] // Closing point
+          [[minLon, minLat], [maxLon, minLat],
+            [maxLon, maxLat], [minLon, maxLat], [minLon, minLat]] // Closing point
         ]
       }
     }

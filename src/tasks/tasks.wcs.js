@@ -6,7 +6,7 @@ const debug = makeDebug('krawler:tasks')
 
 // Build the request parameters to download data from input data source
 function getRequestParameters (options) {
-  let queryParameters = _.merge({}, _.omit(options, ['url', 'headers', 'timeout', 'auth', 'subsets']))
+  const queryParameters = _.merge({}, _.omit(options, ['url', 'headers', 'timeout', 'auth', 'subsets']))
   queryParameters.service = 'WCS'
   // If request type if not provided set default value
   if (!queryParameters.request) queryParameters.request = 'GetCoverage'
