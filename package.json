@@ -37,7 +37,7 @@
     "compile": "shx rm -rf lib/ && babel -d lib/ --copy-files src/",
     "watch": "babel --watch -d lib/ --copy-files src/",
     "lint": "standard src/**/*.js test/**/*.js healthcheck.js --fix",
-    "mocha": "mocha --require babel-core/register",
+    "mocha": "mocha --exit --require babel-core/register",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --require babel-core/register",
     "test": "npm run compile && npm run lint && npm run coverage",
     "start": "npm run compile && node lib",
