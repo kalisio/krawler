@@ -1,9 +1,12 @@
-FROM  node:8-buster
+FROM  node:8-buster-slim
 
 LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 
 # Install GDAL
-RUN apt-get update && apt-get -y install gdal-bin
+RUN \
+  apt-get update && \
+  apt-get -y install git && \
+  apt-get -y install gdal-bin
 
 # Install Krawler
 COPY . /opt/krawler
