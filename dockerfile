@@ -14,6 +14,6 @@ COPY --from=builder /opt/krawler /opt/krawler
 RUN cd /opt/krawler && yarn link && yarn link @kalisio/krawler
 ENV NODE_PATH=/opt/krawler/node_modules
 # Add healthcheck
-HEALTHCHECK --interval=30s --timeout=30s --start-period=30s CMD node ./healthcheck.js
+HEALTHCHECK --interval=30s --timeout=30s --start-period=30s CMD node /opt/krawler/healthcheck.js
 # Set command
 CMD node . $ARGS
