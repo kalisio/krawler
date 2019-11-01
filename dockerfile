@@ -1,4 +1,4 @@
-FROM  node:8-buster
+FROM  node:8-buster-slim
 
 LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 
