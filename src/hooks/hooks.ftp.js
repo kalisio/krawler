@@ -21,7 +21,7 @@ export function connectFTP (options = {}) {
   }
 }
 
-// Get a file on the FTP server
+// List files on the remote directory
 export function listFTP (options = {}) {
   async function get (item, hook) {
     const client = _.get(hook.data, options.clientPath || 'client')
@@ -53,15 +53,20 @@ export function getFTP (options = {}) {
     const outputStore = await getStoreFromHook(hook, 'getFTP', options)
     const remoteFile = template(item, options.remoteFile || options.key || (item.id))
     const localFile = template(item, options.localFile || path.join(outputStore.path, path.basename(remoteFile)))
-
     debug('Getting file ' + remoteFile + ' to ' + localFile)
+
+    // Make sure we'll store the local file in the store
+    const relativeLocalFile = path.relative(outputStore.path, localFile)
+    const isInside = (relativeLocalFile && !relativeLocalFile.startsWith('..') && !path.isAbsolute(relativeLocalFile))
+    if (!isInside) throw new Error('The local file is not relative to the store path')
+
     return new Promise((resolve, reject) => {
       client.get(remoteFile, localFile, (err, res) => {
         if (err) {
           reject(err)
         } else {
           debug(remoteFile + ' copied with success')
-          addOutput(item, localFile, options.outputType)
+          addOutput(item, relativeLocalFile, options.outputType)
           resolve(hook)
         }
       })
@@ -71,7 +76,7 @@ export function getFTP (options = {}) {
   return callOnHookItems(get)
 }
 
-// Get a file on the FTP server
+// Put a file on the FTP server
 export function putFTP (options = {}) {
   async function put (item, hook) {
     const client = _.get(hook.data, options.clientPath || 'client')
