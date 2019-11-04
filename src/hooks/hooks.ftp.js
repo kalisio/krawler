@@ -15,14 +15,14 @@ export function connectFTP (options = {}) {
 
     let client = _.get(hook.data, options.clientPath || 'client')
     if (client) {
-      debug('Already connected to FTP for ' + options)
+      debug('Already connected to FTP for ' + hook.data.id)
       return hook
     }
 
-    debug('Connecting to FTP server for ' + options)
+    debug('Connecting to FTP server for ' + hook.data.id)
     client = new JsFTP(options)
     _.set(hook.data, options.clientPath || 'client', client)
-    debug('Connected to FTP for ' + options)
+    debug('Connected to FTP for ' + hook.data.id)
     return hook
   }
 }
@@ -116,11 +116,11 @@ export function disconnectFTP (options = {}) {
     }
     const client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
-      debug('Already disconnected from FTP for ' + options)
+      debug('Already disconnected from FTP for ' + hook.data.id)
       return hook
     }
 
-    debug('Disconnecting from FTP for ' + options)
+    debug('Disconnecting from FTP for ' + hook.data.id)
     // Gracefully send QUIT command
     return new Promise((resolve, reject) => {
       client.raw('quit', (err, data) => {
@@ -132,7 +132,7 @@ export function disconnectFTP (options = {}) {
           debug(err)
           reject(err)
         } else {
-          debug('Disconnected from FTP for ' + options)
+          debug('Disconnected from FTP for ' + hook.data.id)
           resolve(hook)
         }
       })
