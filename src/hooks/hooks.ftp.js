@@ -13,8 +13,14 @@ export function connectFTP (options = {}) {
       throw new Error('The \'connectFTP\' hook should only be used as a \'before\' hook.')
     }
 
+    let client = _.get(hook.data, options.clientPath || 'client')
+    if (!_.isNil(client)) {
+      debug('Already connected to FTP for ' + options)
+      return hook
+    }
+
     debug('Connecting to FTP server for ' + options)
-    const client = new JsFTP(options)
+    client = new JsFTP(options)
     _.set(hook.data, options.clientPath || 'client', client)
     debug('Connected to FTP for ' + options)
     return hook
@@ -110,7 +116,8 @@ export function disconnectFTP (options = {}) {
     }
     const client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error('You must be connected to an FTP serrver before using the \'disconnectFTP\' hook')
+      debug('Already disconnected from FTP for ' + options)
+      return hook
     }
 
     debug('Disconnecting from FTP for ' + options)
