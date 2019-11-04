@@ -14,7 +14,7 @@ export function connectFTP (options = {}) {
     }
 
     let client = _.get(hook.data, options.clientPath || 'client')
-    if (!_.isNil(client)) {
+    if (client) {
       debug('Already connected to FTP for ' + options)
       return hook
     }
