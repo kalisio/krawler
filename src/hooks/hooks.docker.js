@@ -11,8 +11,14 @@ export function connectDocker (options = {}) {
       throw new Error('The \'connectDocker\' hook should only be used as a \'before\' hook.')
     }
 
+    let client = _.get(item, options.clientPath || 'client')
+    if (client) {
+      debug('Already connected to Docker for ' + hook.data.id)
+      return hook
+    }
+
     debug('Connecting to Docker for ' + hook.data.id)
-    const client = new Docker(options)
+    client = new Docker(options)
     _.set(hook.data, options.clientPath || 'client', client)
     debug('Connected to Docker for ' + hook.data.id)
     return hook
@@ -27,7 +33,8 @@ export function disconnectDocker (options = {}) {
     }
     const client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error('You must be connected to Docker before using the \'disconnectDocker\' hook')
+      debug('Already disconnected from Docker for ' + hook.data.id)
+      return hook
     }
 
     debug('Disconnecting from Docker for ' + hook.data.id)

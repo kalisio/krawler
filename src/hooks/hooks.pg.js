@@ -20,7 +20,7 @@ export function connectPG (options = {}) {
     }
 
     debug('Connecting to PG for ' + hook.data.id)
-    const client = new pg.Client(options)
+    client = new pg.Client(options)
     await client.connect()
     _.set(hook.data, options.clientPath || 'client', client)
     debug('Connected to PG for ' + hook.data.id)
