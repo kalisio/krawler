@@ -106,7 +106,7 @@ export function putFTP (options = {}) {
 export function disconnectFTP (options = {}) {
   return async function (hook) {
     if ((hook.type !== 'after') && (hook.type !== 'error')) {
-      throw new Error('The \'disconnectPG\' hook should only be used as a \'after/error\' hook.')
+      throw new Error('The \'disconnectFTP\' hook should only be used as a \'after/error\' hook.')
     }
     const client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) {
@@ -114,13 +114,21 @@ export function disconnectFTP (options = {}) {
     }
 
     debug('Disconnecting from FTP for ' + options)
-    client.raw('quit', (err, data) => {
-      if (err) {
-        throw new Error('\'disconnectFTP\' hook errored: ' + err)
-      }
+    // Gracefully send QUIT command
+    return new Promise((resolve, reject) => {
+      client.raw('quit', (err, data) => {
+        // whatever the outcome is, do call destroy to cleanup ftp object
+        client.destroy()
+        _.unset(hook.data, options.clientPath || 'client')
+
+        if (err) {
+          debug(err)
+          reject(err)
+        } else {
+          debug('Disconnected from FTP for ' + options)
+          resolve(hook)
+        }
+      })
     })
-    _.unset(hook.data, options.clientPath || 'client')
-    debug('Disconnected from FTP for ' + options)
-    return hook
   }
 }
