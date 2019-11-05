@@ -98,7 +98,7 @@ describe('krawler:cli', () => {
           expect(taskEvents.length).to.equal(1)
           const jobEvents = await collection.find({ event: 'job-done' }).toArray()
           expect(jobEvents.length).to.equal(1)
-        }, 10000)
+        }, 11000)
         setTimeout(async () => {
           expect(runCount).to.equal(2) // 2 runs
           const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
@@ -128,11 +128,11 @@ describe('krawler:cli', () => {
           server.close()
           appServer = null
           done()
-        }, 20000)
+        }, 22000)
       })
   })
   // Let enough time to process
-    .timeout(25000)
+    .timeout(30000)
 
   // Cleanup
   after(async () => {
