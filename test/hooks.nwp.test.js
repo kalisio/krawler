@@ -125,7 +125,7 @@ describe('krawler:hooks:nwp', () => {
       })
   })
   // Let enough time to download
-    .timeout(10000)
+    .timeout(30000)
 
   // Cleanup
   after(() => {
