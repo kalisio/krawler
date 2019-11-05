@@ -3,7 +3,7 @@
       <Name>WMS</Name>
       <Title>Service de consultation (WMS) des données issues du modèle de prévision numérique atmosphérique global français. Résolution 0.5 degré sur le globe. Échéances 0 à 114h</Title>
       <Abstract>Le service permet de visualiser les données analysées et prévues issues du modèle numérique global français Arpege</Abstract>
-      <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?"/>
+      <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?"/>
       <ContactInformation>
          <ContactPersonPrimary>
             <ContactPerson/>
@@ -24,7 +24,7 @@
             <DCPType>
                <HTTP>
                   <Get>
-                     <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?"/>
+                     <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?"/>
                   </Get>
                </HTTP>
             </DCPType>
@@ -37,7 +37,7 @@
             <DCPType>
                <HTTP>
                   <Get>
-                     <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?"/>
+                     <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?"/>
                   </Get>
                </HTTP>
             </DCPType>
@@ -49,7 +49,7 @@
       </Exception>
       <inspire_vs:ExtendedCapabilities>
          <inspire_common:MetadataUrl>
-            <inspire_common:URL>http://wispi.meteo.fr/openwis-user-portal/srv/en/iso19139.xml?uuid=urn:x-wmo:md:fr.meteofrance::MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS </inspire_common:URL>
+            <inspire_common:URL>http://wispi.meteo.fr/openwis-user-portal/srv/en/iso19139.xml?uuid=urn:x-wmo:md:fr.meteofrance::MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS </inspire_common:URL>
             <inspire_common:MediaType>application/vnd.iso.19139+xml</inspire_common:MediaType>
          </inspire_common:MetadataUrl>
          <inspire_common:SupportedLanguages>
@@ -89,7 +89,7 @@
                <Title>Style de représentation d'un champ de hauteur de couche limite, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PLANETARY_BOUNDARY_LAYER_HEIGHT__GROUND_OR_WATER_SURFACE&amp;style=H_COULIM__GROUND__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PLANETARY_BOUNDARY_LAYER_HEIGHT__GROUND_OR_WATER_SURFACE&amp;style=H_COULIM__GROUND__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -117,7 +117,7 @@
                <Title>Style de représentation d'un champ  de vent sous forme de barbules.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=UV__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=UV__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -125,7 +125,7 @@
                <Title>Style de représentation d'un champ de vent sous forme de barbules colorées en fonction de la force du vent sur l'échelle de beaufort</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=UV__HEIGHT__BEAUF_NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=UV__HEIGHT__BEAUF_NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -153,7 +153,7 @@
                <Title>Style de représentation d'un champ de température minimale, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MINIMUM_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TMIN__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MINIMUM_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TMIN__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -161,7 +161,7 @@
                <Title>Style de représentation d'un champ de température minimale, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MINIMUM_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TMIN__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MINIMUM_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TMIN__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -188,7 +188,7 @@
                <Title>Style de représentation d'un champ de température de surface, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TEMPERATURE__GROUND_OR_WATER_SURFACE&amp;style=T__GROUND__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TEMPERATURE__GROUND_OR_WATER_SURFACE&amp;style=T__GROUND__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -196,7 +196,7 @@
                <Title>Style de représentation d'un champ de température de surface, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TEMPERATURE__GROUND_OR_WATER_SURFACE&amp;style=T__GROUND__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TEMPERATURE__GROUND_OR_WATER_SURFACE&amp;style=T__GROUND__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -223,7 +223,7 @@
                <Title>Style de représentation d'un champ de quantité totale de précipitations, avec remplissage sans isolignes.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_SNOW_PRECIPITATION__GROUND_OR_WATER_SURFACE&amp;style=NEIGE__GROUND__RADAR_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_SNOW_PRECIPITATION__GROUND_OR_WATER_SURFACE&amp;style=NEIGE__GROUND__RADAR_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -231,7 +231,7 @@
                <Title>Style de représentation d'un champ de quantité totale de précipitations, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_SNOW_PRECIPITATION__GROUND_OR_WATER_SURFACE&amp;style=NEIGE__GROUND__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_SNOW_PRECIPITATION__GROUND_OR_WATER_SURFACE&amp;style=NEIGE__GROUND__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -259,7 +259,7 @@
                <Title>Style de représentation d'un champ de vitesse verticale, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=VERTICAL_VELOCITY_PRESSURE__ISOBARIC_SURFACE&amp;style=VV__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=VERTICAL_VELOCITY_PRESSURE__ISOBARIC_SURFACE&amp;style=VV__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -267,7 +267,7 @@
                <Title>Style de représentation d'un champ de vitesse verticale, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=VERTICAL_VELOCITY_PRESSURE__ISOBARIC_SURFACE&amp;style=VV__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=VERTICAL_VELOCITY_PRESSURE__ISOBARIC_SURFACE&amp;style=VV__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -295,7 +295,7 @@
                <Title>Style de représentation d'un champ de température de point de rosée, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TD__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TD__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -303,7 +303,7 @@
                <Title>Style de représentation d'un champ de température de point de rosée, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TD__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TD__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -311,7 +311,7 @@
                <Title>Style de représentation d'un champ de température de point de rosée, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TD__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TD__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -319,7 +319,7 @@
                <Title>Style de représentation d'un champ de température de point de rosée, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TD__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TD__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -347,7 +347,7 @@
                <Title>Style de représentation d'un champ de température, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=T__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=T__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -355,7 +355,7 @@
                <Title>Style de représentation d'un champ de température, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=T__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=T__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -383,7 +383,7 @@
                <Title>Style de représentation d'un champ de pression, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PRESSURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=P__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PRESSURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=P__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -391,7 +391,7 @@
                <Title>Style de représentation d'un champ de pression, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PRESSURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=P__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PRESSURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=P__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -418,7 +418,7 @@
                <Title>Style de représentation d'un champ de pression sol, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PRESSURE__GROUND_OR_WATER_SURFACE&amp;style=P__GROUND__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PRESSURE__GROUND_OR_WATER_SURFACE&amp;style=P__GROUND__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -446,7 +446,7 @@
                <Title>Style de représentation d'un champ de glace nuageuse, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=CIWC__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=CIWC__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -454,7 +454,7 @@
                <Title>Style de représentation d'un champ de glace nuageuse, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=CIWC__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=CIWC__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -462,7 +462,7 @@
                <Title>Style de représentation d'un champ de glace nuageuse, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=CIWC__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=CIWC__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -470,7 +470,7 @@
                <Title>Style de représentation d'un champ de glace nuageuse, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=CIWC__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=CIWC__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -498,7 +498,7 @@
                <Title>Style de représentation d'un champ d'humidité relative, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__ISOBARIC_SURFACE&amp;style=HU__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__ISOBARIC_SURFACE&amp;style=HU__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -506,7 +506,7 @@
                <Title>Style de représentation d'un champ d'humidité relative, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__ISOBARIC_SURFACE&amp;style=HU__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__ISOBARIC_SURFACE&amp;style=HU__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -514,7 +514,7 @@
                <Title>Style de représentation d'un champ d'humidité relative, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__ISOBARIC_SURFACE&amp;style=HU__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__ISOBARIC_SURFACE&amp;style=HU__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -522,7 +522,7 @@
                <Title>Style de représentation d'un champ d'humidité relative, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__ISOBARIC_SURFACE&amp;style=HU__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__ISOBARIC_SURFACE&amp;style=HU__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -549,7 +549,7 @@
                <Title>Style de représentation d'un champ de température de brillance dans le canal infrarouge 10.8 microns, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=BRIGHTNESS_TEMPERATURE__GROUND_OR_WATER_SURFACE&amp;style=BT__CHANNELS_108__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=BRIGHTNESS_TEMPERATURE__GROUND_OR_WATER_SURFACE&amp;style=BT__CHANNELS_108__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -557,7 +557,7 @@
                <Title>Style de représentation d'un champ de température de brillance dans le canal infrarouge 10.8 microns, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=BRIGHTNESS_TEMPERATURE__GROUND_OR_WATER_SURFACE&amp;style=BT__CHANNELS_108__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=BRIGHTNESS_TEMPERATURE__GROUND_OR_WATER_SURFACE&amp;style=BT__CHANNELS_108__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -584,7 +584,7 @@
                <Title>Style de représentation d'un champ de CAPE, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=CONVECTIVE_AVAILABLE_POTENTIAL_ENERGY__GROUND_OR_WATER_SURFACE&amp;style=CAPE_INS__GROUND__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=CONVECTIVE_AVAILABLE_POTENTIAL_ENERGY__GROUND_OR_WATER_SURFACE&amp;style=CAPE_INS__GROUND__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -592,7 +592,7 @@
                <Title>Style de représentation d'un champ de CAPE, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=CONVECTIVE_AVAILABLE_POTENTIAL_ENERGY__GROUND_OR_WATER_SURFACE&amp;style=CAPE_INS__GROUND__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=CONVECTIVE_AVAILABLE_POTENTIAL_ENERGY__GROUND_OR_WATER_SURFACE&amp;style=CAPE_INS__GROUND__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -619,7 +619,7 @@
                <Title>Style de représentation d'un champ de nébulosité totale, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBUL__GROUND__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBUL__GROUND__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -627,7 +627,7 @@
                <Title>Style de représentation d'un champ de nébulosité totale, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBUL__GROUND__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBUL__GROUND__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -655,7 +655,7 @@
                <Title>Style de représentation d'un champ de température, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TEMPERATURE__ISOBARIC_SURFACE&amp;style=T__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TEMPERATURE__ISOBARIC_SURFACE&amp;style=T__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -663,7 +663,7 @@
                <Title>Style de représentation d'un champ de température, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TEMPERATURE__ISOBARIC_SURFACE&amp;style=T__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TEMPERATURE__ISOBARIC_SURFACE&amp;style=T__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -691,7 +691,7 @@
                <Title>Style de représentation d'un champ d'énergie cinétique turbulente, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TKE__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TKE__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -699,7 +699,7 @@
                <Title>Style de représentation d'un champ d'énergie cinétique turbulente, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TKE__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TKE__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -707,7 +707,7 @@
                <Title>Style de représentation d'un champ d'énergie cinétique turbulente, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TKE__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TKE__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -715,7 +715,7 @@
                <Title>Style de représentation d'un champ d'énergie cinétique turbulente, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TKE__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TKE__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -742,7 +742,7 @@
                <Title>Style de représentation d'un champ de nébulosité de l'étage inférieur, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=LOW_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBBAS__GROUND__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=LOW_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBBAS__GROUND__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -750,7 +750,7 @@
                <Title>Style de représentation d'un champ de nébulosité de l'étage inférieur, avec remplissage unicolore sans isolignes.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=LOW_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBBAS__GROUND__MONO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=LOW_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBBAS__GROUND__MONO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -758,7 +758,7 @@
                <Title>Style de représentation d'un champ de nébulosité de l'étage inférieur, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=LOW_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBBAS__GROUND__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=LOW_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBBAS__GROUND__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -786,7 +786,7 @@
                <Title>Style de représentation d'un champ d'altitude géopotentielle, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=GEOPOTENTIAL__ISOBARIC_SURFACE&amp;style=Z__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=GEOPOTENTIAL__ISOBARIC_SURFACE&amp;style=Z__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -813,7 +813,7 @@
                <Title>Style de représentation d'un champ d'altitude géométrique, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=GEOMETRIC_HEIGHT__GROUND_OR_WATER_SURFACE&amp;style=ALTITUDE__GROUND__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=GEOMETRIC_HEIGHT__GROUND_OR_WATER_SURFACE&amp;style=ALTITUDE__GROUND__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -840,7 +840,7 @@
                <Title>Style de représentation d'un champ de quantité de précipitations, avec remplissage sans isolignes.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_WATER_PRECIPITATION__GROUND_OR_WATER_SURFACE&amp;style=EAU__GROUND__RADAR_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_WATER_PRECIPITATION__GROUND_OR_WATER_SURFACE&amp;style=EAU__GROUND__RADAR_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -848,7 +848,7 @@
                <Title>Style de représentation d'un champ de quantité de précipitations, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_WATER_PRECIPITATION__GROUND_OR_WATER_SURFACE&amp;style=EAU__GROUND__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_WATER_PRECIPITATION__GROUND_OR_WATER_SURFACE&amp;style=EAU__GROUND__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -876,7 +876,7 @@
                <Title>Style de représentation d'un champ de force du vent, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=FF__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=FF__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -884,7 +884,7 @@
                <Title>Style de représentation d'un champ de force du vent, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=FF__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=FF__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -892,7 +892,7 @@
                <Title>Style de représentation d'un champ de force du vent, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=FF__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=FF__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -900,7 +900,7 @@
                <Title>Style de représentation d'un champ de force du vent, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=FF__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=FF__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -928,7 +928,7 @@
                <Title>Style de représentation d'un champ de température pseudo-adiabatique potentielle du thermomètre mouillé, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PSEUDO_ADIABATIC_POTENTIAL_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TPW__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PSEUDO_ADIABATIC_POTENTIAL_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TPW__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -936,7 +936,7 @@
                <Title>Style de représentation d'un champ de température pseudo-adiabatique potentielle du thermomètre mouillé, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PSEUDO_ADIABATIC_POTENTIAL_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TPW__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PSEUDO_ADIABATIC_POTENTIAL_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TPW__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -944,7 +944,7 @@
                <Title>Style de représentation d'un champ de température pseudo-adiabatique potentielle du thermomètre mouillé, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PSEUDO_ADIABATIC_POTENTIAL_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TPW__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PSEUDO_ADIABATIC_POTENTIAL_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TPW__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -952,7 +952,7 @@
                <Title>Style de représentation d'un champ de température pseudo-adiabatique potentielle du thermomètre mouillé, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PSEUDO_ADIABATIC_POTENTIAL_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TPW__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PSEUDO_ADIABATIC_POTENTIAL_TEMPERATURE__ISOBARIC_SURFACE&amp;style=TPW__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -980,7 +980,7 @@
                <Title>Style de représentation d'un champ de glace nuageuse, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE&amp;style=CIWC__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE&amp;style=CIWC__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -988,7 +988,7 @@
                <Title>Style de représentation d'un champ de glace nuageuse, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE&amp;style=CIWC__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE&amp;style=CIWC__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -996,7 +996,7 @@
                <Title>Style de représentation d'un champ de glace nuageuse, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE&amp;style=CIWC__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE&amp;style=CIWC__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1004,7 +1004,7 @@
                <Title>Style de représentation d'un champ de glace nuageuse, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE&amp;style=CIWC__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=SPECIFIC_CLOUD_ICE_WATER_CONTENT__ISOBARIC_SURFACE&amp;style=CIWC__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1032,7 +1032,7 @@
                <Title>Style de représentation d'un champ de température de point de rosée, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TD__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TD__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1040,7 +1040,7 @@
                <Title>Style de représentation d'un champ de température de point de rosée, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TD__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TD__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1048,7 +1048,7 @@
                <Title>Style de représentation d'un champ de température de point de rosée, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TD__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TD__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1056,7 +1056,7 @@
                <Title>Style de représentation d'un champ de température de point de rosée, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TD__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=DEW_POINT_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TD__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1083,7 +1083,7 @@
                <Title>Style de représentation d'un champ de nébulosité de l'étage moyen, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MEDIUM_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBMOY__GROUND__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MEDIUM_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBMOY__GROUND__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1091,7 +1091,7 @@
                <Title>Style de représentation d'un champ de nébulosité de l'étage moyen, avec remplissage unicolore sans isolignes.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MEDIUM_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBMOY__GROUND__MONO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MEDIUM_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBMOY__GROUND__MONO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1099,7 +1099,7 @@
                <Title>Style de représentation d'un champ de nébulosité de l'étage moyen, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MEDIUM_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBMOY__GROUND__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MEDIUM_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBMOY__GROUND__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1127,7 +1127,7 @@
                <Title>Style de représentation d'un champ de température maximale, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MAXIMUM_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TMAX__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MAXIMUM_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TMAX__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1135,7 +1135,7 @@
                <Title>Style de représentation d'un champ de température maximale, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MAXIMUM_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TMAX__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=MAXIMUM_TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=TMAX__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1163,7 +1163,7 @@
                <Title>Style de représentation d'un champ de force du vent, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__ISOBARIC_SURFACE&amp;style=FF__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__ISOBARIC_SURFACE&amp;style=FF__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1171,7 +1171,7 @@
                <Title>Style de représentation d'un champ de force du vent, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__ISOBARIC_SURFACE&amp;style=FF__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__ISOBARIC_SURFACE&amp;style=FF__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1179,7 +1179,7 @@
                <Title>Style de représentation d'un champ de force du vent, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__ISOBARIC_SURFACE&amp;style=FF__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__ISOBARIC_SURFACE&amp;style=FF__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1187,7 +1187,7 @@
                <Title>Style de représentation d'un champ de force du vent, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__ISOBARIC_SURFACE&amp;style=FF__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED__ISOBARIC_SURFACE&amp;style=FF__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1215,7 +1215,7 @@
                <Title>Style de représentation d'un champ de tourbillon absolu, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=ABSOLUTE_VORTICITY__ISOBARIC_SURFACE&amp;style=TA__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=ABSOLUTE_VORTICITY__ISOBARIC_SURFACE&amp;style=TA__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1223,7 +1223,7 @@
                <Title>Style de représentation d'un champ de tourbillon absolu, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=ABSOLUTE_VORTICITY__ISOBARIC_SURFACE&amp;style=TA__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=ABSOLUTE_VORTICITY__ISOBARIC_SURFACE&amp;style=TA__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1250,7 +1250,7 @@
                <Title>Style de représentation d'un champ de quantité totale de précipitations, avec  remplissage sans isolignes.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_PRECIPITATION__GROUND_OR_WATER_SURFACE&amp;style=PRECIP__GROUND__RADAR_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_PRECIPITATION__GROUND_OR_WATER_SURFACE&amp;style=PRECIP__GROUND__RADAR_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1258,7 +1258,7 @@
                <Title>Style de représentation d'un champ de quantité totale de précipitations, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_PRECIPITATION__GROUND_OR_WATER_SURFACE&amp;style=PRECIP__GROUND__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TOTAL_PRECIPITATION__GROUND_OR_WATER_SURFACE&amp;style=PRECIP__GROUND__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1286,7 +1286,7 @@
                <Title>Style de représentation d'un champ de rafale de vent, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED_GUST__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=FF_RAF__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED_GUST__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=FF_RAF__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1294,7 +1294,7 @@
                <Title>Style de représentation d'un champ de rafale de vent, avec isolignes sans remplissage</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED_GUST__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=FF_RAF__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND_SPEED_GUST__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=FF_RAF__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1322,7 +1322,7 @@
                <Title>Style de représentation d'un champ de tourbillon potentiel, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=POTENTIAL_VORTICITY__ISOBARIC_SURFACE&amp;style=TP__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=POTENTIAL_VORTICITY__ISOBARIC_SURFACE&amp;style=TP__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1330,7 +1330,7 @@
                <Title>Style de représentation d'un champ de tourbillon potentiel, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=POTENTIAL_VORTICITY__ISOBARIC_SURFACE&amp;style=TP__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=POTENTIAL_VORTICITY__ISOBARIC_SURFACE&amp;style=TP__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1338,7 +1338,7 @@
                <Title>Style de représentation d'un champ de tourbillon potentiel, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=POTENTIAL_VORTICITY__ISOBARIC_SURFACE&amp;style=TP__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=POTENTIAL_VORTICITY__ISOBARIC_SURFACE&amp;style=TP__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1346,7 +1346,7 @@
                <Title>Style de représentation d'un champ de tourbillon potentiel, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=POTENTIAL_VORTICITY__ISOBARIC_SURFACE&amp;style=TP__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=POTENTIAL_VORTICITY__ISOBARIC_SURFACE&amp;style=TP__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1374,7 +1374,7 @@
                <Title>Style de représentation d'un champ de vent sous forme de barbules.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND__ISOBARIC_SURFACE&amp;style=UV__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND__ISOBARIC_SURFACE&amp;style=UV__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1382,7 +1382,7 @@
                <Title>Style de représentation d'un champ de vent sous forme de barbules colorées en fonction de la force du vent sur l'échelle de beaufort</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND__ISOBARIC_SURFACE&amp;style=UV__ISOBARIC__BEAUF_NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=WIND__ISOBARIC_SURFACE&amp;style=UV__ISOBARIC__BEAUF_NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1409,7 +1409,7 @@
                <Title>Style de représentation d'un champ de pression réduite au niveau de la mer, avec isolignes sans remplissage</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PRESSURE__MEAN_SEA_LEVEL&amp;style=P__SEA__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=PRESSURE__MEAN_SEA_LEVEL&amp;style=P__SEA__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1437,7 +1437,7 @@
                <Title>Style de représentation d'un champ d'énergie cinétique turbulente, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE&amp;style=TKE__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE&amp;style=TKE__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1445,7 +1445,7 @@
                <Title>Style de représentation d'un champ d'énergie cinétique turbulente, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE&amp;style=TKE__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE&amp;style=TKE__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1453,7 +1453,7 @@
                <Title>Style de représentation d'un champ d'énergie cinétique turbulente, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE&amp;style=TKE__ISOBARIC__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE&amp;style=TKE__ISOBARIC__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1461,7 +1461,7 @@
                <Title>Style de représentation d'un champ d'énergie cinétique turbulente, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE&amp;style=TKE__ISOBARIC__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=TURBULENT_KINETIC_ENERGY__ISOBARIC_SURFACE&amp;style=TKE__ISOBARIC__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1488,7 +1488,7 @@
                <Title>Style de représentation d'un champ de nébulosité de l'étage supérieur, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=HIGH_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBHAU__GROUND__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=HIGH_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBHAU__GROUND__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1496,7 +1496,7 @@
                <Title>Style de représentation d'un champ de nébulosité de l'étage supérieur, avec remplissage unicolore sans isolignes.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=HIGH_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBHAU__GROUND__MONO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=HIGH_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBHAU__GROUND__MONO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1504,7 +1504,7 @@
                <Title>Style de représentation d'un champ de nébulosité de l'étage supérieur, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=HIGH_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBHAU__GROUND__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=HIGH_CLOUD_COVER__GROUND_OR_WATER_SURFACE&amp;style=NEBHAU__GROUND__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>
@@ -1532,7 +1532,7 @@
                <Title>Style de représentation d'un champ d'humidité relative, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=HU__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=HU__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1540,7 +1540,7 @@
                <Title>Style de représentation d'un champ d'humidité relative, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=HU__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=HU__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1548,7 +1548,7 @@
                <Title>Style de représentation d'un champ d'humidité relative, avec isolignes et remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=HU__HEIGHT__SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=HU__HEIGHT__SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
             <Style>
@@ -1556,7 +1556,7 @@
                <Title>Style de représentation d'un champ d'humidité relative, avec isolignes sans remplissage.</Title>
                <LegendURL>
                   <Format>image/png</Format>
-                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=HU__HEIGHT__NO_SHADING&amp;format=image/png"/>
+                  <OnlineResource xlink:href="https://geoservices.meteofrance.fr/api/__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS?service=WMS&amp;version=1.3.0&amp;sld_version=1.1.0&amp;request=GetLegendGraphic&amp;layer=RELATIVE_HUMIDITY__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND&amp;style=HU__HEIGHT__NO_SHADING&amp;format=image/png"/>
                </LegendURL>
             </Style>
          </Layer>

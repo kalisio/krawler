@@ -68,7 +68,7 @@ describe('krawler:hooks:grid', () => {
         id: '<%= jobId %>-<%= taskId %>.png',
         type: 'wms',
         options: {
-          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WMS',
+          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WMS',
           version: '1.3.0',
           token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
           layers: 'TEMPERATURE__ISOBARIC_SURFACE',
@@ -160,7 +160,7 @@ describe('krawler:hooks:grid', () => {
           longitudeLabel: 'Long',
           latitudeLabel: 'Lat'
           */
-          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
+          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WCS',
           version: '2.0.1',
           token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
           coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),

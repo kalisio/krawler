@@ -108,6 +108,7 @@ describe('krawler:jobs', () => {
       .then(tasks => {
         expect(tasks).toExist()
         expect(tasks.length).to.equal(1)
+        expect(tasks[0].error).toExist()
       })
   })
   // Let enough time to fail
@@ -117,7 +118,7 @@ describe('krawler:jobs', () => {
     nock('https://www.google.com')
       .get('/')
       .delay(5000)
-      .reply(403)
+      .reply(200, '<html></html>')
     jobsService.create({
       id: 'job',
       options: { faultTolerant: true, timeout: 1 },
@@ -191,7 +192,7 @@ describe('krawler:jobs', () => {
         id: '<%= jobId %>-<%= taskId %>.tif',
         type: 'wcs',
         options: {
-          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
+          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WCS',
           version: '2.0.1',
           token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
           coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
@@ -219,7 +220,7 @@ describe('krawler:jobs', () => {
       })
   })
   // Let enough time to download
-    .timeout(15000)
+    .timeout(60000)
 
   // Cleanup
   after(() => {

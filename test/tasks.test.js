@@ -104,7 +104,7 @@ describe('krawler:tasks', () => {
       store: 'test-store',
       type: 'wcs',
       options: {
-        url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-05-GLOBE-WCS',
+        url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WCS',
         version: '2.0.1',
         token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
         coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
@@ -127,7 +127,7 @@ describe('krawler:tasks', () => {
       })
   })
   // Let enough time to download
-    .timeout(10000)
+    .timeout(30000)
 
   it('creates a WFS task', (done) => {
     tasksService.create({
@@ -154,7 +154,7 @@ describe('krawler:tasks', () => {
       })
   })
   // Let enough time to download
-    .timeout(10000)
+    .timeout(30000)
 
   it('creates an OVERPASS task', (done) => {
     tasksService.create({
@@ -173,7 +173,7 @@ describe('krawler:tasks', () => {
       })
   })
   // Let enough time to download
-    .timeout(10000)
+    .timeout(30000)
 
   it('removes a task', (done) => {
     tasksService.remove('task.tif', { store: storage })
