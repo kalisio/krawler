@@ -13,7 +13,7 @@ export function connectPG (options = {}) {
       throw new Error('The \'connectPG\' hook should only be used as a \'before\' hook.')
     }
 
-    let client = _.get(item, options.clientPath || 'client')
+    let client = _.get(hook.data, options.clientPath || 'client')
     if (client) {
       debug('Already connected to PG for ' + hook.data.id)
       return hook

@@ -11,7 +11,7 @@ export function connectDocker (options = {}) {
       throw new Error('The \'connectDocker\' hook should only be used as a \'before\' hook.')
     }
 
-    let client = _.get(item, options.clientPath || 'client')
+    let client = _.get(hook.data, options.clientPath || 'client')
     if (client) {
       debug('Already connected to Docker for ' + hook.data.id)
       return hook
