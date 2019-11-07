@@ -14,6 +14,10 @@ describe('krawler:hooks:mongo', () => {
     chailint(chai, util)
   })
 
+  const mongoOptions = {
+    url: 'mongodb://127.0.0.1:27017/krawler-test'
+  }
+
   const mongoHook = {
     type: 'before',
     data: {},
@@ -21,13 +25,18 @@ describe('krawler:hooks:mongo', () => {
   }
 
   it('connect to MongoDB', async () => {
-    await pluginHooks.connectMongo({ url: 'mongodb://127.0.0.1:27017/krawler-test' })(mongoHook)
+    await pluginHooks.connectMongo(mongoOptions)(mongoHook)
     expect(mongoHook.data.client).toExist()
     expect(mongoHook.data.client.db).toExist()
     expect(mongoHook.data.client.isConnected()).beTrue()
   })
   // Let enough time to proceed
     .timeout(5000)
+
+  it('connect to MongoDB again', async () => {
+    const result = await pluginHooks.connectMongo(mongoOptions)(mongoHook).then(ok => ok, no => no)
+    expect(result).to.be.equal(mongoHook)
+  })
 
   it('creates MongoDB collection', async () => {
     await pluginHooks.createMongoCollection({ collection: 'geojson', index: { geometry: '2dsphere' } })(mongoHook)
@@ -144,4 +153,9 @@ describe('krawler:hooks:mongo', () => {
   })
   // Let enough time to proceed
     .timeout(5000)
+
+  it('disconnect from MongoDB again', async () => {
+    const result = await pluginHooks.disconnectMongo()(mongoHook).then(ok => ok, no => no)
+    expect(result).to.be.equal(mongoHook)
+  })
 })
