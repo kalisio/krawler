@@ -38,7 +38,8 @@ export function disconnectMongo (options = {}) {
     const item = hook.data // getItems(hook)
     const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
-      throw new Error('You must be connected to MongoDB before using the \'disconnectMongo\' hook')
+      debug('Already disconnected from MongoDB for ' + item.id)
+      return hook
     }
 
     debug('Disconnecting from MongoDB for ' + item.id)

@@ -45,6 +45,12 @@ describe('krawler:hooks:ftp', () => {
   .timeout(5000)
   */
 
+  it('connect to FTP again', async () => {
+    // Must not fail
+    const result = await pluginHooks.connectFTP(ftpOptions)(ftpHook).then(ok => ok, no => no)
+    expect(result).to.be.equal(ftpHook)
+  })
+
   it('get from FTP', async () => {
     try {
       fs.mkdirSync(store.path)
@@ -74,4 +80,22 @@ describe('krawler:hooks:ftp', () => {
   })
   // Let enough time to proceed
     .timeout(5000)
+
+  it('disconnect from FTP again', async function () {
+    // Must not fail
+    const result = await pluginHooks.disconnectFTP()(ftpHook).then(ok => ok, no => no)
+    expect(result).to.be.equal(ftpHook)
+  })
+
+  it('try to get while not connected', async function () {
+    // Must fail
+    const result = await pluginHooks.getFTP(ftpOptions)(ftpHook).then(ok => ok, no => no)
+    expect(result).to.be.instanceOf(Error)
+  })
+
+  it('try to put while not connected', async function () {
+    // Must fail
+    const result = await pluginHooks.putFTP(ftpOptions)(ftpHook).then(ok => ok, no => no)
+    expect(result).to.be.instanceOf(Error)
+  })
 })

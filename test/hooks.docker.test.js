@@ -14,6 +14,14 @@ describe('krawler:hooks:docker', () => {
     chailint(chai, util)
   })
 
+  const dockerOptions = {
+    // Windows socket path: //./pipe/docker_engine ( Windows 10 )
+    // Linux & Darwin socket path: /var/run/docker.sock
+    socketPath: (os.type() === 'Windows_NT' ? '//./pipe/docker_engine' : '/var/run/docker.sock')
+    // host: 'localhost',
+    // port: 2375
+  }
+
   const dockerHook = {
     type: 'before',
     data: {
@@ -36,19 +44,18 @@ describe('krawler:hooks:docker', () => {
     .timeout(5000)
 
   it('connect to docker', () => {
-    return pluginHooks.connectDocker({
-      // Windows socket path: //./pipe/docker_engine ( Windows 10 )
-      // Linux & Darwin socket path: /var/run/docker.sock
-      socketPath: (os.type() === 'Windows_NT' ? '//./pipe/docker_engine' : '/var/run/docker.sock')
-      // host: 'localhost',
-      // port: 2375
-    })(dockerHook)
+    return pluginHooks.connectDocker(dockerOptions)(dockerHook)
       .then(hook => {
         expect(hook.data.client).toExist()
       })
   })
   // Let enough time to proceed, pull image on first run
     .timeout(5000)
+
+  it('connect to docker again', async () => {
+    const result = await pluginHooks.connectDocker(dockerOptions)(dockerHook).then(ok => ok, no => no)
+    expect(result).to.be.equal(dockerHook)
+  })
 
   it('create a container', () => {
     return pluginHooks.createDockerContainer({
@@ -149,6 +156,11 @@ describe('krawler:hooks:docker', () => {
   })
   // Let enough time to proceed, pull image on first run
     .timeout(5000)
+
+  it('disconnect from docker again', async () => {
+    const result = await pluginHooks.disconnectDocker()(dockerHook).then(ok => ok, no => no)
+    expect(result).to.be.equal(dockerHook)
+  })
 
   it('untar output file', () => {
     return pluginHooks.untar({
