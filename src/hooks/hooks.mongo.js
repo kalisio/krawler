@@ -187,6 +187,31 @@ export function writeMongoCollection (options = {}) {
   }
 }
 
+// Create aggregation
+export function createMongoAggregation (options = {}) {
+  return async function (hook) {
+    const item = hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
+    if (_.isNil(client)) {
+      throw new Error('You must be connected to MongoDB before using the \'createMongoAggregation\' hook')
+    }
+
+    const collectionName = template(item, _.get(options, 'collection', _.snakeCase(item.id)))
+    const collection = client.db.collection(collectionName)
+    const pipeline = options.pipeline
+    debug(`Creating aggregation on collection ${collectionName} with the pipeline `, pipeline)
+    let cursor = await collection.aggregate(pipeline)
+    let result = await cursor.toArray()
+    // Allow transform after aggregation
+    if (options.transform) {
+      const templatedTransform = templateObject(item, options.transform)
+      result = transformJsonObject(json, templatedTransform)
+    }
+    _.set(hook, options.dataPath || 'result.data', result)
+    return hook
+  }
+}
+
 // Delete documents in a collection
 export function deleteMongoCollection (options = {}) {
   return async function (hook) {
