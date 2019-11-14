@@ -1,9 +1,13 @@
 #!/bin/bash
 
-# Build docker with version number only on release
+# Define image name
+IMAGE_NAME="$TRAVIS_REPO_SLUG"
+
+# Define image tag
+# Use version number only on release
 if [[ -z "$TRAVIS_TAG" ]]
 then
-	export VERSION=latest
+	IMAGE_TAG=latest
 else
-	export VERSION=$(node -p -e "require('./package.json').version")
+	IMAGE_TAG=$(node -p -e "require('./package.json').version")
 fi
