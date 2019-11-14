@@ -103,7 +103,7 @@ When running the krawler as a cron job note that it provides a healthcheck endpo
 * `error`: returned error object whenever the cron job has erroned
 * `nbFailedTasks`: number of failed tasks for last run for fault-tolerant jobs
 * `nbSuccessfulTasks`: number of successful tasks for last run for fault-tolerant jobs
-* `successRate`: Ratio of successful tasks / failed tasks
+* `successRate`: Ratio of successful tasks / total tasks
 
 The returned HTTP code is `500` whenever an error has occured in the last run, `200` otherwise.
 
@@ -118,9 +118,9 @@ For convenience the krawler also includes a built-in healthcheck script that cou
 * **port**: port used by the krawler (defaults to `3030`)
 * **api**: indicates if the krawler has been launched as a web service/API
 * **api-prefix**: api prefix used when launching the krawler as a web service/API (defaults to `/api`)
-* **success-rate**: the success rate for fault-tolerant jobs to be considered as successful (defaults to 1)
-* **max-duration**: the maximum run duration in seconds for fault-tolerant jobs to be considered as failed (defaults to unset)
-* **nb-skipped-jobs**: the number of skipped runs for fault-tolerant jobs to be considered as failed (defaults to 3)
+* **success-rate**: the success rate for fault-tolerant jobs to be considered as successful when greater or equal (defaults to 1)
+* **max-duration**: the maximum run duration in seconds for fault-tolerant jobs to be considered as failed if greater than (defaults to unset)
+* **nb-skipped-jobs**: the number of skipped runs for scheduled fault-tolerant jobs to be considered as failed (defaults to 3)
 * **slack-webhook**: [Slack webhook URL](https://api.slack.com/incoming-webhooks) to post messages on failure (defaults to process.env.SLACK_WEBHOOK_URL)
 * **message-template**: Message template used on failure for console and Slack output (defaults to `Job <%= jobId %>: <%= error.message %>`)
 * **link-template**: Link template used on failure for Slack output (defaults to empty value)
