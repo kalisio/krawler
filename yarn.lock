@@ -5116,7 +5116,7 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-gdal@^0.9.6, gdal@~0.9.3:
+gdal@~0.9.3:
   version "0.9.6"
   resolved "https://registry.yarnpkg.com/gdal/-/gdal-0.9.6.tgz#0cf75d830d35847b4274368b10e04a925321a0ba"
   dependencies:

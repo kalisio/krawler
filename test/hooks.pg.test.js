@@ -20,7 +20,7 @@ describe('krawler:hooks:pg', () => {
   }
 
   const pgHook = {
-    type: 'before',
+    type: 'before'
     /*
     data: { id: 'ftp' },
     params: { store: store }
