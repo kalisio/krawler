@@ -47,8 +47,10 @@ export async function createApp (job, options = {}) {
     path: apiPrefix + 'ws',
     transports: ['websocket']
   }))
-  if (options.sync) {
-    app.sync = mubsub(options.sync)
+  // Env var can be overridden by option
+  const sync = options.sync || process.env.SYNC_DB_URL
+  if (sync) {
+    app.sync = mubsub(sync)
     const channel = app.sync.channel('krawler-events')
     app.on('krawler', (event) => {
       channel.publish(event.name, event.data)
@@ -91,7 +93,7 @@ export async function createApp (job, options = {}) {
   const port = options.port || 3030
   if (options.api) console.log('Server listening to ' + port)
   server = app.listen(port)
-  if (options.sync) {
+  if (sync) {
     server.on('close', () => app.sync.close())
   }
   await new Promise((resolve, reject) => {
