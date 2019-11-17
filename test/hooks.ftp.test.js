@@ -18,8 +18,8 @@ describe('krawler:hooks:ftp', () => {
     user: 'demo',
     pass: 'password',
     remoteDir: '/pub/example',
-    remoteFile: '/pub/example/ConsoleClient.png',
-    localFile: path.join(__dirname, 'output', 'ConsoleClient.png')
+    remoteFile: '/pub/example/readme.txt',
+    localFile: path.join(__dirname, 'output', 'readme.txt')
   }
 
   const ftpHook = {
@@ -58,7 +58,7 @@ describe('krawler:hooks:ftp', () => {
       // If already exist
     }
     await pluginHooks.getFTP(ftpOptions)(ftpHook)
-    expect(fs.existsSync(path.join(store.path, 'ConsoleClient.png'))).beTrue()
+    expect(fs.existsSync(path.join(store.path, 'readme.txt'))).beTrue()
   })
   // Let enough time to proceed
     .timeout(5000)
