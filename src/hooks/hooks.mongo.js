@@ -201,7 +201,7 @@ export function createMongoAggregation (options = {}) {
     const collection = client.db.collection(collectionName)
     const pipeline = options.pipeline
     debug(`Creating aggregation on collection ${collectionName} with the pipeline `, pipeline)
-    const cursor = await collection.aggregate(pipeline)
+    const cursor = await collection.aggregate(pipeline, options)
     let result = await cursor.toArray()
     // Allow transform after aggregation
     if (options.transform) {
