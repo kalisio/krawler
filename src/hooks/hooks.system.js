@@ -37,15 +37,20 @@ export function untar (options = {}) {
 export function runCommand (options = {}) {
   async function run (item) {
     const command = template(item, options.command)
-    debug('Running command', command)
-    const { stdout, stderr } = await exec(command, options.options)
-    if (options.stdout) {
-      item.stdout = stdout
-      console.log(stdout)
-    }
-    if (options.stderr) {
-      item.stderr = stderr
-      console.error(stderr)
+    const commands = (Array.isArray(command) ? command : [command])
+    for (let i = 0; i < commands.length; i++) {
+      debug('Running command', commands[i])
+      const { stdout, stderr } = await exec(commands[i], options.options)
+      if (options.stdout) {
+        if (i > 0) item.stdout += stdout
+        else item.stdout = stdout
+        console.log(stdout)
+      }
+      if (options.stderr) {
+        if (i > 0) item.stderr += stderr
+        else item.stderr = stderr
+        console.error(stderr)
+      }
     }
   }
   return callOnHookItems(run)

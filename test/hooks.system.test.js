@@ -49,6 +49,20 @@ describe('krawler:hooks:system', () => {
   // Let enough time to proceed
     .timeout(5000)
 
+  it('run multiple commands', () => {
+    return pluginHooks.runCommand({
+      command: ['echo hello', 'echo <%= id %>'],
+      stdout: true
+    })(commandHook)
+      .then(hook => {
+        expect(hook.data.stdout).toExist()
+        expect(hook.data.stdout).to.include('hello')
+        expect(hook.data.stdout).to.include('command')
+      })
+  })
+  // Let enough time to proceed
+    .timeout(5000)
+
   it('tar a file', () => {
     commandHook.data.id = 'krawler-icon'
     return pluginHooks.tar({
