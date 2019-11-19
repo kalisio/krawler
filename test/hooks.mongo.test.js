@@ -83,6 +83,25 @@ describe('krawler:hooks:mongo', () => {
   // Let enough time to proceed
     .timeout(5000)
 
+    it('create MongoDB aggregation', async () => {
+      await pluginHooks.createMongoAggregation({
+        collection: 'geojson',
+        pipeline: {$group: { 
+            _id: "$geometry.type", 
+            num: {$sum:1}
+          }
+        },
+        dataPath: 'result.data'
+      })(mongoHook)
+      const results = mongoHook.result.data
+      expect(results.length).to.equal(3)
+      expect(results[0].num).to.equal(1)
+      expect(results[1].num).to.equal(1)
+      expect(results[2].num).to.equal(1)
+    })
+    // Let enough time to proceed
+      .timeout(5000)
+
   it('deletes MongoDB collection', async () => {
     await pluginHooks.deleteMongoCollection({ collection: 'geojson', filter: { 'geometry.type': 'Point' } })(mongoHook)
     const collection = mongoHook.data.client.db.collection('geojson')

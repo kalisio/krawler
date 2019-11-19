@@ -200,6 +200,9 @@ export function createMongoAggregation (options = {}) {
     const collectionName = template(item, _.get(options, 'collection', _.snakeCase(item.id)))
     const collection = client.db.collection(collectionName)
     const pipeline = options.pipeline
+    if (_.isNil(pipeline)) {
+      throw new Error('You must define a pipeline to use the \'createMongoAggregation\' hook')
+    }
     debug(`Creating aggregation on collection ${collectionName} with the pipeline `, pipeline)
     const cursor = await collection.aggregate(pipeline, options)
     let result = await cursor.toArray()

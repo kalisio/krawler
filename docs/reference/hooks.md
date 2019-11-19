@@ -385,6 +385,19 @@ Inserts JSON into an existing collection. Hook options are the following:
 If the input data is a GeoJSON collection the array of features will be pushed into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections.
 :::
 
+### createMongoAggregation(options)
+
+Creates an [aggregation pipeline](https://docs.mongodb.com/manual/aggregation/#aggregation-framework) on an existing collection. Hook options are the following:
+* **collection**: the name of the collection to used, defaults to the hook object ID
+* **dataPath**: property path where to store the result of the aggregation, defaults to `data.result`
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* **transform**: perform transformation using these options before write, see description in [transformJson](./hooks.md#transformjson-options)
+* any option supported by `options` argument of the [aggregate](https://docs.mongodb.com/manual/reference/method/db.collection.aggregate/) function.
+  
+::: tip
+If the input data is a GeoJSON collection the array of features will be pushed into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections.
+:::
+
 ### dropMongoBucket(options)
 
 Drop if exists a bucket in a MongoDB database. Hook options are the following:
