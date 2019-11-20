@@ -25,7 +25,21 @@ jobs:
     services:
     - docker
     script:
-    - bash .travis.build.sh
+    - |
+      IMAGE_NAME="$TRAVIS_REPO_SLUG"
+      if [[ -z "$TRAVIS_TAG" ]]; then
+        IMAGE_TAG=latest
+      else
+        IMAGE_TAG=$(node -p -e "require('./package.json').version")
+      fi
+      docker build -f dockerfile -t $IMAGE_NAME:$IMAGE_TAG .
+    before_deploy:
+    - docker login -u="$DOCKER_USER" -p="$DOCKER_PASSWORD"
+    deploy:
+      provider: script
+      script: docker push $IMAGE_NAME:$IMAGE_TAG
+      on:
+        all_branches: true
 
   - stage: DOC
     language: node_js
