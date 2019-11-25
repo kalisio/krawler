@@ -8,9 +8,8 @@ const debug = makeDebug('krawler:jobs')
 // Create the async job
 async function createJob (options = {}, store = null, tasks, id, taskTemplate) {
   debug(`Creating async job ${id} with following options`, options)
-  let hasTimeout = false
-  // Check for timeout
-  if (options.timeout) setTimeout(() => { hasTimeout = true }, options.timeout)
+  const hrstart = process.hrtime()
+  
   const runTask = async (task, params) => {
     const faultTolerant = options.faultTolerant || task.faultTolerant
     const attempts = task.attemptsLimit || options.attemptsLimit || 1
@@ -66,10 +65,13 @@ async function createJob (options = {}, store = null, tasks, id, taskTemplate) {
         (i === tasks.length - 1)) {
       try {
         const results = await Promise.all(workers)
+        const hrend = process.hrtime(hrstart)
+        const duration = (1000 * hrend[0] + hrend[1] / 1e6)
         taskResults = taskResults.concat(results)
-        debug(results.length + ' tasks ran', results, hasTimeout)
+        debug(results.length + ' tasks ran', results)
+        debug(taskResults.length + ` tasks ran from start in ${duration} ms`)
         // Check if timeout has been reached
-        if (hasTimeout) throw new Timeout('Job timeout reached')
+        if (options.timeout && (duration > options.timeout)) throw new Timeout('Job timeout reached')
       } catch (error) {
         debug('Some tasks failed', error)
         throw error
