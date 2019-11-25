@@ -125,7 +125,7 @@ export function runJob (job, options = {}) {
         const hrend = process.hrtime(hrstart)
         console.timeEnd('Running time')
         Healthcheck.isRunning = false
-        Healthcheck.duration = hrend[0] // Only seconds
+        Healthcheck.duration = hrend[0] + (hrend[1] / 1e9)
         Healthcheck.error = null
         // Compute the error ratio for fault-tolerant jobs
         Healthcheck.nbFailedTasks = 0
