@@ -29,14 +29,14 @@ export function connectFTP (options = {}) {
 
 // List files on the remote directory
 export function listFTP (options = {}) {
-  async function get (item, hook) {
+  async function list (item, hook) {
     const client = _.get(hook.data, options.clientPath || 'client')
     if (_.isNil(client)) throw new Error('You must be connected to an FTP server before using the \'listFTP\' hook')
     const remoteDir = template(item, options.remoteDir || options.key || (item.id))
 
     debug('Listing dir ' + remoteDir)
     return new Promise((resolve, reject) => {
-      client.list(remoteDir, (err, res) => {
+      client.ls(remoteDir, (err, res) => {
         if (err) {
           reject(err)
         } else {
@@ -48,7 +48,7 @@ export function listFTP (options = {}) {
     })
   }
 
-  return callOnHookItems(get)
+  return callOnHookItems(list)
 }
 
 // Get a file on the FTP server
