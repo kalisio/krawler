@@ -355,6 +355,17 @@ describe('krawler:hooks:main', () => {
       })
   })
 
+  it('apply function raising error', (done) => {
+    pluginHooks.apply({
+      function: (item) => { throw new Error('apply error') }
+    })(applyHook)
+      .catch(error => {
+        expect(error).toExist()
+        expect(error.message).to.equal('apply error')
+        done()
+      })
+  })
+
   it('apply function if with match filter', () => {
     applyHook.type = 'after'
     applyHook.method = 'create' // Required to use hook pipeline

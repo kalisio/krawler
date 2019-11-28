@@ -6,9 +6,10 @@ import path from 'path'
 import nock from 'nock'
 import moment from 'moment'
 import plugin from '../src'
+import { hooks as pluginHooks } from '../src'
 
 describe('krawler:jobs', () => {
-  let app, server, storage, storesService, jobsService
+  let app, server, storage, storesService, jobsService, tasksService
 
   before(() => {
     chailint(chai, util)
@@ -21,6 +22,7 @@ describe('krawler:jobs', () => {
     app.use('stores', plugin.stores())
     storesService = app.service('stores')
     app.use('tasks', plugin.tasks())
+    tasksService = app.service('tasks')
     app.use('jobs', plugin.jobs())
     jobsService = app.service('jobs')
     expect(jobsService).toExist()
@@ -221,6 +223,40 @@ describe('krawler:jobs', () => {
   })
   // Let enough time to download
     .timeout(60000)
+
+  it('creates a job with hooks', () => {
+    tasksService.hooks({ after: pluginHooks.apply({ function: (item) => { item.state = 'processed' } }) })
+    return jobsService.create({
+      id: 'job',
+      tasks: [
+        { id: 'job-apply.html', type: 'noop' }
+      ]
+    })
+      .then(tasks => {
+        expect(tasks).toExist()
+        expect(tasks.length).to.equal(1)
+        expect(tasks[0].state).to.equal('processed')
+      })
+  })
+  // Let enough time to fail
+    .timeout(5000)
+
+  it('creates a failed job with hooks', (done) => {
+    tasksService.hooks({ before: pluginHooks.apply({ function: (item) => { throw new Error('apply error') } }) })
+    jobsService.create({
+      id: 'job',
+      tasks: [
+        { id: 'job-apply-error.html', type: 'noop' }
+      ]
+    })
+      .catch(error => {
+        expect(error).toExist()
+        expect(error.message).to.equal('apply error')
+        done()
+      })
+  })
+  // Let enough time to fail
+    .timeout(5000)
 
   // Cleanup
   after(() => {
