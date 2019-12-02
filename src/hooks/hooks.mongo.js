@@ -182,7 +182,7 @@ export function writeMongoCollection (options = {}) {
       debug(`Inserting ${chunks.length} JSON document in the ${collectionName} collection `)
       await collection.bulkWrite(chunks[i].map(chunk => {
         return { insertOne: { document: chunk } }
-      }))
+      }), options )
     }
     return hook
   }

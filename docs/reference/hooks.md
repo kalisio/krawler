@@ -380,7 +380,8 @@ Inserts JSON into an existing collection. Hook options are the following:
 * **chunkSize**: number of GeoJson features for the [batch insert](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/)
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **transform**: perform transformation using these options before write, see description in [transformJson](./hooks.md#transformjson-options)
-
+* any option supported by `options` argument of the [bulkWrite](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/) function.
+  
 ::: tip
 If the input data is a GeoJSON collection the array of features will be pushed into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections.
 :::
