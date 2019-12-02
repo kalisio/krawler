@@ -94,6 +94,7 @@ function getFaultTolerantHook (hookFunction) {
       const result = await hookFunction(hook)
       return result
     } catch (error) {
+      debug('Catching fault-tolerant hook')
       console.error(error)
       return hook
     }

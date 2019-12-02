@@ -224,8 +224,37 @@ describe('krawler:jobs', () => {
   // Let enough time to download
     .timeout(60000)
 
-  it('creates a job with hooks', () => {
-    tasksService.hooks({ after: pluginHooks.apply({ function: (item) => { item.state = 'processed' } }) })
+  // Add hooks and defaults to no error raised
+  let raise = 'none'
+  it('Add hooks to task service', () => {
+    pluginHooks.activateHooks({
+      after: {
+        applyProcessed: {
+          hook: 'apply',
+          function: (item) => { item.state = 'processed' }
+        }
+      },
+      before: {
+        applyError: {
+          hook: 'apply',
+          function: (item) => {
+            if (raise !== 'error') return
+            throw new Error('apply error')
+          }
+        },
+        applyTolerantError: {
+          hook: 'apply',
+          function: (item) => {
+            if (raise !== 'fault-tolerant') return
+            throw new Error('apply error')
+          },
+          faultTolerant: true
+        }
+      }
+    }, tasksService)
+  })
+  
+  it('creates a job with task hooks', () => {
     return jobsService.create({
       id: 'job',
       tasks: [
@@ -241,8 +270,8 @@ describe('krawler:jobs', () => {
   // Let enough time to fail
     .timeout(5000)
 
-  it('creates a failed job with hooks', (done) => {
-    tasksService.hooks({ before: pluginHooks.apply({ function: (item) => { throw new Error('apply error') } }) })
+  it('creates a failed job with task hooks', (done) => {
+    raise = 'error'
     jobsService.create({
       id: 'job',
       tasks: [
@@ -253,6 +282,23 @@ describe('krawler:jobs', () => {
         expect(error).toExist()
         expect(error.message).to.equal('apply error')
         done()
+      })
+  })
+  // Let enough time to fail
+    .timeout(5000)
+
+  it('creates a failed job with fault-tolerant task hooks', () => {
+    raise = 'fault-tolerant'
+    jobsService.create({
+      id: 'job',
+      tasks: [
+        { id: 'job-apply-error.html', type: 'noop' }
+      ]
+    })
+      .then(tasks => {
+        expect(tasks).toExist()
+        expect(tasks.length).to.equal(1)
+        expect(tasks[0].state).to.equal('processed')
       })
   })
   // Let enough time to fail
