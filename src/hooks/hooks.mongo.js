@@ -147,6 +147,29 @@ export function readMongoCollection (options = {}) {
   }
 }
 
+function getChunks(hook, options) {
+  // Defines the chunks
+  let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
+  // Allow transform before write
+  if (options.transform) {
+    const templatedTransform = templateObject(item, options.transform)
+    json = transformJsonObject(json, templatedTransform)
+  }
+  let chunks = []
+  // Handle specific case of GeoJson
+  if (_.get(json, 'type') === 'FeatureCollection') {
+    chunks = _.chunk(json.features, _.get(options, 'chunkSize', 100))
+  } else if (_.get(json, 'type') === 'Feature') {
+    chunks.push([json])
+  } else if (Array.isArray(json)) {
+    chunks = _.chunk(json, _.get(options, 'chunkSize', 100))
+  } else {
+    chunks.push([json])
+  }
+  
+  return chunks
+}
+
 // Insert JSON document(s) in a collection
 export function writeMongoCollection (options = {}) {
   return async function (hook) {
@@ -159,30 +182,44 @@ export function writeMongoCollection (options = {}) {
     const collectionName = template(item, _.get(options, 'collection', _.snakeCase(item.id)))
     const collection = client.db.collection(collectionName)
     // Defines the chunks
-    let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
-    // Allow transform before write
-    if (options.transform) {
-      const templatedTransform = templateObject(item, options.transform)
-      json = transformJsonObject(json, templatedTransform)
-    }
-    let chunks = []
-    // Handle specific case of GeoJson
-    if (_.get(json, 'type') === 'FeatureCollection') {
-      chunks = _.chunk(json.features, _.get(options, 'chunkSize', 100))
-    } else if (_.get(json, 'type') === 'Feature') {
-      chunks.push([json])
-    } else if (Array.isArray(json)) {
-      chunks = _.chunk(json, _.get(options, 'chunkSize', 100))
-    } else {
-      chunks.push([json])
-    }
+    const chunks = getChunks(hook, options)
 
     // Write the chunks
     for (let i = 0; i < chunks.length; ++i) {
       debug(`Inserting ${chunks.length} JSON document in the ${collectionName} collection `)
       await collection.bulkWrite(chunks[i].map(chunk => {
         return { insertOne: { document: chunk } }
-      }), options )
+      }), options)
+    }
+    return hook
+  }
+}
+
+// Update JSON document(s) in a collection
+export function updateMongoCollection (options = {}) {
+  return async function (hook) {
+    const item = hook.data // getItems(hook)
+    const client = _.get(item, options.clientPath || 'client')
+    if (_.isNil(client)) {
+      throw new Error('You must be connected to MongoDB before using the \'updateMongoCollection\' hook')
+    }
+
+    const collectionName = template(item, _.get(options, 'collection', _.snakeCase(item.id)))
+    const collection = client.db.collection(collectionName)
+    // Defines the chunks
+    const chunks = getChunks(hook, options)
+        
+    // Write the chunks
+    for (let i = 0; i < chunks.length; ++i) {
+      debug(`Updating ${chunks.length} JSON document in the ${collectionName} collection `)
+      await collection.bulkWrite(chunks[i].map(chunk => {
+        return { updateOne: {
+          filter: templateQueryObject(chunk, options.filter || {}),
+          upsert: options.upsert || false,
+          hint: options.hint,
+          update: { $set: chunk }
+        } }
+      }), options)
     }
     return hook
   }

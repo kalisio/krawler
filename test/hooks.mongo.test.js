@@ -83,24 +83,50 @@ describe('krawler:hooks:mongo', () => {
   // Let enough time to proceed
     .timeout(5000)
 
-    it('create MongoDB aggregation', async () => {
-      await pluginHooks.createMongoAggregation({
-        collection: 'geojson',
-        pipeline: {$group: { 
-            _id: "$geometry.type", 
-            num: {$sum:1}
-          }
-        },
-        dataPath: 'result.data'
-      })(mongoHook)
-      const results = mongoHook.result.data
-      expect(results.length).to.equal(3)
-      expect(results[0].num).to.equal(1)
-      expect(results[1].num).to.equal(1)
-      expect(results[2].num).to.equal(1)
+  it('updates MongoDB collection', async () => {
+    mongoHook.type = 'after'
+    mongoHook.result.data = {
+      type: 'FeatureCollection',
+      features: geojson.features.map(feature => {
+        delete feature.geometry
+        delete feature.type
+        feature.properties = { prop0: 'value1' }
+        return feature
+      })
+    }
+    await pluginHooks.updateMongoCollection({
+      collection: 'geojson',
+      filter: { id: '<%= id %>' }
+    })(mongoHook)
+    const collection = mongoHook.data.client.db.collection('geojson')
+    const results = await collection.find({}).toArray()
+    expect(results.length).to.equal(3)
+    results.forEach(result => {
+      expect(result.properties).toExist()
+      expect(result.properties.prop0).to.equal('value1')
     })
-    // Let enough time to proceed
-      .timeout(5000)
+  })
+  // Let enough time to proceed
+    .timeout(5000)
+
+  it('create MongoDB aggregation', async () => {
+    await pluginHooks.createMongoAggregation({
+      collection: 'geojson',
+      pipeline: { $group: { 
+          _id: '$geometry.type',
+          num: { $sum: 1 }
+        }
+      },
+      dataPath: 'result.data'
+    })(mongoHook)
+    const results = mongoHook.result.data
+    expect(results.length).to.equal(3)
+    expect(results[0].num).to.equal(1)
+    expect(results[1].num).to.equal(1)
+    expect(results[2].num).to.equal(1)
+  })
+  // Let enough time to proceed
+    .timeout(5000)
 
   it('deletes MongoDB collection', async () => {
     await pluginHooks.deleteMongoCollection({ collection: 'geojson', filter: { 'geometry.type': 'Point' } })(mongoHook)
