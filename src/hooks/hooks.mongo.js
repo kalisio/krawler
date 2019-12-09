@@ -148,6 +148,7 @@ export function readMongoCollection (options = {}) {
 }
 
 function getChunks(hook, options) {
+  const item = hook.data // getItems(hook)
   // Defines the chunks
   let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
   // Allow transform before write
