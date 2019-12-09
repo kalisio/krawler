@@ -90,7 +90,7 @@ describe('krawler:hooks:mongo', () => {
       features: geojson.features.map(feature => {
         delete feature.geometry
         delete feature.type
-        feature.properties = { prop0: 'value1' }
+        if (feature.id < 3) feature.properties = { prop0: 'value1' }
         return feature
       })
     }
@@ -103,7 +103,8 @@ describe('krawler:hooks:mongo', () => {
     expect(results.length).to.equal(3)
     results.forEach(result => {
       expect(result.properties).toExist()
-      expect(result.properties.prop0).to.equal('value1')
+      if (result.id < 3) expect(result.properties.prop0).to.equal('value1')
+      else expect(result.properties.prop0).to.equal('value0')
     })
   })
   // Let enough time to proceed

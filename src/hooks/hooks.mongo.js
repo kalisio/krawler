@@ -218,7 +218,7 @@ export function updateMongoCollection (options = {}) {
           filter: templateQueryObject(chunk, options.filter || {}),
           upsert: options.upsert || false,
           hint: options.hint,
-          update: { $set: chunk }
+          update: { $set: _.omit(chunk, ['_id']) } // _id is immutable in Mongo
         } }
       }), options)
     }

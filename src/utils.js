@@ -165,12 +165,36 @@ export function convertDates (object, properties) {
   return _.mapValues(object, (value, key) => {
     if (keys.includes(key)) {
       // Recurse on sub objects
-      if (typeof value === 'object') {
+      if (Array.isArray(value)) {
+        return value
+      } else if (typeof value === 'object') {
         return convertDates(value)
       } else {
         // We use moment to validate the date
         const date = moment.utc(value, moment.ISO_8601)
         return (date.isValid() ? date.toDate() : value)
+      }
+    } else {
+      return value
+    }
+  })
+}
+
+// Utility function used to convert from string to numbers a fixed set of properties on a given object (recursive)
+export function convertNumbers (object, properties) {
+  // Restrict to some properties only ?
+  const keys = (properties || _.keys(object))
+  return _.mapValues(object, (value, key) => {
+    if (keys.includes(key)) {
+      // Recurse on sub objects
+      if ((typeof value === 'number') || Array.isArray(value)) {
+        return value
+      } else if (typeof value === 'object') {
+        return convertNumbers(value)
+      } else if (typeof value === 'string') {
+        const number = _.toNumber(value)
+        // We use lodash to validate the number
+        return (!Number.isNaN(number) ? number : value)
       }
     } else {
       return value
@@ -230,7 +254,11 @@ export function templateObject (item, object, properties) {
 // Utility function used to template strings from a fixed set of properties on a given query object (recursive)
 // Will then transform back to right types dates and numbers for comparison operators
 export function templateQueryObject (item, object, properties) {
-  return convertDates(convertComparisonOperators(templateObject(item, object, properties)))
+  let query = templateObject(item, object, properties)
+  // Perform required automated conversions
+  query = convertComparisonOperators(query)
+  query = convertDates(query)
+  return convertNumbers(query)
 }
 
 // Add to the 'outputs' property of the given abject a new entry
