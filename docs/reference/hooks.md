@@ -374,7 +374,7 @@ Due to templating restricted to string output any ISO date string or comparison 
 
 ### writeMongoCollection(options)
 
-Inserts JSON into an existing collection. Hook options are the following:
+Inserts JSON into an existing collection (uses [insertOne](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/#insertone) operations under-the-hood). Hook options are the following:
 * **collection**: the name of the collection to be written, defaults to the hook object ID
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `data.result`
 * **chunkSize**: number of GeoJson features for the [batch insert](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/)
@@ -384,6 +384,20 @@ Inserts JSON into an existing collection. Hook options are the following:
   
 ::: tip
 If the input data is a GeoJSON collection the array of features will be pushed into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections.
+:::
+
+### updateMongoCollection(options)
+
+Updates JSON into an existing collection (uses [updateOne](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/#updateone-and-updatemany) operations under-the-hood). Hook options are the following:
+* **collection**: the name of the collection to be written, defaults to the hook object ID
+* **dataPath**: property path where to read the input JSON object on the hook object, defaults to `data.result`
+* **chunkSize**: number of GeoJson features for the [batch insert](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/)
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* **transform**: perform transformation using these options before update, see description in [transformJson](./hooks.md#transformjson-options)
+* any option supported by `options` argument of the [bulkWrite](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/) function.
+  
+::: tip
+If the input data is a GeoJSON collection the array of features will be updated into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections.
 :::
 
 ### createMongoAggregation(options)
