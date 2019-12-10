@@ -22,3 +22,5 @@ Please read the [documentation web site](https://kalisio.github.io/krawler).
 Released under the MIT License
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkalisio%2Fkrawler.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkalisio%2Fkrawler?ref=badge_large)
+
+The detailed list of Open Source dependencies can be found in our [3rd-party software report](https://app.fossa.com/reports/1ea52b66-cc7a-417e-b3d1-0eb484f29882).
