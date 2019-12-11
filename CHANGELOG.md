@@ -1,5 +1,27 @@
 # Changelog
 
+## [v1.0.0](https://github.com/kalisio/krawler/tree/v1.0.0) (2019-12-11)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v0.9.2...v1.0.0)
+
+**Implemented enhancements:**
+
+- Convert number type on templated queries [\#102](https://github.com/kalisio/krawler/issues/102)
+- Create an update Mongo DB collection hook [\#101](https://github.com/kalisio/krawler/issues/101)
+- Allow to provide bulkWrite options in writeMongoCollection hook [\#100](https://github.com/kalisio/krawler/issues/100)
+- Simplify CI scripts [\#97](https://github.com/kalisio/krawler/issues/97)
+- Improve runCommand hook to manage multiple commands [\#96](https://github.com/kalisio/krawler/issues/96)
+- Enhance travis pipeline [\#94](https://github.com/kalisio/krawler/issues/94)
+- Allow to create a MongoDB Aggregation [\#93](https://github.com/kalisio/krawler/issues/93)
+- Update dockerfile base image  [\#90](https://github.com/kalisio/krawler/issues/90)
+- Enable Greenkeeper to ease dependency upgrades [\#83](https://github.com/kalisio/krawler/issues/83)
+
+**Fixed bugs:**
+
+- faultTolerant hook raises an exception and stops the job [\#99](https://github.com/kalisio/krawler/issues/99)
+- Node hangs when a job with a timeout is finished [\#92](https://github.com/kalisio/krawler/issues/92)
+- getFTP hook may incorrectly register the output file [\#87](https://github.com/kalisio/krawler/issues/87)
+
 ## [v0.9.2](https://github.com/kalisio/krawler/tree/v0.9.2) (2019-09-22)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.9.1...v0.9.2)
