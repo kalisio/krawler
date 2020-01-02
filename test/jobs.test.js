@@ -5,8 +5,7 @@ import express from '@feathersjs/express'
 import path from 'path'
 import nock from 'nock'
 import moment from 'moment'
-import plugin from '../src'
-import { hooks as pluginHooks } from '../src'
+import plugin, { hooks as pluginHooks } from '../src'
 
 describe('krawler:jobs', () => {
   let app, server, storage, storesService, jobsService, tasksService
@@ -253,7 +252,7 @@ describe('krawler:jobs', () => {
       }
     }, tasksService)
   })
-  
+
   it('creates a job with task hooks', () => {
     return jobsService.create({
       id: 'job',

@@ -190,7 +190,9 @@ export function convertNumbers (object, properties) {
       if ((typeof value === 'number') || Array.isArray(value)) {
         return value
       } else if (typeof value === 'object') {
-        return convertNumbers(value)
+        // Take care to date objects that can be converted to numbers as EPOCH
+        const date = moment.utc(value)
+        return (date.isValid() ? value : convertNumbers(value))
       } else if (typeof value === 'string') {
         const number = _.toNumber(value)
         // We use lodash to validate the number
@@ -258,7 +260,8 @@ export function templateQueryObject (item, object, properties) {
   // Perform required automated conversions
   query = convertComparisonOperators(query)
   query = convertDates(query)
-  return convertNumbers(query)
+  query = convertNumbers(query)
+  return query
 }
 
 // Add to the 'outputs' property of the given abject a new entry

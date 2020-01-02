@@ -113,7 +113,8 @@ describe('krawler:hooks:mongo', () => {
   it('create MongoDB aggregation', async () => {
     await pluginHooks.createMongoAggregation({
       collection: 'geojson',
-      pipeline: { $group: { 
+      pipeline: {
+        $group: {
           _id: '$geometry.type',
           num: { $sum: 1 }
         }

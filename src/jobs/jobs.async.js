@@ -9,7 +9,7 @@ const debug = makeDebug('krawler:jobs')
 async function createJob (options = {}, store = null, tasks, id, taskTemplate) {
   debug(`Creating async job ${id} with following options`, options)
   const hrstart = process.hrtime()
-  
+
   const runTask = async (task, params) => {
     const faultTolerant = options.faultTolerant || task.faultTolerant
     const attempts = task.attemptsLimit || options.attemptsLimit || 1

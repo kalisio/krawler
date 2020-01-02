@@ -147,7 +147,7 @@ export function readMongoCollection (options = {}) {
   }
 }
 
-function getChunks(hook, options) {
+function getChunks (hook, options) {
   const item = hook.data // getItems(hook)
   // Defines the chunks
   let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
@@ -167,7 +167,7 @@ function getChunks(hook, options) {
   } else {
     chunks.push([json])
   }
-  
+
   return chunks
 }
 
@@ -209,17 +209,19 @@ export function updateMongoCollection (options = {}) {
     const collection = client.db.collection(collectionName)
     // Defines the chunks
     const chunks = getChunks(hook, options)
-        
+
     // Write the chunks
     for (let i = 0; i < chunks.length; ++i) {
       debug(`Updating ${chunks.length} JSON document in the ${collectionName} collection `)
       await collection.bulkWrite(chunks[i].map(chunk => {
-        return { updateOne: {
-          filter: templateQueryObject(chunk, options.filter || {}),
-          upsert: options.upsert || false,
-          hint: options.hint,
-          update: { $set: _.omit(chunk, ['_id']) } // _id is immutable in Mongo
-        } }
+        return {
+          updateOne: {
+            filter: templateQueryObject(chunk, options.filter || {}),
+            upsert: options.upsert || false,
+            hint: options.hint,
+            update: { $set: _.omit(chunk, ['_id']) } // _id is immutable in Mongo
+          }
+        }
       }), options)
     }
     return hook

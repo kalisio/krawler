@@ -1,0 +1,18 @@
+[
+  {
+    "latitude": 30.6434,
+    "longitude": -84.4841,
+    "altitude": 10858.5,
+    "callsign": "UAL2109 ",
+    "icao": "ab1644",
+    "speed": 399.4603883027113
+  },
+  {
+    "latitude": 40.2945,
+    "longitude": 9.415,
+    "altitude": 12496.8,
+    "callsign": "LAN712  ",
+    "icao": "e8027b",
+    "speed": 502.13434309662466
+  }
+]
