@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.0.1](https://github.com/kalisio/krawler/tree/v1.0.1) (2020-01-02)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v1.0.0...v1.0.1)
+
+**Fixed bugs:**
+
+- Dates contained in MongoDB queries are lost [\#103](https://github.com/kalisio/krawler/issues/103)
+
 ## [v1.0.0](https://github.com/kalisio/krawler/tree/v1.0.0) (2019-12-11)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v0.9.2...v1.0.0)
