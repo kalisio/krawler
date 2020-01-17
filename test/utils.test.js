@@ -46,7 +46,8 @@ describe('krawler:utils', () => {
     const item = {
       min: 30,
       max: 50,
-      time: now
+      time: now,
+      id: now.milliseconds()
     }
     let query = {
       range: {
@@ -55,7 +56,8 @@ describe('krawler:utils', () => {
       },
       value: '17',
       date: '2020-01-02T12:00:00.000Z',
-      time: '<%= time.format() %>'
+      time: '<%= time.format() %>',
+      id: '<%= id %>'
     }
     query = utils.templateQueryObject(item, query)
     expect(typeof query.range.$lte).to.equal('number')
@@ -67,5 +69,6 @@ describe('krawler:utils', () => {
     expect(query.date.toISOString()).to.equal('2020-01-02T12:00:00.000Z')
     expect(typeof query.time).to.equal('object')
     expect(moment.utc(query.time).format()).to.equal(item.time.format())
+    expect(typeof query.id).to.equal('number')
   })
 })

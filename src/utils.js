@@ -171,7 +171,7 @@ export function convertDates (object, properties) {
         return convertDates(value)
       } else {
         // We use moment to validate the date
-        const date = moment.utc(value, moment.ISO_8601)
+        const date = moment(value, moment.ISO_8601).utc()
         return (date.isValid() ? date.toDate() : value)
       }
     } else {
