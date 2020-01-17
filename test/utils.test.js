@@ -47,7 +47,7 @@ describe('krawler:utils', () => {
       min: 30,
       max: 50,
       time: now,
-      id: now.milliseconds()
+      id: now.valueOf()
     }
     let query = {
       range: {
@@ -59,6 +59,7 @@ describe('krawler:utils', () => {
       time: '<%= time.format() %>',
       id: '<%= id %>'
     }
+
     query = utils.templateQueryObject(item, query)
     expect(typeof query.range.$lte).to.equal('number')
     expect(typeof query.range.$gte).to.equal('number')
