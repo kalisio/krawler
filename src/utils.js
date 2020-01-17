@@ -96,7 +96,9 @@ export function transformJsonObject (json, options) {
           }
           _.set(object, path, date)
         } else if (units.asString) { // Handle string conversion
-          _.set(object, path, value.toString(units.asString))
+          _.set(object, path, value.toString)
+        } else if (units.asNumber) { // Handle string conversion
+          _.set(object, path, _.toNumber(value))
         } else { // Handle numbers
           _.set(object, path, math.unit(value, units.from).toNumber(units.to))
         }
@@ -169,11 +171,14 @@ export function convertDates (object, properties) {
         return value
       } else if (typeof value === 'object') {
         return convertDates(value)
-      } else {
+      } else if (typeof value === 'string') {
         // We use moment to validate the date
-        const date = moment(value, moment.ISO_8601).utc()
+        const date = moment(value, moment.ISO_8601)
+        if (date.isValid()) console.log(value)
         return (date.isValid() ? date.toDate() : value)
-      }
+      } else {
+        return value
+      } 
     } else {
       return value
     }
@@ -259,8 +264,8 @@ export function templateQueryObject (item, object, properties) {
   let query = templateObject(item, object, properties)
   // Perform required automated conversions
   query = convertComparisonOperators(query)
-  query = convertDates(query)
   query = convertNumbers(query)
+  query = convertDates(query)
   return query
 }
 
