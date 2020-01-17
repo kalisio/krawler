@@ -4,7 +4,7 @@ import merge from 'merge-stream'
 import _ from 'lodash'
 import { getItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
-import { getStoreFromHook, addOutput, writeBufferToStore, template } from '../utils'
+import { getStoreFromHook, addOutput, writeBufferToStore, template, templateObject, transformJsonObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:csv')
 
@@ -18,8 +18,13 @@ export function writeCSV (options = {}) {
     const store = await getStoreFromHook(hook, 'writeCSV', options)
 
     debug('Creating CSV for ' + hook.data.id)
-    const data = _.get(hook, options.dataPath || 'result')
-    const csv = json2csv({ data, fields: options.fields })
+    let json = _.get(hook, options.dataPath || 'result')
+    // Allow transform before write
+    if (options.transform) {
+      const templatedTransform = templateObject(hook.data, options.transform)
+      json = transformJsonObject(json, templatedTransform)
+    }
+    const csv = json2csv({ json, fields: options.fields })
     const csvName = template(hook.data, options.key || (hook.data.id + '.csv'))
     await writeBufferToStore(
       Buffer.from(csv, 'utf8'),
@@ -79,11 +84,20 @@ export function readCSV (options = {}) {
       _.unset(hook, jsonPath)
       fastcsv.fromStream(stream, options)
         .on('data', data => {
-          const json = _.get(hook, jsonPath, [])
+          let json = _.get(hook, jsonPath, [])
           json.push(data)
           _.set(hook, jsonPath, json)
         })
-        .on('end', () => resolve(hook))
+        .on('end', () => {
+          // Allow transform after read
+          if (options.transform) {
+            let json = _.get(hook, jsonPath, [])
+            const templatedTransform = templateObject(item, options.transform)
+            json = transformJsonObject(json, templatedTransform)
+            _.set(hook, jsonPath, json)
+          }
+          resolve(hook)
+        })
         .on('error', reject)
     })
   }
