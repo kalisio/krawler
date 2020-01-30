@@ -51,15 +51,17 @@ export function generateNwpTasks (options) {
       const elementLowerLimit = (_.has(element, 'lowerLimit') ? element.lowerLimit : lowerLimit)
       const elementUpperLimit = (_.has(element, 'upperLimit') ? element.upperLimit : upperLimit)
       const levels = element.levels || [undefined] // If no level specified it is implicit so push an undefined one
-      const nearestForecastTime = getNearestForecastTime(datetime, elementInterval)
-      // We don't care about the past, however a forecast is still potentially valid at least until we reach the next one
-      const lowerTime = datetime.clone().subtract({ seconds: elementInterval })
+      // If we don't care about the past take care that, however,
+      // a forecast is still potentially valid at least until we reach the next one
+      const lowerTime = (options.keepPastForecasts ?
+        runTime.clone() :
+        datetime.clone().subtract({ seconds: elementInterval }))
 
       levels.forEach(level => {
         // Check for each forecast step if update is required
         for (let timeOffset = elementLowerLimit; timeOffset <= elementUpperLimit; timeOffset += elementInterval) {
-          const forecastTime = nearestForecastTime.clone().add({ seconds: timeOffset })
-          if (!forecastTime.isBefore(lowerTime)) {
+          const forecastTime = runTime.clone().add({ seconds: timeOffset })
+          if (options.keepPastForecasts || !forecastTime.isBefore(lowerTime)) {
             const task = Object.assign({
               level,
               runTime,

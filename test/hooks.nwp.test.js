@@ -36,6 +36,7 @@ describe('krawler:hooks:nwp', () => {
             lowerLimit: 3 * 3600, // From T0 + 3h
             upperLimit: 6 * 3600, // Up to T0 + 6h
             runIndex: -2, // Not current run but previous one to ensure it is already available
+            keepPastForecasts: true, // As we go back in time
             elements: [{
               name: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND',
               levels: [100, 3000]
@@ -91,6 +92,7 @@ describe('krawler:hooks:nwp', () => {
       lowerLimit: 3 * 3600, // From T0 + 3h
       upperLimit: 6 * 3600, // Up to T0 + 6h
       runIndex: -2, // Not current run but previous one to ensure it is already available
+      keepPastForecasts: true, // As we go back in time
       elements: [{
         name: 'var_UGRD',
         levels: ['lev_10_m_above_ground', 'lev_100_m_above_ground']
