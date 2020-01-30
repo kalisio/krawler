@@ -174,7 +174,6 @@ export function convertDates (object, properties) {
       } else if (typeof value === 'string') {
         // We use moment to validate the date
         const date = moment(value, moment.ISO_8601)
-        if (date.isValid()) console.log(value)
         return (date.isValid() ? date.toDate() : value)
       } else {
         return value
