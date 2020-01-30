@@ -17,12 +17,6 @@ function getNearestRunTime (datetime, interval) {
   return datetime.clone().hours(roundHours(datetime.hours(), interval / 3600)).minutes(0).seconds(0).milliseconds(0)
 }
 
-function getNearestForecastTime (datetime, interval) {
-  // Compute nearest forecast T0
-  const offsetDateTime = datetime.clone().add({ seconds: 0.5 * interval })
-  return datetime.clone().hours(roundHours(offsetDateTime.hours(), interval / 3600)).minutes(0).seconds(0).milliseconds(0)
-}
-
 // Generate download tasks for NWP models
 export function generateNwpTasks (options) {
   return function (hook) {
