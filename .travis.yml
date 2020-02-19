@@ -48,7 +48,7 @@ jobs:
     services:
     - docker
     script:
-    - yarn docs:build
+    - yarn docs:build && echo $?
     deploy:
       provider: pages
       local-dir: docs/.vuepress/dist
