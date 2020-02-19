@@ -47,8 +47,8 @@ jobs:
     - '8'
     services:
     - docker
-    script:
-    - cd docs && yarn install && yarn build 
+    install: true
+    script: cd docs && yarn install && yarn build 
     deploy:
       provider: pages
       local-dir: docs/.vuepress/dist
