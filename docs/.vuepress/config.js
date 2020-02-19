@@ -14,6 +14,7 @@ module.exports = {
       { text: 'Guides', link: '/guides/understanding-krawler' },
       { text: 'Reference', link: '/reference/services' },
       { text: 'Examples', link: '/examples/' },
+      { text: 'GitHub', link: 'https://github.com/kalisio/krawler' }
     ],
     sidebar: {
       '/about/': getAboutSidebar(),
