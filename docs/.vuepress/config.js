@@ -10,9 +10,9 @@ module.exports = {
   themeConfig: {
     docsDir: 'docs',
     nav: [
-      { text: 'About', link: '/about/' },
-      { text: 'Guides', link: '/guides/' },
-      { text: 'Reference', link: '/reference/' },
+      { text: 'About', link: '/about/introduction' },
+      { text: 'Guides', link: '/guides/understanding-krawler' },
+      { text: 'Reference', link: '/reference/services' },
       { text: 'Examples', link: '/examples/' },
     ],
     sidebar: {
@@ -26,7 +26,9 @@ module.exports = {
 
 function getAboutSidebar () {
   return [
+    'introduction',
     'roadmap',
+    'contributing',
     'license',
     'contact'
   ] 
