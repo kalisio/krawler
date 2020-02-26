@@ -130,8 +130,8 @@ async function healthcheck () {
       process.exit(0)
     }
   } catch (error) {
-    // Set jobId variable available in context so that templates will not fail
-    const data = Object.assign({ jobId: '' }, _.pick(error, ['error.code', 'error.message']))
+    // Set jobId variable/error available in context so that templates will not fail
+    const data = Object.assign({ jobId: '' }, { error: _.pick(error, ['code', 'message']) })
     writeToLog(data)
     // Add env available for templates
     Object.assign(data, process.env)
