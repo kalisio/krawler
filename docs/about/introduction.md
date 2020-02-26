@@ -1,4 +1,4 @@
-# About
+# Introduction
 
 Krawler aims at making the automated process of extracting and processing (geographic) data from heterogeneous sources easy. It can be viewed as a minimalist **Extract, Transform, Load** (ETL). [**ETL**](https://en.wikipedia.org/wiki/Extract,_transform,_load) refers to a process where data is
 1. **extracted** from heterogeneous data sources (e.g. databases or web services);

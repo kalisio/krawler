@@ -6,28 +6,15 @@ module.exports = {
     ['link', { rel: 'icon', href: `https://s3.eu-central-1.amazonaws.com/kalisioscope/krawler/krawler-icon-64x64.png` }],
     ['link', { rel: 'manifest', href: '/manifest.json' }]
   ],
-
-  head: [
-    ['link', { rel: 'icon', href: `https://s3.eu-central-1.amazonaws.com/kalisioscope/kargo/kargo-icon-64x64.png` }],
-    ['link', { rel: 'manifest', href: '/manifest.json' }]
-  ],
-  // FIXME: cannot install @vuepress/pwa => it brokes the dependencies
-  //plugins: ['@vuepress/pwa'],
   theme: 'kalisio',
-  plugins: [
-    ['@vuepress/back-to-top', true],
-    ['@vuepress/pwa', {
-      serviceWorker: true,
-      updatePopup: true
-    }]
-  ],
   themeConfig: {
     docsDir: 'docs',
     nav: [
-      { text: 'About', link: '/about/' },
-      { text: 'Guides', link: '/guides/' },
-      { text: 'Reference', link: '/reference/' },
+      { text: 'About', link: '/about/introduction' },
+      { text: 'Guides', link: '/guides/understanding-krawler' },
+      { text: 'Reference', link: '/reference/services' },
       { text: 'Examples', link: '/examples/' },
+      { text: 'GitHub', link: 'https://github.com/kalisio/krawler' }
     ],
     sidebar: {
       '/about/': getAboutSidebar(),
@@ -40,7 +27,9 @@ module.exports = {
 
 function getAboutSidebar () {
   return [
+    'introduction',
     'roadmap',
+    'contributing',
     'license',
     'contact'
   ] 
