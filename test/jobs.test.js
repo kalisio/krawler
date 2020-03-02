@@ -303,6 +303,33 @@ describe('krawler:jobs', () => {
   // Let enough time to fail
     .timeout(5000)
 
+  it('creates a failed job with task hooks and error hook', (done) => {
+    raise = 'error'
+    pluginHooks.activateHooks({
+      error: {
+        apply: {
+          function: (item) => {
+            expect(item.error).toExist()
+            expect(item.error.message).to.equal('apply error')
+          }
+        }
+      }
+    }, jobsService)
+    jobsService.create({
+      id: 'job',
+      tasks: [
+        { id: 'job-apply-error.html', type: 'noop' }
+      ]
+    })
+      .catch(error => {
+        expect(error).toExist()
+        expect(error.message).to.equal('apply error')
+        done()
+      })
+  })
+  // Let enough time to fail
+    .timeout(5000)
+
   // Cleanup
   after(() => {
     if (server) server.close()

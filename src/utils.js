@@ -146,17 +146,25 @@ export function callOnHookItems (f) {
     if (isArray) {
       for (let i = 0; i < items.length; i++) {
         // Handle error hooks as usual
-        if (hook.type === 'error') items[i].error = _.omit(hook.error, ['hook']) // Avoid circular reference
+        if (hook.type === 'error') {
+          items[i].error = hook.error
+          // Avoid circular reference
+          delete items[i].error.hook
+        }
         await f(items[i], hookObject)
       }
     } else {
       // Handle error hooks as usual
-      if (hook.type === 'error') items.error = _.omit(hook.error, ['hook']) // Avoid circular reference
+      if (hook.type === 'error') {
+        items.error = hook.error
+        // Avoid circular reference
+        delete items.error.hook
+      }
       await f(items, hookObject)
     }
     // Replace the items within the hook
     replaceItems(hookObject, items)
-    return hookObject
+    return hook
   }
 }
 
