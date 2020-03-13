@@ -44,7 +44,7 @@ jobs:
   - stage: DOC
     language: node_js
     node_js:
-    - '8'
+    - '12'
     services:
     - docker
     install: true
@@ -59,7 +59,7 @@ jobs:
   - stage: TEST
     language: node_js
     node_js:
-    - '8'
+    - '12'
     services:
     - mongodb
     - docker
