@@ -1,8 +1,8 @@
 import path from 'path'
 import _ from 'lodash'
 import makeDebug from 'debug'
-import gtif from 'geo-pixel-stream'
-import gdal from 'gdal'
+import gtif from '@kalisio/geo-pixel-stream'
+import gdal from 'gdal-next'
 import { getStoreFromHook } from '../utils'
 
 const debug = makeDebug('krawler:hooks:raster')
