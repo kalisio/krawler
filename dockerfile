@@ -1,11 +1,11 @@
-FROM node:8-buster AS builder
+FROM node:12-buster AS builder
 # Install krawler
 COPY . /opt/krawler
 WORKDIR /opt/krawler
 # Build krawler
 RUN yarn
 
-FROM  node:8-buster-slim
+FROM  node:12-buster-slim
 LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 # Install GDAL
 RUN apt-get update && apt-get -y install gdal-bin
