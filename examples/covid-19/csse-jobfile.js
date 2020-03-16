@@ -37,14 +37,15 @@ module.exports = {
         writeJsonFS: {
           hook: 'writeJson',
           store: 'fs'
-        }/*,
+        },
         writeJsonS3: {
           hook: 'writeJson',
           store: 's3',
+          key: 'covid-19/<%= id %>.json',
           storageOptions: {
             ACL: 'public-read'
           }
-        }*/
+        }
       }
     },
     jobs: {
