@@ -100,7 +100,7 @@ export function mergeJson (options = {}) {
 
     debug('Merging JSON for ' + hook.data.id)
     // Only in-memory for now
-    const objects = hook.result.map(result => _.get(result, options.dataPath || 'data', {}) || {})
+    const objects = hook.result.map(result => _.get(result, options.dataPath || 'data', []) || [])
     const json = _.unionBy(...objects, options.by)
     _.set(hook, options.dataPath || 'result.data', json)
     return hook
