@@ -39,8 +39,8 @@ module.exports = {
             let count = 0
             if (heatmap) {
               departements.features.forEach(feature => {
-                // Find corresponding patients
-                const match = sift({ departement: feature.properties.nom }, item.data)
+                // Find corresponding patients, we use JSON parsing to manage unicode
+                const match = sift({ departement: JSON.parse(feature.properties.nom) }, item.data)
                 if (match.length) {
                   count += match.length
                   feature.properties.Confirmed = match.length
@@ -49,11 +49,11 @@ module.exports = {
               })
               item.data = departements.features.map(feature => ({
                 'Country/Region': 'France',
-                'Province/State': feature.properties.nom,
+                'Province/State': JSON.parse(feature.properties.nom),
                 Confirmed: feature.properties.Confirmed,
                 Deaths: feature.properties.Deaths,
-                longitude: feature.geometry.coordinates[0],
-                latitude: feature.geometry.coordinates[1]
+                Longitude: feature.geometry.coordinates[0],
+                Latitude: feature.geometry.coordinates[1]
               }))
             } else {
               item.data.forEach(patient => {
@@ -62,8 +62,8 @@ module.exports = {
                 if (match.length) {
                   count++
                   const departement = match[0]
-                  patient.longitude = departement.geometry.coordinates[0]
-                  patient.latitude = departement.geometry.coordinates[1]
+                  patient.Longitude = departement.geometry.coordinates[0]
+                  patient.Latitude = departement.geometry.coordinates[1]
                 }
               })
             }
@@ -71,8 +71,8 @@ module.exports = {
           }
         },
         convertToGeoJson: {
-          latitude: 'latitude',
-          longitude: 'longitude'
+          latitude: 'Latitude',
+          longitude: 'Longitude'
         },
         writeJsonFS: {
           hook: 'writeJson',

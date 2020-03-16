@@ -1,6 +1,17 @@
 const path = require('path')
+const _ = require('lodash')
+const fs = require('fs-extra')
+const sift = require('sift')
+const turf = require('@turf/turf')
 const moment = require('moment')
-console.log(process.argv)
+
+// Read departemnts DB
+const departements = fs.readJsonSync(path.join(__dirname, 'departements-france.geojson'))
+departements.features.forEach(feature => {
+  // Compute centroid of real geometry and update in place
+  const centroid = turf.centroid(feature.geometry)
+  feature.geometry = centroid.geometry
+})
 
 // By default try to grap latest data
 let date = moment.utc().subtract(1, 'day')
@@ -38,7 +49,7 @@ regions.forEach(region => {
 })
 
 module.exports = {
-  id: 'job',
+  id: `departements-france-${date.format('YYYY-MM-DD')}`,
   store: 'memory',
   options: { faultTolerant: true },
   tasks,
@@ -48,24 +59,10 @@ module.exports = {
         readYAML: {
           objectPath: 'donneesDepartementales'
         },
-        transformJson: {
-          mapping: { nom: 'Province/State', casConfirmes: 'Confirmed', deces: 'Deaths' },
-          merge: {
-            'Country/Region': 'France',
-            time: date.format()
-          }
-        }/* DEBUG,
+        /* DEBUG
         writeJsonFS: {
           hook: 'writeJson',
           store: 'fs'
-        },
-        writeJsonS3: {
-          hook: 'writeJson',
-          store: 's3',
-          key: 'covid-19/<%= id %>',
-          storageOptions: {
-            ACL: 'public-read'
-          }
         }*/
       }
     },
@@ -92,19 +89,51 @@ module.exports = {
         mergeJson: {
           by: 'code'
         },
+        apply: {
+          dataPath: 'result.data',
+          function: (data) => {
+            const nbDepartements = departements.features.length
+            let count = 0
+            departements.features.forEach(feature => {
+              // Find corresponding data, we use JSON parsing to manage unicode
+              const match = data.find(element => element.nom === feature.properties.nom)
+              if (match) {
+                count++
+                feature.properties.Confirmed = match.casConfirmes
+                feature.properties.Deaths = match.deces
+              }
+            })
+            // Update data in-place
+            data.splice(0, data.length)
+            departements.features.forEach(feature => {
+              if (feature.properties.Confirmed || feature.properties.Deaths) data.push({
+                'Country/Region': 'France',
+                'Province/State': feature.properties.nom,
+                Confirmed: feature.properties.Confirmed,
+                Deaths: feature.properties.Deaths,
+                Longitude: feature.geometry.coordinates[0],
+                Latitude: feature.geometry.coordinates[1]
+              })
+            })
+            console.log(`Found data for ${count} departements on ${nbDepartements} departements`)
+          }
+        },
+        convertToGeoJson: {
+          latitude: 'Latitude',
+          longitude: 'Longitude'
+        },
         writeJsonFS: {
           hook: 'writeJson',
-          store: 'fs',
-          key: `departements-france-${date.format('YYYY-MM-DD')}.json`
-        }/*,
+          store: 'fs'
+        },
         writeJsonS3: {
           hook: 'writeJson',
           store: 's3',
-          key: `departements-france-${date.format('YYYY-MM-DD')}.json`,
+          key: `covid-19/<%= id %>.json`,
           storageOptions: {
             ACL: 'public-read'
           }
-        }*/,
+        },
         clearOutputs: {},
         removeStores: ['memory', 'fs', 's3']
       }
