@@ -57,7 +57,17 @@ export function emitEvent (options = {}) {
 
 // Apply a custom function on hook items
 export function apply (options) {
-  return callOnHookItems(item => {
+  // If we don't use hook items use selector
+  if (options.dataPath) {
+    return async function (hook) {
+      const item = _.get(hook, options.dataPath)
+      if (item) {
+        options.function(item)
+        debug('Applied function on item', item)
+      }
+      return hook
+    }
+  } else return callOnHookItems(item => {
     options.function(item)
     debug('Applied function on item', item)
   })
