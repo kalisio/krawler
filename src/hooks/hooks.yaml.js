@@ -4,7 +4,7 @@ import fs from 'fs-extra'
 import yamljs from 'js-yaml'
 import { getItems } from 'feathers-hooks-common'
 import makeDebug from 'debug'
-import { getStoreFromHook, addOutput, writeBufferToStore, template } from '../utils'
+import { getStoreFromHook, addOutput, writeBufferToStore, template, templateObject, transformJsonObject } from '../utils'
 
 const debug = makeDebug('krawler:hooks:yaml')
 
@@ -52,7 +52,17 @@ export function readYAML (options = {}) {
       debug('Parsing YAML for ' + yamlName)
       yaml = store.buffers[yamlName]
     }
-    _.set(hook, options.dataPath || 'result.data', yamljs.safeLoad(yaml.toString()))
+    // Clear previous data if any as we append
+    const jsonPath = options.dataPath || 'result.data'
+    _.unset(hook, jsonPath)
+    let json = yamljs.safeLoad(yaml.toString())
+    if (options.objectPath) json = _.get(json, options.objectPath)
+    // Allow transform after read
+    if (options.transform) {
+      const templatedTransform = templateObject(item, options.transform)
+      json = transformJsonObject(json, templatedTransform)
+    }
+    _.set(hook, jsonPath, json)
     return hook
   }
 }
