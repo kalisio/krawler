@@ -42,24 +42,26 @@ export function convertToGeoJson (options = {}) {
       type: 'FeatureCollection',
       features: []
     }
+    const geometry = options.geometry || 'geometry'
     const longitude = options.longitude || 'longitude'
     const latitude = options.latitude || 'latitude'
     const altitude = options.altitude || 'altitude'
     // Then iterate over JSON objects
     _.forEach(json, object => {
+      const geo = _.get(object, geometry)
       const lon = Number(_.get(object, longitude, 0))
       const lat = Number(_.get(object, latitude, 0))
       const alt = Number(_.get(object, altitude, 0))
-      if (lat && lon) {
+      if (geo || (lat && lon)) {
         // Define the GeoJson feature corresponding to the object
         const feature = {
           type: 'Feature',
           // Lat, long, alt not required anymore
-          properties: (options.keepGeometryProperties ? object : _.omit(object, [longitude, latitude, altitude])),
-          geometry: {
+          properties: (options.keepGeometryProperties ? object : _.omit(object, [geometry, longitude, latitude, altitude])),
+          geometry: (geo ? geo : {
             type: 'Point',
             coordinates: [lon, lat, alt]
-          }
+          })
         }
         collection.features.push(feature)
       }
