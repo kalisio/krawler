@@ -107,7 +107,7 @@ export function mergeJson (options = {}) {
       return object
     })
     
-    const json = _.unionBy(...objects, options.by)
+    const json = (options.by ? _.unionBy(...objects, options.by) : _.unionWith(...objects, () => false))
     _.set(hook, options.dataPath || 'result.data', json)
     return hook
   }
