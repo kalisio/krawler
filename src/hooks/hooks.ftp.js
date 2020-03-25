@@ -67,7 +67,7 @@ export function getFTP (options = {}) {
     if (!isInside) throw new Error('The local file is not relative to the store path')
 
     return new Promise((resolve, reject) => {
-      client.get(remoteFile, localFile, (err, res) => {
+      client.get(remoteFile, localFile, (err) => {
         if (err) {
           reject(err)
         } else {
