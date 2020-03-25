@@ -57,6 +57,7 @@ export function transformJsonObject (json, options) {
     const deleteInputPath = (isMappingObject ? _.get(output, 'delete', true) : true)
     // Then iterate over JSON objects
     _.forEach(json, object => {
+      if (!_.has(object, inputPath)) return
       let value = _.get(object, inputPath)
       // Perform value mapping (if any)
       if (isMappingObject && output.values) {
