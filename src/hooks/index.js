@@ -65,7 +65,7 @@ export function getHookFunction (hookName) {
 // Generate a predicate to be used in a when/iff clause
 // that will skip the associated hook depending on configured properties
 export function match (hookName, filter) {
-  return function (hook) {
+  return async function (hook) {
     let hookObject = hook
     // Handle error hooks as usual
     if (hook.type === 'error') hookObject = hook.original
@@ -80,7 +80,7 @@ export function match (hookName, filter) {
     let execute = !_.isEmpty(sift(templatedFilter, [item]))
     // If yes check for a user-given predicate function as well
     if (execute && (typeof filter.predicate === 'function')) {
-      execute = filter.predicate(item)
+      execute = await filter.predicate(item)
     }
     if (!execute) debug('Skipping hook ' + hookName + ' due to filter', templatedFilter)
     else debug('Executing hook ' + hookName + ' not filtered by', templatedFilter)

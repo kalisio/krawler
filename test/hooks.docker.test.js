@@ -110,7 +110,7 @@ describe('krawler:hooks:docker', () => {
       })
   })
   // Let enough time to proceed
-    .timeout(10000)
+    .timeout(20000)
 
   it('copy from a container', () => {
     return pluginHooks.runDockerContainerCommand({

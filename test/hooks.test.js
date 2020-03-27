@@ -339,55 +339,6 @@ describe('krawler:hooks:main', () => {
   // Let enough time to proceed
     .timeout(5000)
 
-  const applyHook = {
-    type: 'before',
-    data: {
-      value: 6
-    }
-  }
-
-  it('apply function', () => {
-    return pluginHooks.apply({
-      function: (item) => { if (item.value === 6) item.value = 3 }
-    })(applyHook)
-      .then(hook => {
-        expect(hook.data.value).to.equal(3)
-      })
-  })
-
-  it('apply function raising error', (done) => {
-    pluginHooks.apply({
-      function: (item) => { throw new Error('apply error') }
-    })(applyHook)
-      .catch(error => {
-        expect(error).toExist()
-        expect(error.message).to.equal('apply error')
-        done()
-      })
-  })
-
-  it('apply function if with match filter', () => {
-    applyHook.type = 'after'
-    applyHook.method = 'create' // Required to use hook pipeline
-    applyHook.result = { value: 6 }
-    return pluginHooks.addHook('apply', { match: { value: 6 }, function: (item) => { item.value = 3 } })(applyHook)
-      .then(hook => {
-        expect(hook.result.value).to.equal(3)
-        return pluginHooks.addHook('apply', { match: { value: 6 }, function: (item) => { item.value = 6 } })(applyHook)
-      })
-      .then(hook => {
-        expect(hook.result.value).to.equal(3)
-        return pluginHooks.addHook('apply', { match: { predicate: (item) => item.value === 3 }, function: (item) => { item.value = 6 } })(applyHook)
-      })
-      .then(hook => {
-        expect(hook.result.value).to.equal(6)
-        return pluginHooks.addHook('apply', { match: { predicate: (item) => item.value === 3 }, function: (item) => { item.value = 3 } })(applyHook)
-      })
-      .then(hook => {
-        expect(hook.result.value).to.equal(6)
-      })
-  })
-
   const capabilitiesHook = {
     type: 'after'
   }
@@ -399,37 +350,6 @@ describe('krawler:hooks:main', () => {
     })(capabilitiesHook)
       .then(hook => {
         expect(hook.result.data).toExist()
-      })
-  })
-  // Let enough time to proceed
-    .timeout(5000)
-
-  const templateHook = {
-    type: 'after',
-    data: {
-      id: 'mapproxy-templated'
-    },
-    result: {
-      id: 'mapproxy-templated',
-      data: {
-        times: [new Date(Date.UTC(2017, 11, 5, 0, 0, 0)), new Date(Date.UTC(2017, 11, 5, 6, 0, 0)), new Date(Date.UTC(2017, 11, 5, 12, 0, 0))],
-        elevations: [0, 10, 100]
-      }
-    },
-    params: { store: outputStore, templateStore: inputStore }
-  }
-
-  it('write template from JSON', () => {
-    return pluginHooks.writeTemplate({ templateFile: 'mapproxy-template.yaml' })(templateHook)
-      .then(hook => {
-        let templated = fs.readFileSync(path.join(outputStore.path, 'mapproxy-templated.yaml'), 'utf8')
-        templated = yaml.safeLoad(templated)
-        const times = _.get(templated, 'layers[0].dimensions.time.values')
-        expect(times).toExist()
-        expect(times.map(time => new Date(time))).to.deep.equal(hook.result.data.times)
-        const elevations = _.get(templated, 'layers[0].dimensions.elevation.values')
-        expect(elevations).toExist()
-        expect(elevations).to.deep.equal(hook.result.data.elevations)
       })
   })
   // Let enough time to proceed

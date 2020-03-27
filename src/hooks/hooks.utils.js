@@ -29,13 +29,13 @@ export function template (options = {}) {
 
 // Set the skip flag based on predicate or item properties filter
 export function discardIf (options = {}) {
-  return callOnHookItems(item => {
+  return callOnHookItems(async item => {
     const templatedFilter = templateQueryObject(item, _.omit(options, ['predicate']))
     // Check if hooks have to be executed or not depending on item properties
     let discard = !_.isEmpty(sift(templatedFilter, [item]))
     // If yes check for a user-given predicate function as well
     if (discard && (typeof options.predicate === 'function')) {
-      discard = options.predicate(item)
+      discard = await options.predicate(item)
     }
     if (discard) {
       debug('Discarding ' + item.id + ' due to filter', templatedFilter)
@@ -62,13 +62,13 @@ export function apply (options) {
     return async function (hook) {
       const item = _.get(hook, options.dataPath)
       if (item) {
-        options.function(item)
+        await options.function(item)
         debug('Applied function on item', item)
       }
       return hook
     }
-  } else return callOnHookItems(item => {
-    options.function(item)
+  } else return callOnHookItems(async item => {
+    await options.function(item)
     debug('Applied function on item', item)
   })
 }
