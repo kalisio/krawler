@@ -8,7 +8,7 @@ Although all are not applicable, [common FeathersJS hooks](https://auk.docs.feat
 
 All hooks can have the following options:
 * **match**: a match filter to be applied on the input hook data using any option supported by [sift](https://github.com/crcn/sift.js), fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template), if the data is filtered the hook will not be applied
-* **predicate**: an additional predicate function taking the hook item as input and returning true if matching occurs
+* **predicate**: an additional predicate function taking the hook item as input and returning true if matching occurs (can be async)
 * **faultTolerant**: will catch any error raised in the hook so that the hook chain will continue anyway
 
 ::: tip
@@ -227,7 +227,9 @@ Generate a JSON file from in-memory JSON values, hook options are the following:
 
 Restructure in-memory JSON values, hook options are the following:
 * **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result.data`
-* **transformPath**: property path where to read/write the JSON part to be transformed in the input JSON object, if not given use the input JSON
+* **transformPath**: property path where to read/write the JSON part to be transformed in the input JSON object
+* **inputPath**: property path where to read the JSON part to be transformed in the input JSON object
+* **outputPath**: property path where to write the JSON part to be transformed in the input JSON object
 * **toArray**: boolean indicating if the JSON object will be transformed into an array using [Lodash](https://lodash.com/docs#toArray), defaults to `false`
 * **toObjects**: if your input JSON objects are flat arrays it will be transformed into objects according to the given indexed list of property names to be used as keys, not defined by default
 * **filter**: a filter to be applied on the JSON object using any option supported by [sift](https://github.com/crcn/sift.js)
@@ -735,7 +737,7 @@ Discard all subsequent hooks and task if the input data passes the given match f
 ### apply(options)
 
 Apply a given function to the hook item(s), hook options are the following:
-* **function**: a function taking the hook item(s) as input and updating it
+* **function**: a function taking the hook item(s) as input and updating it (can be async)
 
 ### healthcheck(options)
 

@@ -27,10 +27,13 @@ Object.getPrototypeOf(moment()).toBSON = function () {
 }
 
 export function transformJsonObject (json, options) {
-  const rootJson = json
-  if (options.transformPath) {
-    json = _.get(json, options.transformPath)
+  let rootJson = json
+  if (options.transformPath || options.inputPath) {
+    json = _.get(json, options.transformPath || options.inputPath)
   }
+  // If no input path then we only have an output path
+  // meaning we will store the array in the output object
+  if (rootJson === json) rootJson = {}
   if (options.toArray) {
     json = _.toArray(json)
   }
@@ -127,8 +130,8 @@ export function transformJsonObject (json, options) {
     if (options.asObject) json = (json.length > 0 ? json[0] : {})
   }
   // Then update JSON in place in memory
-  if (options.transformPath) {
-    _.set(rootJson, options.transformPath, json)
+  if (options.transformPath || options.outputPath) {
+    _.set(rootJson, options.transformPath || options.outputPath, json)
     json = rootJson
   }
 
