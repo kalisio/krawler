@@ -101,11 +101,13 @@ export function transformJsonObject (json, options) {
           _.set(object, path, date)
         } else if (units.asString) { // Handle string conversion
           _.set(object, path, value.toString)
-        } else if (units.asNumber) { // Handle string conversion
+        } else if (units.asNumber) { // Handle number conversion
           _.set(object, path, _.toNumber(value))
         } else { // Handle numbers
           _.set(object, path, math.unit(value, units.from).toNumber(units.to))
         }
+      } else if (_.has(units, 'empty')) {
+        _.set(object, path, units.empty)
       }
     })
   })
