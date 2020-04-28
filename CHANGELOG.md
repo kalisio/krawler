@@ -1,5 +1,24 @@
 # Changelog
 
+## [v1.1.0](https://github.com/kalisio/krawler/tree/v1.1.0) (2020-04-28)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v1.0.1...v1.1.0)
+
+**Implemented enhancements:**
+
+- User-defined functions could be async [\#113](https://github.com/kalisio/krawler/issues/113)
+- Add an option to keep past forecast data in NWP hook [\#106](https://github.com/kalisio/krawler/issues/106)
+- Alllow to apply a tranform in the CSV hooks [\#105](https://github.com/kalisio/krawler/issues/105)
+
+**Fixed bugs:**
+
+- transformJson hook mapping on undefined properties [\#112](https://github.com/kalisio/krawler/issues/112)
+- A job with an error hook will make krawler exit with 'tasks.forEach is not a function' when a task throws an error [\#110](https://github.com/kalisio/krawler/issues/110)
+- Healthcheck fails when behind a proxy [\#109](https://github.com/kalisio/krawler/issues/109)
+- FTP connection fails when behind a proxy [\#108](https://github.com/kalisio/krawler/issues/108)
+- Healthcheck fail if the healthcheck endpoint does not respond [\#107](https://github.com/kalisio/krawler/issues/107)
+- templateQueryObject cast a property of type of number to a date [\#104](https://github.com/kalisio/krawler/issues/104)
+
 ## [v1.0.1](https://github.com/kalisio/krawler/tree/v1.0.1) (2020-01-02)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v1.0.0...v1.0.1)
