@@ -2,9 +2,7 @@ import chai, { util, expect } from 'chai'
 import chailint from 'chai-lint'
 import path from 'path'
 import fsStore from 'fs-blob-store'
-import yaml from 'js-yaml'
 import fs from 'fs'
-import _ from 'lodash'
 import { hooks as pluginHooks } from '../src'
 
 describe('krawler:hooks:main', () => {

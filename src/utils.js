@@ -191,7 +191,7 @@ export function convertDates (object, properties) {
         return (date.isValid() ? date.toDate() : value)
       } else {
         return value
-      } 
+      }
     } else {
       return value
     }

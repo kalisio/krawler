@@ -84,7 +84,7 @@ export function readCSV (options = {}) {
       _.unset(hook, jsonPath)
       fastcsv.fromStream(stream, options)
         .on('data', data => {
-          let json = _.get(hook, jsonPath, [])
+          const json = _.get(hook, jsonPath, [])
           json.push(data)
           _.set(hook, jsonPath, json)
         })

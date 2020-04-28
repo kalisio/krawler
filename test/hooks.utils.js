@@ -42,7 +42,7 @@ describe('krawler:hooks:utils', () => {
     expect(hook.data.value).to.equal(6)
   })
   // Let enough time to download
-  .timeout(5000)
+    .timeout(5000)
 
   it('apply function raising error', (done) => {
     pluginHooks.apply({
@@ -69,7 +69,7 @@ describe('krawler:hooks:utils', () => {
       })
   })
   // Let enough time to download
-  .timeout(5000)
+    .timeout(5000)
 
   it('apply function with match filter', async () => {
     applyHook.type = 'after'
@@ -96,24 +96,28 @@ describe('krawler:hooks:utils', () => {
     applyHook.method = 'create' // Required to use hook pipeline
     applyHook.result = { value: 6 }
     let hook = await pluginHooks.addHook('apply', {
-      match: { predicate: async (item) => {
-        await utils.promisify(setTimeout)(1000)
-        item.value === 3
-      }},
+      match: {
+        predicate: async (item) => {
+          await utils.promisify(setTimeout)(1000)
+          return item.value === 3
+        }
+      },
       function: (item) => { item.value = 6 }
     })(applyHook)
     expect(hook.result.value).to.equal(6)
     hook = await pluginHooks.addHook('apply', {
-      match: { predicate: async (item) => {
-        await utils.promisify(setTimeout)(1000)
-        item.value === 3
-      }},
+      match: {
+        predicate: async (item) => {
+          await utils.promisify(setTimeout)(1000)
+          return item.value === 3
+        }
+      },
       function: (item) => { item.value = 3 }
     })(applyHook)
     expect(hook.result.value).to.equal(6)
   })
   // Let enough time to download
-  .timeout(5000)
+    .timeout(5000)
 
   const templateHook = {
     type: 'after',
@@ -142,5 +146,5 @@ describe('krawler:hooks:utils', () => {
     expect(elevations).to.deep.equal(hook.result.data.elevations)
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 })

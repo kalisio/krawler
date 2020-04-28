@@ -67,10 +67,12 @@ export function apply (options) {
       }
       return hook
     }
-  } else return callOnHookItems(async item => {
-    await options.function(item)
-    debug('Applied function on item', item)
-  })
+  } else {
+    return callOnHookItems(async item => {
+      await options.function(item)
+      debug('Applied function on item', item)
+    })
+  }
 }
 
 // Apply a custom function on healthcheck state

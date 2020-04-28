@@ -58,7 +58,7 @@ export function convertToGeoJson (options = {}) {
           type: 'Feature',
           // Lat, long, alt not required anymore
           properties: (options.keepGeometryProperties ? object : _.omit(object, [geometry, longitude, latitude, altitude])),
-          geometry: (geo ? geo : {
+          geometry: (geo || {
             type: 'Point',
             coordinates: [lon, lat, alt]
           })

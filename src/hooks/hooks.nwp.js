@@ -47,9 +47,9 @@ export function generateNwpTasks (options) {
       const levels = element.levels || [undefined] // If no level specified it is implicit so push an undefined one
       // If we don't care about the past take care that, however,
       // a forecast is still potentially valid at least until we reach the next one
-      const lowerTime = (options.keepPastForecasts ?
-        runTime.clone() :
-        datetime.clone().subtract({ seconds: elementInterval }))
+      const lowerTime = (options.keepPastForecasts
+        ? runTime.clone()
+        : datetime.clone().subtract({ seconds: elementInterval }))
 
       levels.forEach(level => {
         // Check for each forecast step if update is required
