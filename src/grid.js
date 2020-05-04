@@ -164,8 +164,8 @@ export class Grid {
     const tilesetSize = [Math.floor(lonExtent / resolution[0]), Math.floor(latExtent / resolution[1])]
     // Size of tiles is tile bound / resolution
     const tileSize = [
-      Math.max(2, Math.floor(resolution[0] / this.resolution[0])),
-      Math.max(2, Math.floor(resolution[1] / this.resolution[1]))
+      Math.floor(resolution[0] / this.resolution[0]) + 1,
+      Math.floor(resolution[1] / this.resolution[1]) + 1
     ]
     const tileResolution = [this.resolution[0], this.resolution[1]]
     return { tilesetSize, tileSize, tileResolution }
