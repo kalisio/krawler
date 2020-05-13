@@ -1,5 +1,18 @@
 # Changelog
 
+## [v1.1.1](https://github.com/kalisio/krawler/tree/v1.1.1) (2020-05-13)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v1.1.0...v1.1.1)
+
+**Implemented enhancements:**
+
+- Upgrade to latest Node.js LTS [\#91](https://github.com/kalisio/krawler/issues/91)
+
+**Fixed bugs:**
+
+- Build not working anymore [\#115](https://github.com/kalisio/krawler/issues/115)
+- Tile size is wrongly computed in grid [\#114](https://github.com/kalisio/krawler/issues/114)
+
 ## [v1.1.0](https://github.com/kalisio/krawler/tree/v1.1.0) (2020-04-28)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v1.0.1...v1.1.0)
