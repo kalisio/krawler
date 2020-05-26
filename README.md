@@ -1,5 +1,6 @@
 ![krawler](https://s3.eu-central-1.amazonaws.com/kalisioscope/krawler/krawler-logo-black-512x168.png)
 
+[![Latest Release](https://img.shields.io/github/v/tag/kalisio/krawler?sort=semver&label=latest)](https://github.com/kalisio/krawler/releases)
 [![Build Status](https://travis-ci.org/kalisio/krawler.png?branch=master)](https://travis-ci.org/kalisio/krawler)
 [![Code Climate](https://codeclimate.com/github/kalisio/krawler/badges/gpa.svg)](https://codeclimate.com/github/kalisio/krawler)
 [![Test Coverage](https://codeclimate.com/github/kalisio/krawler/badges/coverage.svg)](https://codeclimate.com/github/kalisio/krawler/coverage)
