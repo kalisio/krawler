@@ -88,13 +88,14 @@ export function createMongoCollection (options = {}) {
     }
 
     const collectionName = template(item, _.get(options, 'collection', _.snakeCase(item.id)))
-    // Check if already exist
-    let collection
-    try {
-      collection = await client.db.collection(collectionName, { strict: true })
-    } catch (error) {
-      // If it does not exist we will create it
-    }
+    // Check if already exist (strict mode requires a callback)
+    let collection = await new Promise((resolve, reject) => {
+      client.db.collection(collectionName, { strict: true }, (error, collection) => {
+        // If it does not exist we will create it
+        if (error) resolve(null)
+        else resolve(collection)
+      })
+    })
     // Create the collection if required
     if (!collection) {
       debug('Creating the ' + collection + ' collection')
@@ -284,13 +285,15 @@ export function createMongoBucket (options = {}) {
     }
 
     const bucketName = template(item, _.get(options, 'bucket', _.snakeCase(item.id)))
-    // Check if already exist
-    let bucket
-    try {
-      bucket = await client.db.collection(bucketName + '.files', { strict: true })
-    } catch (error) {
-      // If it does not exist we will create it
-    }
+    // Check if already exist (strict mode requires a callback)
+    let bucket = await new Promise((resolve, reject) => {
+      client.db.collection(bucketName + '.files', { strict: true }, (error, collection) => {
+        // If it does not exist we will create it
+        if (error) resolve(null)
+        else resolve(collection)
+      })
+    })
+    
     if (!bucket) {
       debug('Creating the ' + bucketName + ' bucket')
       bucket = new GridFSBucket(client.db, Object.assign({
