@@ -71,17 +71,21 @@ export function match (hookName, filter) {
     if (hook.type === 'error') hookObject = hook.original
     // Retrieve the item from the hook
     const item = getItems(hookObject)
+    // Check for a user-given predicate function first
+    if (typeof filter.predicate === 'function') {
+      const execute = await filter.predicate(item)
+      if (!execute) {
+        debug('Skipping hook ' + hookName + ' due to unverified predicate on item', item)
+        return false
+      }
+    }
     if (Array.isArray(item)) {
       debug('Executing hook ' + hookName + ' on item array as filtering does not apply')
       return true
     }
     const templatedFilter = templateQueryObject(item, _.omit(filter, ['predicate']))
     // Check if the hook has to be executed or not depending on its properties
-    let execute = !_.isEmpty(sift(templatedFilter, [item]))
-    // If yes check for a user-given predicate function as well
-    if (execute && (typeof filter.predicate === 'function')) {
-      execute = await filter.predicate(item)
-    }
+    const execute = !_.isEmpty(sift(templatedFilter, [item]))
     if (!execute) debug('Skipping hook ' + hookName + ' due to filter', templatedFilter)
     else debug('Executing hook ' + hookName + ' not filtered by', templatedFilter)
     return execute
