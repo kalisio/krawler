@@ -16,6 +16,11 @@ module.exports = {
         readCSV: {
           headers: true
         },
+        transformJson: {
+          unitMapping: {
+            pop: { asNumber: true }
+          }
+        },
         convertToGeoJson: {
           latitude: 'lat',
           longitude: 'lng'

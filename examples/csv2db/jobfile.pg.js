@@ -16,6 +16,11 @@ module.exports = {
         readCSV: {
           headers: true
         },
+        transformJson: {
+          unitMapping: {
+            pop: { asNumber: true }
+          }
+        },
         convertToGeoJson: {
           latitude: 'lat',
           longitude: 'lng'
@@ -30,12 +35,16 @@ module.exports = {
     },
     jobs: {
       before: {
-        createStores: [{
+        createJobStore: {
+          hook: 'createStore',
           id: 'job-store',
           type: 'fs',
           options: { path: path.join(__dirname, '..', 'output') }
         },
-        {
+        // If S3 is configured read from it
+        createS3Store: {
+          hook: 'createStore',
+          match: { predicate: () => process.env.S3_BUCKET },
           id: 'task-store',
           type: 's3',
           options: {
@@ -45,7 +54,15 @@ module.exports = {
             },
             bucket: process.env.S3_BUCKET
           }
-        }],
+        },
+        // Otherwise use local filesystem
+        createFsStore: {
+          hook: 'createStore',
+          match: { predicate: () => !process.env.S3_BUCKET },
+          id: 'task-store',
+          type: 'fs',
+          options: { path: path.join(__dirname) }
+        },
         connectPG: {
           user: process.env.PG_USER,
           password: process.env.PG_PASSWORD,
