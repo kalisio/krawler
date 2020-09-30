@@ -30,12 +30,16 @@ module.exports = {
     },
     jobs: {
       before: {
-        createStores: [{
+        createJobStore: {
+          hook: 'createStore',
           id: 'job-store',
           type: 'fs',
           options: { path: path.join(__dirname, '..', 'output') }
         },
-        {
+        // If S3 is configured read from it
+        createS3Store: {
+          hook: 'createStore',
+          match: { predicate: () => process.env.S3_BUCKET },
           id: 'task-store',
           type: 's3',
           options: {
@@ -45,7 +49,15 @@ module.exports = {
             },
             bucket: process.env.S3_BUCKET
           }
-        }],
+        },
+        // Otherwise use local filesystem
+        createFsStore: {
+          hook: 'createStore',
+          match: { predicate: () => !process.env.S3_BUCKET },
+          id: 'task-store',
+          type: 'fs',
+          options: { path: path.join(__dirname) }
+        },
         connectMongo: {
           url: 'mongodb://127.0.0.1:27017/krawler-test',
           // Required so that client is forwarded from job to tasks
