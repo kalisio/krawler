@@ -53,6 +53,9 @@ export function createStores (options = {}) {
   }
 }
 
+// Alias
+export const createStore = createStores
+
 // Remove an existing (set of) store(s)
 export function removeStores (options = {}) {
   return async function (hook) {
@@ -73,13 +76,25 @@ export function removeStores (options = {}) {
       const storeOptions = stores[i]
       const id = (typeof storeOptions === 'string' ? storeOptions : storeOptions.id)
       debug('Removing store ' + id + ' for ' + hook.data.id)
-      await hook.service.storesService.remove(id)
-      if (storeOptions.storePath) _.unset(hook.data, storeOptions.storePath)
+      try {
+        await hook.service.storesService.remove(id)
+        if (storeOptions.storePath) _.unset(hook.data, storeOptions.storePath)
+      } catch (error) {
+        if (faultTolerant) {
+          debug('Could not remove store for ' + hook.data.id)
+          console.error(error)
+        } else {
+          throw error
+        }
+      }
     }
 
     return hook
   }
 }
+
+// Alias
+export const removeStore = removeStores
 
 export function copyToStore (options = {}) {
   async function copy (item, hook) {
