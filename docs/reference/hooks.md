@@ -280,7 +280,9 @@ The transformations are applied in the order of the documentation, e.g. filterin
 ### mergeJson(options)
 
 Generate a in-memory JSON object from a set of input in-memory JSON objects, hook options are the following:
-* **by**: property name to be used as a unique identifier to perform merging using [Lodash](https://lodash.com/docs#unionBy)
+* **by**: property name to be used as a unique identifier to perform merging using [Lodash](https://lodash.com/docs#unionBy), it can also be a function returning a unique identifier
+* **deep**: this boolean indicates if properties from multiple objects with the same identifier are merged, otherwise only the first object will be kept, defaults to `false`
+* **transform**: perform transformation using these options before deep merging objects with the same identifier, see description in [transformJson](./hooks.md#transformjson-options)
 * **dataPath**: property path where to read the input JSON object on the result hook objects, defaults to `data`
 
 The input hook result is expected to be an array of tasks which output will be read in-memory.

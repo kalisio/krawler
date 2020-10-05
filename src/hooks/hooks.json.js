@@ -100,14 +100,30 @@ export function mergeJson (options = {}) {
 
     debug('Merging JSON for ' + hook.data.id)
     // Only in-memory for now
-    const objects = hook.result.map(result => {
+    let objects = hook.result.map(result => {
       let object = _.get(result, options.dataPath || 'data', []) || []
       // Ensure target is an array, not an object
       if (!Array.isArray(object)) object = [object]
       return object
     })
-
-    const json = (options.by ? _.unionBy(...objects, options.by) : _.unionWith(...objects, () => false))
+    objects = _.flatten(objects)
+    let json
+    if (options.deep) {
+      json = _.unionBy(objects, options.by)
+      json.forEach(object => {
+        // Find similar items
+        const items = _.filter(objects, item => {
+          if (typeof options.by == 'function') return (options.by(object) === options.by(item))
+          else return _.get(object, options.by) === _.get(item, options.by)
+        })
+        // Then merge similar items
+        items.forEach(item => {
+          if (item !== object) _.merge(object, transformJsonObject(item, options.transform))
+        })
+      })
+    } else {
+      json = (options.by ? _.unionBy(objects, options.by) : _.unionWith(objects, () => false))
+    }
     _.set(hook, options.dataPath || 'result.data', json)
     return hook
   }
