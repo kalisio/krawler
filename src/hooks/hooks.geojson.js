@@ -57,7 +57,11 @@ export function convertToGeoJson (options = {}) {
         const feature = {
           type: 'Feature',
           // Lat, long, alt not required anymore
-          properties: (options.keepGeometryProperties ? object : _.omit(object, [geometry, longitude, latitude, altitude])),
+          // Keep GeoJson properties but avoid geometry, etc. in case the target object is already a GeoJson feature
+          properties: Object.assign({}, _.get(object, 'properties'),
+            (options.keepGeometryProperties ?
+              _.omit(object, ['properties', 'geometry', 'type']) :
+              _.omit(object, [geometry, longitude, latitude, altitude, 'properties', 'geometry', 'type']))),
           geometry: (geo || {
             type: 'Point',
             coordinates: [lon, lat, alt]
