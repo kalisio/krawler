@@ -80,7 +80,7 @@ export function transformJsonObject (json, options) {
     // Then iterate over JSON objects
     _.forEach(json, object => {
       // Perform conversion
-      const value = _.get(object, path)
+      let value = _.get(object, path)
       if (value) {
         // Handle dates
         if (units.asDate) {
@@ -102,6 +102,9 @@ export function transformJsonObject (json, options) {
         } else if (units.asString) { // Handle string conversion
           _.set(object, path, value.toString)
         } else if (units.asNumber) { // Handle number conversion
+          // Remove all spaces as sometimes large numbers are written using a space separator
+          // like '120 000' causing the conversion to fail
+          if (typeof value === 'string') value = value.replace(/ /g, '')
           _.set(object, path, _.toNumber(value))
         } else { // Handle numbers
           _.set(object, path, math.unit(value, units.from).toNumber(units.to))
