@@ -212,6 +212,7 @@ Read a JSON from an input stream/store and convert it to in-memory JSON values, 
 * **store**: see description in [common options](./hooks.md#common-options)
 * **key**: see description in [common options](./hooks.md#common-options)
 * **transform**: perform transformation using these options after read, see description in [transformJson](./hooks.md#transformjson-options)
+* **features**: this boolean indicates if only the features are extracted when reading a GeoJson collection, defaults to `false`
 
 ### writeJson(options)
 

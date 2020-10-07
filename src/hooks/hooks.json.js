@@ -154,7 +154,7 @@ export function readJson (options = {}) {
       if (typeof json === 'string') json = JSON.parse(json)
     }
     // Automatically read features from a GeoJson collection
-    if ((json.type === 'FeatureCollection') && json.features && Array.isArray(json.features)) json = json.features
+    if (options.features && (json.type === 'FeatureCollection') && json.features && Array.isArray(json.features)) json = json.features
     if (options.objectPath) json = _.get(json, options.objectPath)
     // Allow transform after read
     if (options.transform) json = transformJsonObject(json, options.transform)
