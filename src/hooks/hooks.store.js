@@ -64,6 +64,7 @@ export function removeStores (options = {}) {
     }
 
     // Transform to array
+    const faultTolerant = options.faultTolerant
     let stores = []
     if (!Array.isArray(options)) {
       if (options.stores) options = options.stores
