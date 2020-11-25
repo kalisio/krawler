@@ -61,7 +61,7 @@ export function generateNwpTasks (options) {
               runTime,
               forecastTime,
               timeOffset
-            }, _.omit(element, ['levels']))
+            }, element)
             // Check if we have to retry on previous runs when failing
             if (oldestRunInterval) {
               // Number of retries required to reach the oldest limit
