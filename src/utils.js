@@ -192,7 +192,7 @@ export function convertDates (object, properties) {
         // We use moment to validate the date
         const date = moment(value, moment.ISO_8601)
         return (date.isValid() ? date.toDate() : value)
-      } else {
+      } else { // Unhandled types like boolean
         return value
       }
     } else {
@@ -218,6 +218,8 @@ export function convertNumbers (object, properties) {
         const number = _.toNumber(value)
         // We use lodash to validate the number
         return (!Number.isNaN(number) ? number : value)
+      } else { // Unhandled types like boolean
+        return value
       }
     } else {
       return value
