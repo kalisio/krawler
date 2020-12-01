@@ -26,7 +26,7 @@ This function is responsible of parsing the job definition including all the req
 
 ## External API
 
-The jobfile is the sole mandatory argument of the CLI and options are read from the CLI arguments with the same names as in the internal API or using shortcuts like this:
+The jobfile is the sole mandatory argument of the CLI and options are read from the CLI arguments with the same names as in the [internal API](./using-krawler.md#internal-api]) or using shortcuts like this:
 
 ```bash
 krawler --user user_name -p password -P proxy_url --cron "*/5 * * * * *" path_to_jobfile.json

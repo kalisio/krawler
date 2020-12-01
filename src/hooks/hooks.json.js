@@ -100,14 +100,30 @@ export function mergeJson (options = {}) {
 
     debug('Merging JSON for ' + hook.data.id)
     // Only in-memory for now
-    const objects = hook.result.map(result => {
+    let objects = hook.result.map(result => {
       let object = _.get(result, options.dataPath || 'data', []) || []
       // Ensure target is an array, not an object
       if (!Array.isArray(object)) object = [object]
       return object
     })
-
-    const json = (options.by ? _.unionBy(...objects, options.by) : _.unionWith(...objects, () => false))
+    objects = _.flatten(objects)
+    let json
+    if (options.deep) {
+      json = _.unionBy(objects, options.by)
+      json.forEach(object => {
+        // Find similar items
+        const items = _.filter(objects, item => {
+          if (typeof options.by == 'function') return (options.by(object) === options.by(item))
+          else return _.get(object, options.by) === _.get(item, options.by)
+        })
+        // Then merge similar items
+        items.forEach(item => {
+          if (item !== object) _.merge(object, transformJsonObject(item, options.transform))
+        })
+      })
+    } else {
+      json = (options.by ? _.unionBy(objects, options.by) : _.unionWith(objects, () => false))
+    }
     _.set(hook, options.dataPath || 'result.data', json)
     return hook
   }
@@ -137,6 +153,8 @@ export function readJson (options = {}) {
       // Sometimes we get a response string containing a JSON as a string
       if (typeof json === 'string') json = JSON.parse(json)
     }
+    // Automatically read features from a GeoJson collection
+    if (options.features && (json.type === 'FeatureCollection') && json.features && Array.isArray(json.features)) json = json.features
     if (options.objectPath) json = _.get(json, options.objectPath)
     // Allow transform after read
     if (options.transform) json = transformJsonObject(json, options.transform)

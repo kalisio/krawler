@@ -10,7 +10,7 @@ features:
   details: Take benefits of the existing functionalities and add your owns operations to address your specific needs
 - title: Web oriented
   details: Deploy your jobs as web services  in a matter of minutes 
-footer: MIT Licensed | Copyright © 2017-2018-Kalisio
+footer: MIT Licensed | Copyright © 2017-20xx Kalisio
 ---
 
 <p align="center">

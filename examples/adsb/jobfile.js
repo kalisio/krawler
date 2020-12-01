@@ -7,6 +7,7 @@ module.exports = {
   store: 'memory',
   options: {
     //workersLimit: 1
+    //faultTolerant: true
   },
   tasks: [{
     id: 'adsb-exchange',
@@ -83,7 +84,10 @@ module.exports = {
           options: {
             path: path.join(__dirname, '..', 'output')
           }
-        }, {
+        }],
+        // If S3 is configured write to it otherwise only to local filesystem
+        createStore: {
+          match: { predicate: () => process.env.S3_BUCKET },
           id: 's3',
           options: {
             client: {
@@ -92,7 +96,7 @@ module.exports = {
             },
             bucket: process.env.S3_BUCKET
           }
-        }]
+        }
       },
       after: {
         mergeJson: { by: 'icao' },
@@ -103,12 +107,17 @@ module.exports = {
         },
         writeJsonS3: {
           hook: 'writeJson',
+          match: { predicate: () => process.env.S3_BUCKET },
           store: 's3',
           storageOptions: {
             ACL: 'public-read'
           }
         },
-        removeStores: ['memory', 'fs', 's3']
+        removeStores: ['memory', 'fs'],
+        removeStore: {
+          match: { predicate: () => process.env.S3_BUCKET },
+          id: 's3'
+        }
       }
     }
   }

@@ -44,7 +44,7 @@ export function generateNwpTasks (options) {
       // These ones can be 0 take care the way the test is written
       const elementLowerLimit = (_.has(element, 'lowerLimit') ? element.lowerLimit : lowerLimit)
       const elementUpperLimit = (_.has(element, 'upperLimit') ? element.upperLimit : upperLimit)
-      const levels = element.levels || [undefined] // If no level specified it is implicit so push an undefined one
+      const levels = element.levels || [undefined] // If no level specified it is implicit so push an undefined one just to run the loop
       // If we don't care about the past take care that, however,
       // a forecast is still potentially valid at least until we reach the next one
       const lowerTime = (options.keepPastForecasts
@@ -61,7 +61,7 @@ export function generateNwpTasks (options) {
               runTime,
               forecastTime,
               timeOffset
-            }, _.omit(element, ['levels']))
+            }, element)
             // Check if we have to retry on previous runs when failing
             if (oldestRunInterval) {
               // Number of retries required to reach the oldest limit

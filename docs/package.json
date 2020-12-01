@@ -6,6 +6,6 @@
   },
   "devDependencies": {
     "vuepress": "^1.5.0",
-    "vuepress-theme-kalisio": "http://github.com/kalisio/vuepress-theme-kalisio#1.3.0"
+    "vuepress-theme-kalisio": "http://github.com/kalisio/vuepress-theme-kalisio#1.5.0"
   }
 }
