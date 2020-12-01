@@ -67,12 +67,22 @@ async function publishToSlack (data, compilers, pretext = '', color = 'danger') 
     }
     text += `\n${pretext}${message}`
 
+    // for some reason, using color names 'danger', 'warning' and 'good'
+    // doesn't work when using the blocks api ...
+    // perform conversion as a workaround
+    const color2hex = {
+      danger: '#a30200',
+      warning: '#daa038',
+      good: '#2eb886',
+      neutral: '#35373b'
+    }
+
     await utils.promisify(request.post)({
       url: program.slackWebhook,
       body: JSON.stringify({
         attachments: [
           {
-            color: color,
+            color: _.get(color2hex, color, color2hex.neutral),
             blocks: [
               {
                 type: 'section',
