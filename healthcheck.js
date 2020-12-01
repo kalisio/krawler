@@ -15,6 +15,7 @@ program
   .option('-nsj, --nb-skipped-jobs [nb]', 'Change the number of skipped runs for fault-tolerant jobs to be considered as failed (defaults to 3)', 3)
   .option('-sw, --slack-webhook [url]', 'Slack webhook URL to post messages on failure', process.env.SLACK_WEBHOOK_URL)
   .option('-mt, --message-template [template]', 'Message template used on failure', 'Job <%= jobId %>: <%= error.message %>')
+  .option('-mo, --message-origin [template]', 'Hint regarding the message\'s origin', 'Krawler healthcheck')
   .option('-lt, --link-template [template]', 'Link template used on failure', '')
   .option('-d, --debug', 'Verbose output for debugging')
   .parse(process.argv)
@@ -51,23 +52,32 @@ function publishToConsole (data, compilers, pretext, stream = 'error') {
   }
 }
 
-async function publishToSlack (data, compilers, pretext, color = 'danger') {
+async function publishToSlack (data, compilers, color = 'danger') {
   if (!program.slackWebhook) return
   try {
     const message = compilers.message(data)
     const link = compilers.link(data)
-    const attachment = {
-      title: message,
-      color: color
-    }
-    if (link) {
-      attachment.title_link = link
-    }
+    const origin = compilers.origin(data)
+    const text = link ? `<${link}|*${origin}*>\n${message}` : `*${origin}*\n${message}`
+
     await utils.promisify(request.post)({
       url: program.slackWebhook,
       body: JSON.stringify({
-        text: `*${pretext} krawler healthcheck*`,
-        attachments: [attachment]
+        attachments: [
+          {
+            color: color,
+            blocks: [
+              {
+                type: 'section',
+                text: {
+                  type: 'mrkdwn',
+                  verbatim: true,
+                  text: text
+                }
+              }
+            ]
+          }
+        ]
       })
     })
   } catch (error) {
@@ -86,7 +96,8 @@ async function healthcheck () {
   const endpoint = `http://localhost:${program.port}${program.api ? program.apiPrefix : ''}/healthcheck`
   const compilers = {
     message: _.template(program.messageTemplate),
-    link: _.template(program.linkTemplate)
+    link: _.template(program.linkTemplate),
+    origin: _.template(program.messageOrigin)
   }
   let previousError
   try {
@@ -117,7 +128,7 @@ async function healthcheck () {
       // Only notify on new errors
       if (!previousError || !isSameError(previousError, data.error)) {
         publishToConsole(data, compilers, '[ALERT]', 'error')
-        await publishToSlack(data, compilers, '[ALERT]', 'danger')
+        await publishToSlack(data, compilers, 'danger')
       }
       process.exit(1)
     } else {
@@ -125,7 +136,7 @@ async function healthcheck () {
       if (previousError) {
         data.error = previousError
         publishToConsole(data, compilers, '[CLOSED ALERT]', 'log')
-        await publishToSlack(data, compilers, '[CLOSED ALERT]', 'good')
+        await publishToSlack(data, compilers, 'good')
       }
       process.exit(0)
     }
@@ -138,7 +149,7 @@ async function healthcheck () {
     // Only notify on new errors
     if (!previousError || !isSameError(previousError, data.error)) {
       publishToConsole(data, compilers, '[ALERT]', 'error')
-      await publishToSlack(data, compilers, '[ALERT]', 'danger')
+      await publishToSlack(data, compilers, 'danger')
     }
     process.exit(1)
   }
