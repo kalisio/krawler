@@ -52,13 +52,20 @@ function publishToConsole (data, compilers, pretext, stream = 'error') {
   }
 }
 
-async function publishToSlack (data, compilers, color = 'danger') {
+async function publishToSlack (data, compilers, pretext = '', color = 'danger') {
   if (!program.slackWebhook) return
   try {
     const message = compilers.message(data)
     const link = compilers.link(data)
     const origin = compilers.origin(data)
-    const text = link ? `<${link}|*${origin}*>\n${message}` : `*${origin}*\n${message}`
+    let text
+    if (link) {
+      // markdown link on origin text
+      text = `<${link}|*${origin}*>`
+    } else {
+      text = `*${origin}*`
+    }
+    text += `\n${pretext}${message}`
 
     await utils.promisify(request.post)({
       url: program.slackWebhook,
@@ -128,7 +135,7 @@ async function healthcheck () {
       // Only notify on new errors
       if (!previousError || !isSameError(previousError, data.error)) {
         publishToConsole(data, compilers, '[ALERT]', 'error')
-        await publishToSlack(data, compilers, 'danger')
+        await publishToSlack(data, compilers, '', 'danger')
       }
       process.exit(1)
     } else {
@@ -136,7 +143,7 @@ async function healthcheck () {
       if (previousError) {
         data.error = previousError
         publishToConsole(data, compilers, '[CLOSED ALERT]', 'log')
-        await publishToSlack(data, compilers, 'good')
+        await publishToSlack(data, compilers, '[RESOLVED] ', 'good')
       }
       process.exit(0)
     }
@@ -149,7 +156,7 @@ async function healthcheck () {
     // Only notify on new errors
     if (!previousError || !isSameError(previousError, data.error)) {
       publishToConsole(data, compilers, '[ALERT]', 'error')
-      await publishToSlack(data, compilers, 'danger')
+      await publishToSlack(data, compilers, '', 'danger')
     }
     process.exit(1)
   }
