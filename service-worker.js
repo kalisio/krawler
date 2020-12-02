@@ -27,27 +27,27 @@ self.addEventListener('message', (event) => {
 self.__precacheManifest = [
   {
     "url": "404.html",
-    "revision": "f9d5166159a94f1ed22128b11e9e0da0"
+    "revision": "272cb9091ae05159751919275a58e7ff"
   },
   {
     "url": "about/contact.html",
-    "revision": "738c1b5e753654ad85ba6dcd27e92b27"
+    "revision": "e9d8f7cd829d29f4cf8b67654e42e84d"
   },
   {
     "url": "about/contributing.html",
-    "revision": "239768fe33053cf7b7dbdf49b536b3c1"
+    "revision": "2a5abb185e3c70a104785e69dfa677c7"
   },
   {
     "url": "about/introduction.html",
-    "revision": "de5ef779bc234a1836fb3c1827302697"
+    "revision": "3d78e73bdafe3f8c4c039d1f9760d688"
   },
   {
     "url": "about/license.html",
-    "revision": "174a382860b2417521125e2975ae5d34"
+    "revision": "d31d76fb3fd01b2fe24d61023a45cf53"
   },
   {
     "url": "about/roadmap.html",
-    "revision": "30e499c59d8bd9318a090151f906eec0"
+    "revision": "310851a96a8f8a8b7c5fa66043a3673f"
   },
   {
     "url": "assets/css/0.styles.25ffafa9.css",
@@ -158,52 +158,52 @@ self.__precacheManifest = [
     "revision": "0c4fb0767085652c399adc7084c0bd4a"
   },
   {
-    "url": "assets/js/app.f188728d.js",
-    "revision": "cbc30265eb7e2d63fc8c7b40051632a3"
+    "url": "assets/js/app.cae6406d.js",
+    "revision": "593329ec61da5fd89282b985ca062c80"
   },
   {
     "url": "examples/index.html",
-    "revision": "54a59b4069d55663760fc92514945750"
+    "revision": "6b5c02b9612d981636661b0e37073a66"
   },
   {
     "url": "guides/extending-krawler.html",
-    "revision": "0caa8297361ffbadd64d9c97f0042c44"
+    "revision": "8f34349cb3a2204215b6aade3f4c7221"
   },
   {
     "url": "guides/index.html",
-    "revision": "116544daf30798e1ebddb8f537502410"
+    "revision": "1a4900e9a7736284e3940cd0f11422b9"
   },
   {
     "url": "guides/installing-krawler.html",
-    "revision": "eb48efbeaf0634aca1d140c060becd8f"
+    "revision": "ef722a42430fa2ed83af53dfd7e8dc77"
   },
   {
     "url": "guides/understanding-krawler.html",
-    "revision": "ea14d61b26c9b069effae8c14f6766b8"
+    "revision": "9fa0207f4c8f470def5170532ca7235e"
   },
   {
     "url": "guides/using-krawler.html",
-    "revision": "4da4e7ec11fc4c2cb1f4542909990d3e"
+    "revision": "b15a3ad661e8ce2da8e8ccc42869dbbd"
   },
   {
     "url": "index.html",
-    "revision": "5655170db538ac5f6fd80b3aae60855f"
+    "revision": "ed9fb9b54ca9a1f1012951eeb79e61a7"
   },
   {
     "url": "reference/hooks.html",
-    "revision": "1a5638368a3afe649c56e237c547282b"
+    "revision": "1580b27453b9f239f8892fee1193c600"
   },
   {
     "url": "reference/index.html",
-    "revision": "c0b87d05c7960c324e043f853961a26c"
+    "revision": "f237b40160008ab50ef5483d6ee6f333"
   },
   {
     "url": "reference/known-issues.html",
-    "revision": "5a874317cc2ed846caa5c37ddc6f2986"
+    "revision": "8fbfb95c6222f083e82a38c27f03b9e0"
   },
   {
     "url": "reference/services.html",
-    "revision": "6982349c516431ab71e9b3748aa2e5d4"
+    "revision": "6f4dcc172061b6034eba9d51e7242f5c"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
