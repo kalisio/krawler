@@ -7,6 +7,7 @@ const _ = require('lodash')
 
 program
   .usage('[options]')
+  .allowUnknownOption()
   .option('-a, --api', 'Setup as web app by exposing an API')
   .option('-ap, --api-prefix [prefix]', 'When exposed as an API change the prefix (defaults to /api)', '/api')
   .option('-po, --port [port]', 'Change the port to be used (defaults to 3030)', 3030)
