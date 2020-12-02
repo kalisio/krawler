@@ -16,7 +16,6 @@ program
   .option('-nsj, --nb-skipped-jobs [nb]', 'Change the number of skipped runs for fault-tolerant jobs to be considered as failed (defaults to 3)', 3)
   .option('-sw, --slack-webhook [url]', 'Slack webhook URL to post messages on failure', process.env.SLACK_WEBHOOK_URL)
   .option('-mt, --message-template [template]', 'Message template used on failure', 'Job <%= jobId %>: <%= error.message %>')
-  .option('-mo, --message-origin [template]', 'Hint regarding the message\'s origin', 'Krawler healthcheck')
   .option('-lt, --link-template [template]', 'Link template used on failure', '')
   .option('-d, --debug', 'Verbose output for debugging')
   .parse(process.argv)
@@ -53,47 +52,21 @@ function publishToConsole (data, compilers, pretext, stream = 'error') {
   }
 }
 
-async function publishToSlack (data, compilers, pretext = '', color = 'danger') {
+async function publishToSlack (data, compilers, posttext = '', color = 'danger') {
   if (!program.slackWebhook) return
   try {
     const message = compilers.message(data)
     const link = compilers.link(data)
-    const origin = compilers.origin(data)
-    let text
-    if (link) {
-      // markdown link on origin text
-      text = `<${link}|*${origin}*>`
-    } else {
-      text = `*${origin}*`
-    }
-    text += `\n${pretext}${message}`
-
-    // for some reason, using color names 'danger', 'warning' and 'good'
-    // doesn't work when using the blocks api ...
-    // perform conversion as a workaround
-    const color2hex = {
-      danger: '#a30200',
-      warning: '#daa038',
-      good: '#2eb886',
-      neutral: '#35373b'
-    }
+    const text = link ? `<${link}|${message}${posttext}>` : `${message}${posttext}`
 
     await utils.promisify(request.post)({
       url: program.slackWebhook,
       body: JSON.stringify({
         attachments: [
           {
-            color: _.get(color2hex, color, color2hex.neutral),
-            blocks: [
-              {
-                type: 'section',
-                text: {
-                  type: 'mrkdwn',
-                  verbatim: true,
-                  text: text
-                }
-              }
-            ]
+            color: color,
+            mrkdwn_in: ['text'],
+            text: text
           }
         ]
       })
@@ -154,7 +127,7 @@ async function healthcheck () {
       if (previousError) {
         data.error = previousError
         publishToConsole(data, compilers, '[CLOSED ALERT]', 'log')
-        await publishToSlack(data, compilers, '[RESOLVED] ', 'good')
+        await publishToSlack(data, compilers, ' [RESOLVED]', 'good')
       }
       process.exit(0)
     }
