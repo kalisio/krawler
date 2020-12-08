@@ -69,8 +69,12 @@ export function match (hookName, filter) {
     let hookObject = hook
     // Handle error hooks as usual
     if (hook.type === 'error') hookObject = hook.original
-    // Retrieve the item from the hook
-    const item = getItems(hookObject)
+    // Retrieve the item from the hook if any
+    const item = (hookObject ? getItems(hookObject) : null)
+    if (!item) {
+      debug('Executing hook ' + hookName + ' on undefined item as filtering does not apply')
+      return true
+    }
     // Check for a user-given predicate function first
     if (typeof filter.predicate === 'function') {
       const execute = await filter.predicate(item)

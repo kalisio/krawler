@@ -53,7 +53,7 @@ export function disconnectMongo (options = {}) {
 // Drop a collection
 export function dropMongoCollection (options = {}) {
   return async function (hook) {
-    const item = hook.data // hook.data // getItems(hook)
+    const item = hook.data // getItems(hook)
     const client = _.get(item, options.clientPath || 'client')
     if (_.isNil(client)) {
       throw new Error('You must be connected to MongoDB before using the \'dropMongoCollection\' hook')
