@@ -56,22 +56,29 @@ export function generateNwpTasks (options) {
         for (let timeOffset = elementLowerLimit; timeOffset <= elementUpperLimit; timeOffset += elementInterval) {
           const forecastTime = runTime.clone().add({ seconds: timeOffset })
           if (options.keepPastForecasts || !forecastTime.isBefore(lowerTime)) {
-            const task = Object.assign({
+            let task = Object.assign({
               level,
               runTime,
               forecastTime,
               timeOffset
             }, element)
-            // Check if we have to retry on previous runs when failing
+            // Check if we have to retry on previous runs
             if (oldestRunInterval) {
               // Number of retries required to reach the oldest limit
-              task.attemptsLimit = 1 + (oldestRunInterval / runInterval)
-              task.attemptsOptions = []
+              const attemptsLimit = 1 + (oldestRunInterval / runInterval)
+              // Do we always download previous run or only try when the current one is failing
+              if (!options.keepPastRuns) {
+                task.attemptsLimit = attemptsLimit
+                task.attemptsOptions = []
+              }
               // For each retry jump to previous run
-              for (let i = 0; i < task.attemptsLimit - 1; i++) {
-                task.attemptsOptions.push({
-                  runTime: runTime.clone().subtract({ seconds: (i + 1) * runInterval })
-                })
+              for (let i = 0; i < attemptsLimit - 1; i++) {
+                const previousRunTime = runTime.clone().subtract({ seconds: (i + 1) * runInterval })
+                if (options.keepPastRuns) {
+                  tasks.push(Object.assign({ runTime: previousRunTime }, _.omit(task, ['runTime'])))
+                } else {
+                  task.attemptsOptions.push({ runTime: previousRunTime })
+                }
               }
             }
             tasks.push(task)
