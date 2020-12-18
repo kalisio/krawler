@@ -53,6 +53,10 @@ export function transformJsonObject (json, options) {
   if (options.filter) {
     json = sift(options.filter, json)
   }
+  // By default we perform transformation in place
+  if (!_.get(options, 'inPlace', true))  {
+    json = _.cloneDeep(json)
+  }
   // Iterate over path mapping
   _.forOwn(options.mapping, (output, inputPath) => {
     const isMappingObject = (typeof output === 'object')
