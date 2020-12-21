@@ -64,7 +64,7 @@
     "@feathersjs/socketio": "^3.2.4",
     "@kalisio/geo-pixel-stream": "https://github.com/kalisio/geo-pixel-stream",
     "@mapbox/sphericalmercator": "^1.0.5",
-    "@turf/turf": "^6.0.0",
+    "@turf/turf": "6.2.0-alpha.3",
     "aws-sdk": "^2.158.0",
     "body-parser": "^1.17.1",
     "commander": "^2.11.0",

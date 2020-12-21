@@ -1367,7 +1367,7 @@
     "@turf/helpers" "^6.2.0-alpha.3"
     "@turf/meta" "^6.2.0-alpha.3"
 
-"@turf/turf@^6.0.0":
+"@turf/turf@6.2.0-alpha.3":
   version "6.2.0-alpha.3"
   resolved "https://registry.yarnpkg.com/@turf/turf/-/turf-6.2.0-alpha.3.tgz#94d9263d06cbe41cce0031d258f23001f59586a9"
   integrity sha512-Fn8lLYYjv5cYMsjeLJtWqQrvW6gWhaISom+tFTuHAUp5sYHB70iBHN7an1JtF8Rli7Mm1nizBlmexUSYMLiDRg==
