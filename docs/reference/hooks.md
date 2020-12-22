@@ -250,6 +250,7 @@ Restructure in-memory JSON values, hook options are the following:
 * **merge**: an object to be merged with each JSON objects using [Lodash](https://lodash.com/docs#merge)
 * **asObject**: this boolean indicates if the output should be transformed into an object if the array contains a single object, defaults to `false`
 * **asArray**: this boolean indicates if the output should be transformed into an array containing the object, defaults to `false`
+* **inPlace**: this boolean indicates if the input data is transformed in place or simply before writing it when part of a write hook, defaults to `true`
 
 Example:
 ```js
