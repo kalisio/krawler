@@ -50,7 +50,13 @@ describe('krawler:hooks:mongo', () => {
     mongoHook.type = 'after'
     mongoHook.result = mongoHook.data
     mongoHook.result.data = geojson
-    await pluginHooks.writeMongoCollection({ collection: 'geojson' })(mongoHook)
+    await pluginHooks.writeMongoCollection({
+      collection: 'geojson',
+      transform: {
+        omit: ['properties.prop2'],
+        inPlace: false
+      }
+    })(mongoHook)
     const collection = mongoHook.data.client.db.collection('geojson')
     const results = await collection.find({
       geometry: { $near: { $geometry: { type: 'Point', coordinates: [102, 0.5] }, $maxDistance: 5000 } }
@@ -58,6 +64,7 @@ describe('krawler:hooks:mongo', () => {
     expect(results.length).to.equal(1)
     expect(results[0].properties).toExist()
     expect(results[0].properties.prop0).to.equal('value0')
+    expect(results[0].properties.prop2).beUndefined()
   })
   // Let enough time to proceed
     .timeout(5000)

@@ -150,26 +150,22 @@ export function readMongoCollection (options = {}) {
 
 function getChunks (hook, options) {
   const item = hook.data // getItems(hook)
-  // Defines the chunks
   let json = _.get(hook, options.dataPath || 'result.data', {}) || {}
+  // Handle specific case of GeoJson
+  if (_.get(json, 'type') === 'FeatureCollection') {
+    json = json.features
+  } else if (_.get(json, 'type') === 'Feature') {
+    json = [json]
+  } else if (!Array.isArray(json)) {
+    json = [json]
+  }
   // Allow transform before write
   if (options.transform) {
     const templatedTransform = templateObject(item, options.transform)
     json = transformJsonObject(json, templatedTransform)
   }
-  let chunks = []
-  // Handle specific case of GeoJson
-  if (_.get(json, 'type') === 'FeatureCollection') {
-    chunks = _.chunk(json.features, _.get(options, 'chunkSize', 100))
-  } else if (_.get(json, 'type') === 'Feature') {
-    chunks.push([json])
-  } else if (Array.isArray(json)) {
-    chunks = _.chunk(json, _.get(options, 'chunkSize', 100))
-  } else {
-    chunks.push([json])
-  }
-
-  return chunks
+  // Defines the chunks
+  return _.chunk(json, _.get(options, 'chunkSize', 100))
 }
 
 // Insert JSON document(s) in a collection

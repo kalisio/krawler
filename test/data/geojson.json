@@ -12,7 +12,8 @@
         ]
       },
       "properties": {
-        "prop0": "value0"
+        "prop0": "value0",
+        "prop2": "value2"
       }
     },
     {
