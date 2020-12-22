@@ -1,5 +1,36 @@
 # Changelog
 
+## [v1.2.0](https://github.com/kalisio/krawler/tree/v1.2.0) (2020-12-22)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v1.1.1...v1.2.0)
+
+**Implemented enhancements:**
+
+- Add an option to avoid transforming Json objects in place [\#144](https://github.com/kalisio/krawler/issues/144)
+- Allow NWP hook to generate tasks for past runs [\#140](https://github.com/kalisio/krawler/issues/140)
+- Healthcheck should not fail when given unknown options [\#139](https://github.com/kalisio/krawler/issues/139)
+- Improve healthcheck messages posted on Slack [\#137](https://github.com/kalisio/krawler/issues/137)
+- Enhance mergeJson hook to deep merge objects [\#132](https://github.com/kalisio/krawler/issues/132)
+
+**Fixed bugs:**
+
+- GeoJson features not transformed on write/updateMongoCollection hooks [\#145](https://github.com/kalisio/krawler/issues/145)
+- Upper limit exceeded in NWP tasks with a oldest run interval [\#138](https://github.com/kalisio/krawler/issues/138)
+- Boolean values in match filter are lost after templating [\#136](https://github.com/kalisio/krawler/issues/136)
+- When a job timeout, krawler hangs with the following error: Cannot read property 'type' of undefined [\#135](https://github.com/kalisio/krawler/issues/135)
+- Permission denied to run krawler command in container [\#134](https://github.com/kalisio/krawler/issues/134)
+- Match predicate not applied when items are an array [\#130](https://github.com/kalisio/krawler/issues/130)
+
+**Merged pull requests:**
+
+- build\(deps\): bump fstream from 1.0.11 to 1.0.12 [\#129](https://github.com/kalisio/krawler/pull/129) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump stringstream from 0.0.5 to 0.0.6 [\#126](https://github.com/kalisio/krawler/pull/126) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump prismjs from 1.20.0 to 1.21.0 in /docs [\#125](https://github.com/kalisio/krawler/pull/125) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump elliptic from 6.5.2 to 6.5.3 in /docs [\#124](https://github.com/kalisio/krawler/pull/124) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump lodash from 4.17.15 to 4.17.19 in /docs [\#123](https://github.com/kalisio/krawler/pull/123) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump lodash from 4.17.15 to 4.17.19 [\#122](https://github.com/kalisio/krawler/pull/122) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump websocket-extensions from 0.1.3 to 0.1.4 in /docs [\#121](https://github.com/kalisio/krawler/pull/121) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v1.1.1](https://github.com/kalisio/krawler/tree/v1.1.1) (2020-05-13)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v1.1.0...v1.1.1)
