@@ -109,7 +109,7 @@ export function copyToStore (options = {}) {
     addOutput(item, outputOptions.key, outputOptions.outputType)
   }
 
-  return callOnHookItems(copy)
+  return callOnHookItems(options)(copy)
 }
 
 export function gzipToStore (options = {}) {
@@ -124,7 +124,7 @@ export function gzipToStore (options = {}) {
     addOutput(item, outputOptions.key, outputOptions.outputType)
   }
 
-  return callOnHookItems(gzip)
+  return callOnHookItems(options)(gzip)
 }
 
 export function gunzipFromStore (options = {}) {
@@ -139,7 +139,7 @@ export function gunzipFromStore (options = {}) {
     addOutput(item, outputOptions.key, outputOptions.outputType)
   }
 
-  return callOnHookItems(gunzip)
+  return callOnHookItems(options)(gunzip)
 }
 
 export function unzipFromStore (options = {}) {
@@ -164,5 +164,5 @@ export function unzipFromStore (options = {}) {
     // addOutput(item, outputOptions.key, outputOptions.outputType)
   }
 
-  return callOnHookItems(unzip)
+  return callOnHookItems(options)(unzip)
 }

@@ -36,7 +36,7 @@ export function clearOutputs (options = {}) {
     await clearObjectOutputs(item, store, options.type)
   }
 
-  return callOnHookItems(clearItemOutputs)
+  return callOnHookItems(options)(clearItemOutputs)
 }
 
 // Clear in-memory data
@@ -49,5 +49,5 @@ export function clearData (options = {}) {
     }
   }
 
-  return callOnHookItems(clearItemData)
+  return callOnHookItems(options)(clearItemData)
 }

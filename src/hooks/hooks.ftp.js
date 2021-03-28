@@ -48,7 +48,7 @@ export function listFTP (options = {}) {
     })
   }
 
-  return callOnHookItems(list)
+  return callOnHookItems(options)(list)
 }
 
 // Get a file on the FTP server
@@ -79,7 +79,7 @@ export function getFTP (options = {}) {
     })
   }
 
-  return callOnHookItems(get)
+  return callOnHookItems(options)(get)
 }
 
 // Put a file on the FTP server
@@ -105,7 +105,7 @@ export function putFTP (options = {}) {
     })
   }
 
-  return callOnHookItems(put)
+  return callOnHookItems(options)(put)
 }
 
 // Disconnect from the FTP server

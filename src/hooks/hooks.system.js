@@ -19,7 +19,7 @@ export function tar (options = {}) {
         addOutput(item, templatedOptions.file, options.outputType)
       })
   }
-  return callOnHookItems(tarc)
+  return callOnHookItems(options)(tarc)
 }
 
 export function untar (options = {}) {
@@ -31,7 +31,7 @@ export function untar (options = {}) {
     debug(`Untar ${item.id} with options`, templatedOptions)
     return Tar.x(templatedOptions, templatedOptions.files)
   }
-  return callOnHookItems(tarx)
+  return callOnHookItems(options)(tarx)
 }
 
 export function runCommand (options = {}) {
@@ -53,5 +53,5 @@ export function runCommand (options = {}) {
       }
     }
   }
-  return callOnHookItems(run)
+  return callOnHookItems(options)(run)
 }

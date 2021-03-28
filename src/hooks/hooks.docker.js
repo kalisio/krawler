@@ -66,7 +66,7 @@ export function pullDockerImage (options = {}) {
       })
     })
   }
-  return callOnHookItems(pull)
+  return callOnHookItems(options)(pull)
 }
 
 export function createDockerContainer (options = {}) {
@@ -83,7 +83,7 @@ export function createDockerContainer (options = {}) {
     const container = await client.createContainer(templatedOptions)
     _.set(item, options.containerPath || 'container', container)
   }
-  return callOnHookItems(create)
+  return callOnHookItems(options)(create)
 }
 
 export function createDockerService (options = {}) {
@@ -100,7 +100,7 @@ export function createDockerService (options = {}) {
     const service = await client.createService(templatedOptions)
     _.set(item, options.servicePath || 'service', service)
   }
-  return callOnHookItems(create)
+  return callOnHookItems(options)(create)
 }
 
 export function runDockerContainerCommand (options = {}) {
@@ -147,5 +147,5 @@ export function runDockerContainerCommand (options = {}) {
       addOutput(item, item.id + '.tar', options.outputType)
     }
   }
-  return callOnHookItems(run)
+  return callOnHookItems(options)(run)
 }

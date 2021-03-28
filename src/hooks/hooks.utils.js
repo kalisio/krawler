@@ -9,7 +9,7 @@ const debug = makeDebug('krawler:hooks:utils')
 
 // Generate UUID
 export function generateId (options = {}) {
-  return callOnHookItems(item => {
+  return callOnHookItems(options)(item => {
     item.id = uuid()
     debug('Generated uuid', item.id)
   })
@@ -17,7 +17,7 @@ export function generateId (options = {}) {
 
 // Apply a template
 export function template (options = {}) {
-  return callOnHookItems(item => {
+  return callOnHookItems(options)(item => {
     const templatedOptions = templateObject(item, options)
     // Use templated property if not provided in item
     _.forOwn(templatedOptions, function (value, key) {
@@ -46,7 +46,7 @@ export function discardIf (options = {}) {
 
 // Emit event
 export function emitEvent (options = {}) {
-  return callOnHookItems((item, hook) => {
+  return callOnHookItems(options)((item, hook) => {
     const templatedOptions = templateObject(item, options)
     const event = { name: templatedOptions.name }
     event.data = transformJsonObject(item, templatedOptions)
@@ -68,7 +68,7 @@ export function apply (options) {
       return hook
     }
   } else {
-    return callOnHookItems(async item => {
+    return callOnHookItems(options)(async item => {
       await options.function(item)
       debug('Applied function on item', item)
     })

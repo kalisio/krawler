@@ -148,36 +148,38 @@ export function transformJsonObject (json, options) {
 }
 
 // Call a given function on each hook item
-export function callOnHookItems (f) {
-  return async function (hook) {
-    let hookObject = hook
-    // Handle error hooks as usual
-    if (hook.type === 'error') hookObject = hook.original
-    // Retrieve the items from the hook
-    const items = getItems(hookObject)
-    const isArray = Array.isArray(items)
-    if (isArray) {
-      for (let i = 0; i < items.length; i++) {
+export function callOnHookItems(options = {}) {
+  return (f) => {
+    return async function (hook) {
+      let hookObject = hook
+      // Handle error hooks as usual
+      if (hook.type === 'error') hookObject = hook.original
+      // Retrieve the items from the hook
+      const items = getItems(hookObject)
+      const isArray = Array.isArray(items)
+      if (isArray && !options.once) {
+        for (let i = 0; i < items.length; i++) {
+          // Handle error hooks as usual
+          if (hook.type === 'error') {
+            items[i].error = hook.error
+            // Avoid circular reference
+            delete items[i].error.hook
+          }
+          await f(items[i], hookObject)
+        }
+      } else {
         // Handle error hooks as usual
         if (hook.type === 'error') {
-          items[i].error = hook.error
+          items.error = hook.error
           // Avoid circular reference
-          delete items[i].error.hook
+          delete items.error.hook
         }
-        await f(items[i], hookObject)
+        await f(items, hookObject)
       }
-    } else {
-      // Handle error hooks as usual
-      if (hook.type === 'error') {
-        items.error = hook.error
-        // Avoid circular reference
-        delete items.error.hook
-      }
-      await f(items, hookObject)
+      // Replace the items within the hook
+      replaceItems(hookObject, items)
+      return hook
     }
-    // Replace the items within the hook
-    replaceItems(hookObject, items)
-    return hook
   }
 }
 
