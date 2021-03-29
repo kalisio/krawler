@@ -150,6 +150,8 @@ export function transformJsonObject (json, options) {
 // Call a given function on each hook item
 export function callOnHookItems(options = {}) {
   return (f) => {
+    // Default call mode is per item
+    const perItem = _.get(options, 'perItem', true)
     return async function (hook) {
       let hookObject = hook
       // Handle error hooks as usual
@@ -157,7 +159,7 @@ export function callOnHookItems(options = {}) {
       // Retrieve the items from the hook
       const items = getItems(hookObject)
       const isArray = Array.isArray(items)
-      if (isArray && !options.once) {
+      if (isArray && perItem) {
         for (let i = 0; i < items.length; i++) {
           // Handle error hooks as usual
           if (hook.type === 'error') {
