@@ -647,7 +647,8 @@ Untar files or directories using [node-tar](https://github.com/npm/node-tar), ho
 ### runCommand(options)
 
 Run a system command. Hook options are the following:
-* **command**: the template of the command to be run with the hook object as context
+* **command**: the template of the command to be run with the hook object as context (could be an array commands for a sequence)
+* **spawn**: `true` to use `child_process.spawn` instead of `child_process.exec` (default) to run the command(s), in that case a command is given as an array of args instead of a single string 
 * **stdout**: boolean indicating if stdout is logged and stored in the hook object
 * **stderr**: boolean indicating if stderr is logged and stored in the hook object
 

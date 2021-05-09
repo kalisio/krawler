@@ -2,6 +2,7 @@ import _ from 'lodash'
 import makeDebug from 'debug'
 import util from 'util'
 import Tar from 'tar'
+import spawn from 'cross-spawn'
 import { addOutput, callOnHookItems, template, templateObject } from '../utils'
 
 const exec = util.promisify(require('child_process').exec)
@@ -36,20 +37,33 @@ export function untar (options = {}) {
 
 export function runCommand (options = {}) {
   async function run (item) {
-    const command = template(item, options.command)
-    const commands = (Array.isArray(command) ? command : [command])
+    let command = template(item, options.command)
+    // Could actually be a set of commands so we unify the way to handle both cases
+    let commands
+    if (!options.spawn) { // When using exec commands are strings
+      commands = (Array.isArray(command) ? command : [command])
+    } else { // When using spawn commands are already arrays of strings
+      commands = (Array.isArray(command[0]) ? command : [command])
+    }
     for (let i = 0; i < commands.length; i++) {
-      debug('Running command', commands[i])
-      const { stdout, stderr } = await exec(commands[i], options.options)
-      if (options.stdout) {
+      let command = commands[i]
+      let result
+      debug('Running command', command)
+      if (options.spawn) {
+        result = spawn.sync(command.shift(), command, options.options)
+      } else {
+        result = await exec(command, options.options)
+      }
+      const { stdout, stderr } = result
+      if (options.stdout && stdout) {
         if (i > 0) item.stdout += stdout
         else item.stdout = stdout
-        console.log(stdout)
+        console.log(stdout.toString())
       }
-      if (options.stderr) {
+      if (options.stderr && stderr) {
         if (i > 0) item.stderr += stderr
         else item.stderr = stderr
-        console.error(stderr)
+        console.error(stderr.toString())
       }
     }
   }

@@ -21,15 +21,20 @@ describe('krawler:hooks:system', () => {
     params: { store: outputStore }
   }
 
-  it('run a command', () => {
-    return pluginHooks.runCommand({
+  it('run a command', async () => {
+    let hook = await pluginHooks.runCommand({
       command: 'echo <%= id %>',
       stdout: true
     })(commandHook)
-      .then(hook => {
-        expect(hook.data.stdout).toExist()
-        expect(hook.data.stdout).to.include('command')
-      })
+    expect(hook.data.stdout).toExist()
+    expect(hook.data.stdout).to.include('command')
+    hook = await pluginHooks.runCommand({
+      command: ['echo', '<%= id %>'],
+      spawn: true, // Use spawn instead of exec
+      options: {
+        stdio: 'inherit'
+      }
+    })(commandHook)
   })
   // Let enough time to proceed
     .timeout(5000)
@@ -49,16 +54,21 @@ describe('krawler:hooks:system', () => {
   // Let enough time to proceed
     .timeout(5000)
 
-  it('run multiple commands', () => {
-    return pluginHooks.runCommand({
+  it('run multiple commands', async () => {
+    let hook = await pluginHooks.runCommand({
       command: ['echo hello', 'echo <%= id %>'],
       stdout: true
     })(commandHook)
-      .then(hook => {
-        expect(hook.data.stdout).toExist()
-        expect(hook.data.stdout).to.include('hello')
-        expect(hook.data.stdout).to.include('command')
-      })
+    expect(hook.data.stdout).toExist()
+    expect(hook.data.stdout).to.include('hello')
+    expect(hook.data.stdout).to.include('command')
+    hook = await pluginHooks.runCommand({
+      command: [['echo', 'hello'], ['echo', '<%= id %>']],
+      spawn: true, // Use spawn instead of exec
+      options: {
+        stdio: 'inherit'
+      }
+    })(commandHook)
   })
   // Let enough time to proceed
     .timeout(5000)
