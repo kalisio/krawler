@@ -50,7 +50,7 @@ export function runCommand (options = {}) {
       let result
       debug('Running command', command)
       if (options.spawn) {
-        result = spawn.sync(command.shift(), command, options.options)
+        result = await spawn(command.shift(), command, options.options)
       } else {
         result = await exec(command, options.options)
       }
