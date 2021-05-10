@@ -50,7 +50,13 @@ export function runCommand (options = {}) {
       let result
       debug('Running command', command)
       if (options.spawn) {
-        result = await spawn(command.shift(), command, options.options)
+        result = spawn(command.shift(), command, options.options)
+        const exitCode = await new Promise((resolve, reject) => {
+          result.on('close', resolve)
+        })
+        if (exitCode) {
+          throw new Error(result.stderr)
+        }
       } else {
         result = await exec(command, options.options)
       }
