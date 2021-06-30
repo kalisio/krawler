@@ -25,7 +25,7 @@ module.exports = {
       generateGridTasks: { resample: true }
     },
     after: {
-      // Because each task is a JSON object wecan directly export them to CSV
+      // Because each task is a JSON object we can directly export them to CSV
       writeCSV: {
         fields: [
           {

@@ -24,7 +24,7 @@ export function writeCSV (options = {}) {
       const templatedTransform = templateObject(hook.data, options.transform)
       json = transformJsonObject(json, templatedTransform)
     }
-    const csv = json2csv({ json, fields: options.fields })
+    const csv = json2csv({ data: json, fields: options.fields })
     const csvName = template(hook.data, options.key || (hook.data.id + '.csv'))
     await writeBufferToStore(
       Buffer.from(csv, 'utf8'),
