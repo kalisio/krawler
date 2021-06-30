@@ -113,7 +113,7 @@ export function mergeJson (options = {}) {
       json.forEach(object => {
         // Find similar items
         const items = _.filter(objects, item => {
-          if (typeof options.by == 'function') return (options.by(object) === options.by(item))
+          if (typeof options.by === 'function') return (options.by(object) === options.by(item))
           else return _.get(object, options.by) === _.get(item, options.by)
         })
         // Then merge similar items

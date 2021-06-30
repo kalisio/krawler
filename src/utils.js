@@ -54,7 +54,7 @@ export function transformJsonObject (json, options) {
     json = sift(options.filter, json)
   }
   // By default we perform transformation in place
-  if (!_.get(options, 'inPlace', true))  {
+  if (!_.get(options, 'inPlace', true)) {
     json = _.cloneDeep(json)
   }
   // Iterate over path mapping
@@ -148,7 +148,7 @@ export function transformJsonObject (json, options) {
 }
 
 // Call a given function on each hook item
-export function callOnHookItems(options = {}) {
+export function callOnHookItems (options = {}) {
   return (f) => {
     // Default call mode is per item
     const perItem = _.get(options, 'perItem', true)

@@ -37,7 +37,7 @@ export function untar (options = {}) {
 
 export function runCommand (options = {}) {
   async function run (item) {
-    let command = template(item, options.command)
+    const command = template(item, options.command)
     // Could actually be a set of commands so we unify the way to handle both cases
     let commands
     if (!options.spawn) { // When using exec commands are strings
@@ -46,7 +46,7 @@ export function runCommand (options = {}) {
       commands = (Array.isArray(command[0]) ? command : [command])
     }
     for (let i = 0; i < commands.length; i++) {
-      let command = commands[i]
+      const command = commands[i]
       let result
       debug('Running command', command)
       if (options.spawn) {

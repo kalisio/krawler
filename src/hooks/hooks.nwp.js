@@ -56,7 +56,7 @@ export function generateNwpTasks (options) {
         for (let timeOffset = elementLowerLimit; timeOffset <= elementUpperLimit; timeOffset += elementInterval) {
           const forecastTime = runTime.clone().add({ seconds: timeOffset })
           if (options.keepPastForecasts || !forecastTime.isBefore(lowerTime)) {
-            let task = Object.assign({
+            const task = Object.assign({
               level,
               runTime,
               forecastTime,

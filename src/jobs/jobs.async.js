@@ -47,38 +47,51 @@ async function createJob (options = {}, store = null, tasks, id, taskTemplate) {
       }
     }
   }
+  // Wait for a task to be run by keeping track of task in queue
+  const addToQueue = async (task, queue, taskResults) => {
+    queue.push(task)
+    const result = await task
+    const hrend = process.hrtime(hrstart)
+    const duration = (1000 * hrend[0] + hrend[1] / 1e6)
+    queue.splice(queue.indexOf(task), 1)
+    taskResults.push(result)
+    debug('Task ran', result)
+    debug(taskResults.length + ` tasks ran from start in ${duration} ms`)
+    // Check if timeout has been reached
+    if (options.timeout && (duration > options.timeout)) throw new Timeout('Job timeout reached')
+    return result
+  }
 
   const workersLimit = options.workersLimit || 4
   let i = 0
   // The set of workers/tasks for current step
   // We launch the workers in sequence, one step of the sequence contains a maximum number of workersLimit workers
-  let workers = []
-  let taskResults = []
+  const workers = []
+  const taskResults = []
   while (i < tasks.length) {
     const task = tasks[i]
     const params = {}
     if (store) params.store = store
     // Add a worker to current step of the sequence
-    workers.push(runTask(task, params))
+    addToQueue(runTask(task, params), workers, taskResults)
     // When we reach the worker limit wait until the step finishes and jump to next one
     if ((workers.length >= workersLimit) ||
         (i === tasks.length - 1)) {
       try {
-        const results = await Promise.all(workers)
-        const hrend = process.hrtime(hrstart)
-        const duration = (1000 * hrend[0] + hrend[1] / 1e6)
-        taskResults = taskResults.concat(results)
-        debug(results.length + ' tasks ran', results)
-        debug(taskResults.length + ` tasks ran from start in ${duration} ms`)
-        // Check if timeout has been reached
-        if (options.timeout && (duration > options.timeout)) throw new Timeout('Job timeout reached')
+        await Promise.race(workers)
       } catch (error) {
         debug('Some tasks failed', error)
         throw error
       }
-      workers = []
     }
     i++
+  }
+  // Wait for the rest of the tasks to finish
+  try {
+    await Promise.all(workers)
+  } catch (error) {
+    debug('Some tasks failed', error)
+    throw error
   }
   return taskResults
 }

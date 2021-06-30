@@ -289,7 +289,7 @@ export function createMongoBucket (options = {}) {
         else resolve(collection)
       })
     })
-    
+
     if (!bucket) {
       debug('Creating the ' + bucketName + ' bucket')
       bucket = new GridFSBucket(client.db, Object.assign({
