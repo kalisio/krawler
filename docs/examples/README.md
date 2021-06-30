@@ -11,7 +11,7 @@ You can run a sample from the *examples* directory of the module like this:
 ```bash
 cd examples
 # If local installation
-node . ./dem2csv/jobfile.js
+node .. ./dem2csv/jobfile.js
 # If global/executable installation
 krawler ./dem2csv/jobfile.js
 ```
