@@ -47,52 +47,52 @@ async function createJob (options = {}, store = null, tasks, id, taskTemplate) {
       }
     }
   }
-  // Wait for a task to be run by keeping track of task in queue
-  const addToQueue = async (task, queue, taskResults) => {
-    queue.push(task)
-    const result = await task
-    const hrend = process.hrtime(hrstart)
-    const duration = (1000 * hrend[0] + hrend[1] / 1e6)
-    queue.splice(queue.indexOf(task), 1)
-    taskResults.push(result)
-    debug('Task ran', result)
-    debug(taskResults.length + ` tasks ran from start in ${duration} ms`)
-    // Check if timeout has been reached
-    if (options.timeout && (duration > options.timeout)) throw new Timeout('Job timeout reached')
-    return result
+  // Wait for a task to be run by keeping track of it in queue
+  const addToQueue = (task, queue, results) => {
+    // FIXME: not sure if possible to express this as async function
+    const promise = task.then(result => {
+      const hrend = process.hrtime(hrstart)
+      const duration = (1000 * hrend[0] + hrend[1] / 1e6)
+      queue.splice(queue.indexOf(promise), 1)
+      results.push(result)
+      debug('Task ran', result)
+      debug(results.length + ` tasks ran from start in ${duration} ms`)
+      // Check if timeout has been reached
+      if (options.timeout && (duration > options.timeout)) throw new Timeout('Job timeout reached')
+      return result
+    })
+    queue.push(promise)
   }
 
   const workersLimit = options.workersLimit || 4
-  let i = 0
   // The set of workers/tasks for current step
-  // We launch the workers in sequence, one step of the sequence contains a maximum number of workersLimit workers
+  // We launch a maximum number of workersLimit tasks in parallel,
+  // but whenever one has finished a new task is ran
   const workers = []
   const taskResults = []
-  while (i < tasks.length) {
-    const task = tasks[i]
-    const params = {}
-    if (store) params.store = store
-    // Add a worker to current step of the sequence
-    addToQueue(runTask(task, params), workers, taskResults)
-    // When we reach the worker limit wait until the step finishes and jump to next one
-    if ((workers.length >= workersLimit) ||
-        (i === tasks.length - 1)) {
-      try {
-        await Promise.race(workers)
-      } catch (error) {
-        debug('Some tasks failed', error)
-        throw error
-      }
-    }
-    i++
-  }
-  // Wait for the rest of the tasks to finish
+  let i = 0
+
   try {
+    while (i < tasks.length) {
+      const task = tasks[i]
+      const params = {}
+      if (store) params.store = store
+      // Add a task to current queue
+      addToQueue(runTask(task, params), workers, taskResults)
+      // When we reach the worker limit wait until one finishes and push next task into queue
+      if ((workers.length >= workersLimit) ||
+          (i === tasks.length - 1)) {
+        await Promise.race(workers)
+      }
+      i++
+    }
+    // Wait for the rest of the tasks to finish
     await Promise.all(workers)
   } catch (error) {
     debug('Some tasks failed', error)
     throw error
   }
+
   return taskResults
 }
 
