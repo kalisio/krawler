@@ -595,6 +595,11 @@ Remove (a set of) store(s), hook options are (array of) the following:
 As a shortcut the options provided can only be store IDs when **storePath** is not used
 :::
 
+### discardIfExistsInStore(options)
+
+Discard the task if a target file already exists in an output store, hook options are the following:
+* **output**: the output store options, see description in [common options](./hooks.md#common-options)
+
 ### copyToStore(options)
 
 Copy the item(s) from an input store to an output store, hook options are the following:

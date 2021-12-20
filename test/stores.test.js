@@ -103,6 +103,20 @@ describe('krawler:stores', () => {
   // Let enough time to proceed
     .timeout(10000)
 
+  it('check if file exists in stores', () => {
+    // Fake hook service
+    return pluginHooks.discardIfExistsInStore({ output: { store: 'fs', key: '<%= id %>.none' } })(storeHook)
+      .then(hook => {
+        expect(hook.data.skip).beUndefined()
+        return pluginHooks.discardIfExistsInStore({ output: { store: 'fs', key: '<%= id %>' } })(storeHook)
+      })
+      .then(hook => {
+        expect(hook.data.skip).beTrue()
+      })
+  })
+  // Let enough time to proceed
+    .timeout(10000)
+
   it('copy inside the same store', () => {
     return pluginHooks.copyToStore({ input: { store: 'fs', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>.copy' } })(storeHook)
       .then(hook => {

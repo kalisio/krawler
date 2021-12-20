@@ -166,3 +166,26 @@ export function unzipFromStore (options = {}) {
 
   return callOnHookItems(options)(unzip)
 }
+
+export function discardIfExistsInStore (options = {}) {
+  async function discard (item, hook) {
+    // Output store config given in options
+    const outputOptions = templateObject(item, options.output, ['key'])
+    const outStore = await hook.service.storesService.get(outputOptions.store)
+    return new Promise((resolve, reject) => {
+      outStore.exists(outputOptions.key, (err, exists) => {
+        if (err) {
+          reject(err)
+        } else {
+          if (exists) {
+            debug('Discarding ' + item.id + ' as it already exists in store', outputOptions)
+            item.skip = true
+          }
+          resolve(hook)
+        }
+      })
+    })
+  }
+
+  return callOnHookItems(options)(discard)
+}
