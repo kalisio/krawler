@@ -10,10 +10,10 @@ function createStore (options, id) {
   const s3 = new aws.S3(options.client)
   // FIXME: Don't know why but some operations like headObject, used by store.exists(), fail if done first
   // As a consequence we perform a first dummy operation to initialize the client
-  s3.listObjects({ Bucket: options.bucket, MaxKeys: 1 }, function(err, res) {
-	  if (!err) debug('Client initialized for S3 store ' + id)
-	  else throw new Error('Failed to initialize client for S3 store ' + id)
-	})
+  s3.listObjects({ Bucket: options.bucket, MaxKeys: 1 }, function (err, res) {
+    if (!err) debug('Client initialized for S3 store ' + id)
+    else throw new Error('Failed to initialize client for S3 store ' + id)
+  })
   return store({
     client: s3,
     bucket: options.bucket
