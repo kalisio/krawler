@@ -37,7 +37,6 @@ describe('krawler:cli', () => {
   })
 
   it('runs once using CLI', async () => {
-    console.log(jobfile)
     const tasks = await cli(jobfile)
     // All other features should have been tested independently
     // so we just test here the CLI run correctly

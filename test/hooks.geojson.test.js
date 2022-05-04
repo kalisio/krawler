@@ -1,12 +1,14 @@
 import chai from 'chai'
 import chailint from 'chai-lint'
 import path, { dirname } from 'path'
+import { readFile } from 'fs/promises'
 import { hooks as pluginHooks } from '../lib/index.js'
 import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const { util, expect } = chai
+const loadJson = async fileName => JSON.parse((await readFile(fileName).toString()))
 
 describe('krawler:hooks:geojson', () => {
   let json, osm
@@ -18,12 +20,8 @@ describe('krawler:hooks:geojson', () => {
   }
 
   before(async () => {
-    json = (await import(path.join(__dirname, 'data', 'json.json'), {
-      assert: { type: 'json' }
-    })).default
-    osm = (await import(path.join(__dirname, 'data', 'osm.json'), {
-      assert: { type: 'json' }
-    })).default
+    json = await loadJson(path.join(__dirname, 'data', 'json.json'))
+    osm = await loadJson(path.join(__dirname, 'data', 'osm.json'))
     chailint(chai, util)
   })
 

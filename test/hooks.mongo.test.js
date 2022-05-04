@@ -9,6 +9,7 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const { util, expect } = chai
+const loadJson = async fileName => JSON.parse((await fs.readFile(fileName).toString()))
 
 describe('krawler:hooks:mongo', () => {
   const inputStore = fsStore({ path: path.join(__dirname, 'data') })
@@ -17,7 +18,7 @@ describe('krawler:hooks:mongo', () => {
 
   before(async () => {
     chailint(chai, util)
-    geojson = (await import(path.join(inputStore.path, 'geojson.json'))).default
+    geojson = await loadJson(path.join(inputStore.path, 'geojson.json'))
   })
 
   const mongoOptions = {
