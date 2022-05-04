@@ -1,9 +1,14 @@
-import chai, { util, expect } from 'chai'
+import chai from 'chai'
 import chailint from 'chai-lint'
-import path from 'path'
+import path, { dirname } from 'path'
 import fsStore from 'fs-blob-store'
 import fs from 'fs'
-import { hooks as pluginHooks } from '../src'
+import { hooks as pluginHooks } from '../lib/index.js'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const { util, expect } = chai
 
 describe('krawler:hooks:main', () => {
   const inputStore = fsStore({ path: path.join(__dirname, 'data') })

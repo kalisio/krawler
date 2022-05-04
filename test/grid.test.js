@@ -1,6 +1,8 @@
-import chai, { util, expect } from 'chai'
+import chai from 'chai'
 import chailint from 'chai-lint'
-import { Grid } from '../src'
+import { Grid } from '../lib/index.js'
+
+const { util, expect } = chai
 
 describe('krawler:grid', () => {
   const grid = new Grid({

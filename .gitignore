@@ -34,9 +34,6 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 
-# The compiled/babelified modules
-lib/
-
 # The test data
 test/output
 examples/output

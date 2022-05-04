@@ -1,9 +1,14 @@
-import chai, { util, expect } from 'chai'
+import chai from 'chai'
 import chailint from 'chai-lint'
 import FsStore from 'fs-blob-store'
 import fs from 'fs'
-import path from 'path'
-import { hooks as pluginHooks } from '../src'
+import path, { dirname } from 'path'
+import { hooks as pluginHooks } from '../lib/index.js'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const { util, expect } = chai
 
 describe('krawler:hooks:ftp', () => {
   before(() => {
@@ -25,7 +30,7 @@ describe('krawler:hooks:ftp', () => {
   const ftpHook = {
     type: 'before',
     data: { id: 'ftp' },
-    params: { store: store }
+    params: { store }
   }
 
   it('connect to FTP', async () => {

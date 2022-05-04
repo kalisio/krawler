@@ -1,17 +1,23 @@
-import chai, { util, expect } from 'chai'
+import chai from 'chai'
 import chailint from 'chai-lint'
-import path from 'path'
+import path, { dirname } from 'path'
 import fs from 'fs-extra'
 import fsStore from 'fs-blob-store'
-import { hooks as pluginHooks } from '../src'
+import { hooks as pluginHooks } from '../lib/index.js'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const { util, expect } = chai
 
 describe('krawler:hooks:mongo', () => {
   const inputStore = fsStore({ path: path.join(__dirname, 'data') })
   const outputStore = fsStore({ path: path.join(__dirname, 'output') })
-  const geojson = require(path.join(inputStore.path, 'geojson'))
+  let geojson
 
-  before(() => {
+  before(async () => {
     chailint(chai, util)
+    geojson = (await import(path.join(inputStore.path, 'geojson.json'))).default
   })
 
   const mongoOptions = {

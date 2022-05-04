@@ -64,9 +64,9 @@ async function publishToSlack (data, compilers, posttext = '', color = 'danger')
       body: JSON.stringify({
         attachments: [
           {
-            color: color,
+            color,
             mrkdwn_in: ['text'],
-            text: text
+            text
           }
         ]
       })

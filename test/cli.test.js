@@ -1,14 +1,21 @@
-import chai, { util, expect } from 'chai'
+import chai from 'chai'
 import chailint from 'chai-lint'
-import path from 'path'
+import path, { dirname } from 'path'
 import _ from 'lodash'
 import request from 'request'
 import utils from 'util'
 import fs from 'fs-extra'
-import { MongoClient } from 'mongodb'
-import { cli, getApp } from '../src'
+import mongodb from 'mongodb'
+import { exec } from 'child_process'
+import { cli, getApp } from '../lib/index.js'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const { MongoClient } = mongodb
+const { util, expect } = chai
 // Can't use promisify here otherwise on error cases we cannot access stdout/stderr
-const exec = require('child_process').exec
+
 async function runCommand (command) {
   return new Promise((resolve, reject) => {
     exec(command, (error, stdout, stderr) => {
@@ -18,18 +25,19 @@ async function runCommand (command) {
 }
 
 describe('krawler:cli', () => {
-  const jobfilePath = path.join(__dirname, 'data', 'jobfile.js')
-  const jobfile = require(jobfilePath)
-  const outputPath = _.get(jobfile, 'hooks.jobs.before.createStores[0].options.path')
-  let client, collection, appServer
+  const jobfilePath = path.join(__dirname, 'data', 'jobfile.cjs')
+  let jobfile, outputPath, client, collection, appServer
 
   before(async () => {
     chailint(chai, util)
+    jobfile = (await import(jobfilePath)).default
+    outputPath = _.get(jobfile, 'hooks.jobs.before.createStores[0].options.path')
     client = await MongoClient.connect('mongodb://127.0.0.1:27017/krawler-test', { useNewUrlParser: true })
     client.db = client.db('krawler-test')
   })
 
   it('runs once using CLI', async () => {
+    console.log(jobfile)
     const tasks = await cli(jobfile)
     // All other features should have been tested independently
     // so we just test here the CLI run correctly

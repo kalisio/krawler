@@ -6,6 +6,4 @@
 .idea/
 coverage/
 examples/output/
-src/
 test/
-!lib/

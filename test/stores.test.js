@@ -1,9 +1,14 @@
-import chai, { util, expect } from 'chai'
+import chai from 'chai'
 import chailint from 'chai-lint'
 import feathers from '@feathersjs/feathers'
-import path from 'path'
+import path, { dirname } from 'path'
 import fs from 'fs'
-import plugin, { hooks as pluginHooks } from '../src'
+import plugin, { hooks as pluginHooks } from '../lib/index.js'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const { util, expect } = chai
 
 describe('krawler:stores', () => {
   let app, storesService, fsStore, memoryStore, s3Store

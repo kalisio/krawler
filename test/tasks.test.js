@@ -1,11 +1,16 @@
-import chai, { util, expect } from 'chai'
+import chai from 'chai'
 import chailint from 'chai-lint'
 import feathers from '@feathersjs/feathers'
 import express from '@feathersjs/express'
-import path from 'path'
+import path, { dirname } from 'path'
 import nock from 'nock'
 import moment from 'moment'
-import plugin from '../src'
+import plugin from '../lib/index.js'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const { util, expect } = chai
 
 describe('krawler:tasks', () => {
   let app, server, storage, storesService, tasksService
