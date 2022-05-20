@@ -88,7 +88,7 @@
     "mongodb": "^3.6.2",
     "mubsub": "^1.4.0",
     "osmtogeojson": "^3.0.0-beta.3",
-    "pg": "^7.4.0",
+    "pg": "^8.7.3",
     "proj4": "^2.4.4",
     "reproject": "^1.2.1",
     "request": "^2.88.0",
