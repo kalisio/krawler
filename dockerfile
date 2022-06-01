@@ -1,4 +1,4 @@
-FROM node:12.16-buster AS builder
+FROM node:16-buster AS builder
 # Install krawler
 COPY . /opt/krawler
 WORKDIR /opt/krawler
