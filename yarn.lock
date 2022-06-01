@@ -2805,11 +2805,6 @@ es-abstract@^1.19.1, es-abstract@^1.19.2, es-abstract@^1.19.5:
     string.prototype.trimstart "^1.0.4"
     unbox-primitive "^1.0.1"
 
-es-main@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/es-main/-/es-main-1.0.2.tgz#c9030d78796f609f865b66f4125a78d77fec3de3"
-  integrity sha512-LLgW8Cby/FiyQygrI23q2EswulHiDKoyjWlDRgTGXjQ3iRim2R26VfoehpxI5oKRXSNams3L/80KtggoUdxdDQ==
-
 es-shim-unscopables@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/es-shim-unscopables/-/es-shim-unscopables-1.0.0.tgz#702e632193201e3edf8713635d083d378e510241"
