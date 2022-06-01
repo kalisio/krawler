@@ -1,11 +1,11 @@
-FROM node:12.16-buster AS builder
+FROM node:16-buster AS builder
 # Install krawler
 COPY . /opt/krawler
 WORKDIR /opt/krawler
 # Build krawler
 RUN yarn
 
-FROM  node:12.16-buster-slim
+FROM  node:16-buster-slim
 LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 
 # Install GDAL
