@@ -72,6 +72,7 @@ jobs:
     - chmod +x ./cc-test-reporter
     - "./cc-test-reporter before-build"
     - docker pull v4tech/imagemagick
+    - yarn install
     after_script:
     - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
 

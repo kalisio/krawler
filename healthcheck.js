@@ -1,8 +1,8 @@
 import request from 'request'
 import program from 'commander'
-import { dirname } from 'path'
+import path, { dirname } from 'path'
 import utils from 'util'
-import path from 'path'
+
 import fs from 'fs-extra'
 import _ from 'lodash'
 import { fileURLToPath } from 'url'
