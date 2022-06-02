@@ -1,6 +1,9 @@
-const path = require('path')
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-module.exports = {
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+export default {
   tasks: {
     before: {
       // Could be set for each task but better to set it on template if all tasks use the same options

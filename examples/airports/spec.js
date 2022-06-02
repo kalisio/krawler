@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	runways: {
 		list: ['LFBO14L'],
 		params: {

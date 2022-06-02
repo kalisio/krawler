@@ -1,8 +1,11 @@
-const path = require('path')
-const fs = require('fs')
+import path from 'path'
+import fs from 'fs'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const outputPath = path.join(__dirname, '..', 'output')
 
-module.exports = {
+export default {
   hooks: {
     stores: {
       before: {
