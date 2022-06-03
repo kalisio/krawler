@@ -13,7 +13,7 @@ describe('krawler', () => {
     app = feathers()
   })
 
-  it('is CommonJS compatible', () => {
+  it('is ES module compatible', () => {
     expect(typeof plugin).to.equal('function')
     expect(typeof plugin.stores).to.equal('function')
     expect(typeof plugin.stores.Service).to.equal('function')

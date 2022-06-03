@@ -64,15 +64,11 @@ jobs:
     - redis-server
     env:
     - CC_TEST_REPORTER_ID=ce3b24cd7b710c5ab893043eec49a13ee068b92c35d75a20a2b2cb4470fb1e42
-    addons:
-      code_climate:
-        repo_token: ce3b24cd7b710c5ab893043eec49a13ee068b92c35d75a20a2b2cb4470fb1e42
-    install:
+    before_script:
     - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
     - chmod +x ./cc-test-reporter
     - "./cc-test-reporter before-build"
     - docker pull v4tech/imagemagick
-    - yarn install
     after_script:
     - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
 
