@@ -15,11 +15,11 @@ const { util, expect } = chai
 describe('krawler:jobs', () => {
   let app, server, storage, storesService, jobsService, tasksService
 
-  before(() => {
+  before(async () => {
     chailint(chai, util)
     app = express(feathers())
     app.configure(plugin())
-    server = app.listen(3030)
+    server = await app.listen(3030)
   })
 
   it('creates the jobs service', () => {
