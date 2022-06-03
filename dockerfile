@@ -25,4 +25,4 @@ ENV NODE_PATH=/opt/krawler/node_modules
 HEALTHCHECK --interval=30s --timeout=30s --start-period=30s CMD node ./healthcheck.js
 
 # Set command
-CMD node ./lib/bin.js $ARGS
+CMD krawler $ARGS
