@@ -13,7 +13,7 @@ import { fileURLToPath, pathToFileURL } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const { MongoClient } = mongodb
-const { util, expect } = chai
+const { util, expect, assert } = chai
 // Can't use promisify here otherwise on error cases we cannot access stdout/stderr
 
 async function runCommand (command) {
@@ -36,19 +36,36 @@ describe('krawler:cli', () => {
     client.db = client.db('krawler-test')
   })
 
-  it('runs once using CLI', async () => {
-    const tasks = await cli(jobfile)
-    // All other features should have been tested independently
-    // so we just test here the CLI run correctly
-    expect(tasks.length).to.equal(1)
-    // Check intermediate products have been erased and final product are here
-    expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif'))).beFalse()
-    expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif.csv'))).beTrue()
+  it('runs successfully once using CLI', async () => {
+    try {
+      const tasks = await cli(jobfile, { port: 3030, messageTemplate: 'Job <%= jobId %>: <%= error.message %>', debug: true })
+      // All other features should have been tested independently
+      // so we just test here the CLI run correctly
+      expect(tasks.length).to.equal(1)
+      // Check intermediate products have been erased and final product are here
+      expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif'))).beFalse()
+      expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif.csv'))).beTrue()
+    } catch (error) {
+      assert.fail('Healthcheck should not fail')
+    }
   })
   // Let enough time to process
     .timeout(10000)
 
-  it('runs as CRON using CLI with healthcheck', (done) => {
+  it('runs unsuccessfully once using CLI', async () => {
+    try {
+      const tasks = await cli(jobfile, { port: 3030, maxDuration: 0, messageTemplate: 'Job <%= jobId %>: <%= error.message %>', debug: true })
+      assert.fail('Healthcheck should fail')
+    } catch (error) {
+      // Check intermediate products have been erased and final product are here
+      expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif'))).beFalse()
+      expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif.csv'))).beTrue()
+    }
+  })
+  // Let enough time to process
+    .timeout(10000)
+
+  it('runs as CRON using CLI with continuous healthcheck', (done) => {
     // Setup the app
     cli(jobfile, {
       mode: 'setup',
@@ -80,35 +97,39 @@ describe('krawler:cli', () => {
         })
         // As it runs every 10 seconds we know that in 10s after first run it should have ran at least once again
         setTimeout(async () => {
-          expect(runCount).to.equal(2) // 2 runs
-          const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
-          expect(response.statusCode).to.equal(500)
-          const { error, stdout, stderr } = await runCommand('node ' + path.join(__dirname, '..', 'healthcheck.js'))
-          expect(error).toExist()
-          expect(stdout).to.equal('')
-          expect(stderr.includes('[ALERT]')).beTrue()
-          const healthcheckLog = fs.readJsonSync(path.join(__dirname, '..', 'healthcheck.log'))
-          const healthcheck = JSON.parse(response.body)
-          expect(healthcheck).to.deep.equal(healthcheckLog)
-          expect(healthcheck.isRunning).beUndefined()
-          expect(healthcheck.duration).beUndefined()
-          expect(healthcheck.nbSkippedJobs).beUndefined()
-          expect(healthcheck.nbFailedTasks).beUndefined()
-          expect(healthcheck.nbSuccessfulTasks).beUndefined()
-          expect(healthcheck.successRate).beUndefined()
-          expect(healthcheck.error).toExist()
-          expect(healthcheck.error.message).toExist()
-          expect(healthcheck.error.message).to.equal('Error')
-          expect(eventCount).to.equal(4) // 4 events
-          collection = client.db.collection('krawler-events')
-          const taskEvents = await collection.find({ event: 'task-done' }).toArray()
-          expect(taskEvents.length).to.equal(2)
-          const jobEvents = await collection.find({ event: 'job-done' }).toArray()
-          expect(jobEvents.length).to.equal(2)
-          server.close()
-          appServer = null
-          done()
-        }, 10000)
+          try {
+            expect(runCount).to.equal(2) // 2 runs
+            const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
+            expect(response.statusCode).to.equal(500)
+            const { error, stdout, stderr } = await runCommand('node ' + path.join(__dirname, '..', 'healthcheck.js'))
+            expect(error).toExist()
+            expect(stdout).to.equal('')
+            expect(stderr.includes('[ALERT]')).beTrue()
+            const healthcheckLog = fs.readJsonSync(path.join(__dirname, '..', 'healthcheck.log'))
+            const healthcheck = JSON.parse(response.body)
+            expect(healthcheck).to.deep.equal(healthcheckLog)
+            expect(healthcheck.isRunning).beUndefined()
+            expect(healthcheck.duration).beUndefined()
+            expect(healthcheck.nbSkippedJobs).beUndefined()
+            expect(healthcheck.nbFailedTasks).beUndefined()
+            expect(healthcheck.nbSuccessfulTasks).beUndefined()
+            expect(healthcheck.successRate).beUndefined()
+            expect(healthcheck.error).toExist()
+            expect(healthcheck.error.message).toExist()
+            expect(healthcheck.error.message).to.equal('Error')
+            expect(eventCount).to.equal(4) // 4 events
+            collection = client.db.collection('krawler-events')
+            const taskEvents = await collection.find({ event: 'task-done' }).toArray()
+            expect(taskEvents.length).to.equal(2)
+            const jobEvents = await collection.find({ event: 'job-done' }).toArray()
+            expect(jobEvents.length).to.equal(2)
+            server.close()
+            appServer = null
+            done()
+          } catch (error) {
+            console.log(error)  
+          }
+        }, 11000)
         // Only run as we already setup the app
         cli(jobfile, { mode: 'runJob', cron: '*/10 * * * * *', run: true })
           .then(async () => {

@@ -1,14 +1,5 @@
-import request from 'request'
 import program from 'commander'
-import path, { dirname } from 'path'
-import utils from 'util'
-
-import fs from 'fs-extra'
-import _ from 'lodash'
-import { fileURLToPath } from 'url'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+import { healthcheck } from './lib/index.js'
 
 program
   .usage('[options]')
@@ -25,130 +16,9 @@ program
   .option('-d, --debug', 'Verbose output for debugging')
   .parse(process.argv)
 
-const logFile = path.join(__dirname, 'healthcheck.log')
-
-function readFromLog () {
-  try {
-    if (fs.pathExistsSync(logFile)) return fs.readJsonSync(logFile)
-    else return {} // First launch
-  } catch (error) {
-    // Allowed to fail to make healthcheck robust
-    console.error(error)
-    return {}
-  }
+try {
+  await healthcheck(program)
+  process.exit(0)
+} catch (error) {
+  process.exit(1)
 }
-
-function writeToLog (data) {
-  try {
-    fs.writeJsonSync(logFile, data)
-  } catch (error) {
-    // Allowed to fail to make healthcheck robust
-    console.error(error)
-  }
-}
-
-function publishToConsole (data, compilers, pretext, stream = 'error') {
-  try {
-    if (stream === 'error') console.error(pretext, compilers.message(data))
-    else console.log(pretext, compilers.message(data))
-  } catch (error) {
-    // Allowed to fail to make healthcheck robust
-    console.error(error)
-  }
-}
-
-async function publishToSlack (data, compilers, posttext = '', color = 'danger') {
-  if (!program.slackWebhook) return
-  try {
-    const message = compilers.message(data)
-    const link = compilers.link(data)
-    const text = link ? `<${link}|${message}${posttext}>` : `${message}${posttext}`
-
-    await utils.promisify(request.post)({
-      url: program.slackWebhook,
-      body: JSON.stringify({
-        attachments: [
-          {
-            color,
-            mrkdwn_in: ['text'],
-            text
-          }
-        ]
-      })
-    })
-  } catch (error) {
-    // Allowed to fail to make healthcheck robust
-    console.error(error)
-  }
-}
-
-function isSameError (previousError, error) {
-  return (_.has(previousError, 'code') && _.has(error, 'code')
-    ? _.isEqual(_.get(previousError, 'code'), _.get(error, 'code'))
-    : _.isEqual(_.get(previousError, 'message'), _.get(error, 'message')))
-}
-
-async function healthcheck () {
-  const endpoint = `http://localhost:${program.port}${program.api ? program.apiPrefix : ''}/healthcheck`
-  const compilers = {
-    message: _.template(program.messageTemplate),
-    link: _.template(program.linkTemplate),
-    origin: _.template(program.messageOrigin)
-  }
-  let previousError
-  try {
-    const previousHealthcheck = readFromLog()
-    previousError = previousHealthcheck.error
-    const response = await utils.promisify(request.get)(endpoint)
-    const data = JSON.parse(response.body)
-    if (program.debug) {
-      console.log('Current healthcheck output read from service', data)
-      console.log('Previous healthcheck output read from log', previousHealthcheck)
-    }
-    if (response.statusCode === 200) {
-      // Fault-tolerant jobs always return 200, we use more criteria to check for health status
-      if (_.has(data, 'successRate') && (data.successRate < program.successRate)) {
-        data.error = { code: 'HEALTHCHECK_SUCCESS_RATE', message: `Insufficient success rate (${data.successRate.toFixed(2)})` }
-      }
-      if (data.nbSkippedJobs >= program.nbSkippedJobs) {
-        data.error = { code: 'HEALTHCHECK_SKIPPED_JOBS', message: `Too much skipped jobs (${data.nbSkippedJobs})` }
-      }
-      if ((program.maxDuration > 0) && (data.duration > program.maxDuration)) {
-        data.error = { code: 'HEALTHCHECK_DURATION', message: `Too much slow execution (${data.duration}s)` }
-      }
-    }
-    writeToLog(data)
-    // Add env available for templates
-    Object.assign(data, process.env)
-    if (data.error) {
-      // Only notify on new errors
-      if (!previousError || !isSameError(previousError, data.error)) {
-        publishToConsole(data, compilers, '[ALERT]', 'error')
-        await publishToSlack(data, compilers, '', 'danger')
-      }
-      process.exit(1)
-    } else {
-      // Only notify on closing errors
-      if (previousError) {
-        data.error = previousError
-        publishToConsole(data, compilers, '[CLOSED ALERT]', 'log')
-        await publishToSlack(data, compilers, ' [RESOLVED]', 'good')
-      }
-      process.exit(0)
-    }
-  } catch (error) {
-    // Set jobId variable/error available in context so that templates will not fail
-    const data = Object.assign({ jobId: '' }, { error: _.pick(error, ['code', 'message']) })
-    writeToLog(data)
-    // Add env available for templates
-    Object.assign(data, process.env)
-    // Only notify on new errors
-    if (!previousError || !isSameError(previousError, data.error)) {
-      publishToConsole(data, compilers, '[ALERT]', 'error')
-      await publishToSlack(data, compilers, '', 'danger')
-    }
-    process.exit(1)
-  }
-}
-
-healthcheck()
