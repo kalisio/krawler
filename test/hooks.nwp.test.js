@@ -20,10 +20,11 @@ describe('krawler:hooks:nwp', () => {
     chailint(chai, util)
     app = express(feathers())
     app.configure(plugin())
-    server = app.listen(3030)
+    server = await app.listen(3030)
   })
 
   it('adds hooks to the jobs service', () => {
+    app.use('stores', plugin.stores())
     app.use('tasks', plugin.tasks())
     tasksService = app.service('tasks')
     expect(tasksService).toExist()

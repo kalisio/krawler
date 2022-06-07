@@ -17,14 +17,15 @@ describe('krawler:hooks:grid', () => {
   let app, server, tasksService, jobsService
   const outputStore = fsStore({ path: path.join(__dirname, 'output') })
 
-  before(() => {
+  before(async () => {
     chailint(chai, util)
     app = express(feathers())
     app.configure(plugin())
-    server = app.listen(3030)
+    server = await app.listen(3030)
   })
 
   it('adds hooks to the jobs service', () => {
+    app.use('stores', plugin.stores())
     app.use('tasks', plugin.tasks())
     tasksService = app.service('tasks')
     expect(tasksService).toExist()
