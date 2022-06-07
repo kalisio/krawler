@@ -9,16 +9,15 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const { util, expect } = chai
-const loadJson = async fileName => JSON.parse((await fs.readFile(fileName).toString()))
 
 describe('krawler:hooks:mongo', () => {
   const inputStore = fsStore({ path: path.join(__dirname, 'data') })
   const outputStore = fsStore({ path: path.join(__dirname, 'output') })
   let geojson
 
-  before(async () => {
+  before(() => {
     chailint(chai, util)
-    geojson = await loadJson(path.join(inputStore.path, 'geojson.json'))
+    geojson = fs.readJsonSync(path.join(inputStore.path, 'geojson.json'))
   })
 
   const mongoOptions = {

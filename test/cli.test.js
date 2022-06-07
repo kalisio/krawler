@@ -8,7 +8,7 @@ import fs from 'fs-extra'
 import mongodb from 'mongodb'
 import { exec } from 'child_process'
 import { cli, getApp } from '../lib/index.js'
-import { fileURLToPath } from 'url'
+import { fileURLToPath, pathToFileURL } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -25,7 +25,7 @@ async function runCommand (command) {
 }
 
 describe('krawler:cli', () => {
-  const jobfilePath = path.join(__dirname, 'data', 'jobfile.cjs')
+  const jobfilePath = pathToFileURL(path.join(__dirname, 'data', 'jobfile.cjs'))
   let jobfile, outputPath, client, collection, appServer
 
   before(async () => {

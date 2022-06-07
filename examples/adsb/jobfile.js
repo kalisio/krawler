@@ -1,7 +1,10 @@
-const path = require('path')
-const fs = require('fs')
+import path from 'path'
+import fs from 'fs'
+import { fileURLToPath } from 'url'
 
-module.exports = {
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+export default {
   id: 'adsb',
   //type: 'kue',
   store: 'memory',

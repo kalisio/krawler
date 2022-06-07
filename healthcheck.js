@@ -1,9 +1,14 @@
-const request = require('request')
-const program = require('commander')
-const utils = require('util')
-const path = require('path')
-const fs = require('fs-extra')
-const _ = require('lodash')
+import request from 'request'
+import program from 'commander'
+import path, { dirname } from 'path'
+import utils from 'util'
+
+import fs from 'fs-extra'
+import _ from 'lodash'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 program
   .usage('[options]')

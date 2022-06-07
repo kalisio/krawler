@@ -1,8 +1,9 @@
-const krawler = require('../../lib')
-const hooks = krawler.hooks
-const fsStore = require('fs-blob-store')
-const path = require('path')
+import { run, hooks, StoresService, TasksService } from '../../lib/index.js'
+import fsStore from 'fs-blob-store'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 let customStore
 
 // Create a custom hook
@@ -15,12 +16,12 @@ let hook = (options = {}) => {
 hooks.registerHook('custom', hook)
 
 // Create a custom store/tasks
-krawler.StoresService.registerGenerator('custom-store', (options) => {
+StoresService.registerGenerator('custom-store', (options) => {
   customStore = fsStore(options)
   console.log('You created a custom store')
   return customStore
 })
-krawler.TasksService.registerGenerator('custom-task', (options, id) => {
+TasksService.registerGenerator('custom-task', (options, id) => {
   console.log('You created a custom task')
   return customStore.createReadStream(id)
 })
@@ -44,7 +45,7 @@ let jobfile = {
   }
 }
 
-krawler.run(jobfile)
+run(jobfile)
 .then(tasks => {
   console.log('Job finished')
 })

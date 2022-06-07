@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	airports: {
 		list: ['LFBO', 'LFMP', 'LFBT', 'LFMI', 'LFMN', 'LFPB', 'EGLF', 'EDDB', 'WSSS', 'OMDB' ],
 		params: {

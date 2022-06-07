@@ -44,7 +44,7 @@ jobs:
   - stage: DOC
     language: node_js
     node_js:
-    - '12'
+    - '16'
     install: true
     script: cd docs && yarn install && yarn build 
     deploy:
@@ -62,14 +62,15 @@ jobs:
     - mongodb
     - docker
     - redis-server
-    addons:
-      code_climate:
-        repo_token: ce3b24cd7b710c5ab893043eec49a13ee068b92c35d75a20a2b2cb4470fb1e42
+    env:
+    - CC_TEST_REPORTER_ID=ce3b24cd7b710c5ab893043eec49a13ee068b92c35d75a20a2b2cb4470fb1e42
     before_script:
+    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    - chmod +x ./cc-test-reporter
+    - "./cc-test-reporter before-build"
     - docker pull v4tech/imagemagick
-    - npm install -g codeclimate-test-reporter
     after_script:
-    - codeclimate-test-reporter < coverage/lcov.info
+    - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
 
 
 
