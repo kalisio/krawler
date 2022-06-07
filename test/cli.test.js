@@ -54,7 +54,7 @@ describe('krawler:cli', () => {
 
   it('runs unsuccessfully once using CLI', async () => {
     try {
-      const tasks = await cli(jobfile, { port: 3030, maxDuration: 0, messageTemplate: 'Job <%= jobId %>: <%= error.message %>', debug: true })
+      await cli(jobfile, { port: 3030, maxDuration: 0, messageTemplate: 'Job <%= jobId %>: <%= error.message %>', debug: true })
       assert.fail('Healthcheck should fail')
     } catch (error) {
       // Check intermediate products have been erased and final product are here
