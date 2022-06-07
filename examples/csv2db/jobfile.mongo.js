@@ -1,6 +1,9 @@
-const path = require('path')
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-module.exports = {
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+export default {
   id: 'job',
   store: 'job-store',
   tasks: [{

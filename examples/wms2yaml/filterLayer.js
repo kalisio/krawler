@@ -1,5 +1,5 @@
-const _ = require('lodash')
-const hooks = require('../../lib').hooks
+import _ from 'lodash'
+import { hooks } from '../../lib/index.js'
 
 // Create a custom hook to filter the layers exposed by the WMS service against the layers we desire
 let hook = (options = {}) => {

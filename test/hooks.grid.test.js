@@ -1,25 +1,31 @@
-import chai, { util, expect } from 'chai'
+import chai from 'chai'
 import chailint from 'chai-lint'
 import feathers from '@feathersjs/feathers'
 import express from '@feathersjs/express'
 import fsStore from 'fs-blob-store'
 import fs from 'fs'
-import path from 'path'
+import path, { dirname } from 'path'
 import moment from 'moment'
-import plugin, { hooks as pluginHooks } from '../src'
+import plugin, { hooks as pluginHooks } from '../lib/index.js'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const { util, expect } = chai
 
 describe('krawler:hooks:grid', () => {
   let app, server, tasksService, jobsService
   const outputStore = fsStore({ path: path.join(__dirname, 'output') })
 
-  before(() => {
+  before(async () => {
     chailint(chai, util)
     app = express(feathers())
     app.configure(plugin())
-    server = app.listen(3030)
+    server = await app.listen(3030)
   })
 
   it('adds hooks to the jobs service', () => {
+    app.use('stores', plugin.stores())
     app.use('tasks', plugin.tasks())
     tasksService = app.service('tasks')
     expect(tasksService).toExist()

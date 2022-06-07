@@ -1,18 +1,18 @@
+import { hooks } from '../../lib/index.js'
+import path from 'path'
+import fs from 'fs-extra'
+import sift from 'sift'
+import _ from 'lodash'
+import makeDebug from 'debug'
+import { fileURLToPath } from 'url'
+import spec from './spec.js'
 
-const krawler = require('../../lib')
-const hooks = krawler.hooks
-const path = require('path')
-const sift = require('sift')
-const _ = require('lodash')
-const makeDebug = require('debug')
-
-const spec = require('./spec')
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const debug = makeDebug('krawler:examples')
 
-const airportsDB = require('./airports').features
+const airportsDB = fs.readJsonSync(path.join(__dirname, 'airports.json')).features
 const earthRadius = 6356752.31424518
-
 
 let generateTask = (id, airport, type, distance) => {
   const lon = airport.geometry.coordinates[0]
@@ -56,7 +56,7 @@ let generateTasks = (options) => {
 }
 hooks.registerHook('generateTasks', generateTasks)
 
-module.exports = {
+export default {
   id: 'aeroway-download',
   store: 'output-store',
   taskTemplate: {

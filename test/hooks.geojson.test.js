@@ -1,11 +1,16 @@
-import chai, { util, expect } from 'chai'
+import chai from 'chai'
 import chailint from 'chai-lint'
-import path from 'path'
-import { hooks as pluginHooks } from '../src'
+import fs from 'fs-extra'
+import path, { dirname } from 'path'
+import { hooks as pluginHooks } from '../lib/index.js'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const { util, expect } = chai
 
 describe('krawler:hooks:geojson', () => {
-  const json = require(path.join(__dirname, 'data', 'json.json'))
-  const osm = require(path.join(__dirname, 'data', 'osm.json'))
+  let json, osm
 
   const geoJsonHook = {
     type: 'after',
@@ -14,6 +19,8 @@ describe('krawler:hooks:geojson', () => {
   }
 
   before(() => {
+    json = fs.readJsonSync(path.join(__dirname, 'data', 'json.json'))
+    osm = fs.readJsonSync(path.join(__dirname, 'data', 'osm.json'))
     chailint(chai, util)
   })
 

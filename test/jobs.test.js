@@ -1,20 +1,25 @@
-import chai, { util, expect } from 'chai'
+import chai from 'chai'
 import chailint from 'chai-lint'
 import feathers from '@feathersjs/feathers'
 import express from '@feathersjs/express'
-import path from 'path'
+import path, { dirname } from 'path'
 import nock from 'nock'
 import moment from 'moment'
-import plugin, { hooks as pluginHooks } from '../src'
+import plugin, { hooks as pluginHooks } from '../lib/index.js'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+const { util, expect } = chai
 
 describe('krawler:jobs', () => {
   let app, server, storage, storesService, jobsService, tasksService
 
-  before(() => {
+  before(async () => {
     chailint(chai, util)
     app = express(feathers())
     app.configure(plugin())
-    server = app.listen(3030)
+    server = await app.listen(3030)
   })
 
   it('creates the jobs service', () => {
@@ -322,9 +327,13 @@ describe('krawler:jobs', () => {
       ]
     })
       .catch(error => {
-        expect(error).toExist()
-        expect(error.message).to.equal('apply error')
-        done()
+        try {
+          expect(error).toExist()
+          expect(error.message).to.equal('apply error')
+          done()
+        } catch (error) {
+          done(error)
+        }
       })
   })
   // Let enough time to fail

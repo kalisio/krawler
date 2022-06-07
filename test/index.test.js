@@ -1,7 +1,9 @@
-import chai, { util, expect } from 'chai'
+import chai from 'chai'
 import chailint from 'chai-lint'
 import feathers from '@feathersjs/feathers'
-import plugin from '../src'
+import plugin from '../lib/index.js'
+
+const { util, expect } = chai
 
 describe('krawler', () => {
   let app
@@ -11,7 +13,7 @@ describe('krawler', () => {
     app = feathers()
   })
 
-  it('is CommonJS compatible', () => {
+  it('is ES module compatible', () => {
     expect(typeof plugin).to.equal('function')
     expect(typeof plugin.stores).to.equal('function')
     expect(typeof plugin.stores.Service).to.equal('function')

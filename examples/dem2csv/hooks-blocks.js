@@ -1,6 +1,9 @@
-const path = require('path')
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-module.exports = {
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+export default {
   tasks: {
     after: {
       // Because each task is not a JSON object but a GeoTiff we need to convert to JSON before exporting them to CSV

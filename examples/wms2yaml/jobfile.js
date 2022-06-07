@@ -1,12 +1,15 @@
-const path = require('path')
-require('./generateTasks')
-require('./filterLayer')
+import path from 'path'
+import { fileURLToPath } from 'url'
+import './generateTasks.js'
+import './filterLayer.js'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const token = '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__'
 const baseUrl = 'http://geoservices.meteofrance.fr/api/'
 const proxyUrl = 'http://mapproxy.kalisio.xyz/service'
 
-module.exports = {
+export default {
   id: 'MF',
   store: 'output-store',
   taskTemplate: {

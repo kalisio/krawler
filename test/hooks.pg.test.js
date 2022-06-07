@@ -1,10 +1,10 @@
-import chai, { util/*, expect */ } from 'chai'
-import chailint from 'chai-lint'
+// import chai from 'chai'
+// import chailint from 'chai-lint'
 // import { hooks as pluginHooks } from '../src'
 
-describe('krawler:hooks:pg', () => {
+describe.skip('krawler:hooks:pg', () => {
   before(() => {
-    chailint(chai, util)
+    // chailint(chai, util)
   })
 
   /* const pgOptions = {
