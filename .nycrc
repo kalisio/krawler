@@ -1,5 +1,0 @@
-{
-	"all": true,
-	"include": ["lib/**/*.js"],
-	"reporter": ["text", "html", "lcov"]
-}
