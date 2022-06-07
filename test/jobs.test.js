@@ -327,9 +327,13 @@ describe('krawler:jobs', () => {
       ]
     })
       .catch(error => {
-        expect(error).toExist()
-        expect(error.message).to.equal('apply error')
-        done()
+        try {
+          expect(error).toExist()
+          expect(error.message).to.equal('apply error')
+          done()
+        } catch (error) {
+          done(error)
+        }
       })
   })
   // Let enough time to fail
