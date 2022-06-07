@@ -25,6 +25,7 @@ describe('krawler:hooks:grid', () => {
   })
 
   it('adds hooks to the jobs service', () => {
+    app.use('stores', plugin.stores())
     app.use('tasks', plugin.tasks())
     tasksService = app.service('tasks')
     expect(tasksService).toExist()
