@@ -26,7 +26,7 @@
     "url": "https://github.com/kalisio/krawler/issues"
   },
   "engines": {
-    "node": ">= 8.0.0"
+    "node": ">= 16.0.0"
   },
   "scripts": {
     "publish": "git push origin --tags && npm run changelog && git push origin",
