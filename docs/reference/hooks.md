@@ -766,6 +766,7 @@ Read an XML file from a store and convert it to in-memory JSON values, hook opti
 * **dataPath**: property path where to store the resulting JSON object on the hook object, defaults to `result.data`
 * **storePath**: see description in [common options](./hooks.md#common-options)
 * **store**: see description in [common options](./hooks.md#common-options)
+* **parser**: the [parser options ](https://github.com/Leonidas-from-XIV/node-xml2js#options)
 
 ## YAML
 
