@@ -127,7 +127,7 @@ describe('krawler:cli', () => {
             appServer = null
             done()
           } catch (error) {
-            console.log(error)  
+            console.log(error)
           }
         }, 11000)
         // Only run as we already setup the app

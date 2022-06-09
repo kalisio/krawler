@@ -2650,10 +2650,6 @@ duplexer2@~0.1.4:
   dependencies:
     readable-stream "^2.0.2"
 
-duplexer@~0.1.1:
-  version "0.1.1"
-  resolved "https://registry.npmjs.org/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
-
 duplexify@^3.2.0:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/duplexify/-/duplexify-3.5.1.tgz#4e1516be68838bc90a49994f0b39a6e5960befcd"
@@ -3400,12 +3396,6 @@ fstream@~1.0.10:
     inherits "~2.0.0"
     mkdirp ">=0.5 0"
     rimraf "2"
-
-ftp-response-parser@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/ftp-response-parser/-/ftp-response-parser-1.0.1.tgz#3b9d33f8edd5fb8e4700b8f778c462e5b1581f89"
-  dependencies:
-    readable-stream "^1.0.31"
 
 function-bind@^1.0.2, function-bind@^1.1.1:
   version "1.1.1"
@@ -4170,17 +4160,6 @@ js-yaml@^3.13.1:
 jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
-
-jsftp@^2.1.3:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/jsftp/-/jsftp-2.1.3.tgz#3a0936b58d170441a0e74f27d34b53dda8dea9c1"
-  dependencies:
-    debug "^3.1.0"
-    ftp-response-parser "^1.0.1"
-    once "^1.4.0"
-    parse-listing "^1.1.3"
-    stream-combiner "^0.2.2"
-    unorm "^1.4.1"
 
 json-parse-better-errors@^1.0.1:
   version "1.0.2"
@@ -5131,10 +5110,6 @@ parse-json@^4.0.0:
     error-ex "^1.3.1"
     json-parse-better-errors "^1.0.1"
 
-parse-listing@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/parse-listing/-/parse-listing-1.1.3.tgz#aa546f57fdc129cfbf9945cd4b757b14b06182dd"
-
 parseurl@~1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/parseurl/-/parseurl-1.3.2.tgz#fc289d4ed8993119460c156253262cdc8de65bf3"
@@ -5603,7 +5578,7 @@ read-pkg@^1.0.0:
     normalize-package-data "^2.3.2"
     path-type "^1.0.0"
 
-readable-stream@1.1, readable-stream@^1.0.31:
+readable-stream@1.1:
   version "1.1.14"
   resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-1.1.14.tgz#7cf4c54ef648e3813084c636dd2079e166c081d9"
   dependencies:
@@ -6228,13 +6203,6 @@ statuses@2.0.1:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.4.0.tgz#bb73d446da2796106efcc1b601a253d6c46bd087"
 
-stream-combiner@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.npmjs.org/stream-combiner/-/stream-combiner-0.2.2.tgz#aec8cbac177b56b6f4fa479ced8c1912cee52858"
-  dependencies:
-    duplexer "~0.1.1"
-    through "~2.3.4"
-
 stream-shift@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/stream-shift/-/stream-shift-1.0.0.tgz#d5c752825e5367e786f78e18e445ea223a155952"
@@ -6485,7 +6453,7 @@ text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
-through@2, "through@>=2.2.7 <3", through@^2.3.4, through@~2.3.4:
+through@2, "through@>=2.2.7 <3", through@^2.3.4:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
 
@@ -6718,10 +6686,6 @@ underscore@>=1.3.1:
 universalify@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.1.tgz#fa71badd4437af4c148841e3b3b165f9e9e590b7"
-
-unorm@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/unorm/-/unorm-1.4.1.tgz#364200d5f13646ca8bcd44490271335614792300"
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"

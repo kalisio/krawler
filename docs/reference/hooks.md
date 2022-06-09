@@ -108,15 +108,9 @@ The input hook result is expected to be an array of tasks which output will be r
 
 [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.ftp.js)
 
-### connectFTP(options)
-
-Connect to an FTP server. The [connection options](https://github.com/sergi/jsftp#api-and-examples) of the client are defined in the hook options plus:
-* **clientPath**: property path where to store the client object to be used by the FTP hooks, defaults to `client`
-
-### disconnectFTP(options)
-
-Disconnect from an FTP server. Hook options are the following:
-* **clientPath**: property path where to retrieve the client object, defaults to `client`
+::: tip
+FTP hooks rely on [lftp](http://lftp.yar.ru/). Consequently, uou need to have the executable `lftp` installed on your computer.
+:::
 
 ### listFTP(options)
 
