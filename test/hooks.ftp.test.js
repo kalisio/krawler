@@ -2,7 +2,7 @@ import chai from 'chai'
 import chailint from 'chai-lint'
 import FsStore from 'fs-blob-store'
 import fs from 'fs'
-import path, { dirname } from 'path'
+import path from 'path'
 import { hooks as pluginHooks } from '../lib/index.js'
 
 const { util, expect } = chai
@@ -41,9 +41,9 @@ describe('krawler:hooks:ftp', () => {
     expect(ftpHook.result.data).toExist()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 
-   it('get from FTP', async () => {
+  it('get from FTP', async () => {
     try {
       fs.mkdirSync(store.path)
     } catch (error) {
@@ -53,5 +53,5 @@ describe('krawler:hooks:ftp', () => {
     expect(fs.existsSync(path.join(store.path, 'readme.txt'))).beTrue()
   })
   // Let enough time to proceed
-  .timeout(5000)
+    .timeout(5000)
 })
