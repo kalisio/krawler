@@ -19,7 +19,7 @@ describe('krawler:hooks:ftp', () => {
   const ftpOptions = {
     remoteDir: '/pub/example',
     remoteFile: '/pub/example/readme.txt',
-    localFile: path.join(outputDir, 'readme.txt')
+    localFile: 'readme.txt'
   }
 
   const ftpHook = {
