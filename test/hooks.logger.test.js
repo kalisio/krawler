@@ -52,11 +52,9 @@ describe('krawler:hooks:logger', () => {
 
   it('log information', async () => {
     let log
-    pluginHooks.log({
-      function: (logger, item) => {
-        log = 'Item value is ' + item.value
-        logger.info(log)
-      }
+    pluginHooks.log((logger, item) => {
+      log = 'Item value is ' + item.value
+      logger.info(log)
     })(loggerHook)
     // Check transport output
     // FIXME: need to let some time to proceed with logs
