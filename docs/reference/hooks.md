@@ -663,6 +663,14 @@ Run a system command. Hook options are the following:
 Learn more about [templating](https://lodash.com/docs/4.17.4#template)
 :::
 
+### envsubst(options)
+
+Provides file-level environment variable substitution. Hook options are the following:
+* **templateFile**: the file to apply the substitution
+* **outputFile**: the resulting file
+* any option supported by **envusb** for [substituting](https://github.com/danday74/envsub#envsub--local-promise-based-usage)
+
+
 ## Docker
 
 [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.docker.js)

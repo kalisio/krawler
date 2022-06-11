@@ -70,6 +70,7 @@
     "cross-spawn": "^7.0.3",
     "debug": "^4.1.0",
     "dockerode": "^2.5.5",
+    "envsub": "^4.0.7",
     "fast-csv": "^2.4.1",
     "feathers-hooks-common": "^3.0.0",
     "fs-blob-store": "^5.2.1",

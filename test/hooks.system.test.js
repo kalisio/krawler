@@ -108,4 +108,28 @@ describe('krawler:hooks:system', () => {
   })
   // Let enough time to proceed
     .timeout(5000)
+
+  it('substitute env variables in text file', () => {
+    try {
+      fs.mkdirSync(path.join(outputStore.path, 'envsubst'))
+    } catch (error) {
+      // If already exist
+    }
+    return pluginHooks.envsubst({
+      templateFile: path.join(inputStore.path, 'message.txt.tpl'),
+      outputFile: path.join(outputStore.path, 'envsubst', 'message.txt'),
+      envs: [
+        { name: 'HELLO', value: 'hello' },
+        { name: 'WORLD', value: 'world' }
+      ]
+    })(commandHook)
+      .then(hook => {
+        const filename = path.join(outputStore.path, 'envsubst', 'message.txt')
+        expect(fs.existsSync(filename)).beTrue()
+        const content = fs.readFileSync(filename, 'utf8')
+        expect(content).to.equal('hello world')
+      })
+  })
+  // Let enough time to proceed
+    .timeout(5000)
 })
