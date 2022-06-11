@@ -19,7 +19,8 @@ describe('krawler:hooks:ftp', () => {
   const ftpOptions = {
     remoteDir: '/pub/example',
     remoteFile: '/pub/example/readme.txt',
-    localFile: 'readme.txt'
+    localFile: 'readme.txt',
+    pattern: '*.png'
   }
 
   const ftpHook = {
@@ -38,6 +39,13 @@ describe('krawler:hooks:ftp', () => {
 
   it('list FTP', async () => {
     await pluginHooks.listFTP(ftpOptions)(ftpHook)
+    expect(ftpHook.result.data).toExist()
+  })
+  // Let enough time to proceed
+    .timeout(5000)
+
+  it('glob FTP', async () => {
+    await pluginHooks.globFTP(ftpOptions)(ftpHook)
     expect(ftpHook.result.data).toExist()
   })
   // Let enough time to proceed

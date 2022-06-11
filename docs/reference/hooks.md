@@ -118,7 +118,15 @@ List the files from a remote directory on the FTP server, hook options are the f
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **remoteDir**: the remote directory to list
 * **key**: see description in [common options](./hooks.md#common-options)
-* 
+
+### globFTP(options)
+
+List the files from a remote directory with names matching a pattern, hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* **remoteDir**: the remote directory to list
+* **key**: see description in [common options](./hooks.md#common-options)
+* **pattern**: the pattern use to match the file names, default to `*`
+
 ### getFTP(options)
 
 Get a remote file from the FTP server, hook options are the following:
