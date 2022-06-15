@@ -12,7 +12,7 @@ program
   .option('-nsj, --nb-skipped-jobs [nb]', 'Change the number of skipped runs for fault-tolerant jobs to be considered as failed (defaults to 3)', process.env.NB_SKIPPED_JOBS ? Number(process.env.NB_SKIPPED_JOBS) : 3)
   .option('-sw, --slack-webhook [url]', 'Slack webhook URL to post messages on failure', process.env.SLACK_WEBHOOK_URL)
   .option('-mt, --message-template [template]', 'Message template used on failure', process.env.MESSAGE_TEMPLATE || 'Job <%= jobId %>: <%= error.message %>')
-  .option('-lt, --link-template [template]', 'Link template used on failure', process.env.SLACK_LINK_TEMPLATE || '')
+  .option('-lt, --link-template [template]', 'Link template used on failure', process.env.LINK_TEMPLATE || '')
   .option('-d, --debug', 'Verbose output for debugging')
   .parse(process.argv)
 
