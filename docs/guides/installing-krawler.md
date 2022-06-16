@@ -19,8 +19,10 @@ Or when developing:
 ```bash
 git clone https://github.com/kalisio/krawler
 cd krawler
-npm install
+yarn install
 ```
+
+> Please refer to the [KDK documentation](https://kalisio.github.io/kdk/guides/development/setup.html) to setup your development environment.
 
 A native command-line executable can be generated using [pkg](https://github.com/zeit/pkg) eg for windows:
 
