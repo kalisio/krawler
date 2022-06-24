@@ -4,6 +4,8 @@
 
 ```bash
 npm install -g @kalisio/krawler
+// Or with Yarn
+yar global add @kalisio/krawler
 ```
 
 ## As module
@@ -12,6 +14,8 @@ As dependency in another module/app:
 
 ```bash
 npm install @kalisio/krawler --save
+// Or with Yarn
+yar add @kalisio/krawler
 ```
 
 Or when developing:
@@ -20,6 +24,11 @@ Or when developing:
 git clone https://github.com/kalisio/krawler
 cd krawler
 yarn install
+yarn link
+// Now you can launch the krawler CLI
+krawler jobfile.js
+// Or link wirh it in another package
+yarn link @kalisio/krawler
 ```
 
 > Please refer to the [KDK documentation](https://kalisio.github.io/kdk/guides/development/setup.html) to setup your development environment.
