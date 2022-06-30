@@ -20,7 +20,7 @@ The type of the created entity depends on the service being extended:
 
 If you do not use the services in your app but the CLI mode, you should extend the default services used by the CLI like this:
 ```js
-import { StoresService, TasksService, JobsService } from 'krawler'
+import { StoresService, TasksService, JobsService } from '@kalisio/krawler'
 
 StoresService
 .registerGenerator('custom-store', (options) => {
@@ -33,7 +33,7 @@ StoresService
 
 It is possible to add user-registered hook constructor functions like this:
 ```js
-import { hooks } from 'krawler'
+import { hooks } from '@kalisio/krawler'
 // A krawler hook constructor function
 let hook = (options = {}) => {
   // Standard FeathersJS hook function
@@ -46,6 +46,10 @@ hooks.registerHook('custom', hook)
 ```
 
 After that you can use your custom hook like the built-in ones with the [CLI](./using-krawler.md#command-line-interface).
+
+::: tip
+For this to work you need to add krawler as a dependency in the `package.json` of your job module or link to it in development mode. Please refer to our [installation section](installing-krawler.md#as-module)
+:::
 
 ## Complete example
 
