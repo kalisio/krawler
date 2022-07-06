@@ -340,7 +340,7 @@ Reproject a GeoJSON from a given projection system to another one, hook options 
 ### readKML(options)
 
 Read a KML from an input stream/store and convert it to in-memory JSON values, hook options are the following:
-* **objectPath**: property path where to read the JSON object in the JSON coming from the store, not defined by default so that the whole JSON is retrieved
+* **objectPath**: property path where to read the KML object in the KML coming from the store, not defined by default so that the whole KML is retrieved
 * **dataPath**: property path where to store the resulting JSON object on the hook object, defaults to `result.data`
 * **storePath**: see description in [common options](./hooks.md#common-options)
 * **store**: see description in [common options](./hooks.md#common-options)
