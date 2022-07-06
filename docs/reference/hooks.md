@@ -333,6 +333,21 @@ Reproject a GeoJSON from a given projection system to another one, hook options 
 * **to**: EPSG code of the output projection, defaults to `EPSG:4326`
 * **dataPath**: property path where to store the resulting GeoJSON object on the hook object, defaults to `result.data`
 
+## KML
+
+[source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.kml.js)
+
+### readKML(options)
+
+Read a KML from an input stream/store and convert it to in-memory JSON values, hook options are the following:
+* **objectPath**: property path where to read the JSON object in the JSON coming from the store, not defined by default so that the whole JSON is retrieved
+* **dataPath**: property path where to store the resulting JSON object on the hook object, defaults to `result.data`
+* **storePath**: see description in [common options](./hooks.md#common-options)
+* **store**: see description in [common options](./hooks.md#common-options)
+* **key**: see description in [common options](./hooks.md#common-options)
+* **transform**: perform transformation using these options after read, see description in [transformJson](./hooks.md#transformjson-options)
+* **features**: this boolean indicates if only the features are extracted when reading a GeoJson collection, defaults to `false`
+
 ## MongoDB
 
 [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.mongo.js)
