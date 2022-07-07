@@ -454,6 +454,59 @@ Insert file into an existing bucket. Hook options are the following:
 
 > If the input data is a GeoJSON collection the array of features will be pushed into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections
 
+## Feathers
+
+[source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.feathers.js)
+
+### connectFeathers(options)
+
+Connect to a Feathers API. The [connection options](https://docs.feathersjs.com/api/client.html) of the client are defined in the hook options plus:
+* **origin**: Feathers connection URL
+* **path**: the Feathers API path prefix if any
+* **authentication**: the Feathers API authentication options if any (including service `path`)
+* **clientPath**: property path where to store the client object to be used by the Feathers hooks, defaults to `client`
+
+::: tip
+**Krawler** uses on the version 5 of the Feathers client. 
+:::
+
+### disconnectFeathers(options)
+
+Disconnect from a Feathers API. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
+### callFeathersServiceMethod(options)
+
+Performs a service operation using the API. Hook options are the following:
+* **service**: the name of the service to be used, defaults to the hook object ID
+* **method**: the name of the method to be called, defaults to `find`
+* **id**: the ID of the item to read/write, defaults to item ID
+* **data**: the data payload of the operation, if not given will be hook item data
+* **dataPath**: property path where to read/write the input/output JSON objects on the hook object, defaults to `data.result`
+* **chunkSize**: number of item for a [multi operation](https://docs.feathersjs.com/api/databases/common.html#options)
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* **transform**: perform transformation using these options after/before read/write, see description in [transformJson](./hooks.md#transformjson-options)
+* **query**: [operation query](https://docs.feathersjs.com/api/databases/querying.html) to be performed, fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+* **updateResult**: if `true` service operation results will not replace item data (default for read operations)
+
+::: warning
+Due to templating restricted to string output any ISO date string or comparison operator value in the query object will be converted back to native types so that matching will work as expected in JS
+:::
+
+### writeMongoCollection(options)
+
+Inserts JSON into an existing collection (uses [insertOne](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/#insertone) operations under-the-hood). Hook options are the following:
+* **collection**: the name of the collection to be written, defaults to the hook object ID
+* **dataPath**: property path where to read the input JSON object on the hook object, defaults to `data.result`
+* **chunkSize**: number of GeoJson features for the [batch insert](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/)
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* **transform**: perform transformation using these options before write, see description in [transformJson](./hooks.md#transformjson-options)
+* any option supported by `options` argument of the [bulkWrite](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/) function.
+  
+::: tip
+If the input data is a GeoJSON collection the array of features will be pushed into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections.
+:::
+
 ## Numerical Weather Prediction
 
 [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.nwp.js)
