@@ -95,6 +95,7 @@
     "s3-blob-store": "^2.1.0",
     "sift": "^6.0.0",
     "tar": "^4.4.4",
+    "txt-file-to-json": "^3.0.6",
     "unzipper": "^0.9.5",
     "uuid": "^3.2.1",
     "winston": "^3.7.2",

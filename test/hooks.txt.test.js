@@ -10,13 +10,13 @@ const { util, expect } = chai
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-describe('krawler:hooks:kml', () => {
+describe('krawler:hooks:txt', () => {
   
   const inputStore = fsStore({ path: path.join(__dirname, 'data') })
   
-  const kmlHook = {
+  const txtHook = {
     type: 'after',
-    result: { id: 'kml.kml' },
+    result: { id: 'lines.txt' },
     params: {'store': inputStore }
   }
 
@@ -24,14 +24,12 @@ describe('krawler:hooks:kml', () => {
     chailint(chai, util)
   })
 
-  it('convert KML to GeoJSON', async () => {
-    await pluginHooks.readKML({})(kmlHook)
-    expect(kmlHook.result.data.type).to.equal('FeatureCollection')
-    expect(kmlHook.result.data.features.length).to.equal(1)
-    kmlHook.result.data.features.forEach(feature => {
-      expect(feature.type).to.equal('Feature')
-      expect(feature.geometry).toExist()
-      expect(feature.properties).toExist()
+  it('convert TXT to JSON', async () => {
+    await pluginHooks.readTXT({})(txtHook)
+    console.log(txtHook.result.data)
+    expect(txtHook.result.data.length).to.equal(8)
+    txtHook.result.data.forEach(line => {
+      expect(line.length).to.equal(10)
     })
   })
 
