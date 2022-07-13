@@ -489,11 +489,18 @@ Updates JSON into an existing collection (uses [updateOne](https://docs.mongodb.
 * **chunkSize**: number of GeoJson features for the [batch insert](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/)
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **transform**: perform transformation using these options before update, see description in [transformJson](./hooks.md#transformjson-options)
+* **filter/upsert/hint**: corresponding option for `updateOne` operation
 * any option supported by `options` argument of the [bulkWrite](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/) function.
   
 ::: tip
 If the input data is a GeoJSON collection the array of features will be updated into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections.
 :::
+
+### deleteMongoCollection(options)
+
+Removes documents from an existing collection (uses [deleteMany](https://www.mongodb.com/docs/manual/reference/method/db.collection.deleteMany/) operations under-the-hood). Hook options are the following:
+* **collection**: the name of the collection to remove documents from, defaults to the hook object ID
+* **filter**: deletion criteria for `deleteMany` operation
 
 ### createMongoAggregation(options)
 
