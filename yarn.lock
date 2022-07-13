@@ -337,6 +337,11 @@
   resolved "https://registry.yarnpkg.com/@socket.io/component-emitter/-/component-emitter-3.1.0.tgz#96116f2a912e0c02817345b3c10751069920d553"
   integrity sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==
 
+"@tmcw/togeojson@^5.2.1":
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/@tmcw/togeojson/-/togeojson-5.2.1.tgz#3e9f08d521d30c968ea4a489116c76efe34a0a1c"
+  integrity sha512-fEmZ29r5SiCqhQTC0mzIDgw2TC+zJIyhTac8hFHpvFFPnqGERM3d94dbbtzor4latESCX+uSBdBJyQ33nwkARg==
+
 "@turf/along@^6.2.0-alpha.3":
   version "6.2.0-alpha.3"
   resolved "https://registry.yarnpkg.com/@turf/along/-/along-6.2.0-alpha.3.tgz#f0b4ad240958c9392577b5502f32bfe5bd0b4045"
@@ -7099,6 +7104,11 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
+txt-file-to-json@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/txt-file-to-json/-/txt-file-to-json-3.0.6.tgz#3694b3b3304e62c4b9f1ef25c1998659e936923a"
+  integrity sha512-DoMaLb7+UTPVRSO+lrKpI/v/md8ONdH1WMyG2V1A8vcwNH6NRkVUXy+kv2e42eSWQPnZ/e2mDTmPqyP+VFN/2A==
+
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/type-check/-/type-check-0.4.0.tgz#07b8203bfa7056c0657050e3ccd2c37730bab8f1"
@@ -7504,6 +7514,11 @@ xmlbuilder@~9.0.1:
   version "9.0.7"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
   integrity sha1-Ey7mPS7FVlxVfiD0wi35rKaGsQ0=
+
+xmldom@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.6.0.tgz#43a96ecb8beece991cef382c08397d82d4d0c46f"
+  integrity sha512-iAcin401y58LckRZ0TkI4k0VSM1Qg0KGSc3i8rU+xrxe19A/BN1zHyVSJY7uoutVlaTSzYyk/v5AmkewAP7jtg==
 
 xmldom@~0.1.16:
   version "0.1.27"

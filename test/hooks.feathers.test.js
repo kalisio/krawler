@@ -20,10 +20,10 @@ describe('krawler:hooks:feathers', () => {
   before(async () => {
     chailint(chai, util)
     app = feathers()
-    .configure(socketio({ path: '/ws' }))
-    .use('/geojson', memory({
-      multi: true
-    }))
+      .configure(socketio({ path: '/ws' }))
+      .use('/geojson', memory({
+        multi: true
+      }))
     server = await app.listen(4000)
     geojson = fs.readJsonSync(path.join(inputStore.path, 'geojson.json'))
   })
@@ -66,7 +66,7 @@ describe('krawler:hooks:feathers', () => {
       }
     })(feathersHook)
     const service = feathersHook.data.client.service('/geojson')
-    let results = await service.find({ query: {} })
+    const results = await service.find({ query: {} })
     expect(results.length).to.equal(3)
     expect(results[0].properties).toExist()
     expect(results[0].properties.prop0).to.equal('value0')
@@ -97,12 +97,12 @@ describe('krawler:hooks:feathers', () => {
     await pluginHooks.callFeathersServiceMethod({
       service: '/geojson',
       method: 'patch',
-      data: { 'properties': 'value1' },
+      data: { properties: 'value1' },
       id: null,
       query: {}
     })(feathersHook)
     const service = feathersHook.data.client.service('/geojson')
-    let results = await service.find({ query: {} })
+    const results = await service.find({ query: {} })
     expect(results.length).to.equal(3)
     results.forEach(result => {
       expect(result.properties).to.equal('value1')
@@ -119,7 +119,7 @@ describe('krawler:hooks:feathers', () => {
       query: {}
     })(feathersHook)
     const service = feathersHook.data.client.service('/geojson')
-    let results = await service.find({ query: {} })
+    const results = await service.find({ query: {} })
     expect(results.length).to.equal(0)
   })
   // Let enough time to proceed

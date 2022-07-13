@@ -104,6 +104,75 @@ Generate a CSV file from a set of input CSV files, hook options are the followin
 
 The input hook result is expected to be an array of tasks which output will be read back from the store.
 
+## Docker
+
+[source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.docker.js)
+
+The Docker hooks allows you to interact with a Docker daemon. It is based on [dockerode](https://github.com/apocas/dockerode), a Docker remote API.
+
+### connectDocker(options)
+
+Connect to the Docker daemon. The [connection options](https://github.com/apocas/dockerode#getting-started) of the client are defined in the hook options plus:
+* **clientPath**: property path where to store the client object to be used by the Docker hooks, defaults to `client`
+
+### disconnectDocker(options)
+
+Disconnect from the Docker daemon. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
+### pullDockerImage(options)
+
+Pull a docker image. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* any options supported by dockerode for [image pulling](https://github.com/apocas/dockerode#equivalent-of-docker-pull-in-dockerode)
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
+::: tip
+`options` can contain an `auth` object to pull the image from a private repository.
+:::
+
+### createDockerContainer(options)
+
+Run a docker container. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* any options supported by dockerode for [container creation](https://github.com/apocas/dockerode#manipulating-a-container)
+  
+::: tip
+`Cmd` and `Env` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+:::
+
+### createDockerService(options)
+
+Create a docker service on a Swarm cluster. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* any options supported by dockerode for [service creation](https://github.com/apocas/dockerode#documentation)
+  
+::: tip
+Options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+:::
+
+### runDockerContainerCommand(options)
+
+Run a command against a docker container. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+* **command**: the name of the command to be run
+* **arguments**: the arguments of the command to be run
+* support any command/option supported by dockerode on [containers](https://github.com/apocas/dockerode#manipulating-a-container)
+
+When the `getArchive` command is used, additional hook options are the following:
+* **storePath**: see description in [common options](./hooks.md#common-options)
+* **store**: see description in [common options](./hooks.md#common-options)
+* **key**: see description in [common options](./hooks.md#common-options)
+* **outputType**: the type of output produced by this hook, defaults to `intermediate`
+
+::: tip
+`Cmd`, `Env` and `path` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+:::
+
+::: tip
+The hook take care to wait for `exec` to finish and automatically write the tar in the hook store for `getArchive`
+:::
+
 ## FTP
 
 [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.ftp.js)
@@ -332,6 +401,21 @@ Reproject a GeoJSON from a given projection system to another one, hook options 
 * **from**: EPSG code of the input projection, defaults to `EPSG:4326`
 * **to**: EPSG code of the output projection, defaults to `EPSG:4326`
 * **dataPath**: property path where to store the resulting GeoJSON object on the hook object, defaults to `result.data`
+
+## KML
+
+[source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.kml.js)
+
+### readKML(options)
+
+Read a KML from an input stream/store and convert it to in-memory JSON values, hook options are the following:
+* **objectPath**: property path where to read the KML object in the KML coming from the store, not defined by default so that the whole KML is retrieved
+* **dataPath**: property path where to store the resulting JSON object on the hook object, defaults to `result.data`
+* **storePath**: see description in [common options](./hooks.md#common-options)
+* **store**: see description in [common options](./hooks.md#common-options)
+* **key**: see description in [common options](./hooks.md#common-options)
+* **transform**: perform transformation using these options after read, see description in [transformJson](./hooks.md#transformjson-options)
+* **features**: this boolean indicates if only the features are extracted when reading a GeoJson collection, defaults to `false`
 
 ## MongoDB
 
@@ -724,75 +808,19 @@ Provides file-level environment variable substitution. Hook options are the foll
 * **outputFile**: the resulting file
 * any option supported by **envusb** for [substituting](https://github.com/danday74/envsub#envsub--local-promise-based-usage)
 
+## TXT
 
-## Docker
+[source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.txt.js)
 
-[source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.docker.js)
+### readTXT(options)
 
-The Docker hooks allows you to interact with a Docker daemon. It is based on [dockerode](https://github.com/apocas/dockerode), a Docker remote API.
-
-### connectDocker(options)
-
-Connect to the Docker daemon. The [connection options](https://github.com/apocas/dockerode#getting-started) of the client are defined in the hook options plus:
-* **clientPath**: property path where to store the client object to be used by the Docker hooks, defaults to `client`
-
-### disconnectDocker(options)
-
-Disconnect from the Docker daemon. Hook options are the following:
-* **clientPath**: property path where to retrieve the client object, defaults to `client`
-
-### pullDockerImage(options)
-
-Pull a docker image. Hook options are the following:
-* **clientPath**: property path where to retrieve the client object, defaults to `client`
-* any options supported by dockerode for [image pulling](https://github.com/apocas/dockerode#equivalent-of-docker-pull-in-dockerode)
-* **clientPath**: property path where to retrieve the client object, defaults to `client`
-
-::: tip
-`options` can contain an `auth` object to pull the image from a private repository.
-:::
-
-### createDockerContainer(options)
-
-Run a docker container. Hook options are the following:
-* **clientPath**: property path where to retrieve the client object, defaults to `client`
-* any options supported by dockerode for [container creation](https://github.com/apocas/dockerode#manipulating-a-container)
-  
-::: tip
-`Cmd` and `Env` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
-:::
-
-### createDockerService(options)
-
-Create a docker service on a Swarm cluster. Hook options are the following:
-* **clientPath**: property path where to retrieve the client object, defaults to `client`
-* any options supported by dockerode for [service creation](https://github.com/apocas/dockerode#documentation)
-  
-::: tip
-Options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
-:::
-
-### runDockerContainerCommand(options)
-
-Run a command against a docker container. Hook options are the following:
-* **clientPath**: property path where to retrieve the client object, defaults to `client`
-* **command**: the name of the command to be run
-* **arguments**: the arguments of the command to be run
-* support any command/option supported by dockerode on [containers](https://github.com/apocas/dockerode#manipulating-a-container)
-
-When the `getArchive` command is used, additional hook options are the following:
+Read a TXT from an input stream/store and convert it to in-memory JSON values, hook options are the following:
+* **objectPath**: property path where to read the KML object in the KML coming from the store, not defined by default so that the whole KML is retrieved
+* **dataPath**: property path where to store the resulting JSON object on the hook object, defaults to `result.data`
 * **storePath**: see description in [common options](./hooks.md#common-options)
 * **store**: see description in [common options](./hooks.md#common-options)
 * **key**: see description in [common options](./hooks.md#common-options)
-* **outputType**: the type of output produced by this hook, defaults to `intermediate`
-
-::: tip
-`Cmd`, `Env` and `path` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
-:::
-
-::: tip
-The hook take care to wait for `exec` to finish and automatically write the tar in the hook store for `getArchive`
-:::
+* **transform**: perform transformation using these options after read, see description in [transformJson](./hooks.md#transformjson-options)
 
 ## Utils
 
@@ -837,6 +865,7 @@ Read an XML file from a store and convert it to in-memory JSON values, hook opti
 * **storePath**: see description in [common options](./hooks.md#common-options)
 * **store**: see description in [common options](./hooks.md#common-options)
 * **parser**: the [parser options ](https://github.com/Leonidas-from-XIV/node-xml2js#options)
+* **key**: see description in [common options](./hooks.md#common-options)
 
 ## YAML
 
