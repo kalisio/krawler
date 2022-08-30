@@ -1,5 +1,81 @@
 # Changelog
 
+## [v2.0.0](https://github.com/kalisio/krawler/tree/v2.0.0) (2022-08-30)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v1.2.0...v2.0.0)
+
+**Implemented enhancements:**
+
+- Reflect healthcheck status in exit code [\#196](https://github.com/kalisio/krawler/issues/196)
+- Add a hook to check for existing key in store [\#179](https://github.com/kalisio/krawler/issues/179)
+- Upgrade NodeJS to v16 [\#177](https://github.com/kalisio/krawler/issues/177)
+- runCommand hook should allow to pipe stdout/stderr [\#154](https://github.com/kalisio/krawler/issues/154)
+- Async job should manage tasks in a queue [\#151](https://github.com/kalisio/krawler/issues/151)
+- Make callOnHookItems more configurable [\#150](https://github.com/kalisio/krawler/issues/150)
+- Add a progress bar during job execution [\#98](https://github.com/kalisio/krawler/issues/98)
+- Upgrade Feathers to v5 [\#82](https://github.com/kalisio/krawler/issues/82)
+- Integrate a logger like winston [\#37](https://github.com/kalisio/krawler/issues/37)
+- Make krawler able to react to external systems [\#34](https://github.com/kalisio/krawler/issues/34)
+- Allow to read TXT files [\#209](https://github.com/kalisio/krawler/issues/209)
+- Add hooks to use a Feathers API [\#207](https://github.com/kalisio/krawler/issues/207)
+- Allow to read KML files [\#204](https://github.com/kalisio/krawler/issues/204)
+- Tasks order in job result array [\#203](https://github.com/kalisio/krawler/issues/203)
+- Ensure the store path exists when creating a store of type of FS [\#202](https://github.com/kalisio/krawler/issues/202)
+- Provide a envsubst hook [\#201](https://github.com/kalisio/krawler/issues/201)
+- Provide a globFTP hook [\#200](https://github.com/kalisio/krawler/issues/200)
+- Allow to specify Xml2js parsing options [\#199](https://github.com/kalisio/krawler/issues/199)
+- Refactor FTP hooks using lftp [\#198](https://github.com/kalisio/krawler/issues/198)
+
+**Fixed bugs:**
+
+- writeCSV hook produces empty files [\#169](https://github.com/kalisio/krawler/issues/169)
+
+**Merged pull requests:**
+
+- build\(deps\): bump terser from 4.8.0 to 4.8.1 in /docs [\#210](https://github.com/kalisio/krawler/pull/210) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump moment from 2.29.2 to 2.29.4 in /docs [\#208](https://github.com/kalisio/krawler/pull/208) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Migrate to ES modules and Feathers 4 [\#197](https://github.com/kalisio/krawler/pull/197) ([daffl](https://github.com/daffl))
+- Upgrade to Feathers 5 [\#195](https://github.com/kalisio/krawler/pull/195) ([daffl](https://github.com/daffl))
+- build\(deps\): bump eventsource from 1.0.7 to 1.1.1 in /docs [\#194](https://github.com/kalisio/krawler/pull/194) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump async from 2.6.3 to 2.6.4 in /docs [\#192](https://github.com/kalisio/krawler/pull/192) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump moment from 2.29.1 to 2.29.2 in /docs [\#191](https://github.com/kalisio/krawler/pull/191) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump minimist from 1.2.5 to 1.2.6 in /docs [\#189](https://github.com/kalisio/krawler/pull/189) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump url-parse from 1.5.7 to 1.5.10 in /docs [\#188](https://github.com/kalisio/krawler/pull/188) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump prismjs from 1.25.0 to 1.27.0 in /docs [\#187](https://github.com/kalisio/krawler/pull/187) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump url-parse from 1.5.3 to 1.5.7 in /docs [\#186](https://github.com/kalisio/krawler/pull/186) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump follow-redirects from 1.14.7 to 1.14.8 in /docs [\#185](https://github.com/kalisio/krawler/pull/185) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump ajv from 6.11.0 to 6.12.6 in /docs [\#184](https://github.com/kalisio/krawler/pull/184) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump pathval from 1.1.0 to 1.1.1 [\#183](https://github.com/kalisio/krawler/pull/183) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump shelljs from 0.8.3 to 0.8.5 [\#182](https://github.com/kalisio/krawler/pull/182) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump follow-redirects from 1.13.1 to 1.14.7 in /docs [\#181](https://github.com/kalisio/krawler/pull/181) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump mermaid from 8.13.5 to 8.13.8 in /docs [\#180](https://github.com/kalisio/krawler/pull/180) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump mermaid from 8.8.4 to 8.13.5 in /docs [\#178](https://github.com/kalisio/krawler/pull/178) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump prismjs from 1.24.0 to 1.25.0 in /docs [\#175](https://github.com/kalisio/krawler/pull/175) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump url-parse from 1.5.1 to 1.5.3 in /docs [\#174](https://github.com/kalisio/krawler/pull/174) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump tar from 4.4.15 to 4.4.18 [\#173](https://github.com/kalisio/krawler/pull/173) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump path-parse from 1.0.6 to 1.0.7 in /docs [\#172](https://github.com/kalisio/krawler/pull/172) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump path-parse from 1.0.5 to 1.0.7 [\#171](https://github.com/kalisio/krawler/pull/171) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump tar from 4.4.4 to 4.4.15 [\#170](https://github.com/kalisio/krawler/pull/170) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump color-string from 1.5.4 to 1.5.5 in /docs [\#168](https://github.com/kalisio/krawler/pull/168) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump prismjs from 1.23.0 to 1.24.0 in /docs [\#167](https://github.com/kalisio/krawler/pull/167) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump bl from 1.2.2 to 1.2.3 [\#166](https://github.com/kalisio/krawler/pull/166) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump postcss from 7.0.35 to 7.0.36 in /docs [\#165](https://github.com/kalisio/krawler/pull/165) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump minimist from 1.2.0 to 1.2.5 in /docs [\#164](https://github.com/kalisio/krawler/pull/164) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump lodash from 4.17.19 to 4.17.21 [\#163](https://github.com/kalisio/krawler/pull/163) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump ws from 6.2.1 to 6.2.2 in /docs [\#162](https://github.com/kalisio/krawler/pull/162) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump dns-packet from 1.3.1 to 1.3.4 in /docs [\#161](https://github.com/kalisio/krawler/pull/161) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump browserslist from 4.16.0 to 4.16.6 in /docs [\#160](https://github.com/kalisio/krawler/pull/160) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump hosted-git-info from 2.6.0 to 2.8.9 [\#158](https://github.com/kalisio/krawler/pull/158) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump lodash from 4.17.19 to 4.17.21 in /docs [\#157](https://github.com/kalisio/krawler/pull/157) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump url-parse from 1.4.7 to 1.5.1 in /docs [\#156](https://github.com/kalisio/krawler/pull/156) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump underscore from 1.9.0 to 1.13.1 [\#155](https://github.com/kalisio/krawler/pull/155) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump ssri from 6.0.1 to 6.0.2 in /docs [\#153](https://github.com/kalisio/krawler/pull/153) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump y18n from 3.2.1 to 3.2.2 [\#152](https://github.com/kalisio/krawler/pull/152) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump elliptic from 6.5.3 to 6.5.4 in /docs [\#149](https://github.com/kalisio/krawler/pull/149) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump pug-code-gen from 2.0.1 to 2.0.3 [\#148](https://github.com/kalisio/krawler/pull/148) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump prismjs from 1.22.0 to 1.23.0 in /docs [\#147](https://github.com/kalisio/krawler/pull/147) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump ini from 1.3.5 to 1.3.7 [\#142](https://github.com/kalisio/krawler/pull/142) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v1.2.0](https://github.com/kalisio/krawler/tree/v1.2.0) (2020-12-22)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v1.1.1...v1.2.0)
@@ -11,6 +87,7 @@
 - Healthcheck should not fail when given unknown options [\#139](https://github.com/kalisio/krawler/issues/139)
 - Improve healthcheck messages posted on Slack [\#137](https://github.com/kalisio/krawler/issues/137)
 - Enhance mergeJson hook to deep merge objects [\#132](https://github.com/kalisio/krawler/issues/132)
+- Match predicate not applied when items are an array [\#130](https://github.com/kalisio/krawler/issues/130)
 
 **Fixed bugs:**
 
@@ -19,7 +96,6 @@
 - Boolean values in match filter are lost after templating [\#136](https://github.com/kalisio/krawler/issues/136)
 - When a job timeout, krawler hangs with the following error: Cannot read property 'type' of undefined [\#135](https://github.com/kalisio/krawler/issues/135)
 - Permission denied to run krawler command in container [\#134](https://github.com/kalisio/krawler/issues/134)
-- Match predicate not applied when items are an array [\#130](https://github.com/kalisio/krawler/issues/130)
 
 **Merged pull requests:**
 
@@ -115,6 +191,7 @@
 **Implemented enhancements:**
 
 - Improve healthcheck with job run time [\#76](https://github.com/kalisio/krawler/issues/76)
+- Healthcheck script should manage alert opening/closing [\#73](https://github.com/kalisio/krawler/issues/73)
 
 **Fixed bugs:**
 
@@ -123,7 +200,6 @@
 - Unexpected error  "Cannot read property 'type' of undefined" [\#77](https://github.com/kalisio/krawler/issues/77)
 - Error messages should be redirected to stderr [\#75](https://github.com/kalisio/krawler/issues/75)
 - Healthcheck script fails if an error is raised by a hook [\#74](https://github.com/kalisio/krawler/issues/74)
-- Healthcheck script should manage alert opening/closing [\#73](https://github.com/kalisio/krawler/issues/73)
 - Healthcheck script slack notification does not have hyperlink [\#72](https://github.com/kalisio/krawler/issues/72)
 - Healthcheck script failure in unknown circumstances [\#71](https://github.com/kalisio/krawler/issues/71)
 
@@ -154,6 +230,7 @@
 - Allow to convert numbers to string on JSON transformation [\#59](https://github.com/kalisio/krawler/issues/59)
 - Add a hook that could transform OSM data to GeoJSON [\#56](https://github.com/kalisio/krawler/issues/56)
 - Add a task which can handle an Overpass API query [\#55](https://github.com/kalisio/krawler/issues/55)
+- Create a apply hook to run a custom function on items [\#36](https://github.com/kalisio/krawler/issues/36)
 
 **Fixed bugs:**
 
@@ -173,8 +250,9 @@
 - Stop job after a given number of failed tasks [\#44](https://github.com/kalisio/krawler/issues/44)
 - Allow the template function to tackle properties of type of array of objects [\#42](https://github.com/kalisio/krawler/issues/42)
 - Allow to create swarm service  [\#41](https://github.com/kalisio/krawler/issues/41)
-- Create a apply hook to run a custom function on items [\#36](https://github.com/kalisio/krawler/issues/36)
+- Creating multiple single indices does not work [\#40](https://github.com/kalisio/krawler/issues/40)
 - Add a retry capability for tasks in async job [\#35](https://github.com/kalisio/krawler/issues/35)
+- CRON jobs are launched immediately [\#32](https://github.com/kalisio/krawler/issues/32)
 - Migrate to Feathers V3 [\#28](https://github.com/kalisio/krawler/issues/28)
 - Enhance docker hooks [\#27](https://github.com/kalisio/krawler/issues/27)
 - Make krawler able to communicate with external systems [\#24](https://github.com/kalisio/krawler/issues/24)
@@ -186,9 +264,7 @@
 - Unauthorize API requests in non-API mode [\#51](https://github.com/kalisio/krawler/issues/51)
 - Job hangs after mongo connection failure [\#47](https://github.com/kalisio/krawler/issues/47)
 - readJson hook fails silently on perse error [\#45](https://github.com/kalisio/krawler/issues/45)
-- Creating multiple single indices does not work [\#40](https://github.com/kalisio/krawler/issues/40)
 - Concurrent tasks skipped when a task fails [\#33](https://github.com/kalisio/krawler/issues/33)
-- CRON jobs are launched immediately [\#32](https://github.com/kalisio/krawler/issues/32)
 - Possible memory leak [\#30](https://github.com/kalisio/krawler/issues/30)
 - Mongo client not correctly cleared [\#29](https://github.com/kalisio/krawler/issues/29)
 
@@ -299,4 +375,4 @@
 
 
 
-\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
