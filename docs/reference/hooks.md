@@ -577,7 +577,8 @@ Performs a service operation using the API. Hook options are the following:
 * **chunkSize**: number of item for a [multi operation](https://docs.feathersjs.com/api/databases/common.html#options)
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **transform**: perform transformation using these options after/before read/write, see description in [transformJson](./hooks.md#transformjson-options)
-* **query**: [operation query](https://docs.feathersjs.com/api/databases/querying.html) to be performed, fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+* **query**: [operation query](https://docs.feathersjs.com/api/databases/querying.html) to be performed (use only if not giving the whole **params** object), fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+* **params**: [operation params](https://docs.feathersjs.com/api/services.html#params) to be used, fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
 * **updateResult**: if `true` service operation results will not replace item data (default for read operations)
 
 ::: warning
