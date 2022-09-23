@@ -61,8 +61,7 @@ describe('krawler:hooks:feathers', () => {
       service: '/geojson',
       method: 'create',
       transform: {
-        omit: ['properties.prop2'],
-        inPlace: false
+        omit: ['properties.prop2']
       }
     })(feathersHook)
     const service = feathersHook.data.client.service('/geojson')
@@ -82,12 +81,20 @@ describe('krawler:hooks:feathers', () => {
       query: {
         $skip: 1,
         $limit: 2
+      },
+      transform: {
+        omit: ['properties.prop0']
       }
     })(feathersHook)
     const results = feathersHook.result.data
     expect(results.length).to.equal(2)
     expect(results[0].id).to.equal(2)
     expect(results[0].properties).toExist()
+    expect(results[0].properties.prop0).beUndefined()
+    expect(results[0].properties.prop1).to.equal(0)
+    expect(results[1].id).to.equal(3)
+    expect(results[1].properties).toExist()
+    expect(results[0].properties.prop0).beUndefined()
   })
   // Let enough time to proceed
     .timeout(5000)
