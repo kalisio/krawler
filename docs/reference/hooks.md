@@ -552,6 +552,7 @@ Insert file into an existing bucket. Hook options are the following:
 ### connectFeathers(options)
 
 Connect to a Feathers API. The [connection options](https://docs.feathersjs.com/api/client.html) of the client are defined in the hook options plus:
+* **distributed**: Boolean indicating if the target service is retrieved using distribution (you will need to set the `feathers-distributed` CLI option to use it), in this case you don't need the others properties
 * **origin**: Feathers connection URL
 * **path**: the Feathers API path prefix if any
 * **authentication**: the Feathers API authentication options if any (including service `path`)

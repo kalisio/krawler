@@ -60,6 +60,7 @@
     "@feathersjs/express": "^5.0.0-pre.28",
     "@feathersjs/feathers": "^5.0.0-pre.28",
     "@feathersjs/socketio": "^5.0.0-pre.28",
+    "@kalisio/feathers-distributed": "^2.0.2",
     "@kalisio/geo-pixel-stream": "https://github.com/kalisio/geo-pixel-stream#next",
     "@mapbox/sphericalmercator": "^1.0.5",
     "@tmcw/togeojson": "^5.2.1",
