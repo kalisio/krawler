@@ -65,7 +65,44 @@ describe('krawler:cli', () => {
   // Let enough time to process
     .timeout(10000)
 
+  it('runs as API using CLI', async () => {
+    try {
+      // Clean previous test output
+      fs.removeSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif.csv'))
+      appServer = await cli(jobfile, { mode: 'setup', api: true, apiPrefix: '/api', port: 3030 })
+      // Submit a job to be run
+      const response = await utils.promisify(request.post)({
+        url: 'http://localhost:3030/api/jobs',
+        body: {
+          id: 'job',
+          store: 'job-store',
+          tasks: [{
+            id: 'RJTT-30-18000-2-1.tif',
+            type: 'store',
+            options: {
+              store: 'task-store'
+            }
+          }]
+        },
+        json: true
+      })
+      const tasks = response.body
+      await appServer.close()
+      expect(tasks.length).to.equal(1)
+      // Check intermediate products have been erased and final product are here
+      expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif'))).beFalse()
+      expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif.csv'))).beTrue()
+    } catch (error) {
+      console.log(error)
+      assert.fail('Healthcheck should not fail')
+    }   
+  })
+  // Let enough time to process
+    .timeout(15000)
+
   it('runs as CRON using CLI with continuous healthcheck', (done) => {
+    // Clean previous test output
+    fs.removeSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif.csv'))
     // Setup the app
     cli(jobfile, {
       mode: 'setup',
