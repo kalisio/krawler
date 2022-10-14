@@ -1,7 +1,7 @@
 # 
 # Make an mage alias to be build the Krawler
 #
-FROM node:16-buster AS builder
+FROM node:16-bullseye AS builder
 # Install krawler
 COPY . /opt/krawler
 WORKDIR /opt/krawler
@@ -11,7 +11,7 @@ RUN yarn
 #
 # Make a slim image using the build image alias
 #
-FROM  node:16-buster-slim
+FROM  node:16-bullseye-slim
 LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 
 # Install GDAL
