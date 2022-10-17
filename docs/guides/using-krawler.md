@@ -21,8 +21,7 @@ However, using the CLI, you can also launch it as standard wep application/API. 
   * **port**: port to be used by the krawler (defaults to `3030`)
   * **api**: launch the krawler as a web service/API
   * **api-prefix**: api prefix to be used when launching the krawler as a web service/API (defaults to `/api`)
-  * **feathers-distributed**: activate Feathers service distribution (defaults to `false`)
-
+  
 This function is responsible of parsing the job definition including all the required parameters to call the underlying services with the relevant hooks configured (see below).
 
 ## External API
