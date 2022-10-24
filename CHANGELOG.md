@@ -1,11 +1,40 @@
 # Changelog
 
+## [v2.1.0](https://github.com/kalisio/krawler/tree/v2.1.0) (2022-10-24)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v2.0.0...v2.1.0)
+
+**Implemented enhancements:**
+
+- Add a hook to specify outputs of a task [\#218](https://github.com/kalisio/krawler/issues/218)
+- Feathers hooks should be able to use distributed services [\#217](https://github.com/kalisio/krawler/issues/217)
+- Hook to call a Feathers API should allow to transform data before sending [\#213](https://github.com/kalisio/krawler/issues/213)
+- Add params option to Feathers service method hook [\#212](https://github.com/kalisio/krawler/issues/212)
+
+**Fixed bugs:**
+
+- Krawler API mode does not work anymore [\#215](https://github.com/kalisio/krawler/issues/215)
+- Job without tasks exit as failing [\#214](https://github.com/kalisio/krawler/issues/214)
+
+**Merged pull requests:**
+
+- build\(deps\): bump moment-timezone from 0.5.17 to 0.5.37 [\#211](https://github.com/kalisio/krawler/pull/211) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v2.0.0](https://github.com/kalisio/krawler/tree/v2.0.0) (2022-08-30)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v1.2.0...v2.0.0)
 
 **Implemented enhancements:**
 
+- Allow to read TXT files [\#209](https://github.com/kalisio/krawler/issues/209)
+- Add hooks to use a Feathers API [\#207](https://github.com/kalisio/krawler/issues/207)
+- Allow to read KML files [\#204](https://github.com/kalisio/krawler/issues/204)
+- Tasks order in job result array [\#203](https://github.com/kalisio/krawler/issues/203)
+- Ensure the store path exists when creating a store of type of FS [\#202](https://github.com/kalisio/krawler/issues/202)
+- Provide a envsubst hook [\#201](https://github.com/kalisio/krawler/issues/201)
+- Provide a globFTP hook [\#200](https://github.com/kalisio/krawler/issues/200)
+- Allow to specify Xml2js parsing options [\#199](https://github.com/kalisio/krawler/issues/199)
+- Refactor FTP hooks using lftp [\#198](https://github.com/kalisio/krawler/issues/198)
 - Reflect healthcheck status in exit code [\#196](https://github.com/kalisio/krawler/issues/196)
 - Add a hook to check for existing key in store [\#179](https://github.com/kalisio/krawler/issues/179)
 - Upgrade NodeJS to v16 [\#177](https://github.com/kalisio/krawler/issues/177)
@@ -16,15 +45,6 @@
 - Upgrade Feathers to v5 [\#82](https://github.com/kalisio/krawler/issues/82)
 - Integrate a logger like winston [\#37](https://github.com/kalisio/krawler/issues/37)
 - Make krawler able to react to external systems [\#34](https://github.com/kalisio/krawler/issues/34)
-- Allow to read TXT files [\#209](https://github.com/kalisio/krawler/issues/209)
-- Add hooks to use a Feathers API [\#207](https://github.com/kalisio/krawler/issues/207)
-- Allow to read KML files [\#204](https://github.com/kalisio/krawler/issues/204)
-- Tasks order in job result array [\#203](https://github.com/kalisio/krawler/issues/203)
-- Ensure the store path exists when creating a store of type of FS [\#202](https://github.com/kalisio/krawler/issues/202)
-- Provide a envsubst hook [\#201](https://github.com/kalisio/krawler/issues/201)
-- Provide a globFTP hook [\#200](https://github.com/kalisio/krawler/issues/200)
-- Allow to specify Xml2js parsing options [\#199](https://github.com/kalisio/krawler/issues/199)
-- Refactor FTP hooks using lftp [\#198](https://github.com/kalisio/krawler/issues/198)
 
 **Fixed bugs:**
 
@@ -138,14 +158,11 @@
 - FTP connection fails when behind a proxy [\#108](https://github.com/kalisio/krawler/issues/108)
 - Healthcheck fail if the healthcheck endpoint does not respond [\#107](https://github.com/kalisio/krawler/issues/107)
 - templateQueryObject cast a property of type of number to a date [\#104](https://github.com/kalisio/krawler/issues/104)
+- Dates contained in MongoDB queries are lost [\#103](https://github.com/kalisio/krawler/issues/103)
 
 ## [v1.0.1](https://github.com/kalisio/krawler/tree/v1.0.1) (2020-01-02)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v1.0.0...v1.0.1)
-
-**Fixed bugs:**
-
-- Dates contained in MongoDB queries are lost [\#103](https://github.com/kalisio/krawler/issues/103)
 
 ## [v1.0.0](https://github.com/kalisio/krawler/tree/v1.0.0) (2019-12-11)
 
@@ -230,7 +247,6 @@
 - Allow to convert numbers to string on JSON transformation [\#59](https://github.com/kalisio/krawler/issues/59)
 - Add a hook that could transform OSM data to GeoJSON [\#56](https://github.com/kalisio/krawler/issues/56)
 - Add a task which can handle an Overpass API query [\#55](https://github.com/kalisio/krawler/issues/55)
-- Create a apply hook to run a custom function on items [\#36](https://github.com/kalisio/krawler/issues/36)
 
 **Fixed bugs:**
 
@@ -251,6 +267,7 @@
 - Allow the template function to tackle properties of type of array of objects [\#42](https://github.com/kalisio/krawler/issues/42)
 - Allow to create swarm service  [\#41](https://github.com/kalisio/krawler/issues/41)
 - Creating multiple single indices does not work [\#40](https://github.com/kalisio/krawler/issues/40)
+- Create a apply hook to run a custom function on items [\#36](https://github.com/kalisio/krawler/issues/36)
 - Add a retry capability for tasks in async job [\#35](https://github.com/kalisio/krawler/issues/35)
 - CRON jobs are launched immediately [\#32](https://github.com/kalisio/krawler/issues/32)
 - Migrate to Feathers V3 [\#28](https://github.com/kalisio/krawler/issues/28)
