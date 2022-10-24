@@ -95,7 +95,7 @@ describe('krawler:cli', () => {
     } catch (error) {
       console.log(error)
       assert.fail('Healthcheck should not fail')
-    }   
+    }
   })
   // Let enough time to process
     .timeout(15000)
