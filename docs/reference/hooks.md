@@ -31,7 +31,7 @@ All input/output hooks and store hooks manipulating items, i.e. reading/writing/
 
 ### basicAuth(options)
 
-Add headers to HTTP requests for basic authorization, hook options are the following:
+Add header to HTTP requests for basic authorization, hook options are the following:
 * **type**: type of authorization used as the key in the header, defaults to `Authorization` but could be changed to `Proxy-Authorization` for instance
 * **optionsPath**: the property path to the request options that contains the authorization options, defaults to `options`
 
@@ -40,10 +40,38 @@ The authorization options have to be structured like this, e.g. on a task (or si
 httpTask: {
   type: 'http',
   options: {
+    // Target request URL
     url: 'xxx',
     auth: {
-      user: 'xxx',
-      password: 'xxx'
+      // Your user identity
+      user: 'yyy',
+      password: 'zzz'
+    }
+  }
+}
+```
+
+### OAuth(options)
+
+Add header with a token retrieved from an OAuth authorization server to HTTP requests, hook options are the following:
+* **type**: type of authorization used as the key in the header, defaults to `Authorization` but could be changed to `Proxy-Authorization` for instance
+* **optionsPath**: the property path to the request options that contains the authorization options, defaults to `options`
+
+The authorization options have to be structured like this, e.g. on a task (or similarly on a task template in a job):
+```js
+httpTask: {
+  type: 'http',
+  options: {
+    // Target request URL
+    url: 'www',
+    oauth: {
+      // Token endpoint
+      url: 'xxx',
+      // Your client identity
+      client_id: 'yyy',
+      client_secret: 'zzz',
+      // Client authentication method to be used to get access token
+      method: 'client_secret_post' // Or 'client_secret_basic'
     }
   }
 }

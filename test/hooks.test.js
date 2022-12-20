@@ -1,6 +1,7 @@
 import chai from 'chai'
 import chailint from 'chai-lint'
 import path, { dirname } from 'path'
+import nock from 'nock'
 import fsStore from 'fs-blob-store'
 import fs from 'fs'
 import { hooks as pluginHooks } from '../lib/index.js'
@@ -46,7 +47,7 @@ describe('krawler:hooks:main', () => {
     expect(testHook.result.n).to.equal(2)
   })
 
-  it('manages auth on requests', () => {
+  it('manages basic auth on request header', () => {
     const authHook = {
       type: 'before',
       data: {
@@ -63,6 +64,58 @@ describe('krawler:hooks:main', () => {
     expect(authHook.data.options.headers['Proxy-Authorization']).toExist()
     expect(authHook.data.options.headers['Proxy-Authorization'].startsWith('Basic ')).beTrue()
   })
+
+  it('manages OAuth token on request header', async () => {
+    const response = {
+      access_token: 'gvocpYeEjygirZWvjcxJUAQLvMxtp8wKoloRDZ4t3ftJMJZPgZHAOE',
+      token_type: 'Bearer',
+      expires_in: 7200
+    }
+    const oauth = {
+      url: 'https://www.api.com/oauth/token',
+      client_id: 'toto',
+      client_secret: 'titi'
+    }
+    // Use post method first
+    nock('https://www.api.com')
+      .post('/oauth/token')
+      .reply(200, response)
+    let oauthHook = {
+      type: 'before',
+      data: {
+        options: {
+          oauth: Object.assign({
+            method: 'client_secret_post'
+          }, oauth)
+        }
+      }
+    }
+    await pluginHooks.OAuth({ type: 'Authorization' })(oauthHook)
+    expect(oauthHook.data.options.headers.Authorization).toExist()
+    expect(oauthHook.data.options.headers.Authorization.startsWith('Bearer ')).beTrue()
+    expect(oauthHook.data.options.headers.Authorization.endsWith(response.access_token)).beTrue()
+    // Switch method to basic
+    nock('https://www.api.com')
+      .get('/oauth/token')
+      .basicAuth({ user: 'toto', pass: 'titi' })
+      .reply(200, response)
+    oauthHook = {
+      type: 'before',
+      data: {
+        options: {
+          oauth: Object.assign({
+            method: 'client_secret_basic'
+          }, oauth)
+        }
+      }
+    }
+    await pluginHooks.OAuth({ type: 'Authorization' })(oauthHook)
+    expect(oauthHook.data.options.headers.Authorization).toExist()
+    expect(oauthHook.data.options.headers.Authorization.startsWith('Bearer ')).beTrue()
+    expect(oauthHook.data.options.headers.Authorization.endsWith(response.access_token)).beTrue()
+  })
+  // Let enough time to proceed
+    .timeout(5000)
 
   function checkJson (hook) {
     // We know we have a max value at 73.44 in this file
@@ -348,7 +401,7 @@ describe('krawler:hooks:main', () => {
 
   it('get WMS capabilities', () => {
     return pluginHooks.getCapabilities({
-      url: 'http://sampleserver1.arcgisonline.com/ArcGIS/services/Specialty/ESRI_StatesCitiesRivers_USA/MapServer/WMSServer',
+      url: 'https://wxs.ign.fr/administratif/geoportail/r/wms',
       service: 'WMS'
     })(capabilitiesHook)
       .then(hook => {
