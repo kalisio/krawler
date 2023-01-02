@@ -31,7 +31,7 @@ The `tasks` [service](https://docs.feathersjs.com/api/services.html) allow to ma
 The returned task objects will contain an additional property for each output types holding an array of produced output files. This is used by the [clearOutputs](./hooks.md#clearoutputsoptions) hook to perform cleanup.
 
 By default a task implementation return a [stream](https://nodejs.org/api/stream.html) to extract data from that is piped to the target store. Available task types are the following:
-* [`http`](https://github.com/request/request) for HTTP requests, available options
+* [`http`](https://github.com/request/request) for HTTP requests
 * [`wms`](https://en.wikipedia.org/wiki/Web_Map_Service) for HTTP requests targeting WMS services
 * [`wcs`](https://en.wikipedia.org/wiki/Web_Coverage_Service) for HTTP requests targeting WCS services
 * [`wfs`](https://en.wikipedia.org/wiki/Web_Feature_Service) for HTTP requests targeting WFS services

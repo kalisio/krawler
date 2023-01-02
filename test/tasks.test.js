@@ -59,6 +59,29 @@ describe('krawler:tasks', () => {
   // Let enough time to download
     .timeout(10000)
 
+  it('creates a HTTP task with POST method', (done) => {
+    nock('https://www.google.com')
+      .post('/')
+      .reply(200, '<html></html>')
+    tasksService.create({
+      id: 'post-task.html',
+      store: 'test-store',
+      type: 'http',
+      options: {
+        url: 'https://www.google.com',
+        method: 'POST'
+      }
+    })
+      .then(task => {
+        storage.exists('post-task.html', (error, exist) => {
+          if (error) done(error)
+          else done(exist ? null : new Error('File not found in store'))
+        })
+      })
+  })
+  // Let enough time to download
+    .timeout(10000)
+
   it('creates a failed HTTP task (403)', (done) => {
     nock('https://www.google.com')
       .get('/')
