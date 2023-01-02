@@ -51,6 +51,21 @@ httpTask: {
 }
 ```
 
+You can also send authentication information as form data like this:
+```js
+auth: {
+  // The login URL receiving form data
+  url: 'xxx'
+  // Your user identity to be send as form data
+  form: {
+    user: 'yyy',
+    password: 'zzz'
+  },
+  // Set this to enable cookie
+  jar: true
+}
+```
+
 ### OAuth(options)
 
 Add header with a token retrieved from an OAuth authorization server to HTTP requests, hook options are the following:

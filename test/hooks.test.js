@@ -47,7 +47,7 @@ describe('krawler:hooks:main', () => {
     expect(testHook.result.n).to.equal(2)
   })
 
-  it('manages basic auth on request header', () => {
+  it('manages basic auth on request header', async () => {
     const authHook = {
       type: 'before',
       data: {
@@ -60,9 +60,32 @@ describe('krawler:hooks:main', () => {
       }
     }
 
-    pluginHooks.basicAuth({ type: 'Proxy-Authorization' })(authHook)
+    await pluginHooks.basicAuth({ type: 'Proxy-Authorization' })(authHook)
     expect(authHook.data.options.headers['Proxy-Authorization']).toExist()
     expect(authHook.data.options.headers['Proxy-Authorization'].startsWith('Basic ')).beTrue()
+  })
+
+  it('manages basic auth with form data and cookie', async () => {
+    const authHook = {
+      type: 'before',
+      data: {
+        options: {
+          auth: {
+            url: 'https://www.portal.com/login',
+            form: {
+              user: 'toto',
+              password: 'titi'
+            }
+          }
+        }
+      }
+    }
+
+    nock('https://www.portal.com')
+      .post('/login', 'user=toto&password=titi')
+      .reply(200, 'OK')
+    await pluginHooks.basicAuth({ jar: true })(authHook)
+    expect(authHook.data.options.jar).beTrue()
   })
 
   it('manages OAuth token on request header', async () => {
@@ -96,7 +119,7 @@ describe('krawler:hooks:main', () => {
     expect(oauthHook.data.options.headers.Authorization.endsWith(response.access_token)).beTrue()
     // Switch method to basic
     nock('https://www.api.com')
-      .get('/oauth/token')
+      .post('/oauth/token')
       .basicAuth({ user: 'toto', pass: 'titi' })
       .reply(200, response)
     oauthHook = {
