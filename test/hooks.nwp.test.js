@@ -58,15 +58,15 @@ describe('krawler:hooks:nwp', () => {
 
   it('creates a ARPEGE/AROME download job', (done) => {
     jobsService.create({
-      id: 'ARPEGE-05-GLOBE',
+      id: 'ARPEGE-025-GLOBE',
       options: { faultTolerant: true },
       taskTemplate: {
         id: '<%= name %>_<%= level %>_<%= runTime.format(\'YYYY-MM-DD[_]HH-mm-ss\') %>_<%= forecastTime.format(\'YYYY-MM-DD[_]HH-mm-ss\') %>.tif',
         type: 'wcs',
         options: {
-          url: 'https://geoservices.meteofrance.fr/services/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WCS',
+          url: 'https://public-api.meteofrance.fr/public/arpege/1.0/wcs/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WCS/GetCoverage',
           version: '2.0.1',
-          token: '__qEMDoIC2ogPRlSoRQLGUBOomaxJyxdEd__',
+          apikey: process.env.METEO_FRANCE_TOKEN,
           coverageid: '<%= name %>___<%= runTime.format() %>',
           subsets: {
             time: '<%= forecastTime.format() %>',
