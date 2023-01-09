@@ -1,5 +1,36 @@
 # Changelog
 
+## [v2.2.0](https://github.com/kalisio/krawler/tree/v2.2.0) (2023-01-09)
+
+[Full Changelog](https://github.com/kalisio/krawler/compare/v2.1.0...v2.2.0)
+
+**Implemented enhancements:**
+
+- Allow pipeline to be templated in createMongoAggregation hook [\#235](https://github.com/kalisio/krawler/issues/235)
+- Create a hook to run a task [\#234](https://github.com/kalisio/krawler/issues/234)
+- Support post method for http tasks [\#232](https://github.com/kalisio/krawler/issues/232)
+- Improve basic auth hook to support storing a cookie [\#231](https://github.com/kalisio/krawler/issues/231)
+- Improve basic auth hook to support sending form data [\#230](https://github.com/kalisio/krawler/issues/230)
+- Improve basic auth hook to support token request [\#229](https://github.com/kalisio/krawler/issues/229)
+
+**Fixed bugs:**
+
+- Tests relying on Meteo France API do not work anymore [\#233](https://github.com/kalisio/krawler/issues/233)
+
+**Merged pull requests:**
+
+- build\(deps\): bump json5 from 1.0.1 to 1.0.2 [\#236](https://github.com/kalisio/krawler/pull/236) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump qs from 6.5.2 to 6.5.3 [\#228](https://github.com/kalisio/krawler/pull/228) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump express from 4.17.1 to 4.18.2 in /docs [\#227](https://github.com/kalisio/krawler/pull/227) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump qs from 6.5.2 to 6.5.3 in /docs [\#226](https://github.com/kalisio/krawler/pull/226) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump express from 4.16.3 to 4.18.2 [\#225](https://github.com/kalisio/krawler/pull/225) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump decode-uri-component from 0.2.0 to 0.2.2 in /docs [\#224](https://github.com/kalisio/krawler/pull/224) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump minimatch from 3.0.4 to 3.1.2 [\#223](https://github.com/kalisio/krawler/pull/223) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump minimatch from 3.0.4 to 3.1.2 in /docs [\#222](https://github.com/kalisio/krawler/pull/222) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump engine.io from 3.6.0 to 3.6.1 [\#221](https://github.com/kalisio/krawler/pull/221) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump socket.io-parser from 3.3.2 to 3.3.3 [\#219](https://github.com/kalisio/krawler/pull/219) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump node-fetch from 3.2.6 to 3.2.10 [\#216](https://github.com/kalisio/krawler/pull/216) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v2.1.0](https://github.com/kalisio/krawler/tree/v2.1.0) (2022-10-24)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v2.0.0...v2.1.0)
@@ -158,11 +189,14 @@
 - FTP connection fails when behind a proxy [\#108](https://github.com/kalisio/krawler/issues/108)
 - Healthcheck fail if the healthcheck endpoint does not respond [\#107](https://github.com/kalisio/krawler/issues/107)
 - templateQueryObject cast a property of type of number to a date [\#104](https://github.com/kalisio/krawler/issues/104)
-- Dates contained in MongoDB queries are lost [\#103](https://github.com/kalisio/krawler/issues/103)
 
 ## [v1.0.1](https://github.com/kalisio/krawler/tree/v1.0.1) (2020-01-02)
 
 [Full Changelog](https://github.com/kalisio/krawler/compare/v1.0.0...v1.0.1)
+
+**Fixed bugs:**
+
+- Dates contained in MongoDB queries are lost [\#103](https://github.com/kalisio/krawler/issues/103)
 
 ## [v1.0.0](https://github.com/kalisio/krawler/tree/v1.0.0) (2019-12-11)
 
@@ -177,7 +211,6 @@
 - Improve runCommand hook to manage multiple commands [\#96](https://github.com/kalisio/krawler/issues/96)
 - Enhance travis pipeline [\#94](https://github.com/kalisio/krawler/issues/94)
 - Allow to create a MongoDB Aggregation [\#93](https://github.com/kalisio/krawler/issues/93)
-- Update dockerfile base image  [\#90](https://github.com/kalisio/krawler/issues/90)
 - Enable Greenkeeper to ease dependency upgrades [\#83](https://github.com/kalisio/krawler/issues/83)
 
 **Fixed bugs:**
@@ -192,6 +225,7 @@
 
 **Implemented enhancements:**
 
+- Update dockerfile base image  [\#90](https://github.com/kalisio/krawler/issues/90)
 - Update dependencies [\#81](https://github.com/kalisio/krawler/issues/81)
 
 **Fixed bugs:**
