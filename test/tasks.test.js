@@ -41,7 +41,7 @@ describe('krawler:tasks', () => {
     nock('https://www.google.com')
       .get('/')
       .reply(200, '<html></html>')
-    const task = await tasksService.create({
+    await tasksService.create({
       id: 'task.html',
       store: 'test-store',
       type: 'http',
