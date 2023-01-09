@@ -20,7 +20,11 @@ describe('krawler:hooks:ftp', () => {
     remoteDir: '/pub/example',
     remoteFile: '/pub/example/readme.txt',
     localFile: 'readme.txt',
-    pattern: '*.png'
+    pattern: '*.png',
+    // Avoid some problems with certificates
+    settings: {
+      'ssl:verify-certificate': false
+    }
   }
 
   const ftpHook = {
@@ -42,14 +46,14 @@ describe('krawler:hooks:ftp', () => {
     expect(ftpHook.result.data).toExist()
   })
   // Let enough time to proceed
-    .timeout(5000)
+    .timeout(10000)
 
   it('glob FTP', async () => {
     await pluginHooks.globFTP(ftpOptions)(ftpHook)
     expect(ftpHook.result.data).toExist()
   })
   // Let enough time to proceed
-    .timeout(5000)
+    .timeout(10000)
 
   it('get from FTP', async () => {
     try {
@@ -61,5 +65,5 @@ describe('krawler:hooks:ftp', () => {
     expect(fs.existsSync(path.join(store.path, 'readme.txt'))).beTrue()
   })
   // Let enough time to proceed
-    .timeout(5000)
+    .timeout(10000)
 })
