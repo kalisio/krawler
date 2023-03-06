@@ -31,5 +31,4 @@ ENV PATH="${PATH}:~/.yarn/bin"
 HEALTHCHECK --interval=30s --timeout=30s --start-period=30s CMD node ./healthcheck.js
 
 # Set command
-ENV KRAWLER_BIN="~/.yarn/bin/krawler"
-CMD $KRAWLER_BIN $ARGS
+CMD ~/.yarn/bin/krawler $ARGS
