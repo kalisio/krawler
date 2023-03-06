@@ -23,12 +23,17 @@ USER node
 
 # - Make krawler available for others to link
 # - Make it executable, yarn link didn't do it
-# - Put it in $PATH
 RUN yarn link && chmod u+x ~/.yarn/bin/krawler
-ENV PATH="${PATH}:~/.yarn/bin"
+
+# Put a symlink in /usr/local/bin
+# This is a bit of a hack but I couldnt make 'krawler' command available
+# using ENV PATH="${PATH}:~/.yarn/bin"
+USER root
+RUN ln -s /home/node/.yarn/bin/krawler /usr/local/bin
+USER node
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=30s --start-period=30s CMD node ./healthcheck.js
 
 # Set command
-CMD ~/.yarn/bin/krawler $ARGS
+CMD krawler $ARGS
