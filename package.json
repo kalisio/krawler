@@ -29,11 +29,10 @@
     "node": ">= 16.0.0"
   },
   "scripts": {
-    "publish": "git push origin --tags && npm run changelog && git push origin",
+    "publish": "git push origin HEAD --tags",
     "release:patch": "npm version patch && npm publish --access public",
     "release:minor": "npm version minor && npm publish --access public",
     "release:major": "npm version major && npm publish --access public",
-    "changelog": "github_changelog_generator -u kalisio -p krawler && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "lint": "standard lib/**/*.js test/**/*.js healthcheck.js --fix",
     "mocha": "mocha --exit",
     "coverage": "c8 npm run mocha",

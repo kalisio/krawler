@@ -1,3 +1,5 @@
+Please refer to GitHub issues for changelog starting from v2.3: https://github.com/kalisio/krawler/issues.
+
 # Changelog
 
 ## [v2.2.0](https://github.com/kalisio/krawler/tree/v2.2.0) (2023-01-09)
