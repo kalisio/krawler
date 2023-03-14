@@ -59,7 +59,8 @@ describe('krawler:utils', () => {
       value: '17',
       date: '2020-01-02T12:00:00.000Z',
       time: '<%= time.format() %>',
-      id: '<%= id %>'
+      id: '<%= id %>',
+      array: ['<%= min %>', '<%= max %>']
     }
 
     query = utils.templateQueryObject(item, query)
@@ -73,5 +74,7 @@ describe('krawler:utils', () => {
     expect(typeof query.time).to.equal('object')
     expect(moment.utc(query.time).format()).to.equal(item.time.format())
     expect(typeof query.id).to.equal('number')
+    expect(Array.isArray(query.array)).beTrue()
+    expect(query.array).to.deep.equal([item.min, item.max])
   })
 })
