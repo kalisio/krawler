@@ -77,4 +77,35 @@ describe('krawler:utils', () => {
     expect(Array.isArray(query.array)).beTrue()
     expect(query.array).to.deep.equal([item.min, item.max])
   })
+
+  it('template timed geospatial query object', () => {
+    const startTime = moment.utc().startOf('day').toISOString()
+    const endTime = moment.utc().toISOString()
+    const item = {
+      department: '81',
+      coordinates: [3, 45]
+    }
+    let query = { 
+      'properties.code': '<%= department %>',
+      geometry: {
+        $near: {
+          $geometry: {
+            type: 'Point',
+            coordinates: ['<%= coordinates[0] %>', '<%= coordinates[1] %>']
+          },
+          $maxDistance: 20000
+        }
+      },
+      time: { $gte: startTime, $lte: endTime }
+    }
+
+    query = utils.templateQueryObject(item, query, { excludedProperties: ['properties.code'] })
+    expect(query.time.$lte instanceof Date).beTrue()
+    expect(query.time.$gte instanceof Date).beTrue()
+    expect(query.time.$lte.toISOString()).to.equal(endTime)
+    expect(query.time.$gte.toISOString()).to.equal(startTime)
+    expect(typeof query['properties.code']).to.equal('string')
+    expect(query['properties.code']).to.equal(item.department)
+    expect(query.geometry.$near.$geometry.coordinates).to.deep.equal(item.coordinates)
+  })
 })

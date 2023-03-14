@@ -501,13 +501,14 @@ Read JSON documents from an existing collection. Hook options are the following:
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **transform**: perform transformation using these options after read, see description in [transformJson](./hooks.md#transformjson-options)
 * **query**: [find query](http://mongodb.github.io/node-mongodb-native/3.1/api/Collection.html#find) to be performed, fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+* **excludedProperties**: array of property names to be excluded from automated type conversion after templating, useful if you have a number-like string (eg '81') that you don't want to convert automatically into a number
 * **project**: project options for [cursor](http://mongodb.github.io/node-mongodb-native/3.1/api/Cursor.html)
 * **sort**: sort options for [cursor](http://mongodb.github.io/node-mongodb-native/3.1/api/Cursor.html)
 * **skip**: skip options for [cursor](http://mongodb.github.io/node-mongodb-native/3.1/api/Cursor.html)
 * **limit**: limit options for [cursor](http://mongodb.github.io/node-mongodb-native/3.1/api/Cursor.html)
 
 ::: warning
-Due to templating restricted to string output any ISO date string or comparison operator value in the query object will be converted back to native types so that matching will work as expected in JS
+Due to templating restricted to string output any ISO date string or comparison operator value in the query object will be automatically converted back to native types so that matching will work as expected in JS
 :::
 
 ### writeMongoCollection(options)
@@ -532,7 +533,8 @@ Updates JSON into an existing collection (uses [updateOne](https://docs.mongodb.
 * **chunkSize**: number of GeoJson features for the [batch insert](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/)
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **transform**: perform transformation using these options before update, see description in [transformJson](./hooks.md#transformjson-options)
-* **filter/upsert/hint**: corresponding option for `updateOne` operation
+* **filter/upsert/hint**: corresponding option for `updateOne` operation, filter fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+* **excludedProperties**: array of property names to be excluded from automated type conversion after templating, useful if you have a number-like string (eg '81') that you don't want to convert automatically into a number
 * any option supported by `options` argument of the [bulkWrite](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/) function.
   
 ::: tip
@@ -543,7 +545,8 @@ If the input data is a GeoJSON collection the array of features will be updated 
 
 Removes documents from an existing collection (uses [deleteMany](https://www.mongodb.com/docs/manual/reference/method/db.collection.deleteMany/) operations under-the-hood). Hook options are the following:
 * **collection**: the name of the collection to remove documents from, defaults to the hook object ID
-* **filter**: deletion criteria for `deleteMany` operation
+* **filter**: deletion criteria for `deleteMany` operation, fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+* **excludedProperties**: array of property names to be excluded from automated type conversion after templating, useful if you have a number-like string (eg '81') that you don't want to convert automatically into a number
 
 ### createMongoAggregation(options)
 
@@ -622,11 +625,12 @@ Performs a service operation using the API. Hook options are the following:
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **transform**: perform transformation using these options after/before read/write, see description in [transformJson](./hooks.md#transformjson-options)
 * **query**: [operation query](https://docs.feathersjs.com/api/databases/querying.html) to be performed (use only if not giving the whole **params** object), fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
+* **excludedProperties**: array of property names to be excluded from automated type conversion after templating, useful if you have a number-like string (eg '81') that you don't want to convert automatically into a number
 * **params**: [operation params](https://docs.feathersjs.com/api/services.html#params) to be used, fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
 * **updateResult**: if `true` service operation results will not replace item data (default for read operations)
 
 ::: warning
-Due to templating restricted to string output any ISO date string or comparison operator value in the query object will be converted back to native types so that matching will work as expected in JS
+Due to templating restricted to string output any ISO date string or comparison operator value in the query object will be automatically converted back to native types so that matching will work as expected in JS
 :::
 
 ### writeMongoCollection(options)
