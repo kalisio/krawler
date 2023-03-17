@@ -66,7 +66,7 @@ jobs:
     - CC_TEST_REPORTER_ID=ce3b24cd7b710c5ab893043eec49a13ee068b92c35d75a20a2b2cb4470fb1e42
     before_install: 
     - sudo apt-get update
-    - sudo apt-get -y install lftp
+    - sudo apt-get -y install ca-certificates lftp
     before_script:
     - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
     - chmod +x ./cc-test-reporter
