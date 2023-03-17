@@ -97,12 +97,10 @@ describe('krawler:hooks:csv', () => {
     params: { store: outputStore }
   }
 
-  console.log(inputStore.path)
-  mergeCsvHook.result.forEach(result => {
-    fs.copyFileSync(path.join(inputStore.path, result.id + '.csv'), path.join(outputStore.path, result.id + '.csv'))
-  })
-
   it('Merges CSV', () => {
+    mergeCsvHook.result.forEach(result => {
+      fs.copyFileSync(path.join(inputStore.path, result.id + '.csv'), path.join(outputStore.path, result.id + '.csv'))
+    })
     return pluginHooks.mergeCSV({ parse: { header: true }, unparse: { header: true } })(mergeCsvHook)
       .then(hook => {
         expect(fs.existsSync(path.join(outputStore.path, csvHook.result.id + '.csv'))).beTrue()
