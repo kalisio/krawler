@@ -56,7 +56,7 @@ export default {
       generateGridTasks: { resample: true }
     },
     after: {
-      mergeCSV: { headers: true },
+      mergeCSV: { header: true },
       clearOutputs: {},
       removeStores: ['job-store']
     }
