@@ -85,7 +85,7 @@ describe('krawler:utils', () => {
       department: '81',
       coordinates: [3, 45]
     }
-    let query = { 
+    let query = {
       'properties.code': '<%= department %>',
       geometry: {
         $near: {
