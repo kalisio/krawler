@@ -123,7 +123,7 @@ Read a CSV from an input stream/store and convert it to in-memory JSON values, h
 * **storePath**: see description in [common options](./hooks.md#common-options)
 * **store**: see description in [common options](./hooks.md#common-options)
 * **key**: see description in [common options](./hooks.md#common-options)
-* any option supported by [fast-csv](https://github.com/C2FO/fast-csv#parsing)
+* any option supported by [Papaparse parse config object](https://www.papaparse.com/docs#config)
 
 ### writeCSV(options)
 
@@ -133,7 +133,7 @@ Generate a CSV file from in-memory JSON values, hook options are the following:
 * **store**: see description in [common options](./hooks.md#common-options)
 * **key**: see description in [common options](./hooks.md#common-options)
 * **outputType**: the type of output produced by this hook, defaults to `intermediate`
-* any option supported by [fast-csv](https://github.com/C2FO/fast-csv#parsing)
+* any option supported by [Papaparse unparse config object](https://www.papaparse.com/docs#unparse-config-default)
 
 ### mergeCSV(options)
 
@@ -143,7 +143,8 @@ Generate a CSV file from a set of input CSV files, hook options are the followin
 * **mergeKey**: input key for the CSV files to be merged in store, must be a template with item as context, learn more about [templating](https://lodash.com/docs/4.17.4#template)
 * **key**: see description in [common options](./hooks.md#common-options)
 * **outputType**: the type of output produced by this hook, defaults to `intermediate`
-* any option supported by [fast-csv](https://github.com/C2FO/fast-csv#parsing)
+* **parse** any option supported by [Papaparse parse config object](https://www.papaparse.com/docs#config)
+* **unparse** any option supported by [Papaparse unparse config object](https://www.papaparse.com/docs#unparse-config-default)
 
 The input hook result is expected to be an array of tasks which output will be read back from the store.
 

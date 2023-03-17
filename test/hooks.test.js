@@ -324,49 +324,6 @@ describe('krawler:hooks:main', () => {
     expect(Math.abs(data.coordinates[1] - 6404230)).to.be.below(1)
   })
 
-  const csvHook = {
-    type: 'after',
-    data: {
-      id: 'RJTT-30-18000-2-1.csv'
-    },
-    result: {
-      id: 'RJTT-30-18000-2-1.csv'
-    },
-    params: { store: inputStore }
-  }
-
-  it('converts CSV to JSON', () => {
-    return pluginHooks.readCSV({ headers: true })(csvHook)
-      .then(hook => {
-        pluginHooks.transformJson({
-          mapping: {
-            Lonmin: 'bbox[0]',
-            Latmin: 'bbox[1]',
-            Lonmax: 'bbox[2]',
-            Latmax: 'bbox[3]',
-            Elev: 'value'
-          }
-        })(hook)
-        checkJson(hook)
-      })
-  })
-  // Let enough time to proceed
-    .timeout(5000)
-
-  it('converts JSON to CSV', () => {
-    return pluginHooks.readCSV({ headers: true })(csvHook)
-      .then(hook => {
-      // Switch to output store
-        csvHook.params.store = outputStore
-        return pluginHooks.writeCSV({ fields: ['Latmin', 'Lonmin', 'Latmax', 'Lonmax', 'Elev'] })(csvHook)
-      })
-      .then(hook => {
-        expect(fs.existsSync(path.join(outputStore.path, csvHook.result.id + '.csv'))).beTrue()
-      })
-  })
-  // Let enough time to proceed
-    .timeout(5000)
-
   const xmlHook = {
     type: 'after',
     data: {

@@ -97,6 +97,7 @@ describe('krawler:hooks:csv', () => {
     params: { store: outputStore }
   }
 
+  console.log(inputStore.path)
   mergeCsvHook.result.forEach(result => {
     fs.copyFileSync(path.join(inputStore.path, result.id + '.csv'), path.join(outputStore.path, result.id + '.csv'))
   })
