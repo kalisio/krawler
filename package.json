@@ -80,7 +80,7 @@
     "js-yaml": "^3.13.1",
     "kue": "^0.11.6",
     "lodash": "^4.17.15",
-    "mathjs": "^5.7.0",
+    "mathjs": "^7.5.1",
     "memory-blob-store": "^5.0.1",
     "merge-stream": "^1.0.1",
     "moment": "^2.24.0",
