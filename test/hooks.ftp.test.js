@@ -9,10 +9,8 @@ const { util, expect } = chai
 
 const outputDir = './test/output'
 
-const runFtpTests = process.env.RUN_FTP_TESTS
-
 describe('krawler:hooks:ftp', () => {
-  if (runFtpTests) {
+  if (process.env.RUN_FTP_TESTS) {
 
     before(() => {
       chailint(chai, util)
