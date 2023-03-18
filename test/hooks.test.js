@@ -381,7 +381,7 @@ describe('krawler:hooks:main', () => {
 
   it('get WMS capabilities', () => {
     return pluginHooks.getCapabilities({
-      url: 'https://wxs.ign.fr/administratif/geoportail/r/wms',
+      url: 'https://geoservices.brgm.fr/risques',
       service: 'WMS'
     })(capabilitiesHook)
       .then(hook => {
