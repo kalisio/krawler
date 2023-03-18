@@ -46,14 +46,14 @@ describe('krawler:hooks:ftp', () => {
     expect(ftpHook.result.data).toExist()
   })
   // Let enough time to proceed
-    .timeout(30000)
+    .timeout(60000)
 
   it('glob FTP', async () => {
     await pluginHooks.globFTP(ftpOptions)(ftpHook)
     expect(ftpHook.result.data).toExist()
   })
   // Let enough time to proceed
-    .timeout(30000)
+    .timeout(60000)
 
   it('get from FTP', async () => {
     try {
@@ -65,5 +65,5 @@ describe('krawler:hooks:ftp', () => {
     expect(fs.existsSync(path.join(store.path, 'readme.txt'))).beTrue()
   })
   // Let enough time to proceed
-    .timeout(30000)
+    .timeout(60000)
 })
