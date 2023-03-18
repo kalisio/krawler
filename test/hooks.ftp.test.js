@@ -17,10 +17,10 @@ describe('krawler:hooks:ftp', () => {
   const store = FsStore({ path: outputDir })
 
   const ftpOptions = {
-    remoteDir: '/gnu',
-    remoteFile: '/gnu/README.DESCRIPTIONS',
-    localFile: 'README.DESCRIPTIONS',
-    pattern: '*.*.README',
+    remoteDir: '/pure-ftpd/doc',
+    remoteFile: '/pure-ftpd/doc/README',
+    localFile: 'README',
+    pattern: 'README*',
     // Avoid some problems with certificates
     settings: {
       'ssl:verify-certificate': false
@@ -32,7 +32,7 @@ describe('krawler:hooks:ftp', () => {
     data: {
       id: 'ftp',
       client: {
-        host: 'ftp.gnu.org',
+        host: 'ftp.pureftpd.org',
         port: 21,
         user: 'anonymous',
         pass: 'anonymous'
