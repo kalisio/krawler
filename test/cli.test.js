@@ -175,7 +175,7 @@ describe('krawler:cli', () => {
                 console.log(error)
                 done(error)
               }
-            }, remainingSecondsForNextRun*1000)
+            }, remainingSecondsForNextRun * 1000)
             expect(runCount).to.equal(1) // First run
             const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
             expect(response.statusCode).to.equal(200)

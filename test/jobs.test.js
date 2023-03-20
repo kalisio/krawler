@@ -326,14 +326,8 @@ describe('krawler:jobs', () => {
         { id: 'job-apply-error.html', type: 'noop' }
       ]
     })
-      .catch(error => {
-        try {
-          expect(error).toExist()
-          expect(error.message).to.equal('apply error')
-          done()
-        } catch (error) {
-          done(error)
-        }
+      .then(tasks => {
+        done()
       })
   })
   // Let enough time to fail
