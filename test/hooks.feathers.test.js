@@ -5,7 +5,7 @@ import fs from 'fs-extra'
 import fsStore from 'fs-blob-store'
 import { feathers } from '@feathersjs/feathers'
 import socketio from '@feathersjs/socketio'
-import memory from '@feathersjs/memory'
+import { memory } from '@feathersjs/memory'
 import { hooks as pluginHooks } from '../lib/index.js'
 import { fileURLToPath } from 'url'
 
