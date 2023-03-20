@@ -2,6 +2,7 @@ import chai from 'chai'
 import chailint from 'chai-lint'
 import path, { dirname } from 'path'
 import _ from 'lodash'
+import moment from 'moment'
 import request from 'request'
 import utils from 'util'
 import fs from 'fs-extra'
@@ -132,44 +133,49 @@ describe('krawler:cli', () => {
         app.on('krawler', event => {
           if ((event.name === 'task-done') || (event.name === 'job-done')) eventCount++
         })
-        // As it runs every 10 seconds we know that in 10s after first run it should have ran at least once again
-        setTimeout(async () => {
-          try {
-            expect(runCount).to.equal(2) // 2 runs
-            const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
-            expect(response.statusCode).to.equal(500)
-            const { error, stdout, stderr } = await runCommand('node ' + path.join(__dirname, '..', 'healthcheck.js'))
-            expect(error).toExist()
-            expect(stdout).to.equal('')
-            expect(stderr.includes('[ALERT]')).beTrue()
-            const healthcheckLog = fs.readJsonSync(path.join(__dirname, '..', 'healthcheck.log'))
-            const healthcheck = JSON.parse(response.body)
-            expect(healthcheck).to.deep.equal(healthcheckLog)
-            expect(healthcheck.isRunning).beUndefined()
-            expect(healthcheck.duration).beUndefined()
-            expect(healthcheck.nbSkippedJobs).beUndefined()
-            expect(healthcheck.nbFailedTasks).beUndefined()
-            expect(healthcheck.nbSuccessfulTasks).beUndefined()
-            expect(healthcheck.successRate).beUndefined()
-            expect(healthcheck.error).toExist()
-            expect(healthcheck.error.message).toExist()
-            expect(healthcheck.error.message).to.equal('Error')
-            expect(eventCount).to.equal(4) // 4 events
-            collection = client.db.collection('krawler-events')
-            const taskEvents = await collection.find({ event: 'task-done' }).toArray()
-            expect(taskEvents.length).to.equal(2)
-            const jobEvents = await collection.find({ event: 'job-done' }).toArray()
-            expect(jobEvents.length).to.equal(2)
-            server.close()
-            appServer = null
-            done()
-          } catch (error) {
-            console.log(error)
-          }
-        }, 11000)
         // Only run as we already setup the app
         cli(jobfile, { mode: 'runJob', cron: '*/10 * * * * *', run: true })
           .then(async () => {
+            // As it runs every 10 seconds wait until it should have ran at least once again
+            const seconds = Math.floor(moment().seconds())
+            const remainingSecondsForNextRun = 11 - seconds % 10
+            setTimeout(async () => {
+              try {
+                expect(runCount).to.equal(2) // 2 runs
+                const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
+                console.log(response.body)
+                expect(response.statusCode).to.equal(500)
+                const { error, stdout, stderr } = await runCommand('node ' + path.join(__dirname, '..', 'healthcheck.js'))
+                expect(error).toExist()
+                expect(stdout).to.equal('')
+                expect(stderr.includes('[ALERT]')).beTrue()
+                const healthcheckLog = fs.readJsonSync(path.join(__dirname, '..', 'healthcheck.log'))
+                const healthcheck = JSON.parse(response.body)
+                console.log(healthcheck)
+                expect(healthcheck).to.deep.equal(healthcheckLog)
+                expect(healthcheck.isRunning).beUndefined()
+                expect(healthcheck.duration).beUndefined()
+                expect(healthcheck.nbSkippedJobs).beUndefined()
+                expect(healthcheck.nbFailedTasks).beUndefined()
+                expect(healthcheck.nbSuccessfulTasks).beUndefined()
+                expect(healthcheck.successRate).beUndefined()
+                expect(healthcheck.error).toExist()
+                expect(healthcheck.error.message).toExist()
+                expect(healthcheck.error.message).to.equal('Error')
+                expect(eventCount).to.equal(4) // 4 events
+                collection = client.db.collection('krawler-events')
+                const taskEvents = await collection.find({ event: 'task-done' }).toArray()
+                expect(taskEvents.length).to.equal(2)
+                const jobEvents = await collection.find({ event: 'job-done' }).toArray()
+                expect(jobEvents.length).to.equal(2)
+                server.close()
+                appServer = null
+                done()
+              } catch (error) {
+                console.log(error)
+                done(error)
+              }
+            }, remainingSecondsForNextRun*1000)
             expect(runCount).to.equal(1) // First run
             const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
             expect(response.statusCode).to.equal(200)
