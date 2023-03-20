@@ -54,11 +54,11 @@
     "lib": "lib"
   },
   "dependencies": {
-    "@feathersjs/client": "^5.0.0-pre.28",
-    "@feathersjs/errors": "^5.0.0-pre.28",
-    "@feathersjs/express": "^5.0.0-pre.28",
-    "@feathersjs/feathers": "^5.0.0-pre.28",
-    "@feathersjs/socketio": "^5.0.0-pre.28",
+    "@feathersjs/client": "^5.0.1",
+    "@feathersjs/errors": "^5.0.1",
+    "@feathersjs/express": "^5.0.1",
+    "@feathersjs/feathers": "^5.0.1",
+    "@feathersjs/socketio": "^5.0.1",
     "@kalisio/feathers-distributed": "^2.0.2",
     "@kalisio/geo-pixel-stream": "https://github.com/kalisio/geo-pixel-stream#next",
     "@mapbox/sphericalmercator": "^1.0.5",
@@ -105,11 +105,10 @@
     "xmldom": "^0.6.0"
   },
   "devDependencies": {
-    "@feathersjs/socketio": "^5.0.0-pre.28",
+    "@feathersjs/memory": "^5.0.1",
     "c8": "^7.11.2",
     "chai": "^4.2.0",
     "chai-lint": "^0.1.1",
-    "feathers-memory": "^4.1.0",
     "loader-runner": "^3.0.0",
     "mocha": "^9.0.0",
     "nock": "^12.0.0",

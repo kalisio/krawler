@@ -11,7 +11,6 @@ const outputDir = './test/output'
 
 describe('krawler:hooks:ftp', () => {
   if (process.env.RUN_FTP_TESTS) {
-
     before(() => {
       chailint(chai, util)
     })
