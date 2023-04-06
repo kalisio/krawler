@@ -47,6 +47,7 @@ The `jobs` [service](https://docs.feathersjs.com/api/services.html) allow to man
 * **create(data)**: create a job based on provided data object properties
   * **id**: unique job ID
   * **type**: job type (e.g. `async`)
+  * **tasks**: tasks to be run by the job
   * **options**: specific job implementation options
 * **remove(id)**: remove the job with given ID, this will actually remove the produced output from the store given as a (query) parameters
 
