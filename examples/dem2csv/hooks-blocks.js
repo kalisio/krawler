@@ -17,28 +17,7 @@ export default {
       */
       writeCSV: {
         dataPath: 'result.data',
-        fields: [
-          {
-            label: 'Latmin',
-            value: 'bbox[1]'
-          },
-          {
-            label: 'Lonmin',
-            value: 'bbox[0]'
-          },
-          {
-            label: 'Latmax',
-            value: 'bbox[3]'
-          },
-          {
-            label: 'Lonmax',
-            value: 'bbox[2]'
-          },
-          {
-            label: 'Elev',
-            value: 'value'
-          }
-        ]
+        header: true
       },
       clearData: { dataPath: 'result.data' }
     }
@@ -56,7 +35,7 @@ export default {
       generateGridTasks: { resample: true }
     },
     after: {
-      mergeCSV: { header: true },
+      mergeCSV: { parse: { header: true }, unparse: { header: true } },
       clearOutputs: {},
       removeStores: ['job-store']
     }
