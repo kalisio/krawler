@@ -17,7 +17,7 @@ export default {
     tasks: {
       after: {
         readCSV: {
-          headers: true
+          header: true
         },
         transformJson: {
           unitMapping: {
