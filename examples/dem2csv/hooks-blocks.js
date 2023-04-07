@@ -17,7 +17,18 @@ export default {
       */
       writeCSV: {
         dataPath: 'result.data',
-        header: true
+        header: true,
+        transform: {
+          dataPath: 'result.data',
+          mapping: {
+            'bbox.1': 'Latmin',
+            'bbox.0': 'Lonmin',
+            'bbox.3': 'Latmax',
+            'bbox.2': 'Lonmax',
+            value: 'Elev'
+          },
+          omit: ['bbox']
+        },
       },
       clearData: { dataPath: 'result.data' }
     }

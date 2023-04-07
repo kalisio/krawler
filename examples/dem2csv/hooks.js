@@ -29,7 +29,19 @@ export default {
     },
     after: {
       // Because each task is a JSON object we can directly export them to CSV
-      writeCSV: { header: true },
+      writeCSV: { 
+        header: true,
+        transform: {
+          mapping: {
+            'bbox.1': 'Latmin',
+            'bbox.0': 'Lonmin',
+            'bbox.3': 'Latmax',
+            'bbox.2': 'Lonmax',
+            max: 'Elev'
+          },
+          omit: ['bbox']
+        },
+      },
       clearOutputs: {},
       removeStores: ['job-store']
     }
