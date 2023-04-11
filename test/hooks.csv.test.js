@@ -52,34 +52,30 @@ describe('krawler:hooks:csv', () => {
     params: { store: inputStore }
   }
 
-  it('converts CSV to JSON', () => {
-    return pluginHooks.readCSV({ header: true })(csvHook)
-      .then(hook => {
-        pluginHooks.transformJson({
-          mapping: {
-            Lonmin: 'bbox[0]',
-            Latmin: 'bbox[1]',
-            Lonmax: 'bbox[2]',
-            Latmax: 'bbox[3]',
-            Elev: 'value'
-          }
-        })(hook)
-        checkJson(hook)
-      })
+  it('converts CSV to JSON', async () => {
+    await pluginHooks.readCSV({
+      header: true,
+      transform: {
+        mapping: {
+          Lonmin: 'bbox[0]',
+          Latmin: 'bbox[1]',
+          Lonmax: 'bbox[2]',
+          Latmax: 'bbox[3]',
+          Elev: 'value'
+        }
+      }
+    })(csvHook)
+    checkJson(csvHook)
   })
   // Let enough time to proceed
     .timeout(5000)
 
-  it('converts JSON to CSV', () => {
-    return pluginHooks.readCSV({ header: true })(csvHook)
-      .then(hook => {
-      // Switch to output store
-        csvHook.params.store = outputStore
-        return pluginHooks.writeCSV()(csvHook)
-      })
-      .then(hook => {
-        expect(fs.existsSync(path.join(outputStore.path, csvHook.result.id + '.csv'))).beTrue()
-      })
+  it('converts JSON to CSV', async () => {
+    await pluginHooks.readCSV({ header: true })(csvHook)
+    // Switch to output store
+    csvHook.params.store = outputStore
+    await pluginHooks.writeCSV()(csvHook)
+    expect(fs.existsSync(path.join(outputStore.path, csvHook.result.id + '.csv'))).beTrue()
   })
   // Let enough time to proceed
     .timeout(5000)
@@ -97,14 +93,12 @@ describe('krawler:hooks:csv', () => {
     params: { store: outputStore }
   }
 
-  it('Merges CSV', () => {
+  it('Merges CSV', async () => {
     mergeCsvHook.result.forEach(result => {
       fs.copyFileSync(path.join(inputStore.path, result.id + '.csv'), path.join(outputStore.path, result.id + '.csv'))
     })
-    return pluginHooks.mergeCSV({ parse: { header: true }, unparse: { header: true } })(mergeCsvHook)
-      .then(hook => {
-        expect(fs.existsSync(path.join(outputStore.path, csvHook.result.id + '.csv'))).beTrue()
-      })
+    await pluginHooks.mergeCSV({ parse: { header: true }, unparse: { header: true } })(mergeCsvHook)
+    expect(fs.existsSync(path.join(outputStore.path, csvHook.result.id + '.csv'))).beTrue()
   })
   // Let enough time to proceed
     .timeout(60000)
