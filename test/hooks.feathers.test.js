@@ -171,7 +171,7 @@ function createTests (servicePath, feathersHook, options = {}) {
 }
 
 describe('krawler:hooks:feathers', () => {
-  let mongoClient, db, app, server
+  let mongoClient, app, server
 
   before(async () => {
     chailint(chai, util)

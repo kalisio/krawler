@@ -15,8 +15,8 @@ describe('krawler:utils', () => {
     let data = {
       time: 1577970430,
       states: [
-        ['ab1644', 'UAL2109 ', 'United States', 1577969618, 1577969619, -84.4841, 30.6434, 10858.5, false, 205.5, 272.73, 0, null, 11361.42, '0721', false, 0],
-        ['e8027b', 'LAN712  ', 'Chile', 1577969619, 1577969619, 9.415, 40.2945, 12496.8, false, 258.32, 100.33, -0.65, null, 12633.96, '1277', false, 0]
+        [3939523, 'UAL2109 ', 'United States', 1577969618, 1577969619, -84.4841, 30.6434, 10858.5, false, 205.5, 272.73, 0, null, 11361.42, '0721', false, 0],
+        [3675002, 'LAN712  ', 'Chile', 1577969619, 1577969619, 9.415, 40.2945, 12496.8, false, 258.32, 100.33, -0.65, null, 12633.96, '1277', false, 0]
       ]
     }
     data = utils.transformJsonObject(data, {
@@ -25,6 +25,7 @@ describe('krawler:utils', () => {
       filter: { velocity: { $gt: 210 } }, // Keep speed above 210 m/s
       mapping: { velocity: 'speed', geo_altitude: 'altitude' },
       unitMapping: {
+        icao: { asString: 16, asCase: 'toUpperCase' },
         speed: { from: 'm/s', to: 'kts' }
       },
       pick: ['latitude', 'longitude', 'altitude', 'callsign', 'icao', 'speed']
@@ -32,7 +33,7 @@ describe('krawler:utils', () => {
     expect(data.states).toExist() // Transform path
     expect(data.states.length).to.equal(1)
     expect(data.states[0].icao).toExist() // Object conversion
-    expect(data.states[0].icao).to.equal('e8027b') // Filtering
+    expect(data.states[0].icao).to.equal('38137A') // Filtering and string conversion
     expect(data.states[0].origin_country).beUndefined() // Picking
     expect(data.states[0].time_position).beUndefined()
     expect(data.states[0].geo_altitude).beUndefined() // Mapping
