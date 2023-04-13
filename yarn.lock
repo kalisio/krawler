@@ -62,6 +62,15 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@feathersjs/adapter-commons@^4.5.11":
+  version "4.5.16"
+  resolved "https://registry.yarnpkg.com/@feathersjs/adapter-commons/-/adapter-commons-4.5.16.tgz#c24b5718d5c7a3ff513782d24b02990d2ba7bea7"
+  integrity sha512-wvThuKayZfr5uy2Oans763xNqAYcRzmgrwVa8TQ2KvRkagarb1fs6Z0rBH62mi4XMp2FAceXMFKw0VMrV4smmg==
+  dependencies:
+    "@feathersjs/commons" "^4.5.16"
+    "@feathersjs/errors" "^4.5.16"
+    "@feathersjs/feathers" "^4.5.16"
+
 "@feathersjs/adapter-commons@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@feathersjs/adapter-commons/-/adapter-commons-5.0.1.tgz#aa8bd0dbd2ce716ed41c19b9de0620aea236705b"
@@ -109,6 +118,11 @@
     "@feathersjs/rest-client" "^5.0.1"
     "@feathersjs/socketio-client" "^5.0.1"
 
+"@feathersjs/commons@^4.5.11", "@feathersjs/commons@^4.5.16":
+  version "4.5.16"
+  resolved "https://registry.yarnpkg.com/@feathersjs/commons/-/commons-4.5.16.tgz#878311fe316459642ba53399e0758efa021ed351"
+  integrity sha512-FXKAcGApcd9w3M42gjLi8+oaPijabS8qbD4ynQK3PM8J7BqpbSdCzURsI7EpReoQxFxdhrR4jix8cQIC/iAeuw==
+
 "@feathersjs/commons@^5.0.0-pre.28", "@feathersjs/commons@^5.0.0-pre.30":
   version "5.0.0-pre.30"
   resolved "https://registry.yarnpkg.com/@feathersjs/commons/-/commons-5.0.0-pre.30.tgz#f00683c7b4fa055afff343678cb31e78de9c7c1c"
@@ -118,6 +132,13 @@
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@feathersjs/commons/-/commons-5.0.1.tgz#738d1ba271582cb07dc51f0520229b009c42fcc7"
   integrity sha512-SNnWoUx/FPiEw8B+2kYLOCKxPRBQ08m5nv1VU80nEMIxURD1z079XsTJBJYKuaqjr5V3LvMrpdmisJ8CLKfJCA==
+
+"@feathersjs/errors@^4.5.11", "@feathersjs/errors@^4.5.16":
+  version "4.5.16"
+  resolved "https://registry.yarnpkg.com/@feathersjs/errors/-/errors-4.5.16.tgz#f79878c3dff6c5c2a21364559a7ad4a406bb51b1"
+  integrity sha512-gurzlqdffsLIrzOcaS0CgNi1ND4hy4BTNGSmz/5IupkoH9Kbbvs3PXqFn/e4nNIYI750YNenuwrYcPtRTZozGw==
+  dependencies:
+    debug "^4.3.3"
 
 "@feathersjs/errors@^5.0.0-pre.28":
   version "5.0.0-pre.30"
@@ -145,6 +166,16 @@
     compression "^1.7.4"
     cors "^2.8.5"
     express "^4.18.2"
+
+"@feathersjs/feathers@^4.5.16":
+  version "4.5.16"
+  resolved "https://registry.yarnpkg.com/@feathersjs/feathers/-/feathers-4.5.16.tgz#d618a76c4ce8bf8d75f65ee148fa7909d3efc503"
+  integrity sha512-MpLeomC+WwTcRtVjhMzx41wdlR2+5yDU6kpJHv2HAjIMVWtw547Uw62d8vNZ6BvltbbUTG03JJpOyyWcAMy57w==
+  dependencies:
+    "@feathersjs/commons" "^4.5.16"
+    debug "^4.3.3"
+    events "^3.3.0"
+    uberproto "^2.0.6"
 
 "@feathersjs/feathers@^5.0.0-pre.28":
   version "5.0.0-pre.30"
@@ -2733,7 +2764,7 @@ data-uri-to-buffer@^4.0.0:
   resolved "https://registry.yarnpkg.com/data-uri-to-buffer/-/data-uri-to-buffer-4.0.0.tgz#b5db46aea50f6176428ac05b73be39a57701a64b"
   integrity sha512-Vr3mLBA8qWmcuschSLAOogKgQ/Jwxulv3RNE4FXnYWRGujzrRWQI4m12fQqRkwX06C0KanhLr4hK+GydchZsaA==
 
-debug@*, debug@4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.2, debug@^4.3.4, debug@~4.3.1, debug@~4.3.2:
+debug@*, debug@4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.2, debug@^4.3.3, debug@^4.3.4, debug@~4.3.1, debug@~4.3.2:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
@@ -3528,6 +3559,15 @@ feathers-hooks@^2.0.1:
   dependencies:
     feathers-commons "^0.8.6"
     uberproto "^1.2.0"
+
+feathers-mongodb@^6.0.0:
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/feathers-mongodb/-/feathers-mongodb-6.4.1.tgz#594dad260ac60883e741a0bc9792130ad1228a88"
+  integrity sha512-EZssrp/EIeMxQ3qzNOdlXbUoTXOKvwCMsuYZ5JuPsahRjQluxPEY2WIKmBAzFi4/Jgfl+JhQQLxceRTjZlsynw==
+  dependencies:
+    "@feathersjs/adapter-commons" "^4.5.11"
+    "@feathersjs/commons" "^4.5.11"
+    "@feathersjs/errors" "^4.5.11"
 
 fecha@^4.2.0:
   version "4.2.3"
@@ -7070,6 +7110,11 @@ typedarray@^0.0.6, typedarray@~0.0.5:
 uberproto@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/uberproto/-/uberproto-1.2.0.tgz#61d4eab024f909c4e6ea52be867c4894a4beeb76"
+
+uberproto@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/uberproto/-/uberproto-2.0.6.tgz#709274d183bce6fb734dfd3880d2086ed72b69e5"
+  integrity sha512-68H97HffZoFaa3HFtpstahWorN9dSp5uTU6jo3GjIQ6JkJBR3hC2Nx/e/HFOoYHdUyT/Z1MRWfxN1EiQJZUyCQ==
 
 uglify-js@^2.6.1:
   version "2.8.29"
