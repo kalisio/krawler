@@ -135,6 +135,24 @@ describe('krawler:hooks:feathers', () => {
   // Let enough time to proceed
     .timeout(5000)
 
+  it('updates objects using service and multiple data as item', async () => {
+    feathersHook.data.data = [{ id: 1, properties: 'value1' }, { id: 2, properties: 'value1' }, { id: 3, properties: 'value1' }]
+    await pluginHooks.callFeathersServiceMethod({
+      service: '/geojson',
+      method: 'patch',
+      id: null,
+      query: { id: '<%= id %>' }
+    })(feathersHook)
+    const service = feathersHook.data.client.service('/geojson')
+    const results = await service.find({ query: {} })
+    expect(results.length).to.equal(3)
+    results.forEach(result => {
+      expect(result.properties).to.equal('value1')
+    })
+  })
+  // Let enough time to proceed
+    .timeout(5000)
+
   it('deletes objects using service', async () => {
     await pluginHooks.callFeathersServiceMethod({
       service: '/geojson',
