@@ -99,8 +99,7 @@ describe('krawler:hooks:feathers', () => {
   // Let enough time to proceed
     .timeout(5000)
 
-  it('updates objects using service', async () => {
-    feathersHook.type = 'after'
+  it('updates objects using service and data as option', async () => {
     await pluginHooks.callFeathersServiceMethod({
       service: '/geojson',
       method: 'patch',
@@ -113,6 +112,24 @@ describe('krawler:hooks:feathers', () => {
     expect(results.length).to.equal(3)
     results.forEach(result => {
       expect(result.properties).to.equal('value1')
+    })
+  })
+  // Let enough time to proceed
+    .timeout(5000)
+
+  it('updates objects using service and data as item', async () => {
+    feathersHook.data.data = { properties: 'value2' }
+    await pluginHooks.callFeathersServiceMethod({
+      service: '/geojson',
+      method: 'patch',
+      id: null,
+      query: {}
+    })(feathersHook)
+    const service = feathersHook.data.client.service('/geojson')
+    const results = await service.find({ query: {} })
+    expect(results.length).to.equal(3)
+    results.forEach(result => {
+      expect(result.properties).to.equal('value2')
     })
   })
   // Let enough time to proceed
