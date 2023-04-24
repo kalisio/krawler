@@ -4,6 +4,7 @@ import feathers from '@feathersjs/feathers'
 import express from '@feathersjs/express'
 import path, { dirname } from 'path'
 import utility from 'util'
+import fs from 'fs-extra'
 import nock from 'nock'
 import moment from 'moment'
 import plugin, { hooks as pluginHooks } from '../lib/index.js'
@@ -73,6 +74,29 @@ describe('krawler:tasks', () => {
   })
   // Let enough time to download
     .timeout(10000)
+
+  it('creates an empty HTTP task (204)', async () => {
+    nock('https://www.google.com')
+      .get('/')
+      .reply(204)
+    await tasksService.create({
+      id: 'task-204.html',
+      store: 'test-store',
+      type: 'http',
+      options: {
+        url: 'https://www.google.com'
+      },
+      response: {
+        204: '{ "content": [] }'
+      }
+    })
+    const exist = await storageExists('task-204.html')
+    expect(exist).beTrue()
+    const json = fs.readJsonSync(path.join(__dirname, 'output/task-204.html'))
+    expect(json).to.deep.equal({ content: [] })
+  })
+  // Let enough time to fail
+    .timeout(5000)
 
   it('creates a failed HTTP task (403)', (done) => {
     nock('https://www.google.com')
