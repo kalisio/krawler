@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import chai from 'chai'
 import chailint from 'chai-lint'
 import path, { dirname } from 'path'
@@ -18,6 +19,9 @@ describe('krawler:hooks:mongo', () => {
   before(() => {
     chailint(chai, util)
     geojson = fs.readJsonSync(path.join(inputStore.path, 'geojson.json'))
+    // Add invalid data breaking the unique index rule to check for error management
+    geojson.features.unshift(_.cloneDeep(geojson.features[0]))
+    geojson.features.push(_.cloneDeep(geojson.features[0]))
   })
 
   const mongoOptions = {
@@ -45,7 +49,10 @@ describe('krawler:hooks:mongo', () => {
   })
 
   it('creates MongoDB collection', async () => {
-    await pluginHooks.createMongoCollection({ collection: 'geojson', index: { geometry: '2dsphere' } })(mongoHook)
+    await pluginHooks.createMongoCollection({
+      collection: 'geojson',
+      indices: [{ geometry: '2dsphere' }, [{ id: 1 }, { unique: true }]]
+    })(mongoHook)
     const collections = await mongoHook.data.client.db.listCollections({ name: 'geojson' }).toArray()
     expect(collections.length === 1).beTrue()
   })
@@ -56,15 +63,32 @@ describe('krawler:hooks:mongo', () => {
     mongoHook.type = 'after'
     mongoHook.result = mongoHook.data
     mongoHook.result.data = geojson
-    await pluginHooks.writeMongoCollection({
-      collection: 'geojson',
-      transform: {
-        omit: ['properties.prop2'],
-        inPlace: false
-      }
-    })(mongoHook)
+    try {
+      await pluginHooks.writeMongoCollection({
+        collection: 'geojson',
+        // Ensure we use multiple chunks for testing purpose
+        chunkSize: 2,
+        transform: {
+          omit: ['properties.prop2'],
+          inPlace: false
+        }
+      })(mongoHook)
+    } catch (error) {
+      expect(error).toExist()
+      // console.log(error)
+      expect(error.writeErrors).toExist()
+      expect(error.writeErrors.length).to.equal(2)
+      expect(error.result).toExist()
+      expect(error.result.insertedIds).toExist()
+      expect(error.result.insertedIds.length).to.equal(3)
+      expect(error.result.nInserted).to.equal(1)
+      // error.writeErrors.forEach(data => console.log(data))
+      expect(error.name).to.equal('BulkWriteError')
+    }
     const collection = mongoHook.data.client.db.collection('geojson')
-    const results = await collection.find({
+    let results = await collection.find({}).toArray()
+    expect(results.length).to.equal(3)
+    results = await collection.find({
       geometry: { $near: { $geometry: { type: 'Point', coordinates: [102, 0.5] }, $maxDistance: 5000 } }
     }).toArray()
     expect(results.length).to.equal(1)

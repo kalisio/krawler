@@ -19,19 +19,37 @@ const { util, expect } = chai
 
 const inputStore = fsStore({ path: path.join(__dirname, 'data') })
 const geojson = fs.readJsonSync(path.join(inputStore.path, 'geojson.json'))
+// Add invalid data breaking the unique index rule to check for error management
+geojson.features.unshift(_.cloneDeep(geojson.features[0]))
+geojson.features.push(_.cloneDeep(geojson.features[0]))
 
 function createTests (servicePath, feathersHook, options = {}) {
   it(`creates objects using service ${servicePath}`, async () => {
     feathersHook.type = 'after'
     feathersHook.result = feathersHook.data
     feathersHook.result.data = geojson
-    await pluginHooks.callFeathersServiceMethod({
-      service: servicePath,
-      method: 'create',
-      transform: {
-        omit: ['properties.prop2']
-      }
-    })(feathersHook)
+    try {
+      await pluginHooks.callFeathersServiceMethod({
+        service: servicePath,
+        method: 'create',
+        // Ensure we use multiple chunks for testing purpose
+        chunkSize: 2,
+        transform: {
+          omit: ['properties.prop2']
+        }
+      })(feathersHook)
+    } catch (error) {
+      expect(error).toExist()
+      console.log(error)
+      expect(error.writeErrors).toExist()
+      expect(error.writeErrors.length).to.equal(2)
+      expect(error.result).toExist()
+      expect(error.result.insertedIds).toExist()
+      expect(error.result.insertedIds.length).to.equal(3)
+      expect(error.result.nInserted).to.equal(1)
+      // error.writeErrors.forEach(data => console.log(data))
+      expect(error.name).to.equal('BulkWriteError')
+    }
     const service = feathersHook.data.client.service(servicePath)
     const results = await service.find({ query: {} })
     expect(results.length).to.equal(3)
@@ -176,10 +194,13 @@ describe('krawler:hooks:feathers', () => {
   before(async () => {
     chailint(chai, util)
     mongoClient = await MongoClient.connect('mongodb://127.0.0.1:27017/krawler-test')
+    const Model = mongoClient.db('krawler-test').collection('geojson')
+    // Add unique index rule to check for error management
+    await Model.createIndex({ id: 1 }, { unique: true })
     app = feathers()
       .configure(socketio({ path: '/ws' }))
       .use('geojson-memory', memory({ multi: true }))
-      .use('geojson-mongodb', mongodb({ multi: true, Model: mongoClient.db('krawler-test').collection('geojson') }))
+      .use('geojson-mongodb', mongodb({ multi: true, Model }))
     // Add required hook to manage upsert
     app.service('geojson-mongodb').hooks({
       before: {
