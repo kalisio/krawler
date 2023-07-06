@@ -129,6 +129,8 @@ function createTests (servicePath, feathersHook, options = {}) {
       await pluginHooks.callFeathersServiceMethod({
         service: servicePath,
         method: 'patch',
+        // Ensure we use multiple chunks for testing purpose
+        chunkSize: 2,
         id: null,
         query: { id: '<%= id %>' }
       })(feathersHook)
