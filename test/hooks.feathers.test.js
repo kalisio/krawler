@@ -6,6 +6,7 @@ import fs from 'fs-extra'
 import fsStore from 'fs-blob-store'
 import mongo from 'mongodb'
 import { feathers } from '@feathersjs/feathers'
+import errors from '@feathersjs/errors'
 import socketio from '@feathersjs/socketio'
 import { memory } from '@feathersjs/memory'
 import mongodb from 'feathers-mongodb'
@@ -14,6 +15,7 @@ import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+const { BadRequest } = errors
 const { MongoClient } = mongo
 const { util, expect } = chai
 
@@ -40,7 +42,7 @@ function createTests (servicePath, feathersHook, options = {}) {
       })(feathersHook)
     } catch (error) {
       expect(error).toExist()
-      console.log(error)
+      //console.log(error)
       expect(error.writeErrors).toExist()
       expect(error.writeErrors.length).to.equal(2)
       expect(error.result).toExist()
@@ -122,19 +124,22 @@ function createTests (servicePath, feathersHook, options = {}) {
     .timeout(5000)
 
   it(`updates objects using service ${servicePath} and multiple data as item`, async () => {
-    feathersHook.data.data = [{ id: 1, properties: 'value1' }, { id: 2, properties: 'value1' }, { id: 3, properties: 'value1' }]
-    await pluginHooks.callFeathersServiceMethod({
-      service: servicePath,
-      method: 'patch',
-      id: null,
-      query: { id: '<%= id %>' }
-    })(feathersHook)
+    feathersHook.data.data = [{ id: 1, properties: 'value1' }, { id: 2, properties: null }, { id: 3, properties: 'value1' }]
+    try {
+      await pluginHooks.callFeathersServiceMethod({
+        service: servicePath,
+        method: 'patch',
+        id: null,
+        query: { id: '<%= id %>' }
+      })(feathersHook)
+    } catch (error) {
+      expect(error).toExist()
+      //console.log(error)
+      expect(error.name).to.equal('BadRequest')
+    }
     const service = feathersHook.data.client.service(servicePath)
-    const results = await service.find({ query: {} })
-    expect(results.length).to.equal(3)
-    results.forEach(result => {
-      expect(result.properties).to.equal('value1')
-    })
+    const results = await service.find({ query: { properties: 'value1' } })
+    expect(results.length).to.equal(2)
   })
   // Let enough time to proceed
     .timeout(5000)
@@ -202,9 +207,13 @@ describe('krawler:hooks:feathers', () => {
       .use('geojson-memory', memory({ multi: true }))
       .use('geojson-mongodb', mongodb({ multi: true, Model }))
     // Add required hook to manage upsert
+      // Also a hook to simulate an error
     app.service('geojson-mongodb').hooks({
       before: {
-        patch: (hook) => { _.set(hook, 'params.mongodb', { upsert: _.get(hook, 'params.query.upsert', false) }) }
+        patch: [
+          (hook) => { _.set(hook, 'params.mongodb', { upsert: _.get(hook, 'params.query.upsert', false) }) },
+          (hook) => { if (hook.data.properties === null) throw new BadRequest('Properties cannot be null') }
+        ]
       }
     })
     server = await app.listen(4000)
