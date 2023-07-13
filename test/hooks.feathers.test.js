@@ -138,6 +138,8 @@ function createTests (servicePath, feathersHook, options = {}) {
       expect(error).toExist()
       //console.log(error)
       expect(error.name).to.equal('BadRequest')
+      // Single error in this case
+      expect(error.errors).beUndefined()
     }
     const service = feathersHook.data.client.service(servicePath)
     const results = await service.find({ query: { properties: 'value1' } })
@@ -162,7 +164,7 @@ function createTests (servicePath, feathersHook, options = {}) {
 
   if (options.upsert) {
     it(`upserts objects using service ${servicePath} and multiple data as item`, async () => {
-      feathersHook.data.data = [{ id: 1, properties: 'value1' }, { id: 2, properties: null }, { id: 3, properties: 'value1' }]
+      feathersHook.data.data = [{ id: 1, properties: 'value1' }, { id: 2, properties: null }, { id: 3, properties: 'value1' }, { id: 4, properties: null }]
       try {
         await pluginHooks.callFeathersServiceMethod({
           service: servicePath,
@@ -174,6 +176,12 @@ function createTests (servicePath, feathersHook, options = {}) {
         expect(error).toExist()
         //console.log(error)
         expect(error.name).to.equal('BadRequest')
+        // Multiple errors in this case
+        expect(error.errors).toExist()
+        expect(error.errors.length).to.equal(2)
+        error.errors.forEach(error => {
+          expect(error.name).to.equal('BadRequest')
+        })
       }
       const service = feathersHook.data.client.service(servicePath)
       const results = await service.find({ query: {} })
