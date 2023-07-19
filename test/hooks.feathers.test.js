@@ -42,7 +42,7 @@ function createTests (servicePath, feathersHook, options = {}) {
       })(feathersHook)
     } catch (error) {
       expect(error).toExist()
-      //console.log(error)
+      // console.log(error)
       expect(error.writeErrors).toExist()
       expect(error.writeErrors.length).to.equal(2)
       expect(error.result).toExist()
@@ -136,7 +136,7 @@ function createTests (servicePath, feathersHook, options = {}) {
       })(feathersHook)
     } catch (error) {
       expect(error).toExist()
-      //console.log(error)
+      // console.log(error)
       expect(error.name).to.equal('BadRequest')
       // Single error in this case
       expect(error.errors).beUndefined()
@@ -174,7 +174,7 @@ function createTests (servicePath, feathersHook, options = {}) {
         })(feathersHook)
       } catch (error) {
         expect(error).toExist()
-        //console.log(error)
+        // console.log(error)
         expect(error.name).to.equal('BadRequest')
         // Multiple errors in this case
         expect(error.errors).toExist()
