@@ -49,7 +49,7 @@ jobs:
     script: cd docs && yarn install && yarn build 
     deploy:
       provider: pages
-      local-dir: docs/.vuepress/dist
+      local-dir: docs/.vitepress/dist
       skip-cleanup: true
       github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
       keep-history: true

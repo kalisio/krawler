@@ -1,11 +1,11 @@
 {
   "name": "docs",
   "scripts": {
-    "dev": "vuepress dev .",
-    "build": "vuepress build ."
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
   },
   "devDependencies": {
-    "vuepress": "^1.7.1",
-    "vuepress-theme-kalisio": "https://github.com/kalisio/vuepress-theme-kalisio#v0.1.0"
+    "vitepress": "^1.0.0-rc.15"
   }
 }
