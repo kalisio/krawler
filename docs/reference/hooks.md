@@ -359,7 +359,7 @@ Restructure in-memory JSON values, hook options are the following:
   * **asDate**: mandatory to indicate if the value is a date, could be `utc` or `local` to interpret it as UTC or Local Time
   * **asString**: mandatory to convert numbers to strings, indicates the [radix](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toString#Syntax) to be used if any
   * **asNumber**: mandatory to convert strings to numbers
-  * **asCase**: target case to be used as the name of a [Lodash](https://lodash.com/docs#pick)  (e.g. `lowerCase`) or [JS string](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/String) (e.g. `toUpperCase`) case conversion function (e.g. `lowerCase`)
+  * **asCase**: target case to be used as the name of a [Lodash](https://lodash.com/docs/4.17.15#lowerCase) (e.g. `lowerCase`) or [JS string](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/String) (e.g. `toUpperCase`) case conversion function
   * **empty**: value to be set if the input value is empty
 * **pick**: an array of properties to be picked using [Lodash](https://lodash.com/docs#pick)
 * **omit**: an array of properties to be omitted using [Lodash](https://lodash.com/docs#omit)
