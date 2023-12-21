@@ -15,7 +15,7 @@ const __dirname = dirname(__filename)
 const { util, expect } = chai
 
 describe('krawler:tasks', () => {
-  let app, server, storage, storageExists, storesService, tasksService
+  let app, server, storage, storageExists, fileStats, storesService, tasksService
 
   before(async () => {
     chailint(chai, util)
@@ -52,6 +52,28 @@ describe('krawler:tasks', () => {
     })
     const exist = await storageExists('task.html')
     expect(exist).beTrue()
+    fileStats = fs.statSync(path.join(storage.path, 'task.html'))
+  })
+  // Let enough time to download
+    .timeout(10000)
+
+  it('creates a HTTP task without overwrite', async () => {
+    nock('https://www.google.com')
+      .get('/')
+      .reply(200, '<html></html>')
+    await tasksService.create({
+      id: 'task.html',
+      store: 'test-store',
+      type: 'http',
+      overwrite: false,
+      options: {
+        url: 'https://www.google.com'
+      }
+    })
+    const exist = await storageExists('task.html')
+    expect(exist).beTrue()
+    const stats = fs.statSync(path.join(storage.path, 'task.html'))
+    expect(stats.birthtimeMs).to.equal(fileStats.birthtimeMs)
   })
   // Let enough time to download
     .timeout(10000)
