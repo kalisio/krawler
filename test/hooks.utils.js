@@ -152,4 +152,31 @@ describe('krawler:hooks:utils', () => {
   })
   // Let enough time to proceed
     .timeout(5000)
+
+  const hookDefinitions = {
+    readJson: {},
+    convertToGeoJson: {}
+  }
+
+  it('insert hook before', () => {
+    let newHookDefinitions = pluginHooks.insertHookBefore('convertToGeoJson', hookDefinitions, 'transformJson', {})
+    let index = 0
+    _.forOwn(newHookDefinitions, (hookOptions, hookName) => {
+      if (index === 0) expect(hookName).to.equal('readJson')
+      else if (index === 1) expect(hookName).to.equal('transformJson')
+      else if (index === 2) expect(hookName).to.equal('convertToGeoJson')
+      index++
+    })
+  })
+
+  it('insert hook after', () => {
+    let newHookDefinitions = pluginHooks.insertHookAfter('readJson', hookDefinitions, 'transformJson', {})
+    let index = 0
+    _.forOwn(newHookDefinitions, (hookOptions, hookName) => {
+      if (index === 0) expect(hookName).to.equal('readJson')
+      else if (index === 1) expect(hookName).to.equal('transformJson')
+      else if (index === 2) expect(hookName).to.equal('convertToGeoJson')
+      index++
+    })
+  })
 })
