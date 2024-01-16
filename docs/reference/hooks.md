@@ -492,6 +492,20 @@ Drop if exists a collection in a MongoDB database. Hook options are the followin
 
 Create a collection in a MongoDB database. Hook options are the following:
 * **collection**: the name of the collection to be created, defaults to the hook object ID
+* **index/indices**: the [specification of the index](https://docs.mongodb.com/manual/indexes/#create-an-index) associated to the collection, uses an array as `indices` if multiple indices are provided
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
+### dropMongoIndex(options)
+
+Drop if exists a collection index in a MongoDB database. Hook options are the following:
+* **collection**: the name of the collection to be removed, defaults to the hook object ID
+* **index**: the [specification of the index](https://docs.mongodb.com/manual/indexes/#create-an-index) associated to the collection
+* **clientPath**: property path where to retrieve the client object, defaults to `client`
+
+### createMongoIndex(options)
+
+Create a collection index in a MongoDB database. Hook options are the following:
+* **collection**: the name of the collection to be created, defaults to the hook object ID
 * **index**: the [specification of the index](https://docs.mongodb.com/manual/indexes/#create-an-index) associated to the collection
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 
