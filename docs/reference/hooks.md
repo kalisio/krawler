@@ -425,6 +425,16 @@ Learn more about [templating](https://lodash.com/docs/4.17.4#template)
 
 [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.geojson.js)
 
+### readSequentialGeoJson(options)
+
+Read a JSON from an input stream/store and convert it to in-memory JSON values, hook options are the following:
+* **dataPath**: property path where to store the resulting JSON object on the hook object, defaults to `result.data`
+* **storePath**: see description in [common options](./hooks.md#common-options)
+* **store**: see description in [common options](./hooks.md#common-options)
+* **key**: see description in [common options](./hooks.md#common-options)
+* **transform**: perform transformation using these options after read, see description in [transformJson](./hooks.md#transformjson-options)
+* **asFeatureCollection**: this boolean indicates if the resulting JSON object is converted to a GeoJson collection, otherwise it will be an array of GeoJSON features, defaults to `false`
+
 ### convertToGeoJson(options)
 
 Convert in-memory JSON values to a [GeoJSON](https://fr.wikipedia.org/wiki/GeoJSON) collection. For each in-memory object, the hook generates a corresponding GeoJSON feature using specific properties to build the `geometry` property. For now, it only allows to generate features of type of `Point`. Moreover, the coordinate reference system is a geographic coordinate reference system, using the World Geodetic System 1984 (WGS 84), with longitude and latitude expressed in decimal degrees. The entire object is stored under the `properties` property of the feature.
