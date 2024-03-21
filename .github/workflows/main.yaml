@@ -56,7 +56,6 @@ jobs:
   build_app:
     name: Build app
     if: ${{ !contains(github.event.head_commit.message, 'skip app') }}
-    needs: [ run_tests ]
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repo
