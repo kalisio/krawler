@@ -39,13 +39,13 @@ done
 ##
 
 WORKSPACE_DIR="$(dirname "$ROOT_DIR")"
-init_app_infos "$ROOT_DIR" "$WORKSPACE_DIR/development/workspaces/apps"
+init_lib_infos "$ROOT_DIR" "$WORKSPACE_DIR/development/workspaces/jobs"
 
-APP=$(get_app_name)
-VERSION=$(get_app_version)
-FLAVOR=$(get_app_flavor)
+APP=$(get_lib_name)
+VERSION=$(get_lib_version)
+GIT_TAG=$(get_lib_tag)
 
-echo "About to run tests for ${APP} v${VERSION}-($FLAVOR) ..."
+echo "About to run tests for ${APP} v${VERSION}..."
 
 . "$WORKSPACE_DIR/development/workspaces/jobs/jobs.sh" krawler
 load_env_files "$WORKSPACE_DIR/development/common/SLACK_WEBHOOK_JOBS.enc.env"
@@ -67,7 +67,7 @@ end_group "Starting mongo $MONGO_VER ..."
 ##
 
 use_node "$NODE_VER"
-yarn test
+yarn && yarn test
 
 ## Publish code coverage
 ##
