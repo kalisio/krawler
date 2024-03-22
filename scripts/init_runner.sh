@@ -24,10 +24,6 @@ init_github_build_docs() {
     install_reqs age sops nvm node18
 }
 
-init_github_main_ci() {
-    install_reqs age sops nvm node16 node18 mongo4
-}
-
 init_github_additional_tests() {
     install_reqs age sops nvm node16 node18 node20 mongo4 mongo5 mongo6
 }

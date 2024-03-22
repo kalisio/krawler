@@ -43,7 +43,7 @@ else
 
     DEVELOPMENT_REPO_URL="$GITHUB_URL/kalisio/development.git"
 
-    # unset KALISIO_DEVELOPMENT_DIR because we want kli to clone everyhting in $WORKSPACE_DIR
+    # unset KALISIO_DEVELOPMENT_DIR because we want kli to clone everything in $WORKSPACE_DIR
     unset KALISIO_DEVELOPMENT_DIR
 fi
 
