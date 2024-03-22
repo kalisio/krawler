@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
-const { util, expect } = chai
+const { util, expect, assert } = chai
 
 describe('krawler:stores', () => {
   let app, storesService, fsStore, memoryStore, s3Store
@@ -25,173 +25,143 @@ describe('krawler:stores', () => {
     expect(storesService).toExist()
   })
 
-  it('creates the fs input storage', () => {
-    return storesService.create({
+  it('creates the fs input storage', async () => {
+    await storesService.create({
       id: 'fs-in',
       type: 'fs',
       options: {
         path: path.join(__dirname, 'data')
       }
     })
-      .then(_ => {
-        return storesService.get('fs-in')
-      })
   })
 
-  it('creates the fs output storage', () => {
-    return storesService.create({
+  it('creates the fs output storage', async () => {
+    await storesService.create({
       id: 'fs',
       type: 'fs',
       options: {
         path: path.join(__dirname, 'output')
       }
     })
-      .then(_ => {
-        return storesService.get('fs')
-      })
-      .then(store => {
-        fsStore = store
-        expect(fsStore).toExist()
-      })
+    fsStore = await storesService.get('fs')
+    expect(fsStore).toExist()
   })
 
-  it('creates the memory storage', () => {
-    return storesService.create({
+  it('creates the memory storage', async () => {
+    await storesService.create({
       id: 'memory',
       type: 'memory'
     })
-      .then(_ => {
-        return storesService.get('memory')
-      })
-      .then(store => {
-        memoryStore = store
-        expect(memoryStore).toExist()
-      })
+    memoryStore = await storesService.get('memory')
+    expect(memoryStore).toExist()
   })
 
-  it('creates the s3 storage', () => {
-    return storesService.create({
+  it('creates the s3 storage', async () => {
+    await storesService.create({
       id: 's3',
       options: {
         client: {
           accessKeyId: process.env.S3_ACCESS_KEY,
-          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+          endpoint: process.env.S3_ENDPOINT
         },
         bucket: process.env.S3_BUCKET
       }
     })
-      .then(_ => {
-        return storesService.get('s3')
-      })
-      .then(store => {
-        s3Store = store
-        expect(s3Store).toExist()
-      })
+    s3Store = await storesService.get('s3')
+    expect(s3Store).toExist()
   })
 
   const storeHook = {
     type: 'before',
     data: {
-      id: 'world_cities.csv'
+      id: 'geojson.json'
     },
     params: {}
   }
 
-  it('copy between stores', () => {
+  it('copy between stores', async () => {
     // Fake hook service
     storeHook.service = { storesService }
-    return pluginHooks.copyToStore({ input: { store: 's3', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>' } })(storeHook)
-      .then(hook => {
-        expect(fs.existsSync(path.join(fsStore.path, storeHook.data.id))).beTrue()
-      })
+    await pluginHooks.copyToStore({ input: { store: 'fs-in', key: '<%= id %>' }, output: { store: 's3', key: '<%= id %>' } })(storeHook)
+    await pluginHooks.copyToStore({ input: { store: 's3', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>' } })(storeHook)
+    expect(fs.existsSync(path.join(fsStore.path, storeHook.data.id))).beTrue()
   })
   // Let enough time to proceed
     .timeout(10000)
 
-  it('check if file exists in stores', () => {
+  it('check if file exists in stores', async () => {
     // Fake hook service
-    return pluginHooks.discardIfExistsInStore({ output: { store: 'fs', key: '<%= id %>.none' } })(storeHook)
-      .then(hook => {
-        expect(hook.data.skip).beUndefined()
-        return pluginHooks.discardIfExistsInStore({ output: { store: 'fs', key: '<%= id %>' } })(storeHook)
-      })
-      .then(hook => {
-        expect(hook.data.skip).beTrue()
-      })
+    let hook = await pluginHooks.discardIfExistsInStore({ output: { store: 'fs', key: '<%= id %>.none' } })(storeHook)
+    expect(hook.data.skip).beUndefined()
+    hook = await pluginHooks.discardIfExistsInStore({ output: { store: 'fs', key: '<%= id %>' } })(storeHook)
+    expect(hook.data.skip).beTrue()
   })
   // Let enough time to proceed
     .timeout(10000)
 
-  it('copy inside the same store', () => {
-    return pluginHooks.copyToStore({ input: { store: 'fs', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>.copy' } })(storeHook)
-      .then(hook => {
-        expect(fs.existsSync(path.join(fsStore.path, storeHook.data.id + '.copy'))).beTrue()
-        const originalStat = fs.statSync(path.join(fsStore.path, storeHook.data.id))
-        const deflateStat = fs.statSync(path.join(fsStore.path, storeHook.data.id + '.copy'))
-        expect(originalStat.size).to.equal(deflateStat.size)
-      })
+  it('copy inside the same store', async () => {
+    await pluginHooks.copyToStore({ input: { store: 'fs', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>.copy' } })(storeHook)
+    expect(fs.existsSync(path.join(fsStore.path, storeHook.data.id + '.copy'))).beTrue()
+    const originalStat = fs.statSync(path.join(fsStore.path, storeHook.data.id))
+    const deflateStat = fs.statSync(path.join(fsStore.path, storeHook.data.id + '.copy'))
+    expect(originalStat.size).to.equal(deflateStat.size)
   })
   // Let enough time to proceed
     .timeout(10000)
 
-  it('gzip in a store', () => {
-    return pluginHooks.gzipToStore({ input: { store: 'fs', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>.gz' } })(storeHook)
-      .then(hook => {
-        expect(fs.existsSync(path.join(fsStore.path, storeHook.data.id + '.gz'))).beTrue()
-      })
+  it('gzip in a store', async () => {
+    await pluginHooks.gzipToStore({ input: { store: 'fs', key: '<%= id %>' }, output: { store: 'fs', key: '<%= id %>.gz' } })(storeHook)
+    expect(fs.existsSync(path.join(fsStore.path, storeHook.data.id + '.gz'))).beTrue()
   })
   // Let enough time to proceed
     .timeout(10000)
 
-  it('gunzip in a store', () => {
-    return pluginHooks.gunzipFromStore({ input: { store: 'fs', key: '<%= id %>.gz' }, output: { store: 'fs', key: '<%= id %>.guz' } })(storeHook)
-      .then(hook => {
-        expect(fs.existsSync(path.join(fsStore.path, storeHook.data.id + '.guz'))).beTrue()
-        const originalStat = fs.statSync(path.join(fsStore.path, storeHook.data.id))
-        const deflateStat = fs.statSync(path.join(fsStore.path, storeHook.data.id + '.guz'))
-        expect(originalStat.size).to.equal(deflateStat.size)
-      })
+  it('gunzip in a store', async () => {
+    await pluginHooks.gunzipFromStore({ input: { store: 'fs', key: '<%= id %>.gz' }, output: { store: 'fs', key: '<%= id %>.guz' } })(storeHook)
+    expect(fs.existsSync(path.join(fsStore.path, storeHook.data.id + '.guz'))).beTrue()
+    const originalStat = fs.statSync(path.join(fsStore.path, storeHook.data.id))
+    const deflateStat = fs.statSync(path.join(fsStore.path, storeHook.data.id + '.guz'))
+    expect(originalStat.size).to.equal(deflateStat.size)
   })
   // Let enough time to proceed
     .timeout(10000)
 
-  it('unzip in a store', () => {
-    return pluginHooks.unzipFromStore({ input: { store: 'fs-in', key: 'stations.zip' }, output: { store: 'fs', path: 'unzip' } })(storeHook)
-      .then(hook => {
-        expect(fs.existsSync(path.join(fsStore.path, 'unzip', 'StationHydro_FXX-geojson.dat'))).beTrue()
-      })
+  it('unzip in a store', async () => {
+    await pluginHooks.unzipFromStore({ input: { store: 'fs-in', key: 'stations.zip' }, output: { store: 'fs', path: 'unzip' } })(storeHook)
+    expect(fs.existsSync(path.join(fsStore.path, 'unzip', 'StationHydro_FXX-geojson.dat'))).beTrue()
   })
   // Let enough time to proceed
     .timeout(10000)
 
-  it('removes the fs storage', (done) => {
-    storesService.remove('fs')
-      .then(store => {
-        storesService.get('fs').catch(error => {
-          expect(error).toExist()
-          done()
-        })
-      })
+  it('removes the fs storage', async () => {
+    await storesService.remove('fs')
+    try {
+      await storesService.get('fs')
+      assert.fail('Store access should fail')
+    } catch (error) {
+      expect(error).toExist()
+    }
   })
 
-  it('removes the memory storage', (done) => {
-    storesService.remove('memory')
-      .then(store => {
-        storesService.get('memory').catch(error => {
-          expect(error).toExist()
-          done()
-        })
-      })
+  it('removes the memory storage', async () => {
+    await storesService.remove('memory')
+    try {
+      await storesService.get('memory')
+      assert.fail('Store access should fail')
+    } catch (error) {
+      expect(error).toExist()
+    }
   })
 
-  it('removes the s3 storage', (done) => {
-    storesService.remove('s3')
-      .then(store => {
-        storesService.get('s3').catch(error => {
-          expect(error).toExist()
-          done()
-        })
-      })
+  it('removes the s3 storage', async () => {
+    await storesService.remove('s3')
+    try {
+      await storesService.get('s3')
+      assert.fail('Store access should fail')
+    } catch (error) {
+      expect(error).toExist()
+    }
   })
 
   // Cleanup
