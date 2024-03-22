@@ -34,10 +34,16 @@ WORKSPACE_DIR="$(dirname "$ROOT_DIR")"
 init_lib_infos "$ROOT_DIR" "$WORKSPACE_DIR/development/workspaces/jobs"
 
 APP=$(get_lib_name)
+# Remove @kalisio prefix in module name
+MODULE=${APP//"@kalisio"/}
 VERSION=$(get_lib_version)
 GIT_TAG=$(get_lib_tag)
 
-echo "About to build ${APP} v${VERSION}..."
+if [[ -z "$GIT_TAG" ]]; then
+    echo "About to build ${APP} development version..."
+else
+    echo "About to build ${APP} v${VERSION}..."
+fi
 
 load_env_files "$WORKSPACE_DIR/development/common/kalisio_dockerhub.enc.env" "$WORKSPACE_DIR/development/common/SLACK_WEBHOOK_JOBS.enc.env"
 load_value_files "$WORKSPACE_DIR/development/common/KALISIO_DOCKERHUB_PASSWORD.enc.value"
@@ -45,6 +51,7 @@ load_value_files "$WORKSPACE_DIR/development/common/KALISIO_DOCKERHUB_PASSWORD.e
 ## Build container
 ##
 
+# Remove trailing @ in module name
 IMAGE_NAME="${APP:1}"
 if [[ -z "$GIT_TAG" ]]; then
     IMAGE_TAG=latest
@@ -58,7 +65,7 @@ docker login --username "$KALISIO_DOCKERHUB_USERNAME" --password-stdin < "$KALIS
 # DOCKER_BUILDKIT is here to be able to use Dockerfile specific dockerginore (app.Dockerfile.dockerignore)
 DOCKER_BUILDKIT=1 docker build -f dockerfile \
     -t "$IMAGE_NAME:$IMAGE_TAG" \
-    "$WORKSPACE_DIR"
+    "$WORKSPACE_DIR/$MODULE"
 
 if [ "$PUBLISH" = true ]; then
     docker push "$IMAGE_NAME:$IMAGE_TAG"

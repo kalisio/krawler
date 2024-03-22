@@ -35,9 +35,9 @@ else
 
     # NOTE: cloning krawler could be avoided if we could parse app_version from tag/branch name instead
     # In this case, the kli would clone krawler
-    GIT_OPS=
+    GIT_OPS="--recurse-submodules"
     if [ -n "$WORKSPACE_TAG" ] || [ -n "$WORKSPACE_BRANCH" ]; then
-        GIT_OPS="--branch ${WORKSPACE_TAG:-$WORKSPACE_BRANCH}"
+        GIT_OPS="$GIT_OPS --branch ${WORKSPACE_TAG:-$WORKSPACE_BRANCH}"
     fi
     git clone --depth 1 $GIT_OPS "$GITHUB_URL/kalisio/krawler.git" "$WORKSPACE_DIR/krawler"
 
