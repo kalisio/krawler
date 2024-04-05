@@ -192,7 +192,7 @@ describe('krawler:tasks', () => {
       store: 'test-store',
       type: 'wfs',
       options: {
-        url: 'http://services.sandre.eaufrance.fr/geo/hyd',
+        url: 'https://services.sandre.eaufrance.fr/geo/hyd',
         version: '1.1.0',
         typename: 'StationHydro_FXX',
         featureID: 'StationHydro_FXX.A282000101'

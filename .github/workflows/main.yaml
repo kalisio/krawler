@@ -1,0 +1,94 @@
+name: Main CI
+on:
+  push:
+    branches:
+      - gha
+
+jobs:
+  run_tests:
+    name: Run tests
+    if: ${{ !contains(github.event.head_commit.message, 'skip tests') }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Init runner
+        run: bash ./scripts/init_runner.sh ${{ github.job }}
+      - name: Setup workspace
+        env:
+          GITHUB_DEVELOPMENT_PAT: ${{ secrets.GH_DEVELOPMENT_PAT }}
+        run: bash ./scripts/setup_workspace.sh
+      - name: Run tests
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash ./scripts/run_tests.sh -c -r ${{ github.job }}
+
+  additional_tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [ 16, 18, 20 ]
+        mongo: [ 4, 5, 6 ]
+        exclude:
+          - node: 16
+            mongo: 4
+    name: Additional tests (node ${{ matrix.node }}, mongo ${{ matrix.mongo }})
+    if: ${{ contains(github.event.head_commit.message, 'additional tests') }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Init runner
+        run: bash ./scripts/init_runner.sh ${{ github.job }}
+      - name: Setup workspace
+        env:
+          GITHUB_DEVELOPMENT_PAT: ${{ secrets.GH_DEVELOPMENT_PAT }}
+        run: bash ./scripts/setup_workspace.sh -n ${{ matrix.node }}
+      - name: Run tests
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash ./scripts/run_tests.sh -n ${{ matrix.node }} -m ${{ matrix.mongo }}
+
+  build_app:
+    name: Build app
+    if: ${{ !contains(github.event.head_commit.message, 'skip app') }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Init runner
+        run: bash ./scripts/init_runner.sh ${{ github.job }}
+      - name: Setup workspace
+        env:
+          GITHUB_DEVELOPMENT_PAT: ${{ secrets.GH_DEVELOPMENT_PAT }}
+        run: bash ./scripts/setup_workspace.sh
+      - name: Build app
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash ./scripts/build_app.sh -p -r ${{ github.job }}
+
+  build_docs:
+    name: Build docs
+    if: ${{ contains(github.event.head_commit.message, 'build doc') }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Init runner
+        run: bash ./scripts/init_runner.sh ${{ github.job }}
+      - name: Setup workspace
+        env:
+          GITHUB_DEVELOPMENT_PAT: ${{ secrets.GH_DEVELOPMENT_PAT }}
+        run: bash ./scripts/setup_workspace.sh
+      - name: Build docs
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+        run: bash ./scripts/build_docs.sh -p -r ${{ github.job }}

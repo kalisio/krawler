@@ -127,14 +127,15 @@ describe('krawler:jobs', () => {
       .reply(200, '<html></html>')
     jobsService.create({
       id: 'job',
-      options: { faultTolerant: true, timeout: 1 },
+      options: { faultTolerant: true, timeout: 1000 },
       tasks: [
         { id: 'job-403-fault-tolerant.html', type: 'http', store: 'test-store', options: { url: 'https://www.google.com', timeout: 3000 } }
       ]
     })
-      .catch(error => {
-        expect(error).toExist()
-        expect(error.name).to.equal('Timeout')
+      .then(tasks => {
+        expect(tasks).toExist()
+        expect(tasks.length).to.equal(1)
+        expect(tasks[0].error).toExist(1)
         done()
       })
   })
