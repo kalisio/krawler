@@ -1,8 +1,5 @@
-name: Main CI
-on:
-  push:
-    branches:
-      - gha
+name: CI
+on: [ push ]
 
 jobs:
   run_tests:
