@@ -48,4 +48,4 @@ docker pull v4tech/imagemagick
 ## Run tests
 ##
 
-run_lib_tests "$ROOT_DIR" "$CODE_COVERAGE"
+run_lib_tests "$ROOT_DIR" "$CODE_COVERAGE" "$NODE_VER" "$MONGO_VER"
