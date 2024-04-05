@@ -31,7 +31,7 @@ done
 ##
 
 WORKSPACE_DIR="$(dirname "$ROOT_DIR")"
-init_lib_infos "$ROOT_DIR" "$WORKSPACE_DIR/development/workspaces/jobs"
+init_lib_infos "$ROOT_DIR"
 
 APP=$(get_lib_name)
 # Remove @kalisio prefix in module name
