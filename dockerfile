@@ -1,7 +1,7 @@
 # 
 # Use a builder to build the Krawler
 #
-FROM node:16-bullseye AS builder
+FROM node:16-bookworm AS builder
 # Install krawler
 COPY . /opt/krawler
 WORKDIR /opt/krawler
@@ -11,7 +11,7 @@ RUN yarn
 #
 # Make a slim image and copy from the build
 #
-FROM  node:16-bullseye-slim
+FROM  node:16-bookworm-slim
 LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 
 # Install Krawler, change owner to 'node' user
