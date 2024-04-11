@@ -96,7 +96,7 @@
     "s3-blob-store": "^2.1.0",
     "sift": "^6.0.0",
     "socket.io-client": "^4.4.1",
-    "tar": "^4.4.4",
+    "tar": "^6.2.1",
     "txt-file-to-json": "^3.0.6",
     "unzipper": "^0.9.5",
     "uuid": "^3.2.1",
