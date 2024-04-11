@@ -60,7 +60,7 @@
     "@feathersjs/feathers": "^5.0.8",
     "@feathersjs/socketio": "^5.0.8",
     "@kalisio/feathers-distributed": "^2.4.0",
-    "@kalisio/geo-pixel-stream": "https://github.com/kalisio/geo-pixel-stream#next",
+    "@kalisio/geo-pixel-stream": "https://github.com/kalisio/geo-pixel-stream#gdal-async",
     "@mapbox/sphericalmercator": "^1.0.5",
     "@tmcw/togeojson": "^5.2.1",
     "@turf/turf": "6.2.0-alpha.3",

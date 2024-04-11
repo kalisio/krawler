@@ -159,7 +159,7 @@ describe('krawler:hooks:utils', () => {
   }
 
   it('insert hook before', () => {
-    let newHookDefinitions = pluginHooks.insertHookBefore('convertToGeoJson', hookDefinitions, 'transformJson', {})
+    const newHookDefinitions = pluginHooks.insertHookBefore('convertToGeoJson', hookDefinitions, 'transformJson', {})
     let index = 0
     _.forOwn(newHookDefinitions, (hookOptions, hookName) => {
       if (index === 0) expect(hookName).to.equal('readJson')
@@ -170,7 +170,7 @@ describe('krawler:hooks:utils', () => {
   })
 
   it('insert hook after', () => {
-    let newHookDefinitions = pluginHooks.insertHookAfter('readJson', hookDefinitions, 'transformJson', {})
+    const newHookDefinitions = pluginHooks.insertHookAfter('readJson', hookDefinitions, 'transformJson', {})
     let index = 0
     _.forOwn(newHookDefinitions, (hookOptions, hookName) => {
       if (index === 0) expect(hookName).to.equal('readJson')
