@@ -13,7 +13,7 @@ THIS_DIR=$(dirname "$THIS_FILE")
 ### Github Actions
 
 init_github_run_tests() {
-    install_reqs yq age sops nvm node16 node18 node20 mongo4 mongo5 mongo6 cc_test_reporter
+    install_reqs yq age sops nvm node16 mongo4 cc_test_reporter
 }
 
 init_github_build_app() {
