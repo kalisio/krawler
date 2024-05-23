@@ -39,12 +39,6 @@ MODULE=${APP//"@kalisio"/}
 VERSION=$(get_lib_version)
 GIT_TAG=$(get_lib_tag)
 
-if [[ -z "$GIT_TAG" ]]; then
-    echo "About to build ${APP} development version..."
-else
-    echo "About to build ${APP} v${VERSION}..."
-fi
-
 load_env_files "$WORKSPACE_DIR/development/common/kalisio_dockerhub.enc.env" "$WORKSPACE_DIR/development/common/SLACK_WEBHOOK_JOBS.enc.env"
 load_value_files "$WORKSPACE_DIR/development/common/KALISIO_DOCKERHUB_PASSWORD.enc.value"
 
@@ -52,16 +46,16 @@ load_value_files "$WORKSPACE_DIR/development/common/KALISIO_DOCKERHUB_PASSWORD.e
 ##
 
 # Remove trailing @ in module name
-IMAGE_NAME="${APP:1}"
+IMAGE_NAME="$KALISIO_DOCKERHUB_URL/${APP:1}"
 if [[ -z "$GIT_TAG" ]]; then
     IMAGE_TAG=latest
 else
     IMAGE_TAG=$VERSION
 fi
 
-begin_group "Building container ..."
+begin_group "Building container $IMAGE_NAME:$IMAGE_TAG ..."
 
-docker login --username "$KALISIO_DOCKERHUB_USERNAME" --password-stdin < "$KALISIO_DOCKERHUB_PASSWORD"
+docker login --username "$KALISIO_DOCKERHUB_USERNAME" --password-stdin "$KALISIO_DOCKERHUB_URL" < "$KALISIO_DOCKERHUB_PASSWORD"
 # DOCKER_BUILDKIT is here to be able to use Dockerfile specific dockerginore (app.Dockerfile.dockerignore)
 DOCKER_BUILDKIT=1 docker build -f dockerfile \
     -t "$IMAGE_NAME:$IMAGE_TAG" \
@@ -73,4 +67,4 @@ fi
 
 docker logout
 
-end_group "Building container ..."
+end_group "Building container $IMAGE_NAME:$IMAGE_TAG ..."
