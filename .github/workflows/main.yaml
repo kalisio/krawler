@@ -1,4 +1,4 @@
-name: CI
+name: ci
 on: [ push, workflow_dispatch ]
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
         run: bash ./scripts/init_runner.sh ${{ github.job }}
       - name: Setup workspace
         env:
-          GITHUB_DEVELOPMENT_PAT: ${{ secrets.GH_DEVELOPMENT_PAT }}
+          GITHUB_DEVELOPMENT_TOKEN: ${{ secrets.GH_DEVELOPMENT_TOKEN }}
         run: bash ./scripts/setup_workspace.sh
       - name: Run tests
         env:
@@ -26,11 +26,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [ 16, 18, 20 ]
-        mongo: [ 4, 5, 6 ]
-        exclude:
-          - node: 16
-            mongo: 4
+        node: [ 18, 20 ]
+        mongo: [ 5, 6, 7 ]
     name: Additional tests (node ${{ matrix.node }}, mongo ${{ matrix.mongo }})
     if: ${{ contains(github.event.head_commit.message, 'additional tests') }}
     runs-on: ubuntu-22.04
@@ -43,7 +40,7 @@ jobs:
         run: bash ./scripts/init_runner.sh ${{ github.job }}
       - name: Setup workspace
         env:
-          GITHUB_DEVELOPMENT_PAT: ${{ secrets.GH_DEVELOPMENT_PAT }}
+          GITHUB_DEVELOPMENT_TOKEN: ${{ secrets.GH_DEVELOPMENT_TOKEN }}
         run: bash ./scripts/setup_workspace.sh -n ${{ matrix.node }}
       - name: Run tests
         env:
@@ -63,7 +60,7 @@ jobs:
         run: bash ./scripts/init_runner.sh ${{ github.job }}
       - name: Setup workspace
         env:
-          GITHUB_DEVELOPMENT_PAT: ${{ secrets.GH_DEVELOPMENT_PAT }}
+          GITHUB_DEVELOPMENT_TOKEN: ${{ secrets.GH_DEVELOPMENT_TOKEN }}
         run: bash ./scripts/setup_workspace.sh
       - name: Build app
         env:
@@ -72,7 +69,7 @@ jobs:
 
   build_docs:
     name: Build docs
-    if: ${{ contains(github.event.head_commit.message, 'build doc') }}
+    if: ${{ startsWith(github.event.head_commit.message, 'docs:') || contains(github.event.head_commit.message, 'build doc') }}
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repo
@@ -83,7 +80,7 @@ jobs:
         run: bash ./scripts/init_runner.sh ${{ github.job }}
       - name: Setup workspace
         env:
-          GITHUB_DEVELOPMENT_PAT: ${{ secrets.GH_DEVELOPMENT_PAT }}
+          GITHUB_DEVELOPMENT_TOKEN: ${{ secrets.GH_DEVELOPMENT_TOKEN }}
         run: bash ./scripts/setup_workspace.sh
       - name: Build docs
         env:
