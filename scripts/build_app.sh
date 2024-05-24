@@ -5,6 +5,7 @@ set -euo pipefail
 THIS_FILE=$(readlink -f "${BASH_SOURCE[0]}")
 THIS_DIR=$(dirname "$THIS_FILE")
 ROOT_DIR=$(dirname "$THIS_DIR")
+WORKSPACE_DIR="$(dirname "$ROOT_DIR")"
 
 . "$THIS_DIR/kash/kash.sh"
 
@@ -20,6 +21,7 @@ while getopts "pr:" option; do
             ;;
         r) # report outcome to slack
             CI_STEP_NAME=$OPTARG
+            load_env_files "$WORKSPACE_DIR/development/common/SLACK_WEBHOOK_JOBS.enc.env"
             trap 'slack_ci_report "$ROOT_DIR" "$CI_STEP_NAME" "$?" "$SLACK_WEBHOOK_JOBS"' EXIT
             ;;
         *)
@@ -30,7 +32,6 @@ done
 ## Init workspace
 ##
 
-WORKSPACE_DIR="$(dirname "$ROOT_DIR")"
 init_lib_infos "$ROOT_DIR"
 
 APP=$(get_lib_name)
@@ -39,7 +40,7 @@ MODULE=${APP//"@kalisio"/}
 VERSION=$(get_lib_version)
 GIT_TAG=$(get_lib_tag)
 
-load_env_files "$WORKSPACE_DIR/development/common/kalisio_dockerhub.enc.env" "$WORKSPACE_DIR/development/common/SLACK_WEBHOOK_JOBS.enc.env"
+load_env_files "$WORKSPACE_DIR/development/common/kalisio_dockerhub.enc.env"
 load_value_files "$WORKSPACE_DIR/development/common/KALISIO_DOCKERHUB_PASSWORD.enc.value"
 
 ## Build container
