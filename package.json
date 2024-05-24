@@ -45,6 +45,10 @@
       "mocha"
     ]
   },
+  "c8": {
+    "all": true,
+    "reporter": [ "lcov" ]
+  },
   "pkg": {
     "scripts": [
       "lib/**/*.js"
