@@ -65,6 +65,6 @@ if [ "$PUBLISH" = true ]; then
     docker push "$IMAGE_NAME:$IMAGE_TAG"
 fi
 
-docker logout
+docker logout "$KALISIO_DOCKERHUB_URL"
 
 end_group "Building container $IMAGE_NAME:$IMAGE_TAG ..."
