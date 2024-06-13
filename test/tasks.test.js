@@ -192,10 +192,10 @@ describe('krawler:tasks', () => {
       store: 'test-store',
       type: 'wfs',
       options: {
-        url: 'https://services.sandre.eaufrance.fr/geo/hyd',
+        url: 'https://data.geopf.fr/wfs/ows',
         version: '1.1.0',
-        typename: 'StationHydro_FXX',
-        featureID: 'StationHydro_FXX.A282000101'
+        typename: 'PROTECTEDAREAS.RIPN:ripn',
+        featureID: 'ripn.2'
       }
     })
     const exist = await storageExists('task.xml')
