@@ -1,7 +1,9 @@
+ARG DEBIAN_VERSION=bookworm
+ARG NODE_VERSION=20
 # 
 # Use a builder to build the Krawler
 #
-FROM node:16-bookworm AS builder
+FROM node:${NODE_VERSION}-${DEBIAN_VERSION} AS builder
 # Install krawler
 COPY . /opt/krawler
 WORKDIR /opt/krawler
@@ -11,7 +13,7 @@ RUN yarn
 #
 # Make a slim image and copy from the build
 #
-FROM  node:16-bookworm-slim
+FROM  node:${NODE_VERSION}-${DEBIAN_VERSION}-slim
 LABEL maintainer="Kalisio <contact@kalisio.xyz>"
 
 # Install Krawler, change owner to 'node' user

@@ -12,10 +12,18 @@ WORKSPACE_DIR="$(dirname "$ROOT_DIR")"
 ## Parse options
 ##
 
+NODE_VER=20
+DEBIAN_VER=bookworm
 PUBLISH=false
 CI_STEP_NAME="Build app"
-while getopts "pr:" option; do
+while getopts "d:n:pr:" option; do
     case $option in
+        d) # defines debian version
+            DEBIAN_VER=$OPTARG
+            ;;
+        n) # defines node version
+            NODE_VER=$OPTARG
+             ;;
         p) # publish app
             PUBLISH=true
             ;;
@@ -49,9 +57,9 @@ load_value_files "$WORKSPACE_DIR/development/common/KALISIO_DOCKERHUB_PASSWORD.e
 # Remove trailing @ in module name
 IMAGE_NAME="$KALISIO_DOCKERHUB_URL/${APP:1}"
 if [[ -z "$GIT_TAG" ]]; then
-    IMAGE_TAG=latest
+    IMAGE_TAG="latest-node$NODE_VER-$DEBIAN_VER"
 else
-    IMAGE_TAG=$VERSION
+    IMAGE_TAG="$VERSION-node$NODE_VER-$DEBIAN_VER"
 fi
 
 begin_group "Building container $IMAGE_NAME:$IMAGE_TAG ..."

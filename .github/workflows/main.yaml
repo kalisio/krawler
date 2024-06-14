@@ -48,6 +48,11 @@ jobs:
         run: bash ./scripts/run_tests.sh -n ${{ matrix.node }} -m ${{ matrix.mongo }}
 
   build_app:
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [ 20 ]
+        debian: [ 'bookworm' ]
     name: Build app
     if: ${{ !contains(github.event.head_commit.message, 'skip app') }}
     runs-on: ubuntu-22.04
@@ -65,7 +70,7 @@ jobs:
       - name: Build app
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-        run: bash ./scripts/build_app.sh -p -r ${{ github.job }}
+        run: bash ./scripts/build_app.sh -n ${{ matrix.node }} -d ${{ matrix.debian }} -p -r ${{ github.job }}
 
   build_docs:
     name: Build docs
