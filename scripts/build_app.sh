@@ -12,8 +12,10 @@ WORKSPACE_DIR="$(dirname "$ROOT_DIR")"
 ## Parse options
 ##
 
-NODE_VER=20
-DEBIAN_VER=bookworm
+DEFAULT_NODE_VER=20
+DEFAULT_DEBIAN_VER=bookworm
+NODE_VER=$DEFAULT_NODE_VER
+DEBIAN_VER=$DEFAULT_DEBIAN_VER
 PUBLISH=false
 CI_STEP_NAME="Build app"
 while getopts "d:n:pr:" option; do
@@ -57,10 +59,11 @@ load_value_files "$WORKSPACE_DIR/development/common/KALISIO_DOCKERHUB_PASSWORD.e
 # Remove trailing @ in module name
 IMAGE_NAME="$KALISIO_DOCKERHUB_URL/${APP:1}"
 if [[ -z "$GIT_TAG" ]]; then
-    IMAGE_TAG="latest-node$NODE_VER-$DEBIAN_VER"
+    KRAWLER_TAG="latest"
 else
-    IMAGE_TAG="$VERSION-node$NODE_VER-$DEBIAN_VER"
+    KRAWLER_TAG="$VERSION"
 fi
+IMAGE_TAG="$KRAWLER_TAG-node$NODE_VER-$DEBIAN_VER"
 
 begin_group "Building container $IMAGE_NAME:$IMAGE_TAG ..."
 
@@ -74,6 +77,11 @@ DOCKER_BUILDKIT=1 docker build -f dockerfile \
 
 if [ "$PUBLISH" = true ]; then
     docker push "$IMAGE_NAME:$IMAGE_TAG"
+    if [ "$NODE_VER" = "$DEFAULT_NODE_VER" ] && [ "$DEBIAN_VER" = "$DEFAULT_DEBIAN_VER" ]; then
+        # Create alias as well for default versions
+        docker tag "$IMAGE_NAME:$IMAGE_TAG" "$IMAGE_NAME:$KRAWLER_TAG"
+        docker push "$IMAGE_NAME:$KRAWLER_TAG"
+    fi
 fi
 
 docker logout "$KALISIO_DOCKERHUB_URL"
