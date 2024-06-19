@@ -318,6 +318,10 @@ The values of the element are assumed to be the one measured at the grid vertice
 
 [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.imap.js)
 
+::: tip
+**IMAP** hooks rely on [ImapFlow](https://imapflow.com/index.html/).
+:::
+
 ### connectIMAP
 
 Connect to an **IMAP** server. The [connection options](http://mongodb.github.io/node-mongodb-native/3.0/api/MongoClient.html#.connect) of the client are defined in the hook options plus:
