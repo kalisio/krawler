@@ -314,6 +314,81 @@ You can use this hook to compute element value at any location from input gridde
 The values of the element are assumed to be the one measured at the grid vertices
 :::
 
+## IMAP
+
+[source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.imap.js)
+
+### connectIMAP
+
+Connect to an **IMAP** server. The [connection options](http://mongodb.github.io/node-mongodb-native/3.0/api/MongoClient.html#.connect) of the client are defined in the hook options plus:
+
+* **clientPath**: property path where to store the client object created when getting connected, defaults to `client`.
+
+### disconnectIMAP
+
+Disconnect from an **IMAP** server. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`.
+
+### listIMAPMailboxes
+
+List the available mailboxes from an **IMAP** server. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`.
+* any option supported by [ImapFlow list function](https://imapflow.com/module-imapflow-ImapFlow.html#list)
+
+### fetchIMAPMessages
+
+Fetch messages from an **IMAP** server. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`.
+* **mailbox**: the mailbox where to fetch the messages.
+* **range**: the [ImapFlow **range** parameter](https://imapflow.com/module-imapflow-ImapFlow.html#fetch)
+* **query**: the [ImapFlow **query** parameter](https://imapflow.com/module-imapflow-ImapFlow.html#fetch)
+* any option supported by [ImapFlow fetch function](https://imapflow.com/module-imapflow-ImapFlow.html#fetch)
+
+The following example fetches unseen messages:
+```js
+fetchIMAPMessages: {
+  mailbox: 'INBOX',
+  range: { seen: false },
+  query: { uid: true, internalDate: true },
+  clientPath: 'taskTemplate.imapClient',     
+  dataPath: 'data.messages' 
+}
+```
+### downloadIMAPAttachments
+
+Download attachments from messages. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`.
+* **mailbox**: the mailbox where to downlaod the atachments.
+* **range**: the [ImapFlow **range** parameter](https://imapflow.com/module-imapflow-ImapFlow.html#download)
+* **type**: the attachment content type.
+* any option supported by [ImapFlow download function](https://imapflow.com/module-imapflow-ImapFlow.html#download)
+
+### flagIMAPMessages
+
+Add flags to messages. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`.
+* **mailbox**: the mailbox where to downlaod the atachments.
+* **range**: the [ImapFlow **range** parameter](https://imapflow.com/module-imapflow-ImapFlow.html#messageFlagsAdd)
+* **flags**: the array of flags to be added
+* any option supported by [ImapFlow messageFlagsAdd function](https://imapflow.com/module-imapflow-ImapFlow.html#messageFlagsAdd)
+
+### unflagIMAPMessages
+
+Remove flags from messages. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`.
+* **mailbox**: the mailbox where to downlaod the atachments.
+* **range**: the [ImapFlow **range** parameter](https://imapflow.com/module-imapflow-ImapFlow.html#messageFlagsRemove)
+* **flags**: the array of flags to be removed
+* any option supported by [ImapFlow messageFlagsRemove function](https://imapflow.com/module-imapflow-ImapFlow.html#messageFlagsRemove)
+
+### deleteIMAPMessages
+
+Delete messages from an **IMAP** server. Hook options are the following:
+* **clientPath**: property path where to retrieve the client object, defaults to `client`.
+* **mailbox**: the mailbox where to downlaod the atachments.
+* **range**: the [ImapFlow **range** parameter](https://imapflow.com/module-imapflow-ImapFlow.html#messageDelete)
+* any option supported by [ImapFlow messageDelete function](https://imapflow.com/module-imapflow-ImapFlow.html#messageDelete)
+
 ## JSON
 
 [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.json.js)
