@@ -353,7 +353,7 @@ The following example fetches unseen messages:
 fetchIMAPMessages: {
   mailbox: 'INBOX',
   range: { seen: false },
-  query: { uid: true, internalDate: true },
+  query: { uid: true },
   clientPath: 'taskTemplate.imapClient',     
   dataPath: 'data.messages' 
 }
