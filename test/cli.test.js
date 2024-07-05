@@ -39,7 +39,7 @@ describe('krawler:cli', () => {
 
   it('runs successfully once using CLI', async () => {
     try {
-      const tasks = await cli(jobfile, { port: 3030, messageTemplate: 'Job <%= jobId %>: <%= error.message %>', debug: true })
+      const tasks = await cli(jobfile, { port: 3030, messageTemplate: process.env.MESSAGE_TEMPLATE, debug: true, slackWebhook: process.env.SLACK_WEBHOOK_URL })
       // All other features should have been tested independently
       // so we just test here the CLI run correctly
       expect(tasks.length).to.equal(1)
@@ -55,7 +55,7 @@ describe('krawler:cli', () => {
 
   it('runs unsuccessfully once using CLI', async () => {
     try {
-      await cli(jobfile, { port: 3030, maxDuration: 0, messageTemplate: 'Job <%= jobId %>: <%= error.message %>', debug: true })
+      await cli(jobfile, { port: 3030, maxDuration: 0, messageTemplate: process.env.MESSAGE_TEMPLATE, debug: true, slackWebhook: process.env.SLACK_WEBHOOK_URL })
       assert.fail('Healthcheck should fail')
     } catch (error) {
       // Check intermediate products have been erased and final product are here
@@ -70,7 +70,7 @@ describe('krawler:cli', () => {
     try {
       // Clean previous test output
       fs.removeSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif.csv'))
-      appServer = await cli(jobfile, { mode: 'setup', api: true, apiPrefix: '/api', port: 3030 })
+      appServer = await cli(jobfile, { mode: 'setup', api: true, apiPrefix: '/api', port: 3030, messageTemplate: process.env.MESSAGE_TEMPLATE, debug: true, slackWebhook: process.env.SLACK_WEBHOOK_URL })
       // Submit a job to be run
       const response = await utils.promisify(request.post)({
         url: 'http://localhost:3030/api/jobs',
@@ -108,7 +108,11 @@ describe('krawler:cli', () => {
     cli(jobfile, {
       mode: 'setup',
       sync: 'mongodb://127.0.0.1:27017/krawler-test',
-      cron: '*/10 * * * * *'
+      port: 3030,
+      cron: '*/10 * * * * *',
+      messageTemplate: process.env.MESSAGE_TEMPLATE,
+      debug: true,
+      slackWebhook: process.env.SLACK_WEBHOOK_URL
     })
       .then(server => {
         appServer = server
@@ -124,7 +128,7 @@ describe('krawler:cli', () => {
               runCount++
               // First run is fine, second one raises an error
               if (runCount === 1) return hook
-              else throw new Error('Error')
+              else throw new Error('Test Error')
             }
           }
         })
@@ -134,7 +138,7 @@ describe('krawler:cli', () => {
           if ((event.name === 'task-done') || (event.name === 'job-done')) eventCount++
         })
         // Only run as we already setup the app
-        cli(jobfile, { mode: 'runJob', cron: '*/10 * * * * *', run: true })
+        cli(jobfile, { mode: 'runJob', port: 3030, cron: '*/10 * * * * *', run: true, messageTemplate: process.env.MESSAGE_TEMPLATE, debug: true, slackWebhook: process.env.SLACK_WEBHOOK_URL })
           .then(async () => {
             // As it runs every 10 seconds wait until it should have ran at least once again
             const seconds = Math.floor(moment().seconds())
@@ -161,7 +165,7 @@ describe('krawler:cli', () => {
                 expect(healthcheck.successRate).beUndefined()
                 expect(healthcheck.error).toExist()
                 expect(healthcheck.error.message).toExist()
-                expect(healthcheck.error.message).to.equal('Error')
+                expect(healthcheck.error.message).to.equal('Test Error')
                 expect(eventCount).to.equal(4) // 4 events
                 collection = client.db.collection('krawler-events')
                 const taskEvents = await collection.find({ event: 'task-done' }).toArray()
