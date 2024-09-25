@@ -20,5 +20,7 @@ try {
   await healthcheck(program)
   process.exit(0)
 } catch (error) {
+  // Healthcheck is already writing to stderr
+  // console.error(error)
   process.exit(1)
 }

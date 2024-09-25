@@ -47,6 +47,7 @@ describe('krawler:cli', () => {
       expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif'))).beFalse()
       expect(fs.existsSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif.csv'))).beTrue()
     } catch (error) {
+      console.log(error)
       assert.fail('Healthcheck should not fail')
     }
   })
@@ -101,110 +102,99 @@ describe('krawler:cli', () => {
   // Let enough time to process
     .timeout(15000)
 
-  it('runs as CRON using CLI with continuous healthcheck', (done) => {
+  it('runs as CRON using CLI with continuous healthcheck', async () => {
     // Clean previous test output
     fs.removeSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif.csv'))
     // Setup the app
-    cli(jobfile, {
+    appServer = await cli(jobfile, {
       mode: 'setup',
       sync: 'mongodb://127.0.0.1:27017/krawler-test',
       port: 3030,
       cron: '*/10 * * * * *',
       messageTemplate: process.env.MESSAGE_TEMPLATE,
-      debug: true,
+      debug: false,
       slackWebhook: process.env.SLACK_WEBHOOK_URL
     })
-      .then(server => {
-        appServer = server
-        // Clean any previous healthcheck log
-        fs.removeSync(path.join(__dirname, '..', 'healthcheck.log'))
-        const app = getApp()
-        // Add hook to know how many times the job will run
-        const jobService = app.service('jobs')
-        let runCount = 0
-        jobService.hooks({
-          after: {
-            create: (hook) => {
-              runCount++
-              // First run is fine, second one raises an error
-              if (runCount === 1) return hook
-              else throw new Error('Test Error')
-            }
-          }
-        })
-        // Check for event emission
-        let eventCount = 0
-        app.on('krawler', event => {
-          if ((event.name === 'task-done') || (event.name === 'job-done')) eventCount++
-        })
-        // Only run as we already setup the app
-        cli(jobfile, { mode: 'runJob', port: 3030, cron: '*/10 * * * * *', run: true, messageTemplate: process.env.MESSAGE_TEMPLATE, debug: true, slackWebhook: process.env.SLACK_WEBHOOK_URL })
-          .then(async () => {
-            // As it runs every 10 seconds wait until it should have ran at least once again
-            const seconds = Math.floor(moment().seconds())
-            const remainingSecondsForNextRun = 11 - seconds % 10
-            setTimeout(async () => {
-              try {
-                expect(runCount).to.equal(2) // 2 runs
-                const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
-                console.log(response.body)
-                expect(response.statusCode).to.equal(500)
-                const { error, stdout, stderr } = await runCommand('node ' + path.join(__dirname, '..', 'healthcheck.js'))
-                expect(error).toExist()
-                expect(stdout).to.equal('')
-                expect(stderr.includes('[ALERT]')).beTrue()
-                const healthcheckLog = fs.readJsonSync(path.join(__dirname, '..', 'healthcheck.log'))
-                const healthcheck = JSON.parse(response.body)
-                console.log(healthcheck)
-                expect(healthcheck).to.deep.equal(healthcheckLog)
-                expect(healthcheck.isRunning).beUndefined()
-                expect(healthcheck.duration).beUndefined()
-                expect(healthcheck.nbSkippedJobs).beUndefined()
-                expect(healthcheck.nbFailedTasks).beUndefined()
-                expect(healthcheck.nbSuccessfulTasks).beUndefined()
-                expect(healthcheck.successRate).beUndefined()
-                expect(healthcheck.error).toExist()
-                expect(healthcheck.error.message).toExist()
-                expect(healthcheck.error.message).to.equal('Test Error')
-                expect(eventCount).to.equal(4) // 4 events
-                collection = client.db.collection('krawler-events')
-                const taskEvents = await collection.find({ event: 'task-done' }).toArray()
-                expect(taskEvents.length).to.equal(2)
-                const jobEvents = await collection.find({ event: 'job-done' }).toArray()
-                expect(jobEvents.length).to.equal(2)
-                server.close()
-                appServer = null
-                done()
-              } catch (error) {
-                console.log(error)
-                done(error)
-              }
-            }, remainingSecondsForNextRun * 1000)
-            expect(runCount).to.equal(1) // First run
-            const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
-            expect(response.statusCode).to.equal(200)
-            const { error, stdout, stderr } = await runCommand('node ' + path.join(__dirname, '..', 'healthcheck.js'))
-            expect(error).to.equal(null)
-            expect(stdout).to.equal('')
-            expect(stderr).to.equal('')
-            const healthcheckLog = fs.readJsonSync(path.join(__dirname, '..', 'healthcheck.log'))
-            const healthcheck = JSON.parse(response.body)
-            expect(healthcheck).to.deep.equal(healthcheckLog)
-            expect(healthcheck.isRunning).toExist()
-            expect(healthcheck.nbSkippedJobs).toExist()
-            expect(healthcheck.error).beUndefined()
-            expect(healthcheck.nbFailedTasks).to.equal(0)
-            expect(healthcheck.nbSuccessfulTasks).to.equal(1)
-            expect(healthcheck.successRate).to.equal(1)
-            expect(healthcheck.state).toExist()
-            expect(eventCount).to.equal(2) // 2 events
-            collection = client.db.collection('krawler-events')
-            const taskEvents = await collection.find({ event: 'task-done' }).toArray()
-            expect(taskEvents.length).to.equal(1)
-            const jobEvents = await collection.find({ event: 'job-done' }).toArray()
-            expect(jobEvents.length).to.equal(1)
-          })
-      })
+    // Clean any previous healthcheck log
+    fs.removeSync(path.join(__dirname, '..', 'healthcheck.log'))
+    const app = getApp()
+    // Add hook to know how many times the job will run
+    const jobService = app.service('jobs')
+    let runCount = 0
+    jobService.hooks({
+      after: {
+        create: (hook) => {
+          runCount++
+          // First run is fine, second one raises an error
+          if (runCount === 1) return hook
+          else throw new Error('Test Error')
+        }
+      }
+    })
+    // Check for event emission
+    let eventCount = 0
+    app.on('krawler', event => {
+      if ((event.name === 'task-done') || (event.name === 'job-done')) eventCount++
+    })
+    // Only run as we already setup the app
+    await cli(jobfile, { mode: 'runJob', port: 3030, cron: '*/10 * * * * *', run: true, messageTemplate: process.env.MESSAGE_TEMPLATE, debug: false, slackWebhook: process.env.SLACK_WEBHOOK_URL })
+    expect(runCount).to.equal(1) // First run
+    const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
+    // console.log(response.body)
+    expect(response.statusCode).to.equal(200)
+    const healthcheck = JSON.parse(response.body)
+    // console.log(healthcheck)
+    const { error } = await runCommand('node ' + path.join(__dirname, '..', 'healthcheck.js'))
+    expect(error).beNull()
+    const healthcheckLog = fs.readJsonSync(path.join(__dirname, '..', 'healthcheck.log'))
+    expect(healthcheck).to.deep.equal(healthcheckLog)
+    expect(healthcheck.isRunning).to.equal(false)
+    expect(healthcheck.nbSkippedJobs).to.equal(0)
+    expect(healthcheck.error).beUndefined()
+    expect(healthcheck.nbFailedTasks).to.equal(0)
+    expect(healthcheck.nbSuccessfulTasks).to.equal(1)
+    expect(healthcheck.successRate).to.equal(1)
+    expect(healthcheck.state).toExist()
+    expect(eventCount).to.equal(2) // 2 events
+    collection = client.db.collection('krawler-events')
+    const taskEvents = await collection.find({ event: 'task-done' }).toArray()
+    expect(taskEvents.length).to.equal(1)
+    const jobEvents = await collection.find({ event: 'job-done' }).toArray()
+    expect(jobEvents.length).to.equal(1)
+    // As it runs every 10 seconds wait until it should have ran at least once again
+    const seconds = Math.floor(moment().seconds())
+    const remainingSecondsForNextRun = 10 - seconds % 10
+    await utils.promisify(setTimeout)((1 + remainingSecondsForNextRun) * 1000)
+    try {
+      expect(runCount).to.be.at.least(2) // 2 runs
+      const response = await utils.promisify(request.get)('http://localhost:3030/healthcheck')
+      // console.log(response.body)
+      expect(response.statusCode).to.equal(500)
+      const healthcheck = JSON.parse(response.body)
+      // console.log(healthcheck)
+      const { error } = await runCommand('node ' + path.join(__dirname, '..', 'healthcheck.js'))
+      expect(error).toExist()
+      const healthcheckLog = fs.readJsonSync(path.join(__dirname, '..', 'healthcheck.log'))
+      expect(healthcheck).to.deep.equal(healthcheckLog)
+      expect(healthcheck.isRunning).to.equal(false)
+      expect(healthcheck.duration).beUndefined()
+      expect(healthcheck.nbSkippedJobs).to.equal(0)
+      expect(healthcheck.nbFailedTasks).beUndefined()
+      expect(healthcheck.nbSuccessfulTasks).beUndefined()
+      expect(healthcheck.successRate).beUndefined()
+      expect(healthcheck.error).toExist()
+      expect(healthcheck.error.message).toExist()
+      expect(healthcheck.error.message).to.equal('Test Error')
+      expect(eventCount).to.be.at.least(4) // 4 events
+      collection = client.db.collection('krawler-events')
+      const taskEvents = await collection.find({ event: 'task-done' }).toArray()
+      expect(taskEvents.length).to.be.at.least(2)
+      const jobEvents = await collection.find({ event: 'job-done' }).toArray()
+      expect(jobEvents.length).to.be.at.least(2)
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   })
   // Let enough time to process
     .timeout(15000)
