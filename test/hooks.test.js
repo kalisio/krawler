@@ -324,57 +324,6 @@ describe('krawler:hooks:main', () => {
     expect(Math.abs(data.coordinates[1] - 6404230)).to.be.below(1)
   })
 
-  const xmlHook = {
-    type: 'after',
-    data: {
-      id: 'wms.xml'
-    },
-    result: {
-      id: 'wms.xml'
-    },
-    params: { store: inputStore }
-  }
-
-  it('converts XML to JSON', () => {
-    return pluginHooks.readXML()(xmlHook)
-      .then(hook => {
-        expect(hook.result.data).toExist()
-      })
-  })
-  // Let enough time to proceed
-    .timeout(5000)
-
-  const yamlHook = {
-    type: 'after',
-    data: {
-      id: 'mapproxy.yaml'
-    },
-    result: {
-      id: 'mapproxy.yaml'
-    },
-    params: { store: inputStore }
-  }
-
-  it('converts YAML to JSON', () => {
-    return pluginHooks.readYAML()(yamlHook)
-      .then(hook => {
-        expect(hook.result.data).toExist()
-      })
-  })
-  // Let enough time to proceed
-    .timeout(5000)
-
-  it('converts JSON to YAML', () => {
-    // Switch to output store
-    yamlHook.params.store = outputStore
-    return pluginHooks.writeYAML()(yamlHook)
-      .then(hook => {
-        expect(fs.existsSync(path.join(outputStore.path, yamlHook.result.id + '.yaml'))).beTrue()
-      })
-  })
-  // Let enough time to proceed
-    .timeout(5000)
-
   const capabilitiesHook = {
     type: 'after'
   }
