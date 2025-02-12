@@ -48,8 +48,4 @@ describe('krawler:hooks:yaml', () => {
   })
   // Let enough time to proceed
     .timeout(5000)
-
-  const capabilitiesHook = {
-    type: 'after'
-  }
 })
