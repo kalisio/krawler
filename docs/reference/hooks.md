@@ -1065,7 +1065,7 @@ Read a YAML file from a store and convert it to in-memory JSON values, hook opti
 ### writeYAML(options)
 
 Generate a YAML file from in-memory JSON values, hook options are the following:
-* **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result`
+* **dataPath**: property path where to read the input JSON object on the hook object, defaults to `result.data`
 * **storePath**: see description in [common options](./hooks.md#common-options)
 * **store**: see description in [common options](./hooks.md#common-options)
 * **key**: see description in [common options](./hooks.md#common-options)
