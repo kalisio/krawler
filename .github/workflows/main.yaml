@@ -1,10 +1,36 @@
 name: ci
-on: [ push, workflow_dispatch ]
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      run_tests:
+        description: "Run tests"
+        default: false
+        required: false
+        type: boolean
+      additional_tests:
+        description: "Run additional tests"
+        default: false
+        required: false
+        type: boolean
+      build_app:
+        description: "Build app"
+        default: false
+        required: false
+        type: boolean
+      build_docs:
+        description: "Build docs"
+        default: false
+        required: false
+        type: boolean
 
 jobs:
   run_tests:
     name: Run tests
-    if: ${{ !contains(github.event.head_commit.message, 'skip tests') }}
+    if: ${{
+      github.event_name == 'workflow_dispatch' && inputs.run_tests ||
+      github.event_name == 'push' && !contains(github.event.head_commit.message, 'skip tests')
+      }}
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repo
@@ -26,10 +52,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [ 16, 18, 20 ]
-        mongo: [ 5, 6, 7 ]
+        node: [ 20 ]
+        mongo: [ 8 ]
     name: Additional tests
-    if: ${{ contains(github.event.head_commit.message, 'additional tests') }}
+    if: ${{
+      github.event_name == 'workflow_dispatch' && inputs.run_tests ||
+      github.event_name == 'push' && contains(github.event.head_commit.message, 'additional tests')
+      }}
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repo
@@ -54,7 +83,10 @@ jobs:
         node: [ 20 ]
         debian: [ 'bookworm' ]
     name: Build app
-    if: ${{ !contains(github.event.head_commit.message, 'skip app') }}
+    if: ${{
+      github.event_name == 'workflow_dispatch' && inputs.build_app ||
+      github.event_name == 'push' && !contains(github.event.head_commit.message, 'skip app')
+      }}
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repo
@@ -74,7 +106,10 @@ jobs:
 
   build_docs:
     name: Build docs
-    if: ${{ startsWith(github.event.head_commit.message, 'docs:') || contains(github.event.head_commit.message, 'build doc') }}
+    if: ${{
+      github.event_name == 'workflow_dispatch' && inputs.build_docs ||
+      github.event_name == 'push' && contains(github.event.head_commit.message, 'doc')
+      }}
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repo
