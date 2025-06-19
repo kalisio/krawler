@@ -661,6 +661,12 @@ Creates an [aggregation pipeline](https://docs.mongodb.com/manual/aggregation/#a
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **transform**: perform transformation using these options before write, see description in [transformJson](./hooks.md#transformjson-options)
 * **pipeline**: the aggregation pipeline to be executed
+* **pipelineTemplateOptions**: options passed to the `templateQueryObject` call made on the `pipeline` arguments.
+  * **skipConvertComparisonOperators** allows to skip comparison operators conversions
+  * **skipConvertNumbers** allows to skip string to number conversions
+  * **skipConvertDates** allows to skip string to date conversions
+  * **skipAllConvert** allows to skip all conversions
+  * other options are passed as is
 * any option supported by `options` argument of the [aggregate](https://docs.mongodb.com/manual/reference/method/db.collection.aggregate/) function.
   
 ::: tip
