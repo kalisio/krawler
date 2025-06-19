@@ -12,7 +12,7 @@ THIS_DIR=$(dirname "$THIS_FILE")
 ### Github Actions
 
 init_github_run_tests() {
-    install_reqs yq age sops nvm node20 mongo4 cc_test_reporter
+    install_reqs yq age sops nvm node20 mongo7 cc_test_reporter
 }
 
 init_github_build_app() {
@@ -24,7 +24,7 @@ init_github_build_docs() {
 }
 
 init_github_additional_tests() {
-    install_reqs age sops nvm node16 node18 node20 mongo4 mongo5 mongo6
+    install_reqs age sops nvm node20 mongo8
 }
 
 begin_group "Init $CI_ID for $JOB_ID"
