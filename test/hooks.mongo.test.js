@@ -120,6 +120,32 @@ describe('krawler:hooks:mongo', () => {
   // Let enough time to proceed
     .timeout(5000)
 
+  it('create MongoDB aggregation and skip some pipeline conversions', async () => {
+    // 'inb' property is a number written in a string
+    // request without skipping conversion => will not match
+    await pluginHooks.createMongoAggregation({
+      collection: 'geojson',
+      pipeline: { $match: { 'properties.inb': '9999'  } },
+      dataPath: 'result.data'
+    })(mongoHook)
+    let results = mongoHook.result.data
+    expect(results.length).to.equal(0)
+
+    // request with skipping conversion => will match
+    await pluginHooks.createMongoAggregation({
+      collection: 'geojson',
+      pipeline: { $match: { 'properties.inb': '9999' } },
+      // we don't want conversions
+      pipelineTemplateOptions: { skipAllConvert: true },
+      dataPath: 'result.data'
+    })(mongoHook)
+    results = mongoHook.result.data
+    expect(results.length).to.equal(1)
+  })
+  // Let enough time to proceed
+    .timeout(5000)
+
+
   it('updates MongoDB collection', async () => {
     mongoHook.type = 'after'
     mongoHook.result.data = {

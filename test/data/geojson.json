@@ -13,7 +13,8 @@
       },
       "properties": {
         "prop0": "value0",
-        "prop2": "value2"
+        "prop2": "value2",
+        "inb": "9999"
       }
     },
     {
@@ -42,7 +43,8 @@
       },
       "properties": {
         "prop0": "value0",
-        "prop1": 0.0
+        "prop1": 0.0,
+        "inb": ""
       }
     },
     {
@@ -79,7 +81,8 @@
         "prop0": "value0",
         "prop1": {
           "this": "that"
-        }
+        },
+        "inb": "200"
       }
     }
   ]
