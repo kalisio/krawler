@@ -73,7 +73,7 @@ describe('krawler:tasks', () => {
   })
   // Let enough time to download
     .timeout(10000)
-/*
+
   it('creates a HTTP task', async () => {
     nock('https://www.google.com')
       .get('/')
@@ -284,7 +284,7 @@ describe('krawler:tasks', () => {
   })
   // Let enough time to download
     .timeout(5000)
-*/
+
   // Cleanup
   after(async () => {
     if (mongoClient) {
