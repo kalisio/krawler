@@ -37,6 +37,7 @@ By default a task implementation return a [stream](https://nodejs.org/api/stream
 * [`wfs`](https://en.wikipedia.org/wiki/Web_Feature_Service) for HTTP requests targeting WFS services
 * [`overpass`](https://wiki.openstreetmap.org/wiki/Overpass_API) for HTTP requests to query OpenStreetMap data
 * [`store`](https://github.com/maxogden/abstract-blob-store) to read input data from a store
+* [`mongo`](https://www.mongodb.com/) to read input data from a MongoDB database, same options as the [readMongoCollection](./hooks.md#readmongocollectionoptions) hook
 * [`noop`](https://en.wikipedia.org/wiki/NOP) when you don't need to read anything, the purpose is just to launch the hooks, returns an `undefined` stream
 
 If the task type is written `type-stream` then the stream is not piped directly to the store but returned in a `stream` property for further usage by hooks.

@@ -1,3 +1,5 @@
+import _ from 'lodash'
+import mongo from 'mongodb'
 import chai from 'chai'
 import chailint from 'chai-lint'
 import feathers from '@feathersjs/feathers'
@@ -13,14 +15,17 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const { util, expect } = chai
+const { MongoClient } = mongo
 
 describe('krawler:tasks', () => {
-  let app, server, storage, storageExists, fileStats, storesService, tasksService
+  let app, server, mongoClient, storage, storageExists, fileStats, storesService, tasksService
 
   before(async () => {
     chailint(chai, util)
     app = express(feathers())
     app.configure(plugin())
+    mongoClient = await MongoClient.connect('mongodb://127.0.0.1:27017/krawler-test', { useNewUrlParser: true })
+    mongoClient.db = mongoClient.db('krawler-test')
     server = await app.listen(3030)
   })
 
@@ -37,6 +42,34 @@ describe('krawler:tasks', () => {
     tasksService = app.service('tasks')
     expect(tasksService).toExist()
   })
+
+  it('creates a mongo task', async () => {
+    const json = []
+    for (let i = 0; i < 10; i++) {
+      json.push({ name: i.toString() })
+    }
+    await mongoClient.db.collection('users').insertMany(json)
+    await tasksService.create({
+      id: 'task.mongo',
+      store: 'test-store',
+      type: 'mongo',
+      options: {
+        client: mongoClient,
+        collection: 'users',
+        query: {}
+      }
+    })
+    const exist = await storageExists('task.mongo')
+    expect(exist).beTrue()
+    const jsonFile = fs.readJsonSync(path.join(storage.path, 'task.mongo'))
+    jsonFile.forEach((object, index) => {
+      expect(object._id).toExist()
+      // Mongo adds IDs
+      expect(_.omit(object, ['_id'])).deep.equal(_.omit(json[index], ['_id']))
+    })
+  })
+  // Let enough time to download
+    .timeout(10000)
 
   it('creates a HTTP task', async () => {
     nock('https://www.google.com')
@@ -250,7 +283,11 @@ describe('krawler:tasks', () => {
     .timeout(5000)
 
   // Cleanup
-  after(() => {
+  after(async () => {
+    if (mongoClient) {
+      await mongoClient.db.dropDatabase()
+      await mongoClient.close()
+    }
     if (server) server.close()
   })
 })
