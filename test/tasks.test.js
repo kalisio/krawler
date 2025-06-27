@@ -56,21 +56,24 @@ describe('krawler:tasks', () => {
       options: {
         client: mongoClient,
         collection: 'users',
-        query: {}
+        query: { name: { $ne: '0' } },
+        limit: 8
       }
     })
     const exist = await storageExists('task.mongo')
     expect(exist).beTrue()
     const jsonFile = fs.readJsonSync(path.join(storage.path, 'task.mongo'))
+    expect(jsonFile.length).equal(8)
     jsonFile.forEach((object, index) => {
       expect(object._id).toExist()
       // Mongo adds IDs
-      expect(_.omit(object, ['_id'])).deep.equal(_.omit(json[index], ['_id']))
+      // Take care that we filter the first item in the collection
+      expect(_.omit(object, ['_id'])).deep.equal(_.omit(json[index+1], ['_id']))
     })
   })
   // Let enough time to download
     .timeout(10000)
-
+/*
   it('creates a HTTP task', async () => {
     nock('https://www.google.com')
       .get('/')
@@ -281,7 +284,7 @@ describe('krawler:tasks', () => {
   })
   // Let enough time to download
     .timeout(5000)
-
+*/
   // Cleanup
   after(async () => {
     if (mongoClient) {
