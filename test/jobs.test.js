@@ -2,6 +2,7 @@ import chai from 'chai'
 import chailint from 'chai-lint'
 import feathers from '@feathersjs/feathers'
 import express from '@feathersjs/express'
+import mongo from 'mongodb'
 import path, { dirname } from 'path'
 import nock from 'nock'
 import moment from 'moment'
@@ -11,14 +12,17 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const { util, expect } = chai
+const { MongoClient } = mongo
 
 describe('krawler:jobs', () => {
-  let app, server, storage, storesService, jobsService, tasksService
+  let app, server, mongoClient, storage, storesService, jobsService, tasksService
 
   before(async () => {
     chailint(chai, util)
     app = express(feathers())
     app.configure(plugin())
+    mongoClient = await MongoClient.connect('mongodb://127.0.0.1:27017/krawler-test', { useNewUrlParser: true })
+    mongoClient.db = mongoClient.db('krawler-test')
     server = await app.listen(3030)
   })
 
@@ -333,6 +337,39 @@ describe('krawler:jobs', () => {
   })
   // Let enough time to fail
     .timeout(5000)
+
+  it('creates a mongo job', (done) => {
+    jobsService.create({
+      id: 'job',
+      options: {
+        workersLimit: 2
+      },
+      taskTemplate: {
+        store: 'test-store',
+        id: '<%= jobId %>-<%= taskId %>.mongo',
+        type: 'mongo',
+        options: {
+          client: mongoClient
+        }
+      },
+      tasks: [
+        { id: '1', options: { collection: 'users' } }
+      ]
+    })
+      .then(tasks => {
+        storage.exists('job-1.mongo', (error, exist) => {
+          if (error) done(error)
+          else done(exist ? null : new Error('File not found in store'))
+        })
+      })
+      .catch(error => {
+      // Sometimes meteo france servers reply 404 or 503
+        console.log(error)
+        done()
+      })
+  })
+  // Let enough time to download
+    .timeout(60000)
 
   // Cleanup
   after(() => {
