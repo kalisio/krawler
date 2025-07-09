@@ -996,6 +996,8 @@ Discard all subsequent hooks and task if the input data passes the given match f
 
 Apply a given function to the hook item(s), hook options are the following:
 * **function**: a function taking the hook item(s) as input and updating it (can be async)
+* **dataPath**: the path of the field to use as function argument. If not set, it'll consider the `data` field (unset by default).
+* **perItem**: a boolean specifying whether the function should run per item when the data is an array (defaults to `true`). This can only be used when `dataPath` is **not** set.
 
 ### healthcheck(options)
 
