@@ -71,6 +71,7 @@
     "@tmcw/togeojson": "^5.2.1",
     "@turf/turf": "6.2.0-alpha.3",
     "aws-sdk": "^2.1151.0",
+    "boxen": "^8.0.1",
     "commander": "^2.11.0",
     "compression": "^1.6.2",
     "cors": "^2.8.1",

@@ -1022,15 +1022,13 @@ Emit a `'krawler'` event on the underlying service, hook options are the followi
 * **type**: the custom type of the event to be emitted
 * any transformation option, see description in [transformJson](./hooks.md#transformjson-options), the transformed object will be used as event payload in the `data` field
 
-### printBanner(options)
+### printEnv(options)
 
-Display a banner to the console with a decorative line and a list of key-value pairs from `options.meta`. Hook options are the following:
-* **meta**: the object that list the value to be print
-* **symbol**: the symbol to use to print the decorative line. Default is `-`.
-* **symbol**: the width of the decorative line. Default is `60`.
+Display a list of key-value pairs from `options`. Hook options are the following:
+* **boxen**: [boxen](https://github.com/sindresorhus/boxen?tab=readme-ov-file#options) options to render the frame
 
 ::: tip
-This hook is typically used as a before-hook on the job service to display environment variables or constants relevant to the job.
+This hook is typically used as a before-hook on the job service to display environment variables relevant to the job.
 :::
 
 ## XML
