@@ -68,7 +68,7 @@ describe('krawler:tasks', () => {
       expect(object._id).toExist()
       // Mongo adds IDs
       // Take care that we filter the first item in the collection
-      expect(_.omit(object, ['_id'])).deep.equal(_.omit(json[index+1], ['_id']))
+      expect(_.omit(object, ['_id'])).deep.equal(_.omit(json[index + 1], ['_id']))
     })
   })
   // Let enough time to download
@@ -201,6 +201,7 @@ describe('krawler:tasks', () => {
   it('creates a WCS task', async () => {
     const datetime = moment.utc()
     datetime.startOf('day')
+    console.log('TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format())
     await tasksService.create({
       id: 'task.tif',
       store: 'test-store',

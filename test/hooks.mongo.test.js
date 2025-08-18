@@ -125,7 +125,7 @@ describe('krawler:hooks:mongo', () => {
     // request without skipping conversion => will not match
     await pluginHooks.createMongoAggregation({
       collection: 'geojson',
-      pipeline: { $match: { 'properties.inb': '9999'  } },
+      pipeline: { $match: { 'properties.inb': '9999' } },
       dataPath: 'result.data'
     })(mongoHook)
     let results = mongoHook.result.data
@@ -144,7 +144,6 @@ describe('krawler:hooks:mongo', () => {
   })
   // Let enough time to proceed
     .timeout(5000)
-
 
   it('updates MongoDB collection', async () => {
     mongoHook.type = 'after'
