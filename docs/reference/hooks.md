@@ -1031,6 +1031,11 @@ Display a list of key-value pairs from `options`. Hook options are the following
 This hook is typically used as a before-hook on the job service to display environment variables relevant to the job.
 :::
 
+### wait (options)
+
+Wait for a delay. Hook options are the following:
+* **delay**: the delay to wait for in milliseconds. Default value is `1000`
+
 ## XML
 
 [source](https://github.com/kalisio/krawler/blob/master/src/hooks/hooks.xml.js)
