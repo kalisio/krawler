@@ -50,6 +50,39 @@ describe('krawler:jobs', () => {
       })
   })
 
+  it('creates a mongo job', (done) => {
+    jobsService.create({
+      id: 'job',
+      options: {
+        workersLimit: 2
+      },
+      taskTemplate: {
+        store: 'test-store',
+        id: '<%= jobId %>-<%= taskId %>.mongo',
+        type: 'mongo',
+        options: {
+          client: mongoClient
+        }
+      },
+      tasks: [
+        { id: '1', options: { collection: 'users' } }
+      ]
+    })
+      .then(tasks => {
+        console.log(tasks)
+        storage.exists('job-1.mongo', (error, exist) => {
+          if (error) done(error)
+          else done(exist ? null : new Error('File not found in store'))
+        })
+      })
+      .catch(error => {
+        console.log(error)
+        done()
+      })
+  })
+  // Let enough time to query mongo
+    .timeout(5000)
+
   it('creates a HTTP job', (done) => {
     jobsService.create({
       id: 'job',
@@ -337,39 +370,6 @@ describe('krawler:jobs', () => {
   })
   // Let enough time to fail
     .timeout(5000)
-
-  it('creates a mongo job', (done) => {
-    jobsService.create({
-      id: 'job',
-      options: {
-        workersLimit: 2
-      },
-      taskTemplate: {
-        store: 'test-store',
-        id: '<%= jobId %>-<%= taskId %>.mongo',
-        type: 'mongo',
-        options: {
-          client: mongoClient
-        }
-      },
-      tasks: [
-        { id: '1', options: { collection: 'users' } }
-      ]
-    })
-      .then(tasks => {
-        storage.exists('job-1.mongo', (error, exist) => {
-          if (error) done(error)
-          else done(exist ? null : new Error('File not found in store'))
-        })
-      })
-      .catch(error => {
-      // Sometimes meteo france servers reply 404 or 503
-        console.log(error)
-        done()
-      })
-  })
-  // Let enough time to download
-    .timeout(60000)
 
   // Cleanup
   after(() => {
