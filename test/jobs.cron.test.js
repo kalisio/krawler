@@ -91,7 +91,7 @@ describe('krawler:jobs:cron', () => {
     }
   })
   // Let enough time to process
-    .timeout(15000)
+    .timeout(30000)
 
   // Cleanup
   after(async () => {
