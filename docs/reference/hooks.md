@@ -713,7 +713,7 @@ Connect to a Feathers API. The [connection options](https://docs.feathersjs.com/
 * **distributed**: Boolean indicating if the target services are retrieved using distribution (you will need to set the `distribution` job options and CLI `api` option), in this case you don't need the others properties
 * **origin**: Feathers connection URL
 * **path**: the Feathers API path prefix if any
-* **authentication**: the Feathers API authentication options if any (including service `path`)
+* **authentication**: the Feathers API authentication payload and client options if any (including service `path`), e.g. `{ path: 'myauthservice', strategy: 'jwt', accessToken }`
 * **customMethods**: an array of `{ servicePath: 'myservice', methods: ['myCustomMethod'] }` used to declare services with custom methods upfront as required by [custom methods](https://feathersjs.com/api/client/rest.html#custom-methods)
 * **clientPath**: property path where to store the client object to be used by the Feathers hooks, defaults to `client`
 
