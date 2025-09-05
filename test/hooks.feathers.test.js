@@ -6,6 +6,7 @@ import fs from 'fs-extra'
 import fsStore from 'fs-blob-store'
 import mongo from 'mongodb'
 import { feathers } from '@feathersjs/feathers'
+import { AuthenticationService, JWTStrategy, authenticate } from '@feathersjs/authentication'
 import errors from '@feathersjs/errors'
 import socketio from '@feathersjs/socketio'
 import { MemoryService } from '@feathersjs/memory'
@@ -240,7 +241,7 @@ function createTests (servicePath, feathersHook, options = {}) {
 }
 
 describe('krawler:hooks:feathers', () => {
-  let mongoClient, app, server
+  let mongoClient, app, server, accessToken
 
   before(async () => {
     chailint(chai, util)
@@ -250,12 +251,38 @@ describe('krawler:hooks:feathers', () => {
     await Model.createIndex({ id: 1 }, { unique: true })
     app = feathers()
       .configure(socketio({ path: '/ws' }))
+      .use('users', new MemoryService({ store: { 1: { name: 'Jack Doe', id: 1 } }, startId: 1 }))
       .use('geojson-memory', new CustomMemoryService({ multi: true }), { methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'custom'] })
       .use('geojson-mongodb', new CustomMongoDBService({ multi: true, Model }), { methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'custom'] })
+    app.set('authentication', {
+      secret: '1234',
+      entity: 'user',
+      service: 'users',
+      entityId: 'id',
+      authStrategies: ['jwt'],
+      jwtOptions: {
+        header: { typ: 'access' },
+        audience: 'https://yourdomain.com',
+        issuer: 'feathers',
+        algorithm: 'HS256',
+        expiresIn: '1d'
+      }
+    })
+    const authService = new AuthenticationService(app)
+    authService.register('jwt', new JWTStrategy())
+    app.use('api/authentication', authService)
+    feathersOptions.authentication.accessToken = await authService.createAccessToken({}, { subject: '1' })
+    // Add authentication hooks on services
+    app.service('geojson-memory').hooks({
+      before: {
+        all: authenticate('jwt')
+      }
+    })
     // Add required hook to manage upsert
-      // Also a hook to simulate an error
+    // Also a hook to simulate an error
     app.service('geojson-mongodb').hooks({
       before: {
+        all: authenticate('jwt'),
         patch: [
           (hook) => { _.set(hook, 'params.mongodb', { upsert: _.get(hook, 'params.query.upsert', false) }) },
           (hook) => { if (hook.data.properties === null) throw new BadRequest('Properties cannot be null') }
@@ -272,7 +299,11 @@ describe('krawler:hooks:feathers', () => {
     customMethods: [{
       servicePath: 'geojson-memory', methods: ['custom'] }, {
       servicePath: 'geojson-mongodb', methods: ['custom']
-    }]
+    }],
+    authentication: {
+      path: 'api/authentication',
+      strategy: 'jwt'
+    }
   }
 
   const feathersHook = {
