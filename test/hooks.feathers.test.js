@@ -8,10 +8,24 @@ import mongo from 'mongodb'
 import { feathers } from '@feathersjs/feathers'
 import errors from '@feathersjs/errors'
 import socketio from '@feathersjs/socketio'
-import { memory } from '@feathersjs/memory'
-import mongodb from 'feathers-mongodb'
+import { MemoryService } from '@feathersjs/memory'
+import { Service } from 'feathers-mongodb'
 import { hooks as pluginHooks } from '../lib/index.js'
 import { fileURLToPath } from 'url'
+
+class CustomMemoryService extends MemoryService {
+  // Add custom method
+  custom (data, params) {
+    return Object.assign(data, { customProperty: 'My custom value' })
+  }
+}
+
+class CustomMongoDBService extends Service {
+  // Add custom method
+  custom (data, params) {
+    return Object.assign(data, { customProperty: 'My custom value' })
+  }
+}
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -207,6 +221,22 @@ function createTests (servicePath, feathersHook, options = {}) {
   })
   // Let enough time to proceed
     .timeout(5000)
+
+  it(`calls custom method on service ${servicePath}`, async () => {
+    feathersHook.data.data = { name: 'My custom data'}
+    await pluginHooks.callFeathersServiceMethod({
+      service: servicePath,
+      method: 'custom'
+    })(feathersHook)
+    const results = feathersHook.result.data
+    expect(results.length).to.equal(1)
+    expect(results[0].name).toExist()
+    expect(results[0].name).to.equal('My custom data')
+    expect(results[0].customProperty).toExist()
+    expect(results[0].customProperty).to.equal('My custom value')
+  })
+  // Let enough time to proceed
+    .timeout(5000)
 }
 
 describe('krawler:hooks:feathers', () => {
@@ -220,8 +250,8 @@ describe('krawler:hooks:feathers', () => {
     await Model.createIndex({ id: 1 }, { unique: true })
     app = feathers()
       .configure(socketio({ path: '/ws' }))
-      .use('geojson-memory', memory({ multi: true }))
-      .use('geojson-mongodb', mongodb({ multi: true, Model }))
+      .use('geojson-memory', new CustomMemoryService({ multi: true }), { methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'custom'] })
+      .use('geojson-mongodb', new CustomMongoDBService({ multi: true, Model }), { methods: ['find', 'get', 'create', 'update', 'patch', 'remove', 'custom'] })
     // Add required hook to manage upsert
       // Also a hook to simulate an error
     app.service('geojson-mongodb').hooks({
@@ -238,7 +268,11 @@ describe('krawler:hooks:feathers', () => {
   const feathersOptions = {
     origin: 'http://localhost:4000',
     transport: 'websocket',
-    path: '/ws'
+    path: '/ws',
+    customMethods: [{
+      servicePath: 'geojson-memory', methods: ['custom'] }, {
+      servicePath: 'geojson-mongodb', methods: ['custom']
+    }]
   }
 
   const feathersHook = {

@@ -710,14 +710,15 @@ Insert file into an existing bucket. Hook options are the following:
 ### connectFeathers(options)
 
 Connect to a Feathers API. The [connection options](https://docs.feathersjs.com/api/client.html) of the client are defined in the hook options plus:
-* **distributed**: Boolean indicating if the target service is retrieved using distribution (you will need to set the `distribution` job options and CLI `api` option), in this case you don't need the others properties
+* **distributed**: Boolean indicating if the target services are retrieved using distribution (you will need to set the `distribution` job options and CLI `api` option), in this case you don't need the others properties
 * **origin**: Feathers connection URL
 * **path**: the Feathers API path prefix if any
 * **authentication**: the Feathers API authentication options if any (including service `path`)
+* **customMethods**: an array of `{ servicePath: 'myservice', methods: ['myCustomMethod'] }` used to declare services with custom methods upfront as required by [custom methods](https://feathersjs.com/api/client/rest.html#custom-methods)
 * **clientPath**: property path where to store the client object to be used by the Feathers hooks, defaults to `client`
 
 ::: tip
-**Krawler** uses on the version 5 of the Feathers client. 
+**Krawler** uses the version 5 of the Feathers client. 
 :::
 
 ### disconnectFeathers(options)
