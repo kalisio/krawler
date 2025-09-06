@@ -224,7 +224,7 @@ function createTests (servicePath, feathersHook, options = {}) {
     .timeout(5000)
 
   it(`calls custom method on service ${servicePath}`, async () => {
-    feathersHook.data.data = { name: 'My custom data'}
+    feathersHook.data.data = { name: 'My custom data' }
     await pluginHooks.callFeathersServiceMethod({
       service: servicePath,
       method: 'custom'
@@ -241,7 +241,7 @@ function createTests (servicePath, feathersHook, options = {}) {
 }
 
 describe('krawler:hooks:feathers', () => {
-  let mongoClient, app, server, accessToken
+  let mongoClient, app, server
 
   before(async () => {
     chailint(chai, util)
@@ -296,8 +296,7 @@ describe('krawler:hooks:feathers', () => {
     origin: 'http://localhost:4000',
     transport: 'websocket',
     path: '/ws',
-    customMethods: [{
-      servicePath: 'geojson-memory', methods: ['custom'] }, {
+    customMethods: [{ servicePath: 'geojson-memory', methods: ['custom'] }, {
       servicePath: 'geojson-mongodb', methods: ['custom']
     }],
     authentication: {
