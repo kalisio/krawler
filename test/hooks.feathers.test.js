@@ -228,7 +228,7 @@ function createTests (servicePath, feathersHook, options = {}) {
     await pluginHooks.callFeathersServiceMethod({
       service: servicePath,
       method: 'custom',
-      query: { custom: `<%= name.replace('data', 'param') %>` }
+      query: { custom: '<%= name.replace(\'data\', \'param\') %>' }
     })(feathersHook)
     const results = feathersHook.result.data
     expect(results.length).to.equal(1)

@@ -201,7 +201,7 @@ describe('krawler:tasks', () => {
   it('creates a WCS task', async () => {
     const datetime = moment.utc()
     datetime.startOf('day')
-    //console.log('TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format())
+    // console.log('TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format())
     await tasksService.create({
       id: 'task.tif',
       store: 'test-store',
