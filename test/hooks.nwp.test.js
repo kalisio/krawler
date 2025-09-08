@@ -47,8 +47,8 @@ describe('krawler:hooks:nwp', () => {
               name: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND',
               levels: [100, 3000]
             }, {
-              name: 'TEMPERATURE__ISOBARIC_SURFACE',
-              levels: [850]
+              name: 'WIND_SPEED_GUST__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND',
+              levels: [10]
             }]
           })
         ]
@@ -56,7 +56,7 @@ describe('krawler:hooks:nwp', () => {
     })
   })
 
-  it('creates a ARPEGE/AROME download job', (done) => {
+  it('creates a ARPEGE download job', (done) => {
     jobsService.create({
       id: 'ARPEGE-025-GLOBE',
       options: { faultTolerant: true },
