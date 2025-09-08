@@ -103,6 +103,10 @@ describe('krawler:cli', () => {
     .timeout(15000)
 
   it('runs as CRON using CLI with continuous healthcheck', async () => {
+    // As it runs every 10 seconds wait until some time before it starts
+    let seconds = Math.floor(moment().seconds())
+    let remainingSecondsForNextRun = 10 - seconds % 10
+    await utils.promisify(setTimeout)((1 + remainingSecondsForNextRun) * 1000)
     // Clean previous test output
     fs.removeSync(path.join(outputPath, 'RJTT-30-18000-2-1.tif.csv'))
     // Setup the app
@@ -162,8 +166,8 @@ describe('krawler:cli', () => {
     const jobEvents = await collection.find({ event: 'job-done' }).toArray()
     expect(jobEvents.length).to.equal(1)
     // As it runs every 10 seconds wait until it should have ran at least once again
-    const seconds = Math.floor(moment().seconds())
-    const remainingSecondsForNextRun = 10 - seconds % 10
+    seconds = Math.floor(moment().seconds())
+    remainingSecondsForNextRun = 10 - seconds % 10
     await utils.promisify(setTimeout)((1 + remainingSecondsForNextRun) * 1000)
     try {
       expect(runCount).to.be.at.least(2) // 2 runs
@@ -197,7 +201,7 @@ describe('krawler:cli', () => {
     }
   })
   // Let enough time to process
-    .timeout(15000)
+    .timeout(30000)
 
   // Cleanup
   after(async () => {
