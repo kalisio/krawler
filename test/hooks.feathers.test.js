@@ -17,14 +17,14 @@ import { fileURLToPath } from 'url'
 class CustomMemoryService extends MemoryService {
   // Add custom method
   custom (data, params) {
-    return Object.assign(data, { customProperty: 'My custom value' })
+    return Object.assign(data, { customMethodProperty: 'My custom value' })
   }
 }
 
 class CustomMongoDBService extends Service {
   // Add custom method
   custom (data, params) {
-    return Object.assign(data, { customProperty: 'My custom value' })
+    return Object.assign(data, { customMethodProperty: 'My custom value' })
   }
 }
 
@@ -227,14 +227,17 @@ function createTests (servicePath, feathersHook, options = {}) {
     feathersHook.data.data = { name: 'My custom data' }
     await pluginHooks.callFeathersServiceMethod({
       service: servicePath,
-      method: 'custom'
+      method: 'custom',
+      query: { custom: `<%= name.replace('data', 'param') %>` }
     })(feathersHook)
     const results = feathersHook.result.data
     expect(results.length).to.equal(1)
     expect(results[0].name).toExist()
     expect(results[0].name).to.equal('My custom data')
-    expect(results[0].customProperty).toExist()
-    expect(results[0].customProperty).to.equal('My custom value')
+    expect(results[0].customMethodProperty).toExist()
+    expect(results[0].customMethodProperty).to.equal('My custom value')
+    expect(results[0].customParamProperty).toExist()
+    expect(results[0].customParamProperty).to.equal('My custom param')
   })
   // Let enough time to proceed
     .timeout(5000)
@@ -275,7 +278,11 @@ describe('krawler:hooks:feathers', () => {
     // Add authentication hooks on services
     app.service('geojson-memory').hooks({
       before: {
-        all: authenticate('jwt')
+        all: authenticate('jwt'),
+        // Hook to check for custom parameter templating
+        custom: (hook) => {
+          if (_.has(hook.params, 'query.custom')) hook.data.customParamProperty = 'My custom param'
+        }
       }
     })
     // Add required hook to manage upsert
@@ -286,7 +293,11 @@ describe('krawler:hooks:feathers', () => {
         patch: [
           (hook) => { _.set(hook, 'params.mongodb', { upsert: _.get(hook, 'params.query.upsert', false) }) },
           (hook) => { if (hook.data.properties === null) throw new BadRequest('Properties cannot be null') }
-        ]
+        ],
+        // Hook to check for custom parameter templating
+        custom: (hook) => {
+          if (_.has(hook.params, 'query.custom')) hook.data.customParamProperty = 'My custom param'
+        }
       }
     })
     server = await app.listen(4000)
