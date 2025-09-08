@@ -743,7 +743,8 @@ Performs a service operation using the API. Hook options are the following:
 * **updateResult**: if `true` service operation results will not replace item data (default for read operations)
 
 ::: warning
-Due to templating restricted to string output any ISO date string or comparison operator value in the query object will be automatically converted back to native types so that matching will work as expected in JS
+Templating context will be the task (i.e. hook item) for operations without data while it will be the individual data items for others operations including custom methods.
+Due to templating restricted to string output any ISO date string or comparison operator value in the query object will be automatically converted back to native types so that matching will work as expected in JS.
 :::
 
 ## Numerical Weather Prediction
