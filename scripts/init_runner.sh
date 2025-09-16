@@ -13,6 +13,9 @@ THIS_DIR=$(dirname "$THIS_FILE")
 
 init_github_run_tests() {
     install_reqs yq age sops nvm node20 mongo7
+    # lftp is used by krawler ftp hooks
+    # apt-get since we know we're on an ubuntu image
+    apt-get --yes install lftp
 }
 
 init_github_build_app() {
