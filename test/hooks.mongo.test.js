@@ -145,6 +145,32 @@ describe('krawler:hooks:mongo', () => {
   // Let enough time to proceed
     .timeout(5000)
 
+  it('updates MongoDB collection with dotify', async () => {
+    mongoHook.type = 'after'
+    mongoHook.result.data = {
+      type: 'FeatureCollection',
+      features: geojson.features.map(feature => {
+        feature.properties.prop0 = feature.id < 3 ? 'value1' : 'value0'
+        return feature
+      })
+    }
+    await pluginHooks.updateMongoCollection({
+      collection: 'geojson',
+      filter: { id: '<%= id %>' },
+      dotify: true
+    })(mongoHook)
+    const collection = mongoHook.data.client.db.collection('geojson')
+    const results = await collection.find({}).toArray()
+    expect(results.length).to.equal(3)
+    results.forEach(result => {
+      if (result.id < 3) expect(result.properties.prop0).to.equal('value1')
+      else expect(result.properties.prop0).to.equal('value0')
+      expect(result.properties.prop1 || result.properties.inb).toExist()
+    })
+  })
+  // Let enough time to proceed
+    .timeout(5000)
+
   it('updates MongoDB collection', async () => {
     mongoHook.type = 'after'
     mongoHook.result.data = {
