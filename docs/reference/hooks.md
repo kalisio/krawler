@@ -638,6 +638,7 @@ Updates JSON into an existing collection (uses [updateOne](https://docs.mongodb.
 * **chunkSize**: number of GeoJson features for the [batch insert](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/)
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **transform**: perform transformation using these options before update, see description in [transformJson](./hooks.md#transformjson-options)
+* **dotify**: when set to `true`, updates only the specified nested properties instead of rewriting the entire sub-object
 * **filter/upsert/hint**: corresponding option for `updateOne` operation, filter fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
 * **excludedProperties**: array of property names to be excluded from automated type conversion after templating, useful if you have a number-like string (eg '81') that you don't want to convert automatically into a number
 * any option supported by `options` argument of the [bulkWrite](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/) function.
