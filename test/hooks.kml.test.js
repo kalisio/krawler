@@ -33,6 +33,16 @@ describe('krawler:hooks:kml', () => {
     })
   })
 
+  it('convert KML to GeoJSON features', async () => {
+    await pluginHooks.readKML({ features: true })(kmlHook)
+    expect(kmlHook.result.data.length).to.equal(1)
+    kmlHook.result.data.forEach(feature => {
+      expect(feature.type).to.equal('Feature')
+      expect(feature.geometry).toExist()
+      expect(feature.properties).toExist()
+    })
+  })
+
   // Let enough time to proceed
     .timeout(5000)
 })
