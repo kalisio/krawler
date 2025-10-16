@@ -70,6 +70,7 @@
     "@mapbox/sphericalmercator": "^1.0.5",
     "@tmcw/togeojson": "^5.2.1",
     "@turf/turf": "6.2.0-alpha.3",
+    "@xmldom/xmldom": "^0.8.11",
     "aws-sdk": "^2.1151.0",
     "boxen": "^8.0.1",
     "commander": "^2.11.0",
@@ -109,8 +110,7 @@
     "unzipper": "^0.9.5",
     "uuid": "^3.2.1",
     "winston": "^3.7.2",
-    "xml2js": "^0.6.0",
-    "xmldom": "^0.6.0"
+    "xml2js": "^0.6.0"
   },
   "devDependencies": {
     "@feathersjs/authentication": "^5.0.8",
