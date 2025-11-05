@@ -94,9 +94,6 @@ describe('krawler:tasks', () => {
     .timeout(10000)
 
   it('creates a HTTP task without overwrite', async () => {
-    nock('https://www.google.com')
-      .get('/')
-      .reply(200, '<html></html>')
     await tasksService.create({
       id: 'task.html',
       store: 'test-store',
