@@ -49,3 +49,5 @@ docker pull v4tech/imagemagick
 ##
 
 run_lib_tests "$ROOT_DIR" "$CODE_COVERAGE" "$NODE_VER" "$MONGO_VER"
+
+cd "$ROOT_DIR" && sonar-scanner

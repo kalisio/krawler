@@ -12,7 +12,7 @@ THIS_DIR=$(dirname "$THIS_FILE")
 ### Github Actions
 
 init_github_run_tests() {
-    install_reqs yq age sops nvm node20 mongo7
+    install_reqs yq age sops nvm node20 mongo7 sonar_scanner_cli
     # lftp is used by krawler ftp hooks
     # apt-get since we know we're on an ubuntu image
     sudo apt-get --yes install lftp
