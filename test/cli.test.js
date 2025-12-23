@@ -7,8 +7,8 @@ import request from 'request'
 import utils from 'util'
 import fs from 'fs-extra'
 import mongodb from 'mongodb'
-import { exec } from 'child_process'
-import { cli/*, getApp*/ } from '../lib/index.js'
+// import { exec } from 'child_process'
+import { cli/*, getApp */ } from '../lib/index.js'
 import { fileURLToPath, pathToFileURL } from 'url'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -17,13 +17,13 @@ const { MongoClient } = mongodb
 const { util, expect, assert } = chai
 // Can't use promisify here otherwise on error cases we cannot access stdout/stderr
 
-/*async function runCommand (command) {
+/* async function runCommand (command) {
   return new Promise((resolve, reject) => {
     exec(command, (error, stdout, stderr) => {
       resolve({ error, stdout, stderr })
     })
   })
-}*/
+} */
 
 describe('krawler:cli', () => {
   const jobfilePath = pathToFileURL(path.join(__dirname, 'data', 'jobfile.cjs'))
