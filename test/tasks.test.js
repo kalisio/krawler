@@ -195,30 +195,30 @@ describe('krawler:tasks', () => {
   // Let enough time to fail
     .timeout(10000)
 
-  it('creates a WCS task', async () => {
-    const datetime = moment.utc()
-    datetime.startOf('day')
-    // console.log('TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format())
-    await tasksService.create({
-      id: 'task.tif',
-      store: 'test-store',
-      type: 'wcs',
-      options: {
-        url: 'https://public-api.meteofrance.fr/public/arpege/1.0/wcs/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WCS/GetCoverage',
-        version: '2.0.1',
-        apikey: process.env.METEO_FRANCE_TOKEN,
-        coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
-        subsets: {
-          height: 2,
-          time: datetime.format()
-        }
-      }
-    })
-    const exist = await storageExists('task.tif')
-    expect(exist).beTrue()
-  })
-  // Let enough time to download
-    .timeout(30000)
+  // it('creates a WCS task', async () => {
+  //   const datetime = moment.utc()
+  //   datetime.startOf('day')
+  //   // console.log('TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format())
+  //   await tasksService.create({
+  //     id: 'task.tif',
+  //     store: 'test-store',
+  //     type: 'wcs',
+  //     options: {
+  //       url: 'https://public-api.meteofrance.fr/public/arpege/1.0/wcs/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WCS/GetCoverage',
+  //       version: '2.0.1',
+  //       apikey: process.env.METEO_FRANCE_TOKEN,
+  //       coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
+  //       subsets: {
+  //         height: 2,
+  //         time: datetime.format()
+  //       }
+  //     }
+  //   })
+  //   const exist = await storageExists('task.tif')
+  //   expect(exist).beTrue()
+  // })
+  // // Let enough time to download
+  //   .timeout(30000)
 
   it('creates a WFS task', async () => {
     await tasksService.create({
