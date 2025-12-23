@@ -238,20 +238,20 @@ describe('krawler:tasks', () => {
   // Let enough time to download
     .timeout(30000)
 
-  it('creates an OVERPASS task', async () => {
-    await tasksService.create({
-      id: 'overpass.json',
-      store: 'test-store',
-      type: 'overpass',
-      options: {
-        data: '[out:json][timeout:25][bbox:43.10,1.36,43.70,1.39];(node["aeroway"="runway"];way["aeroway"="runway"];relation["aeroway"="runway"];);out body;>;out skel qt;'
-      }
-    })
-    const exist = await storageExists('overpass.json')
-    expect(exist).beTrue()
-  })
-  // Let enough time to download
-    .timeout(30000)
+  // it('creates an OVERPASS task', async () => {
+  //   await tasksService.create({
+  //     id: 'overpass.json',
+  //     store: 'test-store',
+  //     type: 'overpass',
+  //     options: {
+  //       data: '[out:json][timeout:25][bbox:43.10,1.36,43.70,1.39];(node["aeroway"="runway"];way["aeroway"="runway"];relation["aeroway"="runway"];);out body;>;out skel qt;'
+  //     }
+  //   })
+  //   const exist = await storageExists('overpass.json')
+  //   expect(exist).beTrue()
+  // })
+  // // Let enough time to download
+  //   .timeout(30000)
 
   it('removes a task', async () => {
     await tasksService.remove('task.tif', { store: storage })

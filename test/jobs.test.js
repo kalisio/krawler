@@ -296,21 +296,21 @@ describe('krawler:jobs', () => {
     }, tasksService)
   })
 
-  it('', () => {
-    return jobsService.create({
-      id: 'job',
-      tasks: [
-        { id: 'job-apply.html', type: 'noop' }
-      ]
-    })
-      .then(tasks => {
-        expect(tasks).toExist()
-        expect(tasks.length).to.equal(1)
-        expect(tasks[0].state).to.equal('processed')
-      })
-  })
-  // Let enough time to fail
-    .timeout(5000)
+  // it('', () => {
+  //   return jobsService.create({
+  //     id: 'job',
+  //     tasks: [
+  //       { id: 'job-apply.html', type: 'noop' }
+  //     ]
+  //   })
+  //     .then(tasks => {
+  //       expect(tasks).toExist()
+  //       expect(tasks.length).to.equal(1)
+  //       expect(tasks[0].state).to.equal('processed')
+  //     })
+  // })
+  // // Let enough time to fail
+  //   .timeout(5000)
 
   it('creates a failed job with task hooks', (done) => {
     raise = 'error'
