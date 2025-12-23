@@ -8,7 +8,7 @@ import path, { dirname } from 'path'
 import utility from 'util'
 import fs from 'fs-extra'
 import nock from 'nock'
-import moment from 'moment'
+// import moment from 'moment'
 import plugin, { hooks as pluginHooks } from '../lib/index.js'
 import { fileURLToPath } from 'url'
 
