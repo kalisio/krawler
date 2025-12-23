@@ -83,22 +83,22 @@ describe('krawler:jobs', () => {
   // Let enough time to query mongo
     .timeout(5000)
 
-  // it('creates a HTTP job', (done) => {
-  //   jobsService.create({
-  //     id: 'job',
-  //     tasks: [
-  //       { id: 'job.html', type: 'http', store: 'test-store', options: { url: 'https://www.google.com' } }
-  //     ]
-  //   })
-  //     .then(tasks => {
-  //       storage.exists('job.html', (error, exist) => {
-  //         if (error) done(error)
-  //         else done(exist ? null : new Error('File not found in store'))
-  //       })
-  //     })
-  // })
-  // // Let enough time to download
-  //   .timeout(5000)
+  it('creates a HTTP job', (done) => {
+    jobsService.create({
+      id: 'job',
+      tasks: [
+        { id: 'job.html', type: 'http', store: 'test-store', options: { url: 'https://www.google.com' } }
+      ]
+    })
+      .then(tasks => {
+        storage.exists('job.html', (error, exist) => {
+          if (error) done(error)
+          else done(exist ? null : new Error('File not found in store'))
+        })
+      })
+  })
+  // Let enough time to download
+    .timeout(5000)
 
   it('creates a failed HTTP job (task with 403 status)', (done) => {
     nock('https://www.google.com')
@@ -157,27 +157,27 @@ describe('krawler:jobs', () => {
   // Let enough time to fail
     .timeout(5000)
 
-  // it('creates a fault-tolerant failed HTTP job (global timeout)', (done) => {
-  //   nock('https://www.google.com')
-  //     .get('/')
-  //     .delay(5000)
-  //     .reply(200, '<html></html>')
-  //   jobsService.create({
-  //     id: 'job',
-  //     options: { faultTolerant: true, timeout: 1000 },
-  //     tasks: [
-  //       { id: 'job-403-fault-tolerant.html', type: 'http', store: 'test-store', options: { url: 'https://www.google.com', timeout: 3000 } }
-  //     ]
-  //   })
-  //     .then(tasks => {
-  //       expect(tasks).toExist()
-  //       expect(tasks.length).to.equal(1)
-  //       expect(tasks[0].error).toExist(1)
-  //       done()
-  //     })
-  // })
-  // // Let enough time to fail
-  //   .timeout(7000)
+  it('creates a fault-tolerant failed HTTP job (global timeout)', (done) => {
+    nock('https://www.google.com')
+      .get('/')
+      .delay(5000)
+      .reply(200, '<html></html>')
+    jobsService.create({
+      id: 'job',
+      options: { faultTolerant: true, timeout: 1000 },
+      tasks: [
+        { id: 'job-403-fault-tolerant.html', type: 'http', store: 'test-store', options: { url: 'https://www.google.com', timeout: 3000 } }
+      ]
+    })
+      .then(tasks => {
+        expect(tasks).toExist()
+        expect(tasks.length).to.equal(1)
+        expect(tasks[0].error).toExist(1)
+        done()
+      })
+  })
+  // Let enough time to fail
+    .timeout(7000)
 
   it('creates a fault-tolerant failed HTTP task in job (task with 403 status)', () => {
     nock('https://www.google.com')
@@ -296,21 +296,21 @@ describe('krawler:jobs', () => {
     }, tasksService)
   })
 
-  // it('', () => {
-  //   return jobsService.create({
-  //     id: 'job',
-  //     tasks: [
-  //       { id: 'job-apply.html', type: 'noop' }
-  //     ]
-  //   })
-  //     .then(tasks => {
-  //       expect(tasks).toExist()
-  //       expect(tasks.length).to.equal(1)
-  //       expect(tasks[0].state).to.equal('processed')
-  //     })
-  // })
-  // // Let enough time to fail
-  //   .timeout(5000)
+  it('creates a job with task hooks', () => {
+    return jobsService.create({
+      id: 'job',
+      tasks: [
+        { id: 'job-apply.html', type: 'noop' }
+      ]
+    })
+      .then(tasks => {
+        expect(tasks).toExist()
+        expect(tasks.length).to.equal(1)
+        expect(tasks[0].state).to.equal('processed')
+      })
+  })
+  // Let enough time to fail
+    .timeout(5000)
 
   it('creates a failed job with task hooks', (done) => {
     raise = 'error'

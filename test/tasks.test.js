@@ -8,7 +8,7 @@ import path, { dirname } from 'path'
 import utility from 'util'
 import fs from 'fs-extra'
 import nock from 'nock'
-// import moment from 'moment'
+import moment from 'moment'
 import plugin, { hooks as pluginHooks } from '../lib/index.js'
 import { fileURLToPath } from 'url'
 
@@ -195,30 +195,30 @@ describe('krawler:tasks', () => {
   // Let enough time to fail
     .timeout(10000)
 
-  // it('creates a WCS task', async () => {
-  //   const datetime = moment.utc()
-  //   datetime.startOf('day')
-  //   // console.log('TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format())
-  //   await tasksService.create({
-  //     id: 'task.tif',
-  //     store: 'test-store',
-  //     type: 'wcs',
-  //     options: {
-  //       url: 'https://public-api.meteofrance.fr/public/arpege/1.0/wcs/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WCS/GetCoverage',
-  //       version: '2.0.1',
-  //       apikey: process.env.METEO_FRANCE_TOKEN,
-  //       coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
-  //       subsets: {
-  //         height: 2,
-  //         time: datetime.format()
-  //       }
-  //     }
-  //   })
-  //   const exist = await storageExists('task.tif')
-  //   expect(exist).beTrue()
-  // })
-  // // Let enough time to download
-  //   .timeout(30000)
+  it('creates a WCS task', async () => {
+    const datetime = moment.utc()
+    datetime.startOf('day')
+    // console.log('TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format())
+    await tasksService.create({
+      id: 'task.tif',
+      store: 'test-store',
+      type: 'wcs',
+      options: {
+        url: 'https://public-api.meteofrance.fr/public/arpege/1.0/wcs/MF-NWP-GLOBAL-ARPEGE-025-GLOBE-WCS/GetCoverage',
+        version: '2.0.1',
+        apikey: process.env.METEO_FRANCE_TOKEN,
+        coverageid: 'TEMPERATURE__SPECIFIC_HEIGHT_LEVEL_ABOVE_GROUND' + '___' + datetime.format(),
+        subsets: {
+          height: 2,
+          time: datetime.format()
+        }
+      }
+    })
+    const exist = await storageExists('task.tif')
+    expect(exist).beTrue()
+  })
+  // Let enough time to download
+    .timeout(30000)
 
   it('creates a WFS task', async () => {
     await tasksService.create({
@@ -238,20 +238,20 @@ describe('krawler:tasks', () => {
   // Let enough time to download
     .timeout(30000)
 
-  // it('creates an OVERPASS task', async () => {
-  //   await tasksService.create({
-  //     id: 'overpass.json',
-  //     store: 'test-store',
-  //     type: 'overpass',
-  //     options: {
-  //       data: '[out:json][timeout:25][bbox:43.10,1.36,43.70,1.39];(node["aeroway"="runway"];way["aeroway"="runway"];relation["aeroway"="runway"];);out body;>;out skel qt;'
-  //     }
-  //   })
-  //   const exist = await storageExists('overpass.json')
-  //   expect(exist).beTrue()
-  // })
-  // // Let enough time to download
-  //   .timeout(30000)
+  it('creates an OVERPASS task', async () => {
+    await tasksService.create({
+      id: 'overpass.json',
+      store: 'test-store',
+      type: 'overpass',
+      options: {
+        data: '[out:json][timeout:25][bbox:43.10,1.36,43.70,1.39];(node["aeroway"="runway"];way["aeroway"="runway"];relation["aeroway"="runway"];);out body;>;out skel qt;'
+      }
+    })
+    const exist = await storageExists('overpass.json')
+    expect(exist).beTrue()
+  })
+  // Let enough time to download
+    .timeout(30000)
 
   it('removes a task', async () => {
     await tasksService.remove('task.tif', { store: storage })
