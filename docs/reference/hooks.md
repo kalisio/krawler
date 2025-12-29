@@ -1,7 +1,7 @@
 # Hooks
 
 ::: tip
-Although all are not applicable, [common FeathersJS hooks](https://auk.docs.feathersjs.com/api/hooks-common.html) are exposed in addition to krawler hooks and can be used in jobs, e.g. you can add `disallow: 'external'` to avoid exposing some services when deploying as a web app. 
+Although all are not applicable, [common FeathersJS hooks](https://auk.docs.feathersjs.com/api/hooks-common.html) are exposed in addition to krawler hooks and can be used in jobs, e.g. you can add `disallow: 'external'` to avoid exposing some services when deploying as a web app.
 :::
 
 ## Common options
@@ -17,7 +17,7 @@ Due to templating restricted to string output any ISO date string or comparison 
 Matching is for instance useful when you'd like to apply a hook to only a subset of your tasks, e.g. all the CSV files but not the JSON files.
 
 Fault tolerance is for instance useful when you use unreliable data sources and you don't want the job to stop when some requests fail.
-::: 
+:::
 
 All input/output hooks and store hooks manipulating items, i.e. reading/writing/transforming/removing data in a store like `readJson`, `writeJson` or `gzipToStore`, can have the following options:
 * **storePath**: property path where to read the store to be used on the hook object or params, defaults to `data.store`
@@ -180,7 +180,7 @@ Pull a docker image. Hook options are the following:
 Run a docker container. Hook options are the following:
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * any options supported by dockerode for [container creation](https://github.com/apocas/dockerode#manipulating-a-container)
-  
+
 ::: tip
 `Cmd` and `Env` options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
 :::
@@ -190,7 +190,7 @@ Run a docker container. Hook options are the following:
 Create a docker service on a Swarm cluster. Hook options are the following:
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * any options supported by dockerode for [service creation](https://github.com/apocas/dockerode#documentation)
-  
+
 ::: tip
 Options can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
 :::
@@ -354,8 +354,8 @@ fetchIMAPMessages: {
   mailbox: 'INBOX',
   range: { seen: false },
   query: { uid: true },
-  clientPath: 'taskTemplate.imapClient',     
-  dataPath: 'data.messages' 
+  clientPath: 'taskTemplate.imapClient',
+  dataPath: 'data.messages'
 }
 ```
 ### downloadIMAPAttachments
@@ -558,12 +558,12 @@ Read a KML from an input stream/store and convert it to in-memory JSON values, h
 ### connectMongo(options)
 
 Connect to a MongoDB database. The [connection options](http://mongodb.github.io/node-mongodb-native/3.0/api/MongoClient.html#.connect) of the client are defined in the hook options plus:
-* **url**: MongoDB [URI connection string](https://docs.mongodb.com/manual/reference/connection-string/)
+* **url**: MongoDB [URI connection string](https://docs.mongodb.com/manual/reference/connection-string/). This field can be a template with item as context, learn more about [templating](https://lodash.com/docs/4.17.4#template)
 * **dbName**: the name of the DB to connect to
 * **clientPath**: property path where to store the client object to be used by the MongoDB hooks, defaults to `client`
 
 ::: tip
-Since **Krawler** relies on the version 3.1.13 of the MongoDB driver, it automatically adds the option `useNewUrlParser: true` when connecting to the database. 
+Since **Krawler** relies on the version 3.1.13 of the MongoDB driver, it automatically adds the option `useNewUrlParser: true` when connecting to the database.
 :::
 
 ### disconnectMongo(options)
@@ -625,7 +625,7 @@ Inserts JSON into an existing collection (uses [insertOne](https://docs.mongodb.
 * **clientPath**: property path where to retrieve the client object, defaults to `client`
 * **transform**: perform transformation using these options before write, see description in [transformJson](./hooks.md#transformjson-options)
 * any option supported by `options` argument of the [bulkWrite](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/) function.
-  
+
 ::: tip
 If the input data is a GeoJSON collection the array of features will be pushed into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections.
 :::
@@ -642,7 +642,7 @@ Updates JSON into an existing collection (uses [updateOne](https://docs.mongodb.
 * **filter/upsert/hint**: corresponding option for `updateOne` operation, filter fields can be templates, learn more about [templating](https://lodash.com/docs/4.17.4#template)
 * **excludedProperties**: array of property names to be excluded from automated type conversion after templating, useful if you have a number-like string (eg '81') that you don't want to convert automatically into a number
 * any option supported by `options` argument of the [bulkWrite](https://docs.mongodb.com/manual/reference/method/db.collection.bulkWrite/) function.
-  
+
 ::: tip
 If the input data is a GeoJSON collection the array of features will be updated into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections.
 :::
@@ -669,7 +669,7 @@ Creates an [aggregation pipeline](https://docs.mongodb.com/manual/aggregation/#a
   * **skipAllConvert** allows to skip all conversions
   * other options are passed as is
 * any option supported by `options` argument of the [aggregate](https://docs.mongodb.com/manual/reference/method/db.collection.aggregate/) function.
-  
+
 ::: tip
 If the input data is a GeoJSON collection the array of features will be pushed into the collection not the root object, this is to conform with MongoDB geospatial capabilities that can not handle recursive collections.
 :::
@@ -719,7 +719,7 @@ Connect to a Feathers API. The [connection options](https://docs.feathersjs.com/
 * **clientPath**: property path where to store the client object to be used by the Feathers hooks, defaults to `client`
 
 ::: tip
-**Krawler** uses the version 5 of the Feathers client. 
+**Krawler** uses the version 5 of the Feathers client.
 :::
 
 ### disconnectFeathers(options)
@@ -809,7 +809,7 @@ Also, this hook allows you to use the same environment variables as [node-postgr
 * `PGPORT=5432`
 * `PGDATABASE=database`
 
-Finaly and for some security reason, it is highly recommended to combine both ways such as in the following example: 
+Finaly and for some security reason, it is highly recommended to combine both ways such as in the following example:
 ```
 connectPG: {
   user: process.env.PG_USER,
@@ -950,7 +950,7 @@ Untar files or directories using [node-tar](https://github.com/npm/node-tar), ho
 
 Run a system command. Hook options are the following:
 * **command**: the template of the command to be run with the hook object as context (could be an array commands for a sequence)
-* **spawn**: `true` to use `child_process.spawn` instead of `child_process.exec` (default) to run the command(s), in that case a command is given as an array of args instead of a single string 
+* **spawn**: `true` to use `child_process.spawn` instead of `child_process.exec` (default) to run the command(s), in that case a command is given as an array of args instead of a single string
 * **stdout**: boolean indicating if stdout is logged and stored in the hook object
 * **stderr**: boolean indicating if stderr is logged and stored in the hook object
 
