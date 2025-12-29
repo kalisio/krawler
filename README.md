@@ -2,6 +2,7 @@
 
 [![Latest Release](https://img.shields.io/github/v/tag/kalisio/krawler?sort=semver&label=latest)](https://github.com/kalisio/krawler/releases)
 [![Build Status](https://github.com/kalisio/krawler/actions/workflows/main.yaml/badge.svg)](https://github.com/kalisio/krawler/actions/workflows/main.yaml)
+[![Quality Gate Status](https://sonar.portal.kalisio.com/api/project_badges/measure?project=kalisio-krawler&metric=alert_status&token=sqb_fafa90cb3ced26431a13e595114bf5ceec0f46bb)](https://sonar.portal.kalisio.com/dashboard?id=kalisio-krawler)
 [![Maintainability Issues](https://sonar.portal.kalisio.com/api/project_badges/measure?project=kalisio-krawler&metric=software_quality_maintainability_issues&token=sqb_fafa90cb3ced26431a13e595114bf5ceec0f46bb)](https://sonar.portal.kalisio.com/dashboard?id=kalisio-krawler)
 [![Coverage](https://sonar.portal.kalisio.com/api/project_badges/measure?project=kalisio-krawler&metric=coverage&token=sqb_fafa90cb3ced26431a13e595114bf5ceec0f46bb)](https://sonar.portal.kalisio.com/dashboard?id=kalisio-krawler)
 [![Documentation](https://img.shields.io/badge/documentation-available-brightgreen.svg)](https://kalisio.gitbooks.io/krawler/)
