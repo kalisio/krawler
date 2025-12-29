@@ -25,12 +25,14 @@ describe('krawler:hooks:mongo', () => {
   })
 
   const mongoOptions = {
-    url: 'mongodb://127.0.0.1:27017/krawler-test'
+    url: 'mongodb://127.0.0.1:27017/<%= dbName %>'
   }
 
   const mongoHook = {
     type: 'before',
-    data: {},
+    data: {
+      dbName: 'krawler-test'
+    },
     params: {}
   }
 
