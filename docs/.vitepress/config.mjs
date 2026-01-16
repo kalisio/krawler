@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { OramaPlugin } from '@orama/plugin-vitepress'
 
 export default defineConfig({
   base: '/krawler/',
@@ -8,6 +9,9 @@ export default defineConfig({
     ['link', { rel: 'icon', href: `https://s3.eu-central-1.amazonaws.com/kalisioscope/krawler/krawler-icon-64x64.png` }],
     ['link', { rel: 'manifest', href: '/manifest.json' }]
   ],
+  vite: {
+    plugins: [OramaPlugin()]
+  },
   theme: 'kalisio',
   themeConfig: {
     logo: 'https://s3.eu-central-1.amazonaws.com/kalisioscope/krawler/krawler-icon-64x64.png',
