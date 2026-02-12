@@ -10,7 +10,7 @@ import { AuthenticationService, JWTStrategy, authenticate } from '@feathersjs/au
 import errors from '@feathersjs/errors'
 import socketio from '@feathersjs/socketio'
 import { MemoryService } from '@feathersjs/memory'
-import { Service } from 'feathers-mongodb'
+import { MongoDBService } from '@feathersjs/mongodb'
 import { hooks as pluginHooks } from '../lib/index.js'
 import { fileURLToPath } from 'url'
 
@@ -21,7 +21,7 @@ class CustomMemoryService extends MemoryService {
   }
 }
 
-class CustomMongoDBService extends Service {
+class CustomMongoDBService extends MongoDBService {
   // Add custom method
   custom (data, params) {
     return Object.assign(data, { customMethodProperty: 'My custom value' })
@@ -65,7 +65,7 @@ function createTests (servicePath, feathersHook, options = {}) {
       expect(error.result.insertedIds.length).to.equal(3)
       expect(error.result.nInserted).to.equal(1)
       // error.writeErrors.forEach(data => console.log(data))
-      expect(error.name).to.equal('BulkWriteError')
+      expect(error.name).to.equal('MongoBulkWriteError')
     }
     const service = feathersHook.data.client.service(servicePath)
     const results = await service.find({ query: {} })

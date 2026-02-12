@@ -40,7 +40,6 @@ describe('krawler:hooks:mongo', () => {
     await pluginHooks.connectMongo(mongoOptions)(mongoHook)
     expect(mongoHook.data.client).toExist()
     expect(mongoHook.data.client.db).toExist()
-    expect(mongoHook.data.client.isConnected()).beTrue()
   })
   // Let enough time to proceed
     .timeout(5000)
@@ -85,7 +84,7 @@ describe('krawler:hooks:mongo', () => {
       expect(error.result.insertedIds.length).to.equal(3)
       expect(error.result.nInserted).to.equal(1)
       // error.writeErrors.forEach(data => console.log(data))
-      expect(error.name).to.equal('BulkWriteError')
+      expect(error.name).to.equal('MongoBulkWriteError')
     }
     const collection = mongoHook.data.client.db.collection('geojson')
     let results = await collection.find({}).toArray()
