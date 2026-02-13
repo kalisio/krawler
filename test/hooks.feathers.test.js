@@ -58,13 +58,13 @@ function createTests (servicePath, feathersHook, options = {}) {
     } catch (error) {
       expect(error).toExist()
       // console.log(error)
-      expect(error.data).toExist() // This is where feathers store the underlying mongodb error
-      expect(error.data.writeErrors).toExist()
-      expect(error.data.writeErrors.length).to.equal(2)
-      expect(error.data.result).toExist()
-      expect(error.data.result.insertedIds).toExist()
-      expect(error.data.result.insertedIds.length).to.equal(3)
-      expect(error.data.result.nInserted).to.equal(1)
+      expect(error).toExist() // This is where feathers store the underlying mongodb error
+      expect(error.writeErrors).toExist()
+      expect(error.writeErrors.length).to.equal(2)
+      expect(error.result).toExist()
+      expect(error.result.insertedIds).toExist()
+      expect(error.result.insertedIds.length).to.equal(3)
+      expect(error.result.nInserted).to.equal(1)
       // error.writeErrors.forEach(data => console.log(data))
     }
     const service = feathersHook.data.client.service(servicePath)
