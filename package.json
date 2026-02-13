@@ -93,7 +93,7 @@
     "memory-blob-store": "^5.0.1",
     "merge-stream": "^1.0.1",
     "moment": "^2.24.0",
-    "mongodb": "5.2.0",
+    "mongodb": "^5.2.0",
     "mubsub-es": "^2.0.0",
     "node-fetch": "^3.2.6",
     "osmtogeojson": "^3.0.0-beta.3",
@@ -126,6 +126,6 @@
     "standard": "^17.0.0",
     "stylus-loader": "^3.0.2",
     "winston-daily-rotate-file": "^4.7.1",
-    "winston-mongodb": "^5.0.7"
+    "winston-mongodb": "6.0.0"
   }
 }
