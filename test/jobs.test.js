@@ -2,6 +2,7 @@ import chai from 'chai'
 import chailint from 'chai-lint'
 import feathers from '@feathersjs/feathers'
 import express from '@feathersjs/express'
+import errors from '@feathersjs/errors'
 import mongo from 'mongodb'
 import path, { dirname } from 'path'
 import nock from 'nock'
@@ -166,13 +167,14 @@ describe('krawler:jobs', () => {
       id: 'job',
       options: { faultTolerant: true, timeout: 1000 },
       tasks: [
-        { id: 'job-403-fault-tolerant.html', type: 'http', store: 'test-store', options: { url: 'https://www.google.com', timeout: 3000 } }
+        { id: 'job-global-timeout.html', type: 'http', store: 'test-store', options: { url: 'https://www.google.com', timeout: 3000 } }
       ]
     })
-      .then(tasks => {
-        expect(tasks).toExist()
-        expect(tasks.length).to.equal(1)
-        expect(tasks[0].error).toExist(1)
+      .catch(error => {
+        // We expect the job to fail since job timeout < task timeout
+        // error is an instance of featherjs error class Timeout
+        expect(error).toExist()
+        expect(error instanceof errors.Timeout).to.beTrue()
         done()
       })
   })
@@ -300,7 +302,7 @@ describe('krawler:jobs', () => {
     return jobsService.create({
       id: 'job',
       tasks: [
-        { id: 'job-apply.html', type: 'noop' }
+        { id: 'job-apply.html', type: 'noop', store: 'test-store' }
       ]
     })
       .then(tasks => {
@@ -317,7 +319,7 @@ describe('krawler:jobs', () => {
     jobsService.create({
       id: 'job',
       tasks: [
-        { id: 'job-apply-error.html', type: 'noop' }
+        { id: 'job-apply-error.html', type: 'noop', store: 'test-store' }
       ]
     })
       .catch(error => {
@@ -334,7 +336,7 @@ describe('krawler:jobs', () => {
     jobsService.create({
       id: 'job',
       tasks: [
-        { id: 'job-apply-error.html', type: 'noop' }
+        { id: 'job-apply-error.html', type: 'noop', store: 'test-store' }
       ]
     })
       .then(tasks => {
@@ -361,7 +363,7 @@ describe('krawler:jobs', () => {
     jobsService.create({
       id: 'job',
       tasks: [
-        { id: 'job-apply-error.html', type: 'noop' }
+        { id: 'job-apply-error.html', type: 'noop', store: 'test-store' }
       ]
     })
       .then(tasks => {
