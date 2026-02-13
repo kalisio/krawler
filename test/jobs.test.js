@@ -15,14 +15,14 @@ const { util, expect } = chai
 const { MongoClient } = mongo
 
 describe('krawler:jobs', () => {
-  let app, server, mongoClient, storage, storesService, jobsService, tasksService
+  let app, server, mongoClient, mongoDb, storage, storesService, jobsService, tasksService
 
   before(async () => {
     chailint(chai, util)
     app = express(feathers())
     app.configure(plugin())
-    mongoClient = await MongoClient.connect('mongodb://127.0.0.1:27017/krawler-test', { useNewUrlParser: true })
-    mongoClient.db = mongoClient.db('krawler-test')
+    mongoClient = await MongoClient.connect('mongodb://127.0.0.1:27017/krawler-test')
+    mongoDb = mongoClient.db('krawler-test')
     server = await app.listen(3030)
   })
 
@@ -61,7 +61,7 @@ describe('krawler:jobs', () => {
         id: '<%= jobId %>-<%= taskId %>.mongo',
         type: 'mongo',
         options: {
-          client: mongoClient
+          client: { connection: mongoClient, db: mongoDb }
         }
       },
       tasks: [

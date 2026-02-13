@@ -27,14 +27,14 @@ async function runCommand (command) {
 
 describe('krawler:cli', () => {
   const jobfilePath = pathToFileURL(path.join(__dirname, 'data', 'jobfile.cjs'))
-  let jobfile, outputPath, client, collection, appServer
+  let jobfile, outputPath, client, db, collection, appServer
 
   before(async () => {
     chailint(chai, util)
     jobfile = (await import(jobfilePath)).default
     outputPath = _.get(jobfile, 'hooks.jobs.before.createStores[0].options.path')
-    client = await MongoClient.connect('mongodb://127.0.0.1:27017/krawler-test', { useNewUrlParser: true })
-    client.db = client.db('krawler-test')
+    client = await MongoClient.connect('mongodb://127.0.0.1:27017/krawler-test')
+    db = client.db('krawler-test')
   })
 
   it('runs successfully once using CLI', async () => {
@@ -160,7 +160,7 @@ describe('krawler:cli', () => {
     expect(healthcheck.successRate).to.equal(1)
     expect(healthcheck.state).toExist()
     expect(eventCount).to.equal(2) // 2 events
-    collection = client.db.collection('krawler-events')
+    collection = db.collection('krawler-events')
     const taskEvents = await collection.find({ event: 'task-done' }).toArray()
     expect(taskEvents.length).to.equal(1)
     const jobEvents = await collection.find({ event: 'job-done' }).toArray()
@@ -190,7 +190,7 @@ describe('krawler:cli', () => {
       expect(healthcheck.error.message).toExist()
       expect(healthcheck.error.message).to.equal('Test Error')
       expect(eventCount).to.be.at.least(4) // 4 events
-      collection = client.db.collection('krawler-events')
+      collection = db.collection('krawler-events')
       const taskEvents = await collection.find({ event: 'task-done' }).toArray()
       expect(taskEvents.length).to.be.at.least(2)
       const jobEvents = await collection.find({ event: 'job-done' }).toArray()

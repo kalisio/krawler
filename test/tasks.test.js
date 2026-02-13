@@ -18,14 +18,14 @@ const { util, expect } = chai
 const { MongoClient } = mongo
 
 describe('krawler:tasks', () => {
-  let app, server, mongoClient, storage, storageExists, fileStats, storesService, tasksService
+  let app, server, mongoClient, mongoDb, storage, storageExists, fileStats, storesService, tasksService
 
   before(async () => {
     chailint(chai, util)
     app = express(feathers())
     app.configure(plugin())
-    mongoClient = await MongoClient.connect('mongodb://127.0.0.1:27017/krawler-test', { useNewUrlParser: true })
-    mongoClient.db = mongoClient.db('krawler-test')
+    mongoClient = await MongoClient.connect('mongodb://127.0.0.1:27017/krawler-test')
+    mongoDb = mongoClient.db('krawler-test')
     server = await app.listen(3030)
   })
 
@@ -48,13 +48,13 @@ describe('krawler:tasks', () => {
     for (let i = 0; i < 10; i++) {
       json.push({ name: i.toString() })
     }
-    await mongoClient.db.collection('users').insertMany(json)
+    await mongoDb.collection('users').insertMany(json)
     await tasksService.create({
       id: 'task.mongo',
       store: 'test-store',
       type: 'mongo',
       options: {
-        client: mongoClient,
+        client: { connection: mongoClient, db: mongoDb },
         collection: 'users',
         query: { name: { $ne: '0' } },
         limit: 8
@@ -286,7 +286,7 @@ describe('krawler:tasks', () => {
   // Cleanup
   after(async () => {
     if (mongoClient) {
-      await mongoClient.db.dropDatabase()
+      await mongoDb.dropDatabase()
       await mongoClient.close()
     }
     if (server) server.close()
