@@ -115,7 +115,7 @@
   "devDependencies": {
     "@feathersjs/authentication": "^5.0.8",
     "@feathersjs/memory": "^5.0.8",
-    "@feathersjs/mongodb": "5.0.8",
+    "@feathersjs/mongodb": "^5.0.8",
     "c8": "^7.11.2",
     "chai": "^4.2.0",
     "chai-lint": "^0.1.1",
