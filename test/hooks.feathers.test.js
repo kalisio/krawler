@@ -58,7 +58,6 @@ function createTests (servicePath, feathersHook, options = {}) {
     } catch (error) {
       expect(error).toExist()
       // console.log(error)
-      expect(error).toExist() // This is where feathers store the underlying mongodb error
       expect(error.writeErrors).toExist()
       expect(error.writeErrors.length).to.equal(2)
       expect(error.result).toExist()
