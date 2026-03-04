@@ -96,7 +96,7 @@
     "mongodb": "^3.6.2",
     "mubsub-es": "^2.0.0",
     "node-fetch": "^3.2.6",
-    "osmtogeojson": "^3.0.0-beta.3",
+    "osmtogeojson": "^3.0.0-beta.5",
     "papaparse": "^5.5.3",
     "pg": "^8.7.3",
     "proj4": "^2.4.4",
@@ -111,6 +111,9 @@
     "uuid": "^3.2.1",
     "winston": "^3.7.2",
     "xml2js": "^0.6.0"
+  },
+  "resolutions": {
+    "@xmldom/xmldom": "^0.8.11"
   },
   "devDependencies": {
     "@feathersjs/authentication": "^5.0.8",
