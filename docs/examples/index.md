@@ -150,3 +150,41 @@ Once the job has been executed the response contains the link to download the pr
 The seeder take advantage of [Kargo](https://kalisio.github.io/kargo/) to seed a dataset. It relies on the seeding capabilities of [MapProxy](https://mapproxy.org/docs/nightly/seed.html). The global approach is to subdivide the job into multiple tasks and run `mapprroxy-seed` utility for each task. To subdivide the job, we use a spatial grid and each cell is used as a coverage entry to limit the extend of the corresponding task. All the tasks, i.e. `mapproxy-seed` share the same MapProxy configuration file and use a generated seed file.
 
 We use the same image of MapProxy as the one used in Kargo, but for now we do not use the benefits of a Swarm infrastructure to deploy the task. Meanwhile, if you plan to seed a layer with a source exposed by TileserverGL, you can easily scale the number of instances of TileserverGL to fit the required charge.
+
+## BD TOPO
+
+> Note: this example job has been entirely generated using AI (Claude) to check if it would be easily possible
+
+Download vector features from the French national topographic database [BD TOPO](https://geoservices.ign.fr/bdtopo) published by [IGN](https://www.ign.fr/) on the [Géoplateforme](https://geoplateforme.fr/) WFS service. The area of interest is defined by one or more EPCI SIREN codes and/or commune INSEE codes, resolved to actual commune geometries via the [Admin Express](https://geoservices.ign.fr/adminexpress) layer of the same service. The resulting features are written as a single GeoJSON file in the output folder.
+
+The job runs in two phases:
+
+1. **Area resolution** — Admin Express is queried to fetch the commune geometries matching the provided SIREN / INSEE codes. Their boundaries are unioned into a single polygon (adaptively simplified to keep the WFS filter URL within server limits) and used as a spatial `INTERSECTS` filter.
+2. **Paginated download** — the total feature count is probed first; one WFS task per page is then generated so that all pages are downloaded in parallel before being merged into a single `FeatureCollection`.
+
+The target data type is configurable. Available types in the `BDTOPO_V3` namespace:
+
+| Type | Description |
+|---|---|
+| `batiment` | Buildings |
+| `erp` | Public buildings (Établissements Recevant du Public) |
+| `troncon_de_route` | Road segments |
+| `troncon_voie_ferree` | Railway segments |
+| `cours_d_eau` | Waterways / Rivers |
+| `plan_d_eau` | Water bodies / Lakes |
+| `zone_de_vegetation` | Vegetation areas |
+| `surface_hydrographique` | Hydrographic surfaces |
+| `aerodrome` | Airports / Aerodromes |
+
+The following environment variables control the job:
+
+* **BDTOPO_SIREN** : comma-separated EPCI SIREN codes (e.g. `243100518,200096956`). Defaults to `200096956` (Agen).
+* **BDTOPO_INSEE** : comma-separated commune INSEE codes (e.g. `31555,31069,47001`). Can be used instead of or combined with `BDTOPO_SIREN`.
+* **BDTOPO_DATA_TYPE** : BD TOPO feature type to download (default: `erp`).
+* **BDTOPO_COUNT** : number of features per WFS page (default: `1000`).
+
+This sample demonstrates:
+* a **two-step job** where the first step (area resolution via Admin Express) drives task generation for the second step (BD TOPO download),
+* **dynamic task generation** using a custom `generateTasks` hook that computes the number of pages at runtime and generates one task per page,
+* **adaptive geometry simplification** using [@turf/turf](https://turfjs.org/) to union commune polygons and simplify the result to a URL-safe WKT length, with a convex hull fallback,
+* **paginated WFS download** with `startIndex`-based pagination and in-memory merge of all `FeatureCollection` pages via a custom `mergeGeoJson` hook.
