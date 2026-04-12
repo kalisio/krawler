@@ -43,6 +43,9 @@
     "sourceType": "module",
     "env": [
       "mocha"
+    ],
+    "globals": [
+      "fetch"
     ]
   },
   "c8": {
