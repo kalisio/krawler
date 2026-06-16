@@ -22,10 +22,18 @@ let generateTask = (id, feature, params) => {
   const convergenceFactor = Math.cos(latitude * Math.PI / 180)
   const dLatitude = 360 * params.resolution / (2 * Math.PI * earthRadius)
   const dLongitude = dLatitude * convergenceFactor
-  const halfWidthLatitude = 360 * params.halfWidth / (2 * Math.PI * earthRadius)
-  const halfWidthLongitude = halfWidthLatitude * convergenceFactor
+  let halfWidthLatitude = 0
+  let halfWidthLongitude = 0
+  if (params.outputSize) {
+    halfWidthLatitude = dLatitude * params.outputSize.height / 2
+    halfWidthLongitude = dLongitude * params.outputSize.width / 2
+  } else {
+    halfWidthLatitude = 360 * params.halfWidth / (2 * Math.PI * earthRadius)
+    halfWidthLongitude = halfWidthLatitude * convergenceFactor
+  }
   return {
     id,
+    store: 'output-store',
     feature,
     resolution: spec.resolution,
     layer: params.layer,
@@ -80,6 +88,7 @@ hooks.registerHook('generateTasks', generateTasks)
 
 export default {
   id: 'airports-download',
+  store: 'output-store',
   options: {
     workersLimit: 4
   },
@@ -98,12 +107,19 @@ export default {
     },
     jobs: {
       before: {
+        createStores: [{
+          id: 'output-store',
+          type: 'fs',
+          storePath: 'taskTemplate.outputStore',
+          options: { path: path.join(__dirname, '..', 'output') }
+        }],
         generateTasks: {
           runways: spec.runways || [],
           airports: spec.airports || []
         }
       },
       after: {
+        removeStores: ['output-store']
       }
     }
   }
